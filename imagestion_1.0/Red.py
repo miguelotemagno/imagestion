@@ -68,7 +68,7 @@ class Net(object):
         self.historial = []
         self.error    = 0.0
         self.capaMax  = 0
-        self.umbralError = 0.01
+        self.umbralError = 0.001
         max,size      = 0,0
                 
         for i in xrange(self.nCapas):
@@ -79,6 +79,9 @@ class Net(object):
             self.layers[i] = Layer(i,size,inputs,funciones[i],self.layers,self)
             self.neuronas += size
             self.capaMax = max
+            self.layers[i].isInput  = True if i == 0 else False
+            self.layers[i].isHidden = True if i > 0 and i < self.nCapas-1 else False
+            self.layers[i].isOutput = True if i == self.nCapas-1 else False
         pass
 
     """
@@ -200,8 +203,6 @@ class Net(object):
                     
                     self.addLog(">> Calculo de error cuadratico de la red")
                     result = self.layers[self.nCapas-1].getDeltas()
-#                    print(">> result:"+str(result))
-#                    print(">> expect:"+str(expect))
                     self.error = self.getErrorCuadratico(result,expect)
                     self.addLog("<< "+str(self.error))
 

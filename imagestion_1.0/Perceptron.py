@@ -113,7 +113,7 @@ class Perceptron(object):
         pass
         
     def getErrorDelta(self):
-        return self.fnTransf.train(self.salida) * self.error
+        return self.fnTransf.train(self.salida) * self.delta
         pass
      
     def getCoeficiente(self,i):
