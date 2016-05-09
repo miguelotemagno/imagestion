@@ -206,7 +206,8 @@ class Net(object):
                     self.error = self.getErrorCuadratico(result,expect)
                     self.addLog("<< "+str(self.error))
 
-                self.historial.append({self.error:self.getPesos()})
+                #self.historial.append({self.error:self.getPesos()})
+                self.addHistory({self.error:self.getPesos()})
                 self.addLog(">> errorCuadratico = "+str(self.error))
                     
                 if abs(self.error) < self.umbralError:
@@ -288,6 +289,10 @@ class Net(object):
         
     def getLog(self):
         return self.log
+        
+    def addHistory(self, event):
+        if self.debug :
+            self.historial.append(event)
         
     def getPesos(self):
         lst = []

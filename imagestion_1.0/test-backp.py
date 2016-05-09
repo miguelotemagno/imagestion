@@ -23,7 +23,7 @@ print (str([I,I]) + ' => ' + str(net.simular([I,I])))
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
     net.setEpochs(1000)
-    net.setUmbralError(0.000001)
+    #net.setUmbralError(0.00001)
     net.entrenar([
             [O,O], [O,I], [I,O], [I,I]
         ],[
