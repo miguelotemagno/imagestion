@@ -72,10 +72,10 @@ class Net(object):
         max,size      = 0,0
                 
         for i in xrange(self.nCapas):
-            inputs = entradas if i == 0 else layers[i-1]
+            inputs = entradas+1 if i == 0 else layers[i-1]
             size   = layers[i]
             max    = size if size > max else max
-            
+            #                     (capa,neurons,inputs,function,layers,padre)
             self.layers[i] = Layer(i,size,inputs,funciones[i],self.layers,self)
             self.neuronas += size
             self.capaMax = max
@@ -102,27 +102,28 @@ class Net(object):
         self.addLog("Red.simular -> inputs:"+str(inputs))
         outputs  = [None] * self.salidas
         sinapsis = [None] * (self.nCapas + 1)
-        i,j,n = 0,0,0
+        i,j,n = None,None,None
         
         for i in xrange(1,self.nCapas+1):
             sinapsis[i]   = [1.0] * (self.layers[i-1].cant)
 
         sinapsis[0] = inputs
         
-        try:
-            for i in xrange(self.nCapas):            
-                for j in xrange(self.layers[i].cant):
-                    self.layers[i].nodos[j].setEntradas(sinapsis[i])
-                    sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
-                    
-            outputs = sinapsis[self.nCapas]
-        except:
-            err = str(exc_info())
-            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j)+" n="+str(n))
-            self.addLog(err)
-            self.addLog(str(sinapsis))
-            self.panic = True
-            pass
+#        try:
+        for i in xrange(self.nCapas):  
+            size = self.layers[i].cant #-1 if self.layers[i].isOutput else self.layers[i].cant
+            for j in xrange(size):
+                self.layers[i].nodos[j].setEntradas(sinapsis[i])
+                sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
+                
+        outputs = sinapsis[self.nCapas]
+#        except:
+#            err = str(exc_info())
+#            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j)+" n="+str(n))
+#            self.addLog(err)
+#            self.addLog(str(sinapsis))
+#            self.panic = True
+#            pass
             
         self.addLog("<< "+str(outputs))
         return outputs
@@ -245,12 +246,12 @@ class Net(object):
                 self.layers[idx].setDeltas(result,expect)
                 
             self.addLog(">> Actualizacion de pesos en la capa")
-            for idx in xrange(self.nCapas):
+            for idx in xrange(self.nCapas -1, -1, -1):
                 self.layers[idx].setPesos(self.rate)
         except:
             err = str(exc_info())
             self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
-            print("ERROR Net.backPropagation('"+str(err)+"'): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
+            #print("ERROR Net.backPropagation('"+str(err)+"'): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
             self.addLog(err)
             self.panic = True 
         pass

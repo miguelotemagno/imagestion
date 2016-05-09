@@ -34,7 +34,7 @@
 # +-----------------------------------------------------------------------+
 
 from Activacion import *
-from json import *
+import json
 import random
 
 class Perceptron(object):
@@ -166,7 +166,7 @@ class Perceptron(object):
         self.id = id
         pass
         
-    def getId(seld):
+    def getId(self):
         return self.id
     
     def inicializarPesos(self):
@@ -177,7 +177,7 @@ class Perceptron(object):
         pass
         
     def setEntradas(self,inputs):
-        for n in xrange(self.nInputs):
+        for n in range(len(inputs)):
             self.entradas[n] = inputs[n]
         pass
         

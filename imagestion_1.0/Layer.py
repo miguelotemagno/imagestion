@@ -76,11 +76,11 @@ class Layer(object):
         self.addLog("Layer->setDeltas("+str(expect)+","+str(result)+") capa:"+str(self.id))
         post = self.id + 1
         #prev = self.id -1
-        #capa = self.id
+        capa = self.id
 
         # capa salida
         if self.isOutput:
-            self.addLog(">> capa salida ID:"+str(self.id))
+            self.addLog(">> capa salida ID:"+str(capa))
             self.error = 0.0
             
             for k in xrange(self.cant):
@@ -95,12 +95,12 @@ class Layer(object):
                 
         if self.isHidden:
         # capas ocultas
-            self.addLog(">> capa oculta ID:"+str(self.id))
+            self.addLog(">> capa oculta ID:"+str(capa))
             self.error = 0.0
             for j in xrange(self.cant):
                 error = 0.0
-                
-                for k in xrange(self.layers[post].cant):
+                size = self.layers[post].cant
+                for k in xrange(size):
                     peso = self.layers[post].nodos[k].getPeso(j)
                     delta = self.layers[post].deltas[k]
                     error += delta * peso
@@ -128,13 +128,13 @@ class Layer(object):
                 self.addLog(">> nodo["+str(k)+"].peso["+str(j)+"]: "+str(peso)+
                             " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getPeso(j))+
                             "   diff("+str(rate*cambio)+")")
-                if self.isInput:
-                    cambio = self.deltas[k] * self.nodos[k].entradas[j]
-                    peso = self.nodos[k].getwBias()
-                    self.nodos[k].setwBias(peso + rate*cambio)
-                    self.addLog(">> nodo["+str(k)+"].wBias: "+str(peso)+
-                                " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getwBias())+
-                                "   diff("+str(rate*cambio)+")")
+#                if self.isInput:
+#                    cambio = self.deltas[k] * self.nodos[k].entradas[j]
+#                    peso = self.nodos[k].getwBias()
+#                    self.nodos[k].setwBias(peso + rate*cambio)
+#                    self.addLog(">> nodo["+str(k)+"].wBias: "+str(peso)+
+#                                " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getwBias())+
+#                                "   diff("+str(rate*cambio)+")")
                 
 
     def getStrDeltas(self):
