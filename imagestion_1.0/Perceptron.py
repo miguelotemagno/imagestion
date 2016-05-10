@@ -61,7 +61,6 @@ class Perceptron(object):
         self.fnTransf.padre = padre
         self.expect   = 0
         self.pesos    = [random.uniform(-0.5,0.5) for x in xrange(inputs)]
-        #self.pesos = [1.0 for x in xrange(inputs)] if self.capa == 0 else [random.uniform(-0.5,0.5) for x in xrange(inputs)]
         pass
         
     def getSumPesosEntradas(self):
@@ -79,7 +78,7 @@ class Perceptron(object):
             self.addLog ("ERROR en Perceptron.getSumPesosEntradas() - Iteracion i="+str(i))
             self.addLog (err)
         
-        self.neta = suma + self.bias*self.wBias
+        self.neta = suma #+ self.bias*self.wBias
         return self.neta
         
     def calcular(self):

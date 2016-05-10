@@ -74,6 +74,7 @@ class Layer(object):
         
     def setDeltas(self,expect,result):
         self.addLog("Layer->setDeltas("+str(expect)+","+str(result)+") capa:"+str(self.id))
+        self.error = 0.0
         post = self.id + 1
         #prev = self.id -1
         capa = self.id
@@ -81,7 +82,6 @@ class Layer(object):
         # capa salida
         if self.isOutput:
             self.addLog(">> capa salida ID:"+str(capa))
-            self.error = 0.0
             
             for k in xrange(self.cant):
                 delta = expect[k] - result[k]
@@ -96,7 +96,6 @@ class Layer(object):
         if self.isHidden:
         # capas ocultas
             self.addLog(">> capa oculta ID:"+str(capa))
-            self.error = 0.0
             for j in xrange(self.cant):
                 error = 0.0
                 size = self.layers[post].cant
@@ -109,7 +108,6 @@ class Layer(object):
                     self.addLog(">> nodo["+str(j)+"].peso["+str(k)+"]: "+str(self.error)+" += "+str(delta)+"*"+str(peso))
                 
                 self.nodos[j].setDelta(error)                
-                #self.deltas[j] = self.nodos[j].fnTransf.train(self.nodos[j].getSalidaNeta()) * error
                 self.deltas[j] = self.nodos[j].getErrorDelta()
                 self.nodos[j].setError(self.deltas[j])
                 
@@ -127,15 +125,7 @@ class Layer(object):
                 self.nodos[k].setPeso(j, peso + rate*cambio)
                 self.addLog(">> nodo["+str(k)+"].peso["+str(j)+"]: "+str(peso)+
                             " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getPeso(j))+
-                            "   diff("+str(rate*cambio)+")")
-#                if self.isInput:
-#                    cambio = self.deltas[k] * self.nodos[k].entradas[j]
-#                    peso = self.nodos[k].getwBias()
-#                    self.nodos[k].setwBias(peso + rate*cambio)
-#                    self.addLog(">> nodo["+str(k)+"].wBias: "+str(peso)+
-#                                " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getwBias())+
-#                                "   diff("+str(rate*cambio)+")")
-                
+                            "   diff("+str(rate*cambio)+")")                
 
     def getStrDeltas(self):
         return {'layer_'+str(self.id) : [

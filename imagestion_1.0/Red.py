@@ -67,7 +67,6 @@ class Net(object):
         self.expect   = []
         self.historial = []
         self.error    = 0.0
-        self.capaMax  = 0
         self.umbralError = 0.001
         max,size      = 0,0
                 
@@ -102,28 +101,27 @@ class Net(object):
         self.addLog("Red.simular -> inputs:"+str(inputs))
         outputs  = [None] * self.salidas
         sinapsis = [None] * (self.nCapas + 1)
-        i,j,n = None,None,None
+        i,j = None,None
         
         for i in xrange(1,self.nCapas+1):
             sinapsis[i]   = [1.0] * (self.layers[i-1].cant)
 
         sinapsis[0] = inputs
         
-#        try:
-        for i in xrange(self.nCapas):  
-            size = self.layers[i].cant #-1 if self.layers[i].isOutput else self.layers[i].cant
-            for j in xrange(size):
-                self.layers[i].nodos[j].setEntradas(sinapsis[i])
-                sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
-                
-        outputs = sinapsis[self.nCapas]
-#        except:
-#            err = str(exc_info())
-#            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j)+" n="+str(n))
-#            self.addLog(err)
-#            self.addLog(str(sinapsis))
-#            self.panic = True
-#            pass
+        try:
+            for i in xrange(self.nCapas):  
+                for j in xrange(self.layers[i].cant):
+                    self.layers[i].nodos[j].setEntradas(sinapsis[i])
+                    sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
+                    
+            outputs = sinapsis[self.nCapas]
+        except:
+            err = str(exc_info())
+            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j)+" n="+str(n))
+            self.addLog(err)
+            self.addLog(str(sinapsis))
+            self.panic = True
+            pass
             
         self.addLog("<< "+str(outputs))
         return outputs
@@ -170,7 +168,7 @@ class Net(object):
             for ciclo in range(epochs):
                 self.addLog(">> ciclo:"+str(ciclo)+" ====================================================================================================================")
                 salidas = [[None] * len(outputs[0])] * len(outputs)
-                self.error = 0.0
+                error = 0.0
 
                 ## [[0.0,0.0], [0.0,1.0], [1.0,0.0], [1.0,1.0]]
                 for idx in range(len(inputs)):
@@ -204,14 +202,14 @@ class Net(object):
                     
                     self.addLog(">> Calculo de error cuadratico de la red")
                     result = self.layers[self.nCapas-1].getDeltas()
-                    self.error = self.getErrorCuadratico(result,expect)
-                    self.addLog("<< "+str(self.error))
+                    error = self.getErrorCuadratico(result,expect)
 
                 #self.historial.append({self.error:self.getPesos()})
-                self.addHistory({self.error:self.getPesos()})
-                self.addLog(">> errorCuadratico = "+str(self.error))
+                self.addHistory({error:self.getPesos()})
+                self.addLog(">> errorCuadratico = "+str(error))
+                #self.error = error
                     
-                if abs(self.error) < self.umbralError:
+                if abs(error) < self.umbralError:
                     break
             pass
         except:
@@ -241,17 +239,17 @@ class Net(object):
         #i,j = 0,0
                 
         try:
+            size = self.nCapas -1
             self.addLog(">> Calculo de deltas en la capa")
-            for idx in xrange(self.nCapas -1, -1, -1):
+            for idx in xrange(size, -1, -1):
                 self.layers[idx].setDeltas(result,expect)
                 
             self.addLog(">> Actualizacion de pesos en la capa")
-            for idx in xrange(self.nCapas -1, -1, -1):
+            for idx in xrange(size, -1, -1):
                 self.layers[idx].setPesos(self.rate)
         except:
             err = str(exc_info())
             self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
-            #print("ERROR Net.backPropagation('"+str(err)+"'): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
             self.addLog(err)
             self.panic = True 
         pass
@@ -262,11 +260,12 @@ class Net(object):
     """ 
     def getErrorCuadratico(self,result,expect):
         self.addLog("Net.getErrorCuadratico -> result:"+str(result)+" expect:"+str(expect))
-        error = 0
+        error = 0.0
         
         for j in xrange(len(expect)):
             error += 0.5 * (expect[j] - result[j])**2
             
+        self.addLog("<< error:"+str(error))
         return error
         
     def getEpochs(self):
@@ -360,8 +359,8 @@ class Net(object):
             'salidas'   : self.salidas,
             'funciones' : self.transferencias,
             'epochs'    : self.epochs,
-            'expect'    : self.expect,
-            'error'     : self.error
+            #'error'     : self.error,
+            'expect'    : self.expect
         }
         return red
     
@@ -374,7 +373,7 @@ class Net(object):
         self.salidas  = data['salidas']
         self.rate     = data['rate']
         self.epochs   = data['epochs']
-        self.error    = data['error']
+        #self.error    = data['error']
         self.transferencias = data['funciones']
         self.expect   = data['expect']
         self.layers   = [None] * self.nCapas
