@@ -51,7 +51,7 @@ class Perceptron(object):
         self.padre    = padre
         self.capa     = capa
         self.bias     = 1.0
-        self.wBias    = random.uniform(-0.5,0.5) if capa==0 else 0.0
+        self.wBias    = 0.0 if self.capa == 0 else random.uniform(-0.5,0.5)
         self.salida   = 0.0
         self.neta     = 0.0
         self.delta    = 0.0
@@ -60,7 +60,8 @@ class Perceptron(object):
         self.fnTransf = Activacion(funcion)
         self.fnTransf.padre = padre
         self.expect   = 0
-        self.pesos    = [random.uniform(-0.5,0.5) for x in xrange(inputs)]
+        min, max = (1.0, 1.0) if self.capa == 0 else (-0.5, 0.5)
+        self.pesos    = [random.uniform(min,max) for x in xrange(inputs)]
         pass
         
     def getSumPesosEntradas(self):
