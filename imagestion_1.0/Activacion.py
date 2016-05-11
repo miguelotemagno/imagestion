@@ -114,7 +114,7 @@ class Activacion(object):
             return 1.0 / (1.0 + math.exp(-val))
         except:
             err = str(exc_info())            
-            print ('ERROR logsig('+str(val)+'):'+err)
+            self.addLog('ERROR logsig('+str(val)+'):'+err)
             return 0.0
         
     def tansig(self,val):

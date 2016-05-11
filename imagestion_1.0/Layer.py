@@ -85,9 +85,9 @@ class Layer(object):
             
             for k in xrange(self.cant):
                 delta = expect[k] - result[k]
-                self.nodos[k].setDelta(delta)
+                self.nodos[k].delta = delta
                 self.deltas[k] = self.nodos[k].getErrorDelta()
-                self.nodos[k].setError(self.deltas[k])
+                self.nodos[k].error = self.deltas[k]
                 self.error += self.deltas[k]
                 
                 self.addLog(">> "+str(delta)+" = "+str(expect[k])+" - "+str(result[k]))           
@@ -107,9 +107,9 @@ class Layer(object):
                     
                     self.addLog(">> nodo["+str(j)+"].peso["+str(k)+"]: "+str(self.error)+" += "+str(delta)+"*"+str(peso))
                 
-                self.nodos[j].setDelta(error)                
+                self.nodos[j].delta = error
                 self.deltas[j] = self.nodos[j].getErrorDelta()
-                self.nodos[j].setError(self.deltas[j])
+                self.nodos[j].error = self.deltas[j]
                 
         pass
             

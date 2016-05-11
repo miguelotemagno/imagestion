@@ -5,7 +5,7 @@ O = 0 #0.000001
 I = 1 #0.999999
 
 # Net(entradas,salidas,[capa1,capa2,...],[funciones])
-net = Net(2,1,[2,2,1],['PURELIN','TANSIG','TANSIG'])
+net = Net(2,1,[2,3,1],['PURELIN','TANSIG','TANSIG'])
 #net = Net(2,1,[2,1],['LOGSIG','LOGSIG'])
 net.debug = True
 
@@ -22,8 +22,9 @@ print (str([I,I]) + ' => ' + str(net.simular([I,I])))
 
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
-    net.setEpochs(2000)
-    net.setUmbralError(0.00001)
+    net.rate = 0.25
+    net.epochs = 2000
+    net.umbralError = 0.00001
     net.entrenar([
             [O,O], [O,I], [I,O], [I,I]
         ],[

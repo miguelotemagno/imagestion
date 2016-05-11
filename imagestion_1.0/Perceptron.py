@@ -51,16 +51,16 @@ class Perceptron(object):
         self.padre    = padre
         self.capa     = capa
         self.bias     = 1.0
-        self.wBias    = 0.0 if self.capa == 0 else random.uniform(-0.5,0.5)
         self.salida   = 0.0
-        self.neta     = 0.0
         self.delta    = 0.0
         self.error    = 0.0
         self.funcion  = funcion
         self.fnTransf = Activacion(funcion)
         self.fnTransf.padre = padre
         self.expect   = 0
-        min, max = (1.0, 1.0) if self.capa == 0 else (-0.5, 0.5)
+        #min, max = (1.0, 1.0) if self.capa == 0 else (-0.5, 0.5)
+        min, max = (-0.5, 0.5)
+        self.wBias    = random.uniform(min,max)
         self.pesos    = [random.uniform(min,max) for x in xrange(inputs)]
         pass
         
@@ -79,14 +79,14 @@ class Perceptron(object):
             self.addLog ("ERROR en Perceptron.getSumPesosEntradas() - Iteracion i="+str(i))
             self.addLog (err)
         
-        self.neta = suma #+ self.bias*self.wBias
+        self.neta = suma if self.capa > 0 else suma + self.bias*self.wBias
         return self.neta
         
     def calcular(self):
         #self.addLog("Perceptron.calcular(name:"+self.name+", entradas:"+str(self.entradas)+')')
         suma = self.getSumPesosEntradas()
         res  = self.fnTransf.exe(suma)
-        self.setSalida(res)
+        self.salida = res
         return res
 
     """
@@ -104,43 +104,16 @@ class Perceptron(object):
     #  y derivables (la funcion sigmoidal pertenece a este tipo de funciones).
     #
     """         
-    def setDelta(self,d):
-        self.delta = d
-        pass
-        
-    def getDelta(self):
-        return self.delta
-        pass
-        
+         
     def getErrorDelta(self):
         return self.fnTransf.train(self.salida) * self.delta
         pass
      
     def getCoeficiente(self,i):
         return self.pesos[i] * self.delta
-     
-    def setBias(self,bias):
-        self.bias = bias
-        pass
-    
-    def getBias(self):
-        return self.bias
     
     def setSalida(self,salida):
         self.salida = salida
-        pass
-        
-    def getSalida(self):
-        return self.salida
-    
-    def getSalidaNeta(self):
-        return self.neta
-    
-    def getwBias(self):
-        return self.wBias
-    
-    def setwBias(self,bias):
-        self.wBias = bias
         pass
         
     def setPeso(self,idx,peso):
@@ -154,27 +127,6 @@ class Perceptron(object):
         pesos = self.pesos
         pesos.add(self.wBias)
         return pesos    
-        
-    def setError(self,err):
-        self.error = err
-        pass
-        
-    def getError(self):
-        return self.error
-    
-    def setId(self,id):
-        self.id = id
-        pass
-        
-    def getId(self):
-        return self.id
-    
-    def inicializarPesos(self):
-        pass
-        
-    def getEntradas(self):
-        return self.entradas
-        pass
         
     def setEntradas(self,inputs):
         for n in range(len(inputs)):

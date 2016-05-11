@@ -71,7 +71,7 @@ class Net(object):
         max,size      = 0,0
                 
         for i in xrange(self.nCapas):
-            inputs = entradas+1 if i == 0 else layers[i-1]
+            inputs = entradas if i == 0 else layers[i-1]
             size   = layers[i]
             max    = size if size > max else max
             #                     (capa,neurons,inputs,function,layers,padre)
@@ -111,13 +111,13 @@ class Net(object):
         try:
             for i in xrange(self.nCapas):  
                 for j in xrange(self.layers[i].cant):
-                    self.layers[i].nodos[j].setEntradas(sinapsis[i])
+                    self.layers[i].nodos[j].entradas = sinapsis[i]
                     sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
                     
             outputs = sinapsis[self.nCapas]
         except:
             err = str(exc_info())
-            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j)+" n="+str(n))
+            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j))
             self.addLog(err)
             self.addLog(str(sinapsis))
             self.panic = True
