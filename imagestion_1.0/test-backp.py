@@ -5,7 +5,7 @@ O = 0 #0.000001
 I = 1 #0.999999
 
 # Net(entradas,salidas,[capa1,capa2,...],[funciones])
-net = Net(2,1,[2,2,1],['TANSIG','TANSIG','TANSIG'])
+net = Net(2,1,[2,2,1],['PURELIN','TANSIG','TANSIG'])
 #net = Net(2,1,[2,1],['LOGSIG','LOGSIG'])
 net.debug = True
 
