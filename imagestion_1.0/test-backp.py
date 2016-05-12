@@ -5,7 +5,7 @@ O = 0 #0.000001
 I = 1 #0.999999
 
 # Net(entradas,salidas,[capa1,capa2,...],[funciones])
-net = Net(2,1,[2,3,1],['PURELIN','TANSIG','TANSIG'])
+net = Net(2,1,[2,1],['TANSIG','TANSIG'])
 #net = Net(2,1,[2,1],['LOGSIG','LOGSIG'])
 net.debug = True
 
@@ -22,9 +22,10 @@ print (str([I,I]) + ' => ' + str(net.simular([I,I])))
 
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
-    net.rate = 0.25
-    net.epochs = 2000
-    net.umbralError = 0.00001
+    net.rate = 0.5
+    net.epochs = 2
+    #net.umbralError = 0.0001
+
     net.entrenar([
             [O,O], [O,I], [I,O], [I,I]
         ],[
@@ -50,12 +51,13 @@ print (net.getConfiguracion())
 with open("neural-network.json", "w") as text_file:
     text_file.write(dumps(net.getConfiguracion(), sort_keys=True,indent=4, separators=(',', ': ')))
 
+print ("\nprint HISTORIAL:"+str(net.getHistorialLenght()))
+print (net.getHistorial())
+
+
 net.panic = True
     
 if net.panic:
     print ("print LOG")
     print (net.printLog())
     
-print ("\nprint HISTORIAL:"+str(net.getHistorialLenght()))
-print (net.getHistorial())
-

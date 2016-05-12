@@ -50,7 +50,6 @@ class Perceptron(object):
         self.name     = name
         self.padre    = padre
         self.capa     = capa
-        self.bias     = 1.0
         self.salida   = 0.0
         self.delta    = 0.0
         self.error    = 0.0
@@ -58,10 +57,11 @@ class Perceptron(object):
         self.fnTransf = Activacion(funcion)
         self.fnTransf.padre = padre
         self.expect   = 0
-        #min, max = (1.0, 1.0) if self.capa == 0 else (-0.5, 0.5)
-        min, max = (-0.5, 0.5)
-        self.wBias    = random.uniform(min,max)
-        self.pesos    = [random.uniform(min,max) for x in xrange(inputs)]
+        #min, max = (0.0, 0.0) if not self.capa == 0 else (padre.min,padre.max)
+        min, max = (padre.min,padre.max)
+        #self.bias     = 1.0
+        #self.wBias    = random.uniform(min,max)
+        self.pesos    = [random.uniform(min, max) for x in xrange(inputs)]
         pass
         
     def getSumPesosEntradas(self):
@@ -79,7 +79,7 @@ class Perceptron(object):
             self.addLog ("ERROR en Perceptron.getSumPesosEntradas() - Iteracion i="+str(i))
             self.addLog (err)
         
-        self.neta = suma if self.capa > 0 else suma + self.bias*self.wBias
+        self.neta = suma #if self.capa > 0 else suma + self.bias*self.wBias
         return self.neta
         
     def calcular(self):
@@ -106,15 +106,14 @@ class Perceptron(object):
     """         
          
     def getErrorDelta(self):
-        return self.fnTransf.train(self.salida) * self.delta
-        pass
+        self.error = self.fnTransf.train(self.salida) * self.delta
+        return self.error
      
     def getCoeficiente(self,i):
         return self.pesos[i] * self.delta
     
     def setSalida(self,salida):
         self.salida = salida
-        pass
         
     def setPeso(self,idx,peso):
         self.pesos[idx] = peso
@@ -123,9 +122,12 @@ class Perceptron(object):
     def getPeso(self,idx):
         return self.pesos[idx]
     
+    def getEntrada(self,idx):
+        return self.entradas[idx]
+    
     def getPesos(self):
         pesos = self.pesos
-        pesos.add(self.wBias)
+        #pesos.add(self.wBias)
         return pesos    
         
     def setEntradas(self,inputs):
@@ -141,8 +143,8 @@ class Perceptron(object):
         data = {
             'name':self.name,
             'capa':self.capa,
-            'bias':self.bias,
-            'wBias':self.wBias,
+            #'bias':self.bias,
+            #'wBias':self.wBias,
             'error':self.error,
             'nInputs':self.nInputs,
             'funcion':self.funcion,
@@ -157,8 +159,8 @@ class Perceptron(object):
     def setConfiguracion(self,data):
         self.name = data['name']
         self.capa = data['capa']
-        self.bias = data['bias']
-        self.wBias = data['wBias']
+        #self.bias = data['bias']
+        #self.wBias = data['wBias']
         self.error = data['error']
         self.funcion = data['funcion']
         self.entradas = data['entradas']

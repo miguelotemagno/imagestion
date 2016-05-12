@@ -68,6 +68,8 @@ class Net(object):
         self.historial = []
         self.error    = 0.0
         self.umbralError = 0.001
+        self.min      = -1.0
+        self.max      = 1.0
         max,size      = 0,0
                 
         for i in xrange(self.nCapas):
@@ -78,9 +80,6 @@ class Net(object):
             self.layers[i] = Layer(i,size,inputs,funciones[i],self.layers,self)
             self.neuronas += size
             self.capaMax = max
-            self.layers[i].isInput  = True if i == 0 else False
-            self.layers[i].isHidden = True if i > 0 and i < self.nCapas-1 else False
-            self.layers[i].isOutput = True if i == self.nCapas-1 else False
         pass
 
     """
@@ -116,11 +115,12 @@ class Net(object):
                     
             outputs = sinapsis[self.nCapas]
         except:
-            err = str(exc_info())
+            err = exc_info()
             self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j))
-            self.addLog(err)
             self.addLog(str(sinapsis))
             self.panic = True
+            #traceback.print_stack()
+            self.addLog(str(err)+" - "+repr(traceback.format_stack()))
             pass
             
         self.addLog("<< "+str(outputs))
@@ -151,6 +151,65 @@ class Net(object):
     ##            [0.0], [1.0], [1.0], [0.0]
     ##        ])
 
+    def train(self,inputs,outputs):
+        self.addLog("Net.train -> inputs:"+str(inputs)+"\n outputs:"+str(outputs))
+        self.expect = outputs
+        resultado = []
+        error = 1
+        idx = 0
+
+        # paso 1: Se inicializan los pesos de todas las neuronas con valores
+        #         aleatorios rango [0..1]
+        #         N <= {[in1,in2,...,inN] [entrada2...]}
+        epochs = self.epochs if self.epochs != None else len(inputs) 
+        self.addLog("PASO 1: Se inicializan los pesos de todas las neuronas con valores aleatorios rango [0..1]")
+        self.addLog(">> epochs:"+str(epochs)+' idx=len(inputs[0]):'+str(len(inputs[0])))
+        try:
+            #salidas = [[None] * len(outputs[0])] * len(outputs)
+            error = 0.0
+
+            ## [[0.0,0.0], [0.0,1.0], [1.0,0.0], [1.0,1.0]]
+            for idx in range(len(inputs)):
+                # paso 2: Seleccionar el siguiente par de entrenamiento del conjunto de
+                #         entrenamiento, aplicando el vector de entrada a la entrada de la red.
+                self.addLog('>> idx:'+str(idx)+' -------------------------------------------------------------------------------------------------------')
+                self.addLog("PASO 2: Seleccionar el siguiente par de entrenamiento para el vector de entrada a la red.")
+                
+                datos = [None] * len(inputs[idx])
+                
+                for i in range(len(inputs[idx])):
+                    datos[i] = inputs[idx][i]
+                
+                # paso 3: Calcular salida de la red    
+                resultado = self.simular(datos)
+                
+                self.addLog("PASO 3: Calcular salida de la red")
+                self.addLog(">> datos:"+str(datos)+" resultado:"+str(resultado)+" size:"+str(len(resultado)))
+                
+#                for i in range(len(salidas[idx])):
+#                    self.addLog('>> salidas['+str(idx)+']['+str(i)+']='+str(resultado[i]))
+#                    salidas[idx][i] = resultado[i]
+                
+                expect = outputs[idx]
+                                    
+                # paso 5: balancea los pesos en funcion a la variacion del delta de error
+                self.addLog("PASO 4: balancea los pesos en funcion a la variacion del delta de error")
+                self.addLog(">> epochs:"+str(epochs)+' pesos:'+self.getPesos())
+                
+                self.backPropagation(resultado,expect)
+                
+            self.addLog(">> Calculo de error cuadratico de la red")
+            #result = self.layers[self.nCapas-1].getDeltas()
+            error = self.getErrorCuadratico(resultado,expect)
+
+        except:
+            err = exc_info()
+            self.addLog("ERROR Net.train(): iteracion idx="+str(idx)+" de "+str(len(inputs)))
+            self.addLog(str(err))
+            self.panic = True
+            
+        return error
+  
     def entrenar(self,inputs,outputs):
         self.addLog("Net.entrenar -> inputs:"+str(inputs)+"\n outputs:"+str(outputs))
         self.expect = outputs
@@ -167,56 +226,18 @@ class Net(object):
         try:
             for ciclo in range(epochs):
                 self.addLog(">> ciclo:"+str(ciclo)+" ====================================================================================================================")
-                salidas = [[None] * len(outputs[0])] * len(outputs)
-                error = 0.0
-
-                ## [[0.0,0.0], [0.0,1.0], [1.0,0.0], [1.0,1.0]]
-                for idx in range(len(inputs)):
-                    # paso 2: Seleccionar el siguiente par de entrenamiento del conjunto de
-                    #         entrenamiento, aplicando el vector de entrada a la entrada de la red.
-                    self.addLog('>> idx:'+str(idx)+' -------------------------------------------------------------------------------------------------------')
-                    self.addLog("PASO 2: Seleccionar el siguiente par de entrenamiento para el vector de entrada a la red.")
-                    
-                    datos = [None] * len(inputs[idx])
-                    
-                    for i in range(len(inputs[idx])):
-                        datos[i] = inputs[idx][i]
-                    
-                    # paso 3: Calcular salida de la red    
-                    resultado = self.simular(datos)
-                    
-                    self.addLog("PASO 3: Calcular salida de la red")
-                    self.addLog(">> datos:"+str(datos)+" resultado:"+str(resultado)+" size:"+str(len(resultado))+" salidas:"+str(salidas))
-                    
-                    for i in range(len(salidas[idx])):
-                        self.addLog('>> salidas['+str(idx)+']['+str(i)+']='+str(resultado[i]))
-                        salidas[idx][i] = resultado[i]
-                    
-                    expect = outputs[idx]
-                                        
-                    # paso 5: balancea los pesos en funcion a la variacion del delta de error
-                    self.addLog("PASO 4: balancea los pesos en funcion a la variacion del delta de error")
-                    self.addLog(">> epochs:"+str(epochs)+' pesos:'+self.getPesos())
-                    
-                    self.backPropagation(resultado,expect)
-                    
-                    self.addLog(">> Calculo de error cuadratico de la red")
-                    result = self.layers[self.nCapas-1].getDeltas()
-                    error = self.getErrorCuadratico(result,expect)
-
-                #self.historial.append({self.error:self.getPesos()})
-                self.addHistory({error:self.getPesos()})
+                
+                error = self.train(inputs,outputs)
                 self.addLog(">> errorCuadratico = "+str(error))
-                #self.error = error
-                    
-                if abs(error) < self.umbralError:
+                self.addHistory({error:self.getPesos()})
+                  
+                if error < self.umbralError:
                     break
             pass
         except:
-            err = str(exc_info())
+            err = exc_info()
             self.addLog("ERROR Net.entrenar(): iteracion idx="+str(idx)+" de "+str(len(inputs)))
-            print("ERROR Net.entrenar('"+str(err)+"'): iteracion idx="+str(idx)+" de "+str(len(inputs))+"\n")
-            self.addLog(err)
+            self.addLog(str(err))
             self.panic = True
             pass        
 
@@ -248,9 +269,10 @@ class Net(object):
             for idx in xrange(size, -1, -1):
                 self.layers[idx].setPesos(self.rate)
         except:
-            err = str(exc_info())
-            self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas)+"\n")
-            self.addLog(err)
+            err = exc_info()
+            self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas))
+            #traceback.print_stack()
+            self.addLog(str(err)+" - "+repr(traceback.format_stack()))
             self.panic = True 
         pass
         
