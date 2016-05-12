@@ -74,9 +74,9 @@ class Layer(object):
         pass
         
     def getDeltas(self):
-        deltas = [self.nodos[x].delta for x in xrange(self.cant)]
+        deltas = [self.nodos[x].error for x in xrange(self.cant)]
         if self.isHidden:
-            deltas.append(self.bias.delta)
+            deltas.append(self.bias.error)
             
         return deltas
         
@@ -92,37 +92,32 @@ class Layer(object):
             if self.isOutput:
                 self.addLog(">> capa salida ID:"+str(capa))
                 
-                for k in xrange(self.cant):
-                    delta = expect[k] - result[k]
-                    self.nodos[k].delta = delta
+                for k in range(self.cant):
+                    self.nodos[k].delta = expect[k] - result[k]
                     self.nodos[k].delta = self.nodos[k].getErrorDelta()
-                    self.error += self.nodos[k].error
                     
-                    self.addLog(">> "+str(delta)+" = "+str(expect[k])+" - "+str(result[k]))           
+                    self.addLog(">> "+str(self.nodos[k].delta)+" = "+str(expect[k])+" - "+str(result[k]))           
                     self.addLog(">> output.error = "+str(self.nodos[k].delta))         
                     
             if self.isHidden:
             # capas ocultas
                 self.addLog(">> capa oculta ID:"+str(capa))
-                error = 0.0
-                for j in xrange(self.cant):
-                    error = self.bias.getPeso(j) * self.bias.delta if self.bias else 0.0
+                for j in range(self.cant):
+                    self.error = self.bias.getPeso(j) * self.bias.delta if self.bias else 0.0
                     size = self.layers[post].cant
-                    for k in xrange(size):
+                    for k in range(size):
                         peso = self.layers[post].nodos[k].getPeso(j)
                         delta = self.layers[post].nodos[k].delta
-                        error += delta * peso
                         self.error += delta * peso
-                        
-                        self.addLog(">> nodo["+str(j)+"].peso["+str(k)+"]: "+str(self.error)+" += "+str(delta)+"*"+str(peso))
+                        self.addLog(">> layers["+str(post)+"].nodos["+str(k)+"].delta:"+str(self.error)+" += "+str(delta)+ " * "+str(peso))
                     
-                    self.nodos[j].delta = error
-                    self.nodos[j].delta = self.nodos[j].getErrorDelta()
-                    #self.nodos[j].error = self.deltas[j]
+                    self.nodos[j].delta = self.error
+                    self.nodos[j].getErrorDelta()
+                    self.addLog(">> hidden.error = "+str(self.nodos[j].error))         
                     
                 if self.bias:   
-                    self.bias.delta = error
-                    self.bias.delta = self.bias.getErrorDelta()
+                    self.bias.delta = self.error
+                    self.bias.getErrorDelta()
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
@@ -138,17 +133,17 @@ class Layer(object):
         #prev = self.id - 1
         
         try:        
-            for k in xrange(self.cant):
-                for j in xrange(self.nodos[k].nInputs):
+            for k in range(self.cant):
+                for j in range(self.nodos[k].nInputs):
                     #cambio = self.deltas[k] * self.nodos[k].entradas[j]
-                    cambio = self.nodos[k].delta * self.nodos[k].entradas[j]
+                    cambio = self.nodos[k].error * self.nodos[k].entradas[j]
                     peso = self.nodos[k].getPeso(j)
                     self.nodos[k].setPeso(j, peso + rate*cambio)
                     self.addLog(">> nodo["+str(k)+"].peso["+str(j)+"]: "+str(peso)+
                                 " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getPeso(j))+
                                 "   diff("+str(rate*cambio)+")")  
                     if self.bias:
-                        cambio = self.bias.delta * self.bias.entradas[j]
+                        cambio = self.bias.error * self.bias.entradas[j]
                         peso = self.bias.getPeso(j)
                         self.bias.setPeso(j, peso + rate*cambio)
                         
