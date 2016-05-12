@@ -86,7 +86,7 @@ class Net(object):
     /**
     * simular
     * 
-    * @param inputs
+    * @param inputs[]
     * @return Double[]
     * 
     * Propagacion hacia adelante del la red neuronal, devolviendo una salida
@@ -125,6 +125,30 @@ class Net(object):
             
         self.addLog("<< "+str(outputs))
         return outputs
+        
+    def feedForward(self,inputs,layer=0):
+        self.addLog("Red.feedForward -> inputs:"+str(inputs)+" layer:"+str(layer))
+        #print("Red.feedForward -> inputs:"+str(inputs)+" layer:"+str(layer))
+        i,j = (None,None)
+        try:
+            if layer < self.nCapas:
+                outputs  = [None] * self.layers[layer].cant
+                i = layer
+                for j in range(self.layers[i].cant):
+                    self.layers[i].nodos[j].entradas = inputs[j]
+                    outputs[j] = self.layers[i].nodos[j].calcular()
+                    
+                self.addLog("<< "+str(outputs))
+                #print("<< "+str(outputs))
+                return  self.feedForward(outputs, layer+1)
+        except:
+            err = exc_info()
+            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j))
+            #print("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j))
+            self.panic = True
+            self.addLog(str(err))
+       
+        return inputs
         
     """
     /** 
