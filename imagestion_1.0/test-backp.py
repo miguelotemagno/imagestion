@@ -15,28 +15,30 @@ print ('DELTA : '+str(net.getDeltas()))
 print ('ERROR : '+str(net.getErrores()))
 
 print ("0 SIMULAR")
-print (str([O,O]) + ' => ' + str(net.simular([O,O])))
-print (str([O,I]) + ' => ' + str(net.simular([O,I])))
-print (str([I,O]) + ' => ' + str(net.simular([I,O])))
-print (str([I,I]) + ' => ' + str(net.simular([I,I])))
+print (str([O,O]) + ' => ' + str(net.feedForward([O,O])))
+print (str([O,I]) + ' => ' + str(net.feedForward([O,I])))
+print (str([I,O]) + ' => ' + str(net.feedForward([I,O])))
+print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
-    net.rate = 0.5
-    net.epochs = 2
+    net.rate   = 0.5
+    net.epochs = 3
+    net.min    = -0.5
+    net.max    = 0.5
     #net.umbralError = 0.0001
 
-    net.entrenar([
+    net.trainUntilConverge ([
             [O,O], [O,I], [I,O], [I,I]
         ],[
              [O],   [I],   [I],   [O]
         ])
 
     print (str(x+1)+" SIMULAR")
-    print (str([O,O]) + ' => ' + str(net.simular([O,O])))
-    print (str([O,I]) + ' => ' + str(net.simular([O,I])))
-    print (str([I,O]) + ' => ' + str(net.simular([I,O])))
-    print (str([I,I]) + ' => ' + str(net.simular([I,I])))
+    print (str([O,O]) + ' => ' + str(net.feedForward([O,O])))
+    print (str([O,I]) + ' => ' + str(net.feedForward([O,I])))
+    print (str([I,O]) + ' => ' + str(net.feedForward([I,O])))
+    print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 
     print ('PESOS    : '+str(net.getPesos()))
     print ('DELTA    : '+str(net.getDeltas()))

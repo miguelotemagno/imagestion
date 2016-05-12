@@ -84,7 +84,7 @@ class Net(object):
 
     """
     /**
-    * simular
+    * feedForward
     * 
     * @param inputs[]
     * @return Double[]
@@ -95,36 +95,26 @@ class Net(object):
     * Mas detalle en profundidad visitar:
     * http://galaxy.agh.edu.pl/~vlsi/AI/backp_t_en/backprop.html
     **/
-    """
-    def simular(self,inputs):
-        self.addLog("Red.simular -> inputs:"+str(inputs))
-        outputs  = [None] * self.salidas
-        sinapsis = [None] * (self.nCapas + 1)
-        i,j = None,None
-        
-        for i in xrange(1,self.nCapas+1):
-            sinapsis[i]   = [1.0] * (self.layers[i-1].cant)
-
-        sinapsis[0] = inputs
-        
+    """      
+    def feedForward(self,inputs,layer=0):
+        self.addLog("Red.feedForward -> inputs:"+str(inputs)+" layer:"+str(layer))
+        i,j = (None,None)
         try:
-            for i in xrange(self.nCapas):  
-                for j in xrange(self.layers[i].cant):
-                    self.layers[i].nodos[j].entradas = sinapsis[i]
-                    sinapsis[i+1][j] =  self.layers[i].nodos[j].calcular();
+            if layer < self.nCapas:
+                outputs  = [None] * self.layers[layer].cant
+                i = layer
+                for j in range(self.layers[i].cant):
+                    self.layers[i].nodos[j].entradas = inputs
+                    outputs[j] = self.layers[i].nodos[j].calcular()
                     
-            outputs = sinapsis[self.nCapas]
+                return self.feedForward(outputs, layer+1)
         except:
             err = exc_info()
-            self.addLog("ERROR en Red.simular('"+str(err)+"') Iteracion i="+str(i)+" j="+str(j))
-            self.addLog(str(sinapsis))
+            self.addLog("ERROR en Red.feedForward('"+str(inputs)+"') Iteracion i="+str(i)+" j="+str(j))
             self.panic = True
-            #traceback.print_stack()
-            self.addLog(str(err)+" - "+repr(traceback.format_stack()))
-            pass
-            
-        self.addLog("<< "+str(outputs))
-        return outputs
+            self.addLog(str(err))
+       
+        return inputs
         
     def feedForward(self,inputs,layer=0):
         self.addLog("Red.feedForward -> inputs:"+str(inputs)+" layer:"+str(layer))
@@ -205,14 +195,10 @@ class Net(object):
                     datos[i] = inputs[idx][i]
                 
                 # paso 3: Calcular salida de la red    
-                resultado = self.simular(datos)
+                resultado = self.feedForward(datos)
                 
                 self.addLog("PASO 3: Calcular salida de la red")
                 self.addLog(">> datos:"+str(datos)+" resultado:"+str(resultado)+" size:"+str(len(resultado)))
-                
-#                for i in range(len(salidas[idx])):
-#                    self.addLog('>> salidas['+str(idx)+']['+str(i)+']='+str(resultado[i]))
-#                    salidas[idx][i] = resultado[i]
                 
                 expect = outputs[idx]
                                     
@@ -223,7 +209,6 @@ class Net(object):
                 self.backPropagation(resultado,expect)
                 
             self.addLog(">> Calculo de error cuadratico de la red")
-            #result = self.layers[self.nCapas-1].getDeltas()
             error = self.getErrorCuadratico(resultado,expect)
 
         except:
@@ -234,7 +219,7 @@ class Net(object):
             
         return error
   
-    def entrenar(self,inputs,outputs):
+    def trainUntilConverge(self,inputs,outputs):
         self.addLog("Net.entrenar -> inputs:"+str(inputs)+"\n outputs:"+str(outputs))
         self.expect = outputs
         idx = 0
