@@ -23,9 +23,9 @@ print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
     net.rate   = 0.5
-    net.epochs = 3
-    net.min    = -0.5
-    net.max    = 0.5
+    net.epochs = 10
+    #net.min    = -0.5
+    #net.max    = 0.5
     #net.umbralError = 0.0001
 
     net.trainUntilConverge ([
