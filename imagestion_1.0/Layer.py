@@ -52,27 +52,8 @@ class Layer(object):
         #self.isHidden = True if capa > 0 and not self.isOutput else False
         self.isHidden = True if not self.isOutput else False
         self.bias     = Perceptron(str(capa)+'xBias',inputs,function,padre,capa) if self.isHidden else None
-        #self.bias.     = 1.0
-        #self.wBias    = random.uniform(padre.min,padre.max)
         pass
       
-    def getPeso(self, i, j):
-        capa = self.id
-        post = capa + 1
-        #prev = capa -1
-        return self.layers[post].nodos[i].getPeso(j)
-        pass
-        
-    def setPeso(self, i, j, value):
-        capa = self.id
-        post = capa + 1
-        #prev = capa -1
-        self.layers[post].nodos[i].setPeso(j, value)
-        pass
-        
-    def getEntrada(self, x, y):
-        pass
-        
     def getDeltas(self):
         deltas = [self.nodos[x].error for x in xrange(self.cant)]
         if self.isHidden:
@@ -86,34 +67,37 @@ class Layer(object):
         post = self.id + 1
         prev = self.id -1
         capa = self.id
+        #  error = error + delta_salida[0..k] * pesos_sal[j][0..k]   ;   delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error   
 
         try:
             # capa salida
             if self.isOutput:
-                self.addLog(">> capa salida ID:"+str(capa))
+                self.addLog(">> CAPA SALIDA ID:"+str(capa))
                 
                 for k in range(self.cant):
                     self.nodos[k].delta = expect[k] - result[k]
-                    self.nodos[k].delta = self.nodos[k].getErrorDelta()
+                    self.nodos[k].getErrorDelta()
                     
-                    self.addLog(">> "+str(self.nodos[k].delta)+" = "+str(expect[k])+" - "+str(result[k]))           
+                    self.addLog(">> nodo[%s].delta:%f = r:%f - o:%f" % (self.nodos[k].name,self.nodos[k].delta,expect[k],result[k]))
                     self.addLog(">> output.error = "+str(self.nodos[k].delta))         
                     
             if self.isHidden:
             # capas ocultas
-                self.addLog(">> capa oculta ID:"+str(capa))
+                self.addLog(">> CAPA OCULTA ID:"+str(capa))
                 for j in range(self.cant):
-                    self.error = self.bias.getPeso(j) * self.bias.delta if self.bias else 0.0
+                    self.error = self.bias.getCoeficiente(j) if self.bias else 0.0
                     size = self.layers[post].cant
                     for k in range(size):
-                        peso = self.layers[post].nodos[k].getPeso(j)
                         delta = self.layers[post].nodos[k].delta
+                        peso  = self.nodos[j].getPeso(k)
                         self.error += delta * peso
-                        self.addLog(">> layers["+str(post)+"].nodos["+str(k)+"].delta:"+str(self.error)+" += "+str(delta)+ " * "+str(peso))
+                        self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name,self.error,delta,peso))
+                        self.layers[capa].nodos[k].getErrorDelta()
+                        self.addLog(">> error += "+str(self.error))
                     
                     self.nodos[j].delta = self.error
                     self.nodos[j].getErrorDelta()
-                    self.addLog(">> hidden.error = "+str(self.nodos[j].error))         
+                    self.addLog("<< hidden.error = "+str(self.nodos[j].error))         
                     
                 if self.bias:   
                     self.bias.delta = self.error
@@ -122,26 +106,25 @@ class Layer(object):
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
             self.padre.panic = True 
-            #traceback.print_stack()
             self.padre.addLog(str(err)+" - "+str(self.getConfiguracion()))
             raise err
         pass
             
     def setPesos(self,rate):
         self.addLog("Layer->setPesos("+str(rate)+") capa:"+str(self.id))
-        #post = self.id + 1
-        #prev = self.id - 1
+        post = self.id + 1
+        prev = self.id - 1
+        capa = self.id
         
         try:        
             for k in range(self.cant):
                 for j in range(self.nodos[k].nInputs):
-                    #cambio = self.deltas[k] * self.nodos[k].entradas[j]
-                    cambio = self.nodos[k].error * self.nodos[k].entradas[j]
-                    peso = self.nodos[k].getPeso(j)
-                    self.nodos[k].setPeso(j, peso + rate*cambio)
-                    self.addLog(">> nodo["+str(k)+"].peso["+str(j)+"]: "+str(peso)+
-                                " + "+str(rate)+"*"+str(cambio)+" = "+str(self.nodos[k].getPeso(j))+
-                                "   diff("+str(rate*cambio)+")")  
+                    #cambio = delta_oculto[post] * act_ent[capa] ; delta_salida[post] * act_ocu[capa]
+                    error   = self.nodos[k].error
+                    entrada = self.nodos[k].getEntrada(j)
+                    peso    = self.nodos[k].getPeso(j)
+                    self.nodos[k].setPeso(j, peso + rate*error*entrada)
+                    self.addLog(">> nodo[%s].peso[%d]:%f = w:%f + l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.nodos[k].name, j, self.nodos[k].getPeso(j), peso, rate, error, entrada, rate*error*entrada))  
                     if self.bias:
                         cambio = self.bias.error * self.bias.entradas[j]
                         peso = self.bias.getPeso(j)
@@ -155,12 +138,6 @@ class Layer(object):
             self.padre.panic = True 
             raise err
         pass
-
-    def getStrDeltas(self):
-        return {'layer_'+str(self.id) : [
-                self.nodos[x].getConfiguracion() 
-                for x in xrange(self.cant)
-            ]}
             
     def addLog(self,str):
         if self.padre.debug :
@@ -186,7 +163,6 @@ class Layer(object):
         self.id     = data['id']
         self.error  = data['error']
         self.cant   = data['cant']
-        #self.deltas = data['deltas']
         self.bias   = Perceptron( data['bias']['name'],
                         data['bias']['nInputs'],
                         data['bias']['funcion'],

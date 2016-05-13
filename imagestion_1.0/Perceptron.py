@@ -59,8 +59,6 @@ class Perceptron(object):
         self.expect   = 0
         #min, max = (0.0, 0.0) if not self.capa == 0 else (padre.min,padre.max)
         min, max = (padre.min,padre.max)
-        #self.bias     = 1.0
-        #self.wBias    = random.uniform(min,max)
         self.pesos    = [random.uniform(min, max) for x in xrange(inputs)]
         pass
         
@@ -71,7 +69,7 @@ class Perceptron(object):
         try:
             for i in range(len(self.entradas)):
                 suma += self.entradas[i] * self.pesos[i]
-                #self.addLog(str(suma)+" = "+str(self.entradas[i])+" * "+str(self.pesos[i]))
+                #self.padre.addLog(">> nodo[%s].neta:%f += i[%d]:%f * w[%d]:%f" % (self.name,suma,i,self.entradas[i],i,self.pesos[i]))
             pass
             
         except:
@@ -86,6 +84,7 @@ class Perceptron(object):
         #self.addLog("Perceptron.calcular(name:"+self.name+", entradas:"+str(self.entradas)+')')
         suma = self.getSumPesosEntradas()
         res  = self.fnTransf.exe(suma)
+        self.padre.addLog(">> res:%f = %s(%f)" % (res,self.fnTransf.funciones[self.fnTransf.tipo],suma))
         self.salida = res
         return res
 
@@ -104,13 +103,31 @@ class Perceptron(object):
     #  y derivables (la funcion sigmoidal pertenece a este tipo de funciones).
     #
     """         
+    
+    """
+    #  getErrorDelta
+    #             error = error + delta_salida[0..k] * pesos_sal[j][0..k]
+    #             delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
+    #
+    """
          
     def getErrorDelta(self):
         self.error = self.fnTransf.train(self.salida) * self.delta
+        self.padre.addLog(">> errorDelta:%f = %s(%f) * %f" % (self.error,self.fnTransf.derivadas[self.fnTransf.tipo],self.salida,self.delta))
         return self.error
      
     def getCoeficiente(self,i):
-        return self.pesos[i] * self.delta
+        try:
+            coef = self.pesos[i] * self.delta
+            self.padre.addLog(">> nodo[%s].peso(%d).getCoeficiente: %f = w:%f * d:%f ; Layer.id:%d" % (self.name,i,coef,self.pesos[i],self.delta,self.capa))
+            return coef
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Perceptron.getCoeficiente(%d): Layer.id:%d" % (i,self.capa))
+            self.padre.panic = True 
+            #traceback.print_stack()
+            self.padre.addLog(str(err)+" - "+str(self.getConfiguracion()))
+            raise err
     
     def setSalida(self,salida):
         self.salida = salida
