@@ -112,7 +112,8 @@ class Perceptron(object):
     """
          
     def getErrorDelta(self):
-        self.error = self.fnTransf.train(self.salida) * self.delta
+        error = self.fnTransf.train(self.salida) * self.delta
+        self.error = error
         self.padre.addLog(">> errorDelta:%f = %s(%f) * %f" % (self.error,self.fnTransf.derivadas[self.fnTransf.tipo],self.salida,self.delta))
         return self.error
      

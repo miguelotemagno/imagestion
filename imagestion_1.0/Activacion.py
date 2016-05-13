@@ -102,11 +102,11 @@ class Activacion(object):
         pass
         
     def satlin(self,val):
-        return 0.0 if val < 0.0 else 1.0 if val > 1.0 else val
+        return 0.0 if val < 0.0 else (1.0 if val > 1.0 else val)
         pass
         
     def satlins(self,val):
-        return -1.0 if val < -1.0 else 1.0 if val > 1.0 else val
+        return -1.0 if val < -1.0 else (1.0 if val > 1.0 else val)
         pass
         
     def logsig(self,val):
@@ -115,11 +115,10 @@ class Activacion(object):
         except:
             err = str(exc_info())            
             self.addLog('ERROR logsig('+str(val)+'):'+err)
-            return 0.0
+            return 1.0
         
     def tansig(self,val):
         #valor = (exp(val) - exp(-val)) / (exp(val) + exp(-val))      
-        #return self.satlin(valor)    # Corregir que valores devueltos no se disparen durante entrenamiento
         return math.tanh(val)
         
     def radbas(self,val):
@@ -128,7 +127,7 @@ class Activacion(object):
     def logsig_derivada(self,val):
         valor = val * (1.0 - val)
         #return valor 
-        return self.satlin(valor)    # Corregir que valores devueltos no se disparen durante entrenamiento
+        return self.satlins(valor)    # Corregir que valores devueltos no se disparen durante entrenamiento
         pass
         
     def tansig_derivada(self,valor):

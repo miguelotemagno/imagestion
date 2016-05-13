@@ -1,8 +1,8 @@
 from Red import *
 import json
 
-O = 0 #0.000001
-I = 1 #0.999999
+O = 0 #+ 0.000001
+I = 1 #- 0.000001
 
 # Net(entradas,salidas,[capa1,capa2,...],[funciones])
 net = Net(2,1,[2,1],['TANSIG','TANSIG'])
@@ -10,10 +10,10 @@ net = Net(2,1,[2,1],['TANSIG','TANSIG'])
 #net = Net(2,1,[2,2,1],['LOGSIG','TANSIG','TANSIG'])
 net.debug = True
 
-print ('NET   : Net(2,1,'+str(net.capas)+','+str(net.transferencias)+')')
-print ('PESOS : '+str(net.getPesos()))
-print ('DELTA : '+str(net.getDeltas()))
-print ('ERROR : '+str(net.getErrores()))
+print ('NET      : Net(2,1,'+str(net.capas)+','+str(net.transferencias)+')')
+print ('PESOS    : '+str(net.getPesos()))
+print ('DELTA    : '+str(net.getDeltas()))
+print ('LIST_ERR : '+str(net.getErrores()))
 
 print ("0 SIMULAR")
 print (str([O,O]) + ' => ' + str(net.feedForward([O,O])))
@@ -23,7 +23,7 @@ print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
-    net.rate   = 0.8
+    net.rate   = 0.5
     net.epochs = 10
     #net.min    = -0.5
     #net.max    = 0.5
