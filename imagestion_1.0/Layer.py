@@ -191,8 +191,9 @@ class Layer(object):
                         data['bias']['nInputs'],
                         data['bias']['funcion'],
                         self.padre,
-                        self.id) if data['bias'] else []
-        self.bias.setConfiguracion(data['bias'])
+                        self.id) if data['bias'] else None
+        if self.bias:
+            self.bias.setConfiguracion(data['bias'])
         self.nodos = [
             Perceptron( data['nodos'][x]['name'],
                         data['nodos'][x]['nInputs'],
