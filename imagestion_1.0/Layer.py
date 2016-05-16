@@ -76,6 +76,7 @@ class Layer(object):
                 
                 for k in range(self.cant):
                     self.nodos[k].delta = expect[k] - result[k]                    
+                    self.nodos[k].getErrorDelta()
                     self.addLog(">> nodo[%s].delta:%f = r:%f - o:%f" % (self.nodos[k].name,self.nodos[k].delta,expect[k],result[k]))
                     self.addLog(">> output.error = "+str(self.nodos[k].delta))         
                     
@@ -93,10 +94,12 @@ class Layer(object):
                         self.addLog(">> error += "+str(self.error))
                     
                     self.nodos[j].delta = self.error
+                    self.nodos[j].getErrorDelta()
                     self.addLog("<< hidden.error = "+str(self.nodos[j].error))         
                     
                 if self.bias:   
                     self.bias.delta = self.error
+                    self.bias.getErrorDelta()
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
@@ -115,18 +118,15 @@ class Layer(object):
             for k in range(self.cant):
                 for j in range(self.nodos[k].nInputs):
                     #cambio = delta_oculto[post] * act_ent[capa] ; delta_salida[post] * act_ocu[capa]
-                    self.nodos[k].getErrorDelta()
                     error   = self.nodos[k].error
                     entrada = self.nodos[k].getEntrada(j)
                     peso    = self.nodos[k].getPeso(j)
                     self.nodos[k].setPeso(j, peso + rate*error*entrada)
                     self.addLog(">> nodo[%s].peso[%d]:%f = w:%f + l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.nodos[k].name, j, self.nodos[k].getPeso(j), peso, rate, error, entrada, rate*error*entrada))  
                     if self.bias:
-                        self.bias.getErrorDelta()
                         cambio = self.bias.error * self.bias.entradas[j]
                         peso = self.bias.getPeso(j)
-                        self.bias.setPeso(j, peso + rate*cambio)
-                        
+                        self.bias.setPeso(j, peso + rate*cambio)                        
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setPesos(%d): Layer.id:%d" % (rate,self.id))

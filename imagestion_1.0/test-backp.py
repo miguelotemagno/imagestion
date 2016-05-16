@@ -7,7 +7,7 @@ I = 1 #- 0.000001
 # Net(entradas,salidas,[capa1,capa2,...],[funciones])
 net = Net(2,1,[2,1],['TANSIG','TANSIG'])
 #net = Net(2,1,[2,1],['LOGSIG','LOGSIG'])
-#net = Net(2,1,[2,2,1],['LOGSIG','TANSIG','TANSIG'])
+#net = Net(2,1,[2,1],['LOGSIG','TANSIG'])
 net.debug = True
 
 print ('NET      : Net(2,1,'+str(net.capas)+','+str(net.transferencias)+')')
@@ -32,7 +32,7 @@ for x in range(1):
     net.trainUntilConverge ([
             [O,O], [O,I], [I,O], [I,I]
         ],[
-             [I],   [O],   [O],   [I]
+             [O],   [I],   [O],   [I]
         ])
 
     print (str(x+1)+" SIMULAR")
