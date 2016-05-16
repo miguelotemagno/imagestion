@@ -140,7 +140,33 @@ class Layer(object):
             self.padre.panic = True 
             raise err
         pass
-            
+
+	def setWeight(self, x, y, value):
+        post = self.id + 1
+        prev = self.id - 1
+        capa = self.id
+		pass
+
+	def setDelta(self, x, y, value):
+        post = self.id + 1
+        prev = self.id - 1
+        capa = self.id
+		pass
+
+	def getWeigth(self, x, y):
+        post = self.id + 1
+        prev = self.id - 1
+        capa = self.id
+		self.layers[post].nodos[x].getPeso(y)
+		pass
+
+	def getDelta(self, x, y):
+        post = self.id + 1
+        prev = self.id - 1
+        capa = self.id
+		self.layers[post].nodos[x].error(y)
+		pass
+		
     def addLog(self,str):
         if self.padre.debug :
             self.padre.addLog(str)
