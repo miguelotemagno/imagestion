@@ -75,33 +75,28 @@ class Layer(object):
                 self.addLog(">> CAPA SALIDA Layer:"+str(capa))
                 
                 for k in range(self.cant):
-                    self.nodos[k].delta = expect[k] - result[k]
-                    #self.nodos[k].getErrorDelta()
-                    
+                    self.nodos[k].delta = expect[k] - result[k]                    
                     self.addLog(">> nodo[%s].delta:%f = r:%f - o:%f" % (self.nodos[k].name,self.nodos[k].delta,expect[k],result[k]))
                     self.addLog(">> output.error = "+str(self.nodos[k].delta))         
                     
             if self.isHidden:
             # capas ocultas
                 self.addLog(">> CAPA OCULTA Layer:"+str(capa))
+                size = self.layers[post].cant
                 for j in range(self.cant):
                     self.error = self.bias.getCoeficiente(j) if self.bias else 0.0
-                    size = self.layers[post].cant
                     for k in range(size):
-                        delta = self.layers[post].nodos[k].delta
-                        peso  = self.nodos[j].getPeso(k)
+                        delta = self.getDelta(j,k) 
+                        peso  = self.getWeight(j,k) 
                         self.error += delta * peso
-                        self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name,self.error,delta,peso))
-                        #self.layers[capa].nodos[k].getErrorDelta()
+                        self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name, self.error, delta, peso))
                         self.addLog(">> error += "+str(self.error))
                     
                     self.nodos[j].delta = self.error
-                    #self.nodos[j].getErrorDelta()
                     self.addLog("<< hidden.error = "+str(self.nodos[j].error))         
                     
                 if self.bias:   
                     self.bias.delta = self.error
-                    #self.bias.getErrorDelta()
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
@@ -135,37 +130,38 @@ class Layer(object):
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setPesos(%d): Layer.id:%d" % (rate,self.id))
-            traceback.print_stack()
             self.padre.addLog(str(err)+" - "+str(self.getConfiguracion()))
             self.padre.panic = True 
             raise err
         pass
 
-	def setWeight(self, x, y, value):
+    def setWeight(self, x, y, value):
         post = self.id + 1
         prev = self.id - 1
         capa = self.id
-		pass
+        self.layers[post].nodos[y].setPeso(x,value)
+        pass
 
-	def setDelta(self, x, y, value):
+    def setDelta(self, x, y, value):
         post = self.id + 1
         prev = self.id - 1
         capa = self.id
-		pass
+        self.layers[post].nodos[y].delta = value
+        pass
 
-	def getWeigth(self, x, y):
+    def getWeight(self, x, y):
         post = self.id + 1
         prev = self.id - 1
         capa = self.id
-		self.layers[post].nodos[x].getPeso(y)
-		pass
+        self.padre.addLog("Layer.getWeight(%d,%d): Layer.id:%d" % (x,y,post))
+        return self.layers[post].nodos[y].getPeso(x)
 
-	def getDelta(self, x, y):
+    def getDelta(self, x, y):
         post = self.id + 1
         prev = self.id - 1
         capa = self.id
-		self.layers[post].nodos[x].error(y)
-		pass
+        self.padre.addLog("Layer.getDelta(%d,%d): Layer.id:%d" % (x,y,post))
+        return self.layers[post].nodos[y].delta
 		
     def addLog(self,str):
         if self.padre.debug :

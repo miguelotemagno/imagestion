@@ -256,8 +256,6 @@ class Net(object):
         except:
             err = exc_info()
             self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas))
-            #traceback.print_stack()
-            self.addLog(str(err)+" - "+repr(traceback.format_stack()))
             self.panic = True 
         pass
         
