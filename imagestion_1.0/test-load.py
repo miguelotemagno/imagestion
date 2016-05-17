@@ -1,13 +1,15 @@
 from Red import *
 import json
 
-O = 0 #0.01 #0.000001
-I = 1 #0.99 #0.999999
+O = 0 #+0.000001
+I = 1 #-0.000001
 
 # Net(entradas,salidas,[nodos,...],[funciones])
 net = Net(2,1,[2,2,1],['TANSIG','TANSIG','TANSIG'])
 #net = Net(2,1,[2,2,1],['LOGSIG','LOGSIG','LOGSIG'])
 net.debug = True
+net.min   = -0.5
+net.max   = 0.5
 
 print ""
 print 'NET   : Net(2,1,'+str(net.capas)+','+str(net.transferencias)+')'
