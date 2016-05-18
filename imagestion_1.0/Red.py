@@ -68,11 +68,11 @@ class Net(object):
         self.historial = []
         self.error    = 0.0
         self.umbralError = 0.001
-        self.min      = -1.0
-        self.max      = 1.0
+        self.min      = -0.5
+        self.max      = 0.5
         max,size      = 0,0
                 
-        for i in xrange(self.nCapas):
+        for i in range(self.nCapas):
             inputs = entradas if i == 0 else layers[i-1]
             size   = layers[i]
             max    = size if size > max else max
@@ -82,6 +82,10 @@ class Net(object):
             self.capaMax = max
         pass
 
+    def reInit(self):
+        for i in range(self.nCapas):
+            self.layers[i].reInit()
+            
     """
     /**
     * feedForward
@@ -104,7 +108,7 @@ class Net(object):
                 outputs  = [None] * self.layers[layer].cant
                 i = layer
                 for j in range(self.layers[i].cant):
-                    self.layers[i].nodos[j].entradas = inputs
+                    self.layers[i].nodos[j].setEntradas(inputs)
                     outputs[j] = self.layers[i].nodos[j].calcular()
                     
                 return self.feedForward(outputs, layer+1)
@@ -212,11 +216,11 @@ class Net(object):
             for ciclo in range(epochs):
                 self.addLog(">> ciclo:"+str(ciclo)+" ====================================================================================================================")
                 
-                error = self.train(inputs,outputs)
-                self.addLog(">> errorCuadratico = "+str(error))
-                self.addHistory({error:self.getPesos()})
+                self.error = self.train(inputs,outputs)
+                self.addLog(">> errorCuadratico = "+str(self.error))
+                self.addHistory({self.error:self.getPesos()})
                   
-                if error < self.umbralError:
+                if self.error < self.umbralError:
                     break
             pass
         except:
@@ -267,7 +271,7 @@ class Net(object):
         self.addLog("Net.getErrorCuadratico -> result:"+str(result)+" expect:"+str(expect))
         error = 0.0
         
-        for j in xrange(len(expect)):
+        for j in range(len(expect)):
             error += 0.5 * (expect[j] - result[j])**2
             
         self.addLog("<< error:"+str(error))

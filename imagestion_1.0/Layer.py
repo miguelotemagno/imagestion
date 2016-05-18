@@ -46,13 +46,17 @@ class Layer(object):
         self.cant     = neurons
         self.layers   = layers
         self.padre    = padre
-        self.nodos    = [Perceptron(str(capa)+'x'+str(x),inputs,function,padre,capa) for x in xrange(neurons)]
+        self.nodos    = [Perceptron(str(capa)+'x'+str(x),inputs,function,padre,capa) for x in range(neurons)]
         self.isInput  = True if capa == 0 else False
         self.isOutput = True if capa == padre.nCapas - 1 else False
-        #self.isHidden = True if capa > 0 and not self.isOutput else False
-        self.isHidden = True if not self.isOutput else False
+        self.isHidden = True if capa > 0 and not self.isOutput else False
+        #self.isHidden = True if not self.isOutput else False
         self.bias     = Perceptron(str(capa)+'xBias',inputs,function,padre,capa) if self.isHidden else None
         pass
+    
+    def reInit(self):
+        for x in range(self.cant):
+            self.nodos[x].reInit()
       
     def getDeltas(self):
         deltas = [self.nodos[x].error for x in xrange(self.cant)]
@@ -63,7 +67,6 @@ class Layer(object):
         
     def setDeltas(self,expect,result):
         self.addLog("Layer->setDeltas("+str(expect)+","+str(result)+") Layer:"+str(self.id))
-        self.error = 0.0
         post = self.id + 1
         prev = self.id -1
         capa = self.id
@@ -85,21 +88,22 @@ class Layer(object):
                 self.addLog(">> CAPA OCULTA Layer:"+str(capa))
                 size = self.layers[post].cant
                 for j in range(self.cant):
-                    self.error = self.bias.getCoeficiente(j) if self.bias else 0.0
+                    error = 0.0
+#                    self.error = self.bias.getCoeficiente(j) if self.bias else 0.0
                     for k in range(size):
                         delta = self.getDelta(j,k) 
                         peso  = self.getWeight(j,k) 
-                        self.error += delta * peso
+                        error += delta * peso
                         self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name, self.error, delta, peso))
                         self.addLog(">> error += "+str(self.error))
                     
-                    self.nodos[j].delta = self.error
+                    self.nodos[j].delta = error
                     self.nodos[j].getErrorDelta()
                     self.addLog("<< hidden.error = "+str(self.nodos[j].error))         
                     
-                if self.bias:   
-                    self.bias.delta = self.error
-                    self.bias.getErrorDelta()
+#                if self.bias:   
+#                    self.bias.delta = self.error
+#                    self.bias.getErrorDelta()
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
@@ -116,13 +120,14 @@ class Layer(object):
         
         try:        
             for k in range(self.cant):
+                self.nodos[k].setBias(rate)
                 for j in range(self.nodos[k].nInputs):
                     #cambio = delta_oculto[post] * act_ent[capa] ; delta_salida[post] * act_ocu[capa]
                     error   = self.nodos[k].error
                     entrada = self.nodos[k].getEntrada(j)
                     peso    = self.nodos[k].getPeso(j)
-                    self.nodos[k].setPeso(j, peso + rate*error*entrada)
-                    self.addLog(">> nodo[%s].peso[%d]:%f = w:%f + l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.nodos[k].name, j, self.nodos[k].getPeso(j), peso, rate, error, entrada, rate*error*entrada))  
+                    self.nodos[k].setPeso(j, peso - rate*error*entrada)
+                    self.addLog(">> nodo[%s].peso[%d]:%f = w:%f - l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.nodos[k].name, j, self.nodos[k].getPeso(j), peso, rate, error, entrada, rate*error*entrada))  
                     if self.bias:
                         cambio = self.bias.error * self.bias.entradas[j]
                         peso = self.bias.getPeso(j)
