@@ -25,6 +25,7 @@ print str([I,O]) + ' => ' + str(net.feedForward([I,O]))
 print str([I,I]) + ' => ' + str(net.feedForward([I,I]))
 print ""
 
+#f = open('neural-network.json', 'r')
 f = open('referencia.json', 'r')
 jsNet = f.read();
 f.close()

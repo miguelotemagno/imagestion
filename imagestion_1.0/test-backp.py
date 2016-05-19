@@ -1,5 +1,7 @@
 from Red import *
 import json
+import time
+import math
 
 O = 0 #+ 0.000001
 I = 1 #- 0.000001
@@ -24,17 +26,34 @@ print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
     net.rate   = 0.5
-    net.epochs = 10
+    net.epochs = 1000
     #net.min    = -0.5
     #net.max    = 0.5
-    #net.umbralError = 0.0001
+    net.umbralError = 0.001
+    inputs  = [[O,O], [O,I], [I,O], [I,I]]
+    outputs = [ [O],   [I],   [I],   [O] ]
+    error = 1
+    tryAgain = True
 
-    net.trainUntilConverge ([
-            [O,O], [O,I], [I,O], [I,I]
-        ],[
-             [O],   [I],   [O],   [I]
-        ])
+    while tryAgain:
+        net.trainUntilConverge (inputs,outputs)
+        
+        OO = net.feedForward([0,0])
+        OI = net.feedForward([0,1])
+        IO = net.feedForward([1,0])
+        II = net.feedForward([1,1])
+        
+        print([OO,OI,IO,II])
+        
+#        if math.fabs(OO[0]) < 0.5 and math.fabs(OI[0]) > 0.5 and math.fabs(IO[0]) > 0.5 and math.fabs(II[0]) < 0.5 :
+#            tryAgain = False
+#        else:
+#            net.reInit()
+#            
+#        time.sleep(5)
 
+        tryAgain = False    
+        
     print (str(x+1)+" SIMULAR")
     print (str([O,O]) + ' => ' + str(net.feedForward([O,O])))
     print (str([O,I]) + ' => ' + str(net.feedForward([O,I])))
@@ -55,10 +74,10 @@ with open("neural-network.json", "w") as text_file:
     text_file.write(dumps(net.getConfiguracion(), sort_keys=True,indent=4, separators=(',', ': ')))
 
 print ("\nprint HISTORIAL:"+str(net.getHistorialLenght()))
-print (net.getHistorial())
+#print (net.getHistorial())
 
 
-net.panic = True
+#net.panic = True
     
 if net.panic:
     print ("print LOG")
