@@ -186,7 +186,8 @@ class Net(object):
                 self.addLog("PASO 4: balancea los pesos en funcion a la variacion del delta de error")
                 self.addLog(">> epochs:%d ; pesos:%s ; deltas:%s" % (epochs,self.getPesos(),self.getDeltas()))
                 
-                self.backPropagation(resultado,expect)
+                #self.backPropagation(resultado,expect)
+                self.backp(resultado,expect)
                 
             self.addLog(">> Calculo de error cuadratico de la red")
             error = self.getErrorCuadratico(resultado,expect)
@@ -251,18 +252,57 @@ class Net(object):
         try:
             size = self.nCapas -1
             self.addLog(">> Calculo de deltas en la capa")
-            for idx in xrange(size, -1, -1):
+            for idx in range(size, -1, -1):
                 self.layers[idx].setDeltas(result,expect)
                 
             self.addLog(">> Actualizacion de pesos en la capa")
-            for idx in xrange(size, -1, -1):
+            for idx in range(size, -1, -1):
                 self.layers[idx].setPesos(self.rate)
         except:
             err = exc_info()
             self.addLog("ERROR Net.backPropagation(): iteracion idx="+str(idx)+" de "+str(self.nCapas))
-            self.panic = True 
+            self.addLog(str(err))
+            self.panic = True
         pass
         
+    def backp(self,result,expect):
+        self.addLog("Net.backp -> result:"+str(result)+" expect:"+str(expect))
+        nCapas = self.nCapas -1
+        
+        try:
+            self.addLog(">> Calculo de deltas en la capa")
+            for i in range(nCapas, -1, -1):
+                nNodos = self.layers[i].cant
+                deltas = [0.0] * nNodos
+                for j in range(nNodos -1):
+                    self.layers[i].setDelta(i, j, 0.0)
+                    error = 0.0
+                    if self.layers[i].isOutput:
+                        error = expect[j] - result[j]
+                    else:
+                        nPesos = self.layers[i].inputsNextLayer()
+                        post = i + 1
+                        for k in range(nPesos -1):
+                            error += self.layers[i].getDelta(post,k) * self.layers[i].getWeight(post,j,k)
+                        pass
+                    self.layers[i].nodos[j].setDelta(error)
+                    self.layers[i].setDelta(i, j, self.layers[i].nodos[j].getErrorDelta())
+                
+            self.addLog(">> Actualizacion de pesos en la capa")
+            for i in range(nCapas, -1, -1):
+                nNodos = self.layers[i].cant
+                for j in range(nNodos -1):
+                    nPesos = self.layers[i].nodos[i].nInputs
+                    for k in range(nPesos -1):
+                        cambio = self.layers[i].getDelta(i,j) * self.layers[i].nodos[j].entradas[k]
+                        peso   = self.layers[i].getWeight(i,j,k)
+                        self.layers[i].setWeight(i,j,k, peso + self.rate * cambio)
+        except:
+            err = exc_info()
+            self.addLog("ERROR Net.backp(): iteracion idx="+str(i)+" de "+str(self.nCapas))
+            self.addLog(str(err))
+            self.panic = True
+        pass
        
     """
     # Obtiene el error cuadratico de la red

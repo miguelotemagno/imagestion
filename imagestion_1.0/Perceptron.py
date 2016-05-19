@@ -109,6 +109,8 @@ class Perceptron(object):
     #  y derivables (la funcion sigmoidal pertenece a este tipo de funciones).
     #
     """         
+    def setDelta(self, val):
+        self.delta = val
     
     """
     #  getErrorDelta
