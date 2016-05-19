@@ -80,13 +80,13 @@ def retropropagacion(objetivo,l):
             error = error + delta_salida[k]*pesos_sal[j][k]
         delta_oculto[j] = dsigmoide(act_ocu[j]) * error
         
-    for j in range(nodos_ocu):
-        for k in range(nodos_sal):
+    for k in range(nodos_sal):
+        for j in range(nodos_ocu):
             cambio = delta_salida[k]*act_ocu[j]
             pesos_sal[j][k] = pesos_sal[j][k] + l*cambio
             
-    for i in range(nodos_ent):
-        for j in range(nodos_ocu):
+    for j in range(nodos_ocu):
+        for i in range(nodos_ent):
             cambio = delta_oculto[j]*act_ent[i]
             pesos_ent[i][j] = pesos_ent[i][j] + l*cambio
             
@@ -144,4 +144,4 @@ if __name__ == '__main__':
     print('PESOS SAL: '+ dumps(pesos_sal, sort_keys=True,indent=4, separators=(',', ': '))) #str(pesos_sal)
     print('ACTIV SAL: '+ dumps(act_sal, sort_keys=True,indent=4, separators=(',', ': '))) #str(pesos_ent)
     
-    print ("HISTORIAL:"+str(len(log))+"\n"+dumps(log, sort_keys=True,indent=4, separators=(',', ': ')))
+    #print ("HISTORIAL:"+str(len(log))+"\n"+dumps(log, sort_keys=True,indent=4, separators=(',', ': ')))
