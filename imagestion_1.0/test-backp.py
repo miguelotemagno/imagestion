@@ -26,7 +26,7 @@ print (str([I,I]) + ' => ' + str(net.feedForward([I,I])))
 for x in range(1):
     print (str(x+1)+" ENTRENAR")
     net.rate   = 0.5
-    net.epochs = 1000
+    net.epochs = 10
     #net.min    = -0.5
     #net.max    = 0.5
     net.umbralError = 0.001
@@ -74,10 +74,10 @@ with open("neural-network.json", "w") as text_file:
     text_file.write(dumps(net.getConfiguracion(), sort_keys=True,indent=4, separators=(',', ': ')))
 
 print ("\nprint HISTORIAL:"+str(net.getHistorialLenght()))
-#print (net.getHistorial())
+print (net.getHistorial())
 
 
-#net.panic = True
+net.panic = True
     
 if net.panic:
     print ("print LOG")

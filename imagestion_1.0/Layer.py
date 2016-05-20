@@ -162,7 +162,13 @@ class Layer(object):
     def getDelta(self, z, y):
         self.padre.addLog("Layer.getDelta(%d): Layer.id:%d" % (y,z))
         return self.layers[z].deltas[y]
-		
+
+    def getInput(self, z, y, x):
+        return self.layers[z].nodos[y].getEntrada(x)
+
+    def getOutput(self, z, y):
+        return self.layers[z].nodos[y].salida
+        
     def addLog(self,str):
         if self.padre.debug :
             self.padre.addLog(str)
