@@ -50,24 +50,22 @@ class Perceptron(object):
         self.name     = name
         self.padre    = padre
         self.capa     = capa
-        self.salida   = 0.0
         self.delta    = 0.0
         self.error    = 0.0
         self.funcion  = funcion
         self.fnTransf = Activacion(funcion)
         self.fnTransf.padre = padre
         self.expect   = 0
-        min, max = (padre.min,padre.max)
-        self.pesos    = [random.uniform(min, max) for x in range(inputs)]
-        self.bias     = 1.0
-        self.wBias    = random.uniform(min, max) if capa==0 else 1.0
+        self.reInit()
         pass
     
     def reInit(self):
         min, max = (self.padre.min,self.padre.max)
         self.pesos    = [random.uniform(min, max) for x in range(self.nInputs)]
-        self.wBias    = random.uniform(min, max) if self.capa==0 else 1.0        
-        
+        self.wBias    = random.uniform(min, max) #if self.capa==0 else 1.0        
+        self.bias     = 1.0
+        self.salida   = 1.0
+       
     def getSumPesosEntradas(self):
         i    = 0
         suma = 0.0
@@ -119,7 +117,8 @@ class Perceptron(object):
     #
     """
          
-    def getErrorDelta(self):
+    def getErrorDelta(self, delta):
+        self.delta = delta
         error = self.fnTransf.train(self.salida) * self.delta
         self.error = error
         self.padre.addLog(">> errorDelta:%f = %s(%f) * %f" % (self.error,self.fnTransf.derivadas[self.fnTransf.tipo],self.salida,self.delta))
@@ -138,7 +137,7 @@ class Perceptron(object):
             raise err
     
     def setBias(self, rate):
-        self.wBias -= rate * self.delta
+        self.wBias += rate * self.delta
         pass
     
     def setSalida(self,salida):

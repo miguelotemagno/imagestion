@@ -34,6 +34,7 @@
 # +-----------------------------------------------------------------------+
 
 ## http://docs.python.org/reference/index.html
+import sys
 from Imagen import *
 from datetime import datetime
 
@@ -55,8 +56,9 @@ from datetime import datetime
 # 1503                ims.append(self._new(self.im.getband(i)))
 # 1504        return tuple(ims)
 
-
-img = Imagen('../imgtest/exp1.jpg')
+imgFile = sys.argv[1]
+print imgFile
+img = Imagen(imgFile)
 print 'ancho:', img.getAncho() ,' alto:', img.getAlto()
 
 #r = img.getR()

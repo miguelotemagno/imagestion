@@ -161,7 +161,7 @@ class Net(object):
         try:
             #salidas = [[None] * len(outputs[0])] * len(outputs)
             error = 0.0
-
+    
             ## [[0.0,0.0], [0.0,1.0], [1.0,0.0], [1.0,1.0]]
             for idx in range(len(inputs)):
                 # paso 2: Seleccionar el siguiente par de entrenamiento del conjunto de
@@ -186,8 +186,8 @@ class Net(object):
                 self.addLog("PASO 4: balancea los pesos en funcion a la variacion del delta de error")
                 self.addLog(">> epochs:%d ; pesos:%s ; deltas:%s" % (epochs,self.getPesos(),self.getDeltas()))
                 
-                #self.backPropagation(resultado,expect)
-                self.backp(resultado,expect)
+                self.backPropagation(resultado,expect)
+                #self.backp(resultado,expect)
                 
             self.addLog(">> Calculo de error cuadratico de la red")
             error = self.getErrorCuadratico(resultado,expect)
