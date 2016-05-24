@@ -139,7 +139,7 @@ class Net(object):
     """
     
     ##    Ejemplo
-    ##    net.entrenar([
+    ##    net.trainUntilConverge([
     ##            [0.0,0.0], [0.0,1.0], [1.0,0.0], [1.0,1.0]
     ##        ],[
     ##            [0.0], [1.0], [1.0], [0.0]
@@ -352,6 +352,7 @@ class Net(object):
         for i in range(self.nCapas):
             for j in range(self.layers[i].cant):
                 lst.append({self.layers[i].nodos[j].name : self.layers[i].nodos[j].pesos})
+            lst.append({self.layers[i].nodos[j].name+'.wBias' : self.layers[i].nodos[j].wBias})
                 
         return str(lst)
 
