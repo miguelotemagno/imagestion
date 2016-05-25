@@ -49,8 +49,8 @@ class Layer(object):
         self.nodos    = [Perceptron(str(capa)+'x'+str(x),inputs,function,padre,capa) for x in range(neurons)]
         self.isInput  = True if capa == 0 else False
         self.isOutput = True if capa == padre.nCapas - 1 else False
-        self.isHidden = True if capa > 0 and not self.isOutput else False
-        #self.isHidden = True if not self.isOutput else False
+        #self.isHidden = True if capa > 0 and not self.isOutput else False
+        self.isHidden = True if not self.isOutput else False
         pass
     
     def reInit(self):
@@ -72,6 +72,7 @@ class Layer(object):
         #  error = error + delta_salida[0..k] * pesos_sal[j][0..k]   ;   delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error   
 
         try:
+            k = None
             # capa salida
             if self.isOutput:
                 self.addLog(">> CAPA SALIDA Layer:"+str(capa))
@@ -86,13 +87,13 @@ class Layer(object):
             if self.isHidden:
             # capas ocultas
                 self.addLog(">> CAPA OCULTA Layer:"+str(capa))
-                nodosEntrada = self.cant
-                nodosOcultos = self.layers[post].cant
-                for j in range(nodosEntrada):
+                nodosOcultos = self.cant
+                nodosSalida  = self.layers[post].cant
+                for j in range(nodosSalida):
                     delta = self.getDelta(post,j) 
-                    error = self.nodos[j].bias * delta
+                    error = self.nodos[j].wBias * delta
                     for k in range(nodosOcultos):
-                        peso  = self.getWeight(post.k,j) 
+                        peso  = self.getWeight(post,j,k) 
                         error += delta * peso
                         self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name, error, delta, peso))
                         self.addLog(">> error += "+str(self.error))
@@ -102,7 +103,7 @@ class Layer(object):
                     self.addLog("<< hidden.error = %f" % (self.getDelta(capa,j)))                             
         except:
             err = exc_info()
-            self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d" % (str(expect),str(result),self.id))
+            self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d ; j:%d ; k:%d" % (str(expect),str(result),self.id,j,k))
             self.padre.panic = True 
             self.padre.addLog(str(err)+" - "+str(self.getConfiguracion()))
             raise err
@@ -118,7 +119,7 @@ class Layer(object):
             for k in range(self.cant):
                 error = self.getDelta(capa,k)
                 #error  = self.nodos[k].error
-                cambio = error * rate * self.nodos[k].bias
+                cambio = error * rate * self.nodos[k].wBias
                 #wBias  = self.nodos[k].wBias
                 #self.nodos[k].setBias(rate)
                 self.nodos[k].wBias += cambio
@@ -150,17 +151,36 @@ class Layer(object):
         pass
 
     def setDelta(self, z, y, value):
-        #self.layers[z].nodos[y].delta = value
-        self.layers[z].deltas[y] = value
-        pass
+        try:
+            #self.layers[z].nodos[y].delta = value
+            self.layers[z].deltas[y] = value
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.setDelta(%d,%d,%d): Layer.id:%d" % (z,y,value,self.id))
+            self.padre.panic = True 
+            raise err
+
 
     def getWeight(self, z, y, x):
-        #self.padre.addLog("Layer.getWeight(%d,%d): Layer.id:%d" % (y,x,z))
-        return self.layers[z].nodos[y].getPeso(x)
+        try:
+            #self.padre.addLog("Layer.getWeight(%d,%d): Layer.id:%d" % (y,x,z))
+            return self.layers[z].nodos[y].getPeso(x)
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getWeight(%d,%d,%d): Layer.id:%d" % (z,y,x,self.id))
+            self.padre.panic = True 
+            raise err
+         
 
     def getDelta(self, z, y):
-        #self.padre.addLog("Layer.getDelta(%d): Layer.id:%d" % (y,z))
-        return self.layers[z].deltas[y]
+        try:
+            #self.padre.addLog("Layer.getDelta(%d): Layer.id:%d" % (y,z))
+            return self.layers[z].deltas[y]
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getDelta(%d,%d): Layer.id:%d" % (z,y,self.id))
+            self.padre.panic = True 
+            raise err
 
     def getInput(self, z, y, x):
         return self.layers[z].nodos[y].getEntrada(x)
