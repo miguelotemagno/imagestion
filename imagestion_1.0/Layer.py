@@ -69,7 +69,6 @@ class Layer(object):
         post = self.id + 1
         prev = self.id -1
         capa = self.id
-        #  error = error + delta_salida[0..k] * pesos_sal[j][0..k]   ;   delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error   
 
         try:
             k = None
@@ -89,6 +88,8 @@ class Layer(object):
                 self.addLog(">> CAPA OCULTA Layer:"+str(capa))
                 nodosOcultos = self.cant
                 nodosSalida  = self.layers[post].cant
+                # error = error + delta_salida[0..k] * pesos_sal[j][0..k]
+                # delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
                 for j in range(nodosSalida):
                     delta = self.getDelta(post,j) 
                     error = self.nodos[j].wBias * delta
@@ -115,17 +116,14 @@ class Layer(object):
         prev = self.id - 1
         capa = self.id
         
-        try:        
+        try:
+            # pesos_sal[j][k] = pesos_sal[j][k] + rate * delta_salida[k] * act_ocu[j]
+            # pesos_ent[i][j] = pesos_ent[i][j] + rate * delta_oculto[j] * act_ent[i]
             for k in range(self.cant):
                 error = self.getDelta(capa,k)
-                #error  = self.nodos[k].error
                 cambio = error * rate * self.nodos[k].wBias
-                #wBias  = self.nodos[k].wBias
-                #self.nodos[k].setBias(rate)
                 self.nodos[k].wBias += cambio
-                
                 for j in range(self.nodos[k].nInputs):
-                    #cambio = delta_oculto[post] * act_ent[capa] ; delta_salida[post] * act_ocu[capa]
                     entrada = self.getInput(capa,k,j)
                     peso    = self.getWeight(capa,k,j)
                     cambio  = rate * error * entrada
