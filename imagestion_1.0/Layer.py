@@ -92,7 +92,8 @@ class Layer(object):
                 # delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
                 for j in range(nodosSalida):
                     delta = self.getDelta(post,j) 
-                    error = self.nodos[j].wBias * delta
+                    #layers[post].nodos[j].wBias * delta
+                    error = self.getWeightBias(post,j) * delta  
                     for k in range(nodosOcultos):
                         peso  = self.getWeight(post,j,k) 
                         error += delta * peso
@@ -168,8 +169,25 @@ class Layer(object):
             self.padre.addLog("ERROR Layer.getWeight(%d,%d,%d): Layer.id:%d" % (z,y,x,self.id))
             self.padre.panic = True 
             raise err
-         
-
+    
+    def getWeightBias(self, z, y):
+        try:
+            return self.layers[z].nodos[y].wBias
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getWeightBias(%d,%d): Layer.id:%d" % (z,y,self.id))
+            self.padre.panic = True 
+            raise err
+            
+    def setWeightBias(self, z, y, value):
+        try:
+            self.layers[z].nodos[y].wBias = value
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.setWeightBias(%d,%d,%f): Layer.id:%d" % (z,y,value,self.id))
+            self.padre.panic = True 
+            raise err
+            
     def getDelta(self, z, y):
         try:
             #self.padre.addLog("Layer.getDelta(%d): Layer.id:%d" % (y,z))
