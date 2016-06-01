@@ -37,6 +37,7 @@ from Perceptron import *
 from random import *
 from json import *
 from sys import *
+import random
 
 class Layer(object):
     def __init__(self,capa,neurons,inputs,function,layers,padre):
@@ -51,6 +52,11 @@ class Layer(object):
         self.isOutput = True if capa == padre.nCapas - 1 else False
         #self.isHidden = True if capa > 0 and not self.isOutput else False
         self.isHidden = True if not self.isOutput else False
+        weights = inputs + 1 if self.isHidden else inputs
+        self.wMatrix  = [] 
+
+        for y in range(neurons):
+            self.wMatrix.append([random.uniform(padre.min, padre.max) for x in range(weights)])
         pass
     
     def reInit(self):
@@ -67,7 +73,7 @@ class Layer(object):
     def setDeltas(self,expect,result):
         self.addLog("Layer->setDeltas("+str(expect)+","+str(result)+") Layer:"+str(self.id))
         post = self.id + 1
-        prev = self.id -1
+        prev = self.id - 1
         capa = self.id
 
         try:
@@ -86,7 +92,7 @@ class Layer(object):
             if self.isHidden:
             # capas ocultas
                 self.addLog(">> CAPA OCULTA Layer:"+str(capa))
-                nodosOcultos = self.cant
+                nodosOculto = self.cant
                 nodosSalida  = self.layers[post].cant
                 # error = error + delta_salida[0..k] * pesos_sal[j][0..k]
                 # delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
@@ -94,7 +100,7 @@ class Layer(object):
                     delta = self.getDelta(post,j) 
                     #layers[post].nodos[j].wBias * delta
                     error = self.getWeightBias(post,j) * delta  
-                    for k in range(nodosOcultos):
+                    for k in range(nodosOculto):
                         peso  = self.getWeight(post,j,k) 
                         error += delta * peso
                         self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name, error, delta, peso))
@@ -118,18 +124,23 @@ class Layer(object):
         capa = self.id
         
         try:
+            nodosSalida = self.cant
             # pesos_sal[j][k] = pesos_sal[j][k] + rate * delta_salida[k] * act_ocu[j]
             # pesos_ent[i][j] = pesos_ent[i][j] + rate * delta_oculto[j] * act_ent[i]
-            for k in range(self.cant):
+            for k in range(nodosSalida):
+                nodosOculto = self.nodos[k].nInputs
                 error = self.getDelta(capa,k)
-                cambio = error * rate * self.nodos[k].wBias
-                self.nodos[k].wBias += cambio
-                for j in range(self.nodos[k].nInputs):
-                    entrada = self.getInput(capa,k,j)
-                    peso    = self.getWeight(capa,k,j)
-                    cambio  = rate * error * entrada
+                if self.isHidden:
+                    wBias  = self.getWeightBias(capa,k)
+                    cambio = error * rate * wBias
+                    self.addLog(">> nodo[%s].wBias += wb:%f * d:%f * l:%f" % (self.getNodeName(capa,k),wBias,error,rate))
+                    self.setWeightBias(capa,k, wBias + cambio)
+                for j in range(nodosOculto):
+                    salida = self.getInput(capa,k,j) if self.isInput else self.getOutput(prev,j)
+                    peso   = self.getWeight(capa,k,j)
+                    cambio = rate * error * salida
                     self.setWeight(capa,k,j, peso + cambio)
-                    self.addLog(">> nodo[%s].peso[%d]:%f = w:%f + l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.nodos[k].name, j, self.getWeight(capa,k,j), peso, rate, error, entrada, cambio))  
+                    self.addLog(">> nodo[%s].peso[%d]:%f = w:%f + l:%f * e:%f * i:%f  ;  l*e*i:%f" % (self.getNodeName(capa,k), j, self.getWeight(capa,k,j), peso, rate, error, salida, cambio))  
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setPesos(%d): Layer.id:%d" % (rate,self.id))
@@ -199,11 +210,32 @@ class Layer(object):
             raise err
 
     def getInput(self, z, y, x):
-        return self.layers[z].nodos[y].getEntrada(x)
+        try:
+            return self.layers[z].nodos[y].getEntrada(x)
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getInput(%d,%d,%d): Layer.id:%d" % (z,y,x,self.id))
+            self.padre.panic = True 
+            raise err
 
     def getOutput(self, z, y):
-        return self.layers[z].nodos[y].salida
-        
+        try:
+            return self.layers[z].nodos[y].salida
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getOutput(%d,%d): Layer.id:%d" % (z,y,self.id))
+            self.padre.panic = True 
+            raise err
+            
+    def getNodeName(self,z,y):
+        try:
+            return self.layers[z].nodos[y].name
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Layer.getNodeName(%d,%d): Layer.id:%d" % (z,y,self.id))
+            self.padre.panic = True 
+            raise err
+            
     def addLog(self,str):
         if self.padre.debug :
             self.padre.addLog(str)

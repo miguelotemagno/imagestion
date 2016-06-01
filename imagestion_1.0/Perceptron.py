@@ -81,7 +81,10 @@ class Perceptron(object):
             self.addLog ("ERROR en Perceptron.getSumPesosEntradas() - Iteracion i="+str(i))
             self.addLog (err)
         
-        self.neta = suma + self.bias*self.wBias
+        if self.padre.layers[self.capa].isHidden:
+            suma += self.bias * self.wBias
+            
+        self.neta = suma 
         return self.neta
         
     def calcular(self):
