@@ -33,6 +33,7 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
+from Activacion import *
 from Perceptron import *
 from random import *
 from json import *
@@ -41,6 +42,7 @@ import random
 
 class Layer(object):
     def __init__(self,capa,neurons,inputs,function,layers,padre):
+        self.func     = Activacion(function)
         self.error    = 0.0
         self.deltas   = [0.0] * neurons
         self.id       = capa
@@ -82,9 +84,11 @@ class Layer(object):
             if self.isOutput:
                 self.addLog(">> CAPA SALIDA Layer:"+str(capa))
                 nodosSalida = self.cant
+                # error = objetivo[k] - act_sal[k]
+                # delta_salida[k] = dsigmoide(act_sal[k]) * error
                 for j in range(nodosSalida):
                     error = expect[j] - result[j]   
-                    error = self.nodos[j].getErrorDelta(error)
+                    error = self.func.tansig_derivada(result[j]) * error   #self.nodos[j].getErrorDelta(error)
                     self.setDelta(capa,j, error)
                     self.addLog(">> nodo[%s].delta:%f = r:%f - o:%f" % (self.nodos[j].name,self.getDelta(capa,j),expect[j],result[j]))
                     self.addLog(">> output.error = %f" % (self.nodos[j].delta))
@@ -96,19 +100,19 @@ class Layer(object):
                 nodosSalida  = self.layers[post].cant
                 # error = error + delta_salida[0..k] * pesos_sal[j][0..k]
                 # delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
-                for j in range(nodosSalida):
-                    delta = self.getDelta(post,j) 
-                    #layers[post].nodos[j].wBias * delta
-                    error = self.getWeightBias(post,j) * delta  
-                    for k in range(nodosOculto):
-                        peso  = self.getWeight(post,j,k) 
+                for j in range(nodosOculto):
+                    error = 0.0
+                    for k in range(nodosSalida):
+                        delta = self.getDelta(post,k) 
+                        error = self.getWeightBias(capa,j) * delta if error == 0.0 else error
+                        peso  = self.getWeight(capa,j,k) 
                         error += delta * peso
                         self.addLog(">> nodo[%s].delta:%f = d:%f * w:%f" % (self.nodos[j].name, error, delta, peso))
                         self.addLog(">> error += "+str(self.error))
                     
-                    error = self.nodos[j].getErrorDelta(error)
+                    error = self.func.tansig_derivada(self.getOutput(capa,j)) * error   #self.nodos[j].getErrorDelta(error)
                     self.setDelta(capa,j, error)
-                    self.addLog("<< hidden.error = %f" % (self.getDelta(capa,j)))                             
+                    self.addLog("<< hidden.error = %f" % (self.getDelta(capa,k)))                             
         except:
             err = exc_info()
             self.padre.addLog("ERROR Layer.setDeltas(%s,%s): Layer.id:%d ; j:%d ; k:%d" % (str(expect),str(result),self.id,j,k))
