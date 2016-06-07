@@ -16,11 +16,12 @@ print imgFile
 #im = Image.open(imgFile)
 #im.show()
 
-shape1 = (3,3)
+shape1 = (2,2)
 shape2 = (6,6)
 
 im1 = ndimage.imread(imgFile, flatten=True).astype(np.uint8)
 print im1.shape
+w,h = im1.shape
 im2 = ndimage.grey_erosion(im1, size=(shape1)) 
 im2 = ndimage.grey_dilation(im2, size=(shape1)) 
 
@@ -56,9 +57,15 @@ print filter
 
 im5 = np.array(diff, np.uint8)
 im5[im5 < filter] = 0
+im5[im5 > filter*2] = 255
 im5 = ndimage.grey_erosion(im5, size=(shape1)) 
 
 im = Image.fromarray(im5)
 im6 = Image.merge('RGB',(im,im,im))
 
+
 toimage(im6).show()
+
+hist = ndimage.measurements.histogram(im6, 0, 255, 256)
+
+print hist
