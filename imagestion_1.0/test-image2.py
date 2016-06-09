@@ -1,7 +1,8 @@
 import scipy
 from scipy import ndimage
 from scipy.misc import toimage
-#import matplotlib.pyplot as plt
+#from skimage import io, color
+import matplotlib.pyplot as plt
 import numpy as np
 import Image, colorsys, sys
 
@@ -24,9 +25,17 @@ def HSVColor(img):
     else:
         return None
         
+def plotHistogram(arr, b):
+    hist, bins = np.histogram(arr, bins=b)
+    #width = 0.7 * (bins[1] - bins[0])
+    center = (bins[:-1] + bins[1:]) / 2
+    plt.bar(center, hist, align='center') #, width=width)
+    plt.show()
+    
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
 #  http://gis.stackexchange.com/questions/24827/how-to-smooth-the-polygons-in-a-contour-map
-
+#  http://scikit-image.org
+        
 imgFile = sys.argv[1]
 print imgFile
 
@@ -73,8 +82,9 @@ print filter
 
 im5 = np.array(diff, np.uint8)
 im5[im5 < filter] = 0
-im5[im5 > filter*2] = 255
+#im5[im5 > filter*3] = 255
 im5 = ndimage.grey_erosion(im5, size=(shape1)) 
+im5 = ndimage.grey_dilation(im5, size=(shape1)) 
 
 im = Image.fromarray(im5)
 im6 = Image.merge('RGB',(im,im,im))
@@ -85,6 +95,7 @@ hist = ndimage.measurements.histogram(im6, 0, 255, 256)
 
 print hist
 
+plotHistogram(im6,256)
 
 img = Image.open(imgFile)
 r,g,b = img.split()
@@ -94,9 +105,14 @@ G = Image.fromarray(ndimage.grey_dilation(g, size=(shape2)))
 B = Image.fromarray(ndimage.grey_dilation(b, size=(shape2)))
 
 rgb = Image.merge('RGB',(R,G,B))
-rgb.show()
+#rgb.show()
 #toimage(rgb).show()
 
 hsv = HSVColor(rgb)
-toimage(hsv).show()
+#toimage(hsv).show()
+
+#lab = color.rgb2lab(rgb)
+#toimage(lab).show()
+
+
 
