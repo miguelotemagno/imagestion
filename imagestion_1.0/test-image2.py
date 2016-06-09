@@ -32,6 +32,15 @@ def plotHistogram(arr, b):
     plt.bar(center, hist, align='center') #, width=width)
     plt.show()
     
+def drawHistogram(arr, b):
+    bins, edges = np.histogram(arr, b, normed=1)
+    left,right = edges[:-1],edges[1:]
+    X = np.array([left,right]).T.flatten()
+    Y = np.array([bins,bins]).T.flatten()
+    
+    plt.plot(X,Y)
+    plt.show()    
+    
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
 #  http://gis.stackexchange.com/questions/24827/how-to-smooth-the-polygons-in-a-contour-map
 #  http://scikit-image.org
@@ -95,7 +104,7 @@ hist = ndimage.measurements.histogram(im6, 0, 255, 256)
 
 print hist
 
-plotHistogram(im6,256)
+#plotHistogram(im6,256)
 
 img = Image.open(imgFile)
 r,g,b = img.split()
@@ -115,4 +124,7 @@ hsv = HSVColor(rgb)
 #toimage(lab).show()
 
 
+plotHistogram(R,256)
+plotHistogram(G,256)
+plotHistogram(B,256)
 
