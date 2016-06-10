@@ -32,14 +32,6 @@ def plotHistogram(arr, b):
     plt.bar(center, hist, align='center') #, width=width)
     plt.show()
     
-def drawHistogram(arr, b):
-    bins, edges = np.histogram(arr, b, normed=1)
-    left,right = edges[:-1],edges[1:]
-    X = np.array([left,right]).T.flatten()
-    Y = np.array([bins,bins]).T.flatten()
-    
-    plt.plot(X,Y)
-    plt.show()    
     
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
 #  http://gis.stackexchange.com/questions/24827/how-to-smooth-the-polygons-in-a-contour-map
@@ -63,7 +55,7 @@ im3 = ndimage.grey_dilation(im1, size=(shape2))
 #im3 = ndimage.grey_erosion(im3, size=(shape2)) 
 
 diff = im3 - im2
-toimage(diff).show()
+#toimage(diff).show()
 
 #im4 = ndimage.grey_erosion(diff, size=(shape1)) 
 #im4 = ndimage.grey_dilation(im4, size=(shape1)) 
@@ -118,13 +110,15 @@ rgb = Image.merge('RGB',(R,G,B))
 #toimage(rgb).show()
 
 hsv = HSVColor(rgb)
-#toimage(hsv).show()
+toimage(hsv).show()
 
-#lab = color.rgb2lab(rgb)
-#toimage(lab).show()
+h,s,v = hsv.split()
 
+H = Image.fromarray(ndimage.grey_dilation(h, size=(shape2)))
+S = Image.fromarray(ndimage.grey_dilation(s, size=(shape2)))
+V = Image.fromarray(ndimage.grey_dilation(v, size=(shape2)))
 
-plotHistogram(R,256)
-plotHistogram(G,256)
-plotHistogram(B,256)
+plotHistogram(H, 360)
+plotHistogram(S, 256)
+plotHistogram(V, 100)
 
