@@ -1,0 +1,26 @@
+function img = CreaImagen3(hash,img)
+    idxHash = fieldnames(exterior);
+    szHash  = size(hash,1);
+    
+    for i=1:szHash
+        index    = char(idxHash(i));
+        expr     = sprintf('res = hash.%s;',index);
+        hex      = regexprep(index,'x','');
+        eval(expr);
+        
+        microImg = res(1);
+        R        = microImg(:,:,1);
+        G        = microImg(:,:,2);
+        B        = microImg(:,:,3);
+        
+        coords   = hex2dec(hex);
+        
+    
+        y = mat(i,1);
+        x = mat(i,2);
+        
+        img(y,x,1) = R;
+        img(y,x,2) = G;
+        img(y,x,3) = B;
+    end
+end

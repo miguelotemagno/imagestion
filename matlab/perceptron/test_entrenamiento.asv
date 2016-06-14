@@ -1,0 +1,64 @@
+function test_entrenamiento(imagen1,imagen2)
+    tol   = 40;
+    step  = 4;
+    se    = ones(3,3);
+    %se = strel('disk',10);
+    
+    display('INICIO');
+    rgb1 = imread(imagen1);
+    rgb2 = imread(imagen2);
+    data = fopen('colores.mat','r');
+    
+    if(data > -1)
+        fclose(data);
+        load('colores.mat','color');
+    else
+        color = zeros(10,3,4);
+    end
+   
+%     color(:,:,1) = [
+%         %R   G   B    % -- Manzana Fuji --
+%         218 204 93
+%     ];
+%     
+%     color(:,:,2) = [
+%         184 187 134
+%     ];
+    
+    display('extraccion de colores imagen principal');
+    mat1  = ExtraeColores(rgb1,se,30);
+    display('extraccion de colores imagen secundaria');
+    mat2  = ExtraeColores(rgb2,se,30);
+    display('OK');
+    
+    display('resta de colores ');
+    color = RestaColores(mat1,mat2,color,tol);
+    
+    Ri  = color(:,1,1);
+    Gi  = color(:,2,1);
+    Bi  = color(:,3,1);
+    
+    Ro  = color(:,1,2);
+    Go  = color(:,2,2);
+    Bo  = color(:,3,2);
+    
+    Hi  = color(:,1,3);
+    Si  = color(:,2,3);
+    Vi  = color(:,3,3);
+    
+    Ho  = color(:,1,4);
+    So  = color(:,2,4);
+    Vo  = color(:,3,4);
+    
+    desvHSVi = DesviacionEstandar(Hi,Si,Vi); 
+    desvHSVo = DesviacionEstandar(Ho,So,Vo); 
+    desvRGBi = DesviacionEstandar(Ri,Gi,Bi); 
+    desvRGBo = DesviacionEstandar(Ro,Go,Bo); 
+
+    net = perceptron_backpropagation(desvRGBi,desvRGBo,desvHSVi,desvHSVo,color);
+    
+    save('colores.mat','color');
+    save('perceptron.mat','net');
+    
+    display('FINALIZADO OK');
+end
