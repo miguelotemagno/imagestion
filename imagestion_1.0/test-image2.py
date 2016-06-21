@@ -36,6 +36,7 @@ def plotHistogram(arr, b):
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
 #  http://gis.stackexchange.com/questions/24827/how-to-smooth-the-polygons-in-a-contour-map
 #  http://scikit-image.org
+#  https://sites.google.com/site/bustosmerino/home/segmentacion---color-de-piel
         
 imgFile = sys.argv[1]
 print imgFile
