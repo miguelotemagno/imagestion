@@ -80,7 +80,7 @@ print np.amin(diff)
 print np.amax(diff)
 
 filter = (np.amin(diff) + np.amax(diff)) // 8
-print filter
+print "filter: %s " % (filter)
 
 im5 = np.array(diff, np.uint8)
 im5[im5 < filter] = 0
@@ -91,7 +91,7 @@ im5 = ndimage.grey_dilation(im5, size=(shape1))
 im = Image.fromarray(im5)
 im6 = Image.merge('RGB',(im,im,im))
 
-toimage(im6).show()
+#toimage(im6).show()
 
 hist = ndimage.measurements.histogram(im6, 0, 255, 256)
 
@@ -111,7 +111,7 @@ rgb = Image.merge('RGB',(R,G,B))
 #toimage(rgb).show()
 
 hsv = HSVColor(rgb)
-toimage(hsv).show()
+#toimage(hsv).show()
 
 h,s,v = hsv.split()
 
@@ -119,7 +119,40 @@ H = Image.fromarray(ndimage.grey_dilation(h, size=(shape2)))
 S = Image.fromarray(ndimage.grey_dilation(s, size=(shape2)))
 V = Image.fromarray(ndimage.grey_dilation(v, size=(shape2)))
 
-plotHistogram(H, 360)
-plotHistogram(S, 256)
-plotHistogram(V, 100)
+s1 = np.array(S, np.uint8)
 
+s1[s1 < 140] = 50
+s1[s1 > 160] = 200
+
+toimage(s1).show()
+#toimage(H).show()
+toimage(S).show()
+#toimage(V).show()
+
+plotHistogram(s1, 256)
+#plotHistogram(H, 256)
+plotHistogram(S, 256)
+#plotHistogram(V, 256)
+
+## http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
+#mu, sigma = 0, 0.1 # mean and standard deviation
+#s = np.random.normal(mu, sigma, 1000)
+#abs(mu - np.mean(s)) < 0.01
+#abs(sigma - np.std(s, ddof=1)) < 0.01
+#count, bins, ignored = plt.hist(s, 30, normed=True)
+#plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (bins - mu)**2 / (2 * sigma**2) ), linewidth=2, color='r')
+#plt.show()
+
+# http://stackoverflow.com/questions/10138085/python-pylab-plot-normal-distribution
+#import matplotlib.pyplot as plt
+#import numpy as np
+#import matplotlib.mlab as mlab
+#import math
+#
+#mu = 0
+#variance = 1
+#sigma = math.sqrt(variance)
+#x = np.linspace(-3, 3, 100)
+#plt.plot(x,mlab.normpdf(x, mu, sigma))
+#
+#plt.show()
