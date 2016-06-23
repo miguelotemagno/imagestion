@@ -1,5 +1,6 @@
 import scipy
 from scipy import ndimage
+from scipy import stats
 from scipy.misc import toimage
 #from skimage import io, color
 import matplotlib.pyplot as plt
@@ -47,7 +48,7 @@ shape1 = (2,2)
 shape2 = (6,6)
 
 im1 = ndimage.imread(imgFile, flatten=True).astype(np.uint8)
-print im1.shape
+print "width:%d x height:%d" % im1.shape
 w,h = im1.shape
 im2 = ndimage.grey_erosion(im1, size=(shape1)) 
 im2 = ndimage.grey_dilation(im2, size=(shape1)) 
@@ -75,10 +76,8 @@ diff = im3 - im2
 #toimage(sob).show()
 
 
-print diff
-print np.amin(diff)
-print np.amax(diff)
-
+#print diff
+print "min:%s , max:%s" % (np.amin(diff),np.amax(diff))
 filter = (np.amin(diff) + np.amax(diff)) // 8
 print "filter: %s " % (filter)
 
@@ -93,9 +92,8 @@ im6 = Image.merge('RGB',(im,im,im))
 
 #toimage(im6).show()
 
-hist = ndimage.measurements.histogram(im6, 0, 255, 256)
-
-print hist
+#hist = ndimage.measurements.histogram(im6, 0, 255, 256)
+#print hist
 
 #plotHistogram(im6,256)
 
@@ -111,7 +109,7 @@ rgb = Image.merge('RGB',(R,G,B))
 #toimage(rgb).show()
 
 hsv = HSVColor(rgb)
-#toimage(hsv).show()
+toimage(hsv).show()
 
 h,s,v = hsv.split()
 
@@ -119,19 +117,46 @@ H = Image.fromarray(ndimage.grey_dilation(h, size=(shape2)))
 S = Image.fromarray(ndimage.grey_dilation(s, size=(shape2)))
 V = Image.fromarray(ndimage.grey_dilation(v, size=(shape2)))
 
+h1 = np.array(H, np.uint8)
 s1 = np.array(S, np.uint8)
+v1 = np.array(V, np.uint8)
 
-s1[s1 < 140] = 50
-s1[s1 > 160] = 200
+mh = stats.mode(h1)
+ms = stats.mode(s1)
+mv = stats.mode(v1)
 
-toimage(s1).show()
+print "moda H: "+str(mh)
+#print "moda S: "+str(ms[0])
+#print "moda V: "+str(mv[0])
+
+#h1[h1 < 19] = 0
+h1[h1 > 50] = 0
+#h1[h1 != 0] = 255
+
+s1[s1 >= 256*0.6] = 0
+s1[s1 <= 256*0.1] = 0
+
+#v1[v1 < 140] = 50
+v1[v1 <= 256*0.2] = 0
+
+toimage(h1).show()
+#toimage(s1).show()
+#toimage(v1).show()
+
+mh = stats.mode(h1)
+print "moda H: "+str(mh)
+
 #toimage(H).show()
-toimage(S).show()
+#toimage(S).show()
 #toimage(V).show()
 
-plotHistogram(s1, 256)
-#plotHistogram(H, 256)
-plotHistogram(S, 256)
+plotHistogram(h1, 256)
+plotHistogram(H, 256)
+
+#plotHistogram(s1, 256)
+#plotHistogram(S, 256)
+#
+#plotHistogram(v1, 256)
 #plotHistogram(V, 256)
 
 ## http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
