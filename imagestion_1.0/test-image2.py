@@ -2,7 +2,7 @@ import scipy
 from scipy import ndimage
 from scipy import stats
 from scipy.misc import toimage
-#from skimage import io, color
+import math
 import matplotlib.pyplot as plt
 import numpy as np
 import Image, colorsys, sys
@@ -109,7 +109,7 @@ rgb = Image.merge('RGB',(R,G,B))
 #toimage(rgb).show()
 
 hsv = HSVColor(rgb)
-toimage(hsv).show()
+#toimage(hsv).show()
 
 h,s,v = hsv.split()
 
@@ -121,17 +121,25 @@ h1 = np.array(H, np.uint8)
 s1 = np.array(S, np.uint8)
 v1 = np.array(V, np.uint8)
 
-mh = stats.mode(h1)
-ms = stats.mode(s1)
-mv = stats.mode(v1)
+sth = np.std(h1)
+meh = np.mean(h1)
+mdh = np.ma.median(h1)
+print "std H: "+str(sth)
+print "mean H: "+str(meh)
+print "median H: "+str(mdh)
 
-print "moda H: "+str(mh)
-#print "moda S: "+str(ms[0])
-#print "moda V: "+str(mv[0])
+#ms = np.std(s1)
+#mv = np.std(v1)
 
-#h1[h1 < 19] = 0
-h1[h1 > 50] = 0
-#h1[h1 != 0] = 255
+#print "std S: "+str(ms)
+#print "std V: "+str(mv)
+
+delta = 25
+varH = math.sqrt(sth)  # :-) funciona!
+
+h1[h1 < varH - delta] = 0
+h1[h1 > varH + delta] = 0
+h1[h1 != 0] = 255
 
 s1[s1 >= 256*0.6] = 0
 s1[s1 <= 256*0.1] = 0
@@ -143,8 +151,8 @@ toimage(h1).show()
 #toimage(s1).show()
 #toimage(v1).show()
 
-mh = stats.mode(h1)
-print "moda H: "+str(mh)
+#mh = stats.mode(h1)
+#print "moda H: "+str(mh)
 
 #toimage(H).show()
 #toimage(S).show()
