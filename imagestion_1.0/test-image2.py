@@ -121,35 +121,50 @@ h1 = np.array(H, np.uint8)
 s1 = np.array(S, np.uint8)
 v1 = np.array(V, np.uint8)
 
-sth = np.std(h1)
-meh = np.mean(h1)
-mdh = np.ma.median(h1)
-print "std H: "+str(sth)
-print "mean H: "+str(meh)
-print "median H: "+str(mdh)
+stH = np.std(h1)
+meH = np.mean(h1)
+mdH = np.ma.median(h1)
+print "std H: "+str(stH)
+print "mean H: "+str(meH)
+print "median H: "+str(mdH)
 
-#ms = np.std(s1)
+stS = np.std(s1)
+meS = np.mean(s1)
+mdS = np.ma.median(s1)
+print "std S: "+str(stS)
+print "mean S: "+str(meS)
+print "median S: "+str(mdS)
+
 #mv = np.std(v1)
 
 #print "std S: "+str(ms)
 #print "std V: "+str(mv)
 
 delta = 25
-varH = math.sqrt(sth)  # :-) funciona!
+varH = 20 #math.sqrt(stH)  # :-) funciona!
+print "varH:%s" % (varH)
 
-h1[h1 < varH - delta] = 0
-h1[h1 > varH + delta] = 0
-h1[h1 != 0] = 255
+h1[h1 <= varH - delta] = 0
+h1[h1 >= varH + delta] = 0
+h1[h1 != 0] = 0x55
 
+#varS = 100
+#s1[s1 >= varS + delta] = 0
+#s1[s1 <= varS - delta] = 0
 s1[s1 >= 256*0.6] = 0
 s1[s1 <= 256*0.1] = 0
+s1[s1//2 <= 30] = 0
+s1[s1 != 0] = 0xAA
 
 #v1[v1 < 140] = 50
-v1[v1 <= 256*0.2] = 0
+v1[v1 <= 256*0.1] = 0
+#v1 = v1//3
+hsv2 = (h1 | s1) & v1
 
 toimage(h1).show()
-#toimage(s1).show()
-#toimage(v1).show()
+toimage(s1).show()
+toimage(v1).show()
+toimage(hsv2).show()
 
 #mh = stats.mode(h1)
 #print "moda H: "+str(mh)
@@ -158,8 +173,8 @@ toimage(h1).show()
 #toimage(S).show()
 #toimage(V).show()
 
-plotHistogram(h1, 256)
-plotHistogram(H, 256)
+#plotHistogram(h1, 256)
+#plotHistogram(H, 256)
 
 #plotHistogram(s1, 256)
 #plotHistogram(S, 256)
