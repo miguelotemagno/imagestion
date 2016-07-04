@@ -128,6 +128,8 @@ print "std H: "+str(stH)
 print "mean H: "+str(meH)
 print "median H: "+str(mdH)
 
+# http://stackoverflow.com/questions/25828184/fitting-to-poisson-histogram
+# http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.mode.html
 stS = np.std(s1)
 meS = np.mean(s1)
 mdS = np.ma.median(s1)
@@ -148,6 +150,11 @@ h1[h1 <= varH - delta] = 0
 h1[h1 >= varH + delta] = 0
 h1[h1 != 0] = 0x55
 
+#h1[h1 > 250] = 0x55
+#h1[h1 < 50] = 0x55
+#h1[h1 < 1] = 0
+#h1[h1 != 0x55] = 0
+
 #varS = 100
 #s1[s1 >= varS + delta] = 0
 #s1[s1 <= varS - delta] = 0
@@ -156,10 +163,12 @@ s1[s1 <= 256*0.1] = 0
 s1[s1//2 <= 30] = 0
 s1[s1 != 0] = 0xAA
 
-#v1[v1 < 140] = 50
+#v1[v1 < 140] = 0
 v1[v1 <= 256*0.1] = 0
 #v1 = v1//3
-hsv2 = (h1 | s1) & v1
+hs = h1 | s1
+hs[hs != 255] = 0
+hsv2 = hs & v1
 
 toimage(h1).show()
 toimage(s1).show()
