@@ -148,7 +148,7 @@ print "varH:%s" % (varH)
 
 h1[h1 <= varH - delta] = 0
 h1[h1 >= varH + delta] = 0
-h1[h1 != 0] = 0x55
+h1[h1 != 0] = 0x92
 
 #h1[h1 > 250] = 0x55
 #h1[h1 < 50] = 0x55
@@ -161,14 +161,18 @@ h1[h1 != 0] = 0x55
 s1[s1 >= 256*0.6] = 0
 s1[s1 <= 256*0.1] = 0
 s1[s1//2 <= 30] = 0
-s1[s1 != 0] = 0xAA
+s1[s1 != 0] = 0x49
 
-#v1[v1 < 140] = 0
 v1[v1 <= 256*0.1] = 0
 #v1 = v1//3
-hs = h1 | s1
-hs[hs != 255] = 0
-hsv2 = hs & v1
+#v1[v1 < 140] = 0
+v1[v1 != 0] = 0x24
+
+#hs = h1 | s1 
+#hs[hs != 255] = 0
+#hsv2 = hs & v1
+hsv2 = h1 | s1 | v1
+hsv2[hsv2 < 150] = 0
 
 toimage(h1).show()
 toimage(s1).show()
@@ -190,6 +194,8 @@ toimage(hsv2).show()
 #
 #plotHistogram(v1, 256)
 #plotHistogram(V, 256)
+
+plotHistogram(hsv2, 256)
 
 ## http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
 #mu, sigma = 0, 0.1 # mean and standard deviation
