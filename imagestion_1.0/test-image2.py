@@ -5,8 +5,8 @@ from scipy.misc import toimage
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import Image, colorsys, sys
-
+import colorsys, sys # Image
+from PIL import Image, ImageDraw, ImageFont
 
 def HSVColor(img):
     if isinstance(img,Image.Image):
@@ -33,7 +33,15 @@ def plotHistogram(arr, b):
     plt.bar(center, hist, align='center') #, width=width)
     plt.show()
     
-    
+# http://stackoverflow.com/questions/16373425/add-text-on-image-using-pil 
+def showImage(img, text):
+    draw = ImageDraw.Draw(img)
+    # font = ImageFont.truetype(<font-file>, <font-size>)
+    font = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 16)
+    # draw.text((x, y),"Sample Text",(r,g,b))
+    draw.text((10, 10),text) #,font=font,fill=(255,255,255))
+    img.show()
+   
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
 #  http://gis.stackexchange.com/questions/24827/how-to-smooth-the-polygons-in-a-contour-map
 #  http://scikit-image.org
@@ -108,6 +116,7 @@ rgb = Image.merge('RGB',(R,G,B))
 #rgb.show()
 #toimage(rgb).show()
 
+
 hsv = HSVColor(rgb)
 #toimage(hsv).show()
 
@@ -174,10 +183,11 @@ v1[v1 != 0] = 0x24
 hsv2 = h1 | s1 | v1
 hsv2[hsv2 < 150] = 0
 
+#showImage(toimage(h1),'H')
 toimage(h1).show()
 toimage(s1).show()
 toimage(v1).show()
-toimage(hsv2).show()
+#toimage(hsv2).show()
 
 #mh = stats.mode(h1)
 #print "moda H: "+str(mh)
@@ -193,9 +203,9 @@ toimage(hsv2).show()
 #plotHistogram(S, 256)
 #
 #plotHistogram(v1, 256)
-#plotHistogram(V, 256)
+plotHistogram(V, 256)
 
-plotHistogram(hsv2, 256)
+#plotHistogram(hsv2, 256)
 
 ## http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
 #mu, sigma = 0, 0.1 # mean and standard deviation
