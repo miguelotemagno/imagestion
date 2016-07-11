@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import colorsys, sys # Image
 from PIL import Image, ImageDraw, ImageFont
+from scipy.optimize import curve_fit
+from scipy.misc import factorial
 
 def HSVColor(img):
     if isinstance(img,Image.Image):
@@ -133,23 +135,31 @@ v1 = np.array(V, np.uint8)
 stH = np.std(h1)
 meH = np.mean(h1)
 mdH = np.ma.median(h1)
+cvH = np.cov(h1)
 print "std H: "+str(stH)
 print "mean H: "+str(meH)
 print "median H: "+str(mdH)
+#print "cov H: "+str(cvH)
 
 # http://stackoverflow.com/questions/25828184/fitting-to-poisson-histogram
 # http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.mode.html
 stS = np.std(s1)
 meS = np.mean(s1)
 mdS = np.ma.median(s1)
+cvS = np.cov(s1)
 print "std S: "+str(stS)
 print "mean S: "+str(meS)
 print "median S: "+str(mdS)
+#print "cov S: "+str(cvS)
 
-#mv = np.std(v1)
-
-#print "std S: "+str(ms)
-#print "std V: "+str(mv)
+stV = np.std(v1)
+meV = np.mean(v1)
+mdV = np.ma.median(v1)
+cvV = np.cov(v1)
+print "std V: "+str(stV)
+print "mean V: "+str(meV)
+print "median V: "+str(mdV)
+#print "cov V: "+str(cvV)
 
 delta = 25
 varH = 20 #math.sqrt(stH)  # :-) funciona!
@@ -172,9 +182,10 @@ s1[s1 <= 256*0.1] = 0
 s1[s1//2 <= 30] = 0
 s1[s1 != 0] = 0x49
 
-v1[v1 <= 256*0.1] = 0
+#v1[v1 <= 256*0.1] = 0
 #v1 = v1//3
-#v1[v1 < 140] = 0
+v1[v1 < meV - delta] = 0
+#v1[v1 > meV + delta] = 0
 v1[v1 != 0] = 0x24
 
 #hs = h1 | s1 
@@ -187,7 +198,7 @@ hsv2[hsv2 < 150] = 0
 toimage(h1).show()
 toimage(s1).show()
 toimage(v1).show()
-#toimage(hsv2).show()
+toimage(hsv2).show()
 
 #mh = stats.mode(h1)
 #print "moda H: "+str(mh)
@@ -229,3 +240,8 @@ plotHistogram(V, 256)
 #plt.plot(x,mlab.normpdf(x, mu, sigma))
 #
 #plt.show()
+
+
+
+
+
