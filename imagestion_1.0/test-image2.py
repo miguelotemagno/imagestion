@@ -9,6 +9,7 @@ import colorsys, sys # Image
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
+from Segmentation import *
 
 def HSVColor(img):
     if isinstance(img,Image.Image):
@@ -51,11 +52,24 @@ def showImage(img, text):
         
 imgFile = sys.argv[1]
 print imgFile
-
-
-
 shape1 = (2,2)
 shape2 = (6,6)
+
+#~ seg = Segmentation(imgFile)
+
+#~ seg.rgb2hsv()
+#~ seg.erodeHSV(shape2)
+#~ seg.dilateHSV(shape2)
+#~ seg.statisticalDispersionHSV()
+#~ hsv = seg.getHSV()
+#~ mask = seg.getHSVmask()
+
+#~ toimage(seg.H).show()
+#~ toimage(seg.S).show()
+#~ toimage(seg.V).show()
+#~ toimage(hsv).show()
+
+########################################################################
 
 im1 = ndimage.imread(imgFile, flatten=True).astype(np.uint8)
 print "width:%d x height:%d" % im1.shape
@@ -122,11 +136,15 @@ rgb = Image.merge('RGB',(R,G,B))
 hsv = HSVColor(rgb)
 #toimage(hsv).show()
 
-h,s,v = hsv.split()
+H,S,V = hsv.split()
 
-H = Image.fromarray(ndimage.grey_dilation(h, size=(shape2)))
-S = Image.fromarray(ndimage.grey_dilation(s, size=(shape2)))
-V = Image.fromarray(ndimage.grey_dilation(v, size=(shape2)))
+H = Image.fromarray(ndimage.grey_erosion(H, size=(shape2)))
+S = Image.fromarray(ndimage.grey_erosion(S, size=(shape2)))
+V = Image.fromarray(ndimage.grey_erosion(V, size=(shape2)))
+
+H = Image.fromarray(ndimage.grey_dilation(H, size=(shape2)))
+S = Image.fromarray(ndimage.grey_dilation(S, size=(shape2)))
+V = Image.fromarray(ndimage.grey_dilation(V, size=(shape2)))
 
 h1 = np.array(H, np.uint8)
 s1 = np.array(S, np.uint8)
