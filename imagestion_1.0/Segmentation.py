@@ -44,7 +44,7 @@ class Segmentation(object):
 	
 	def __init__(self, pathImage):
 		self.imgFile = pathImage
-		self.rgb = Image.open(imgFile)
+		self.rgb = Image.open(pathImage)
 		
 		r,g,b = self.rgb.split()
 		self.R = r
@@ -118,8 +118,8 @@ class Segmentation(object):
 	### ----------------------------------------------------------------
 	
 	def rgb2hsv(self):
-		self.hsv = HSVColor(self.rgb)
-		h,s,v = hsv.split()
+		self.hsv = self.HSVColor(self.rgb)
+		h,s,v = self.hsv.split()
 		self.H = h
 		self.S = s
 		self.V = v
@@ -173,7 +173,10 @@ class Segmentation(object):
 	### ----------------------------------------------------------------
 	
 	def getHSVmask(self):
-		h,s,v = (self.H, self.S, self.V)
+		h = np.array(self.H, np.uint8)
+		s = np.array(self.S, np.uint8)
+		v = np.array(self.V, np.uint8)
+		
 		h[h <= self.varH - self.delta] = 0
 		h[h >= self.varH + self.delta] = 0
 		h[h != 0] = 0x92
@@ -183,11 +186,13 @@ class Segmentation(object):
 		s[s//2 <= 30] = 0
 		s[s != 0] = 0x49
 
-		v[v < self.meV - self.delta] = 0
+		v[v < self.meV + self.delta] = 0
+		#v[v > self.meV + self.delta] = 0
 		v[v != 0] = 0x24
 
 		hsv = h | s | v
-		hsv[hsv < 150] = 0
+		#hsv[hsv < 0x92] = 0
+		hsv[hsv != 0xFF] = 0
 		
 		self.maskH = h
 		self.maskS = s
@@ -198,5 +203,11 @@ class Segmentation(object):
 
 	### ----------------------------------------------------------------
 	
-
+	def applyMask2Rgb(self, mask):
+		r = Image.fromarray(self.R & mask)
+		g = Image.fromarray(self.G & mask)
+		b = Image.fromarray(self.B & mask)
+		rgb = Image.merge('RGB',(r,g,b))
+		return rgb
+		
         
