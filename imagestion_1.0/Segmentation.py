@@ -84,6 +84,15 @@ class Segmentation(object):
 		pass
 
 	### ----------------------------------------------------------------
+	
+	def setRGB(self, img):
+		self.rgb = img
+		r,g,b = self.rgb.split()
+		self.R = r
+		self.G = g
+		self.B = b
+
+	### ----------------------------------------------------------------
 
 	def getRGB(self):
 		self.rgb = Image.merge('RGB',(self.R,self.G,self.B))
@@ -130,6 +139,7 @@ class Segmentation(object):
 		self.R = Image.fromarray(ndimage.grey_dilation(self.R, size=(shape)))
 		self.G = Image.fromarray(ndimage.grey_dilation(self.G, size=(shape)))
 		self.B = Image.fromarray(ndimage.grey_dilation(self.B, size=(shape)))
+		return Image.merge('RGB',(self.R,self.G,self.B))
 			
 	### ----------------------------------------------------------------
 	
@@ -137,6 +147,7 @@ class Segmentation(object):
 		self.R = Image.fromarray(ndimage.grey_erosion(self.R, size=(shape)))
 		self.G = Image.fromarray(ndimage.grey_erosion(self.G, size=(shape)))
 		self.B = Image.fromarray(ndimage.grey_erosion(self.B, size=(shape)))
+		return Image.merge('RGB',(self.R,self.G,self.B))
 			
 	### ----------------------------------------------------------------
 	
@@ -144,6 +155,7 @@ class Segmentation(object):
 		self.H = Image.fromarray(ndimage.grey_dilation(self.H, size=(shape)))
 		self.S = Image.fromarray(ndimage.grey_dilation(self.S, size=(shape)))
 		self.V = Image.fromarray(ndimage.grey_dilation(self.V, size=(shape)))
+		return Image.merge('RGB',(self.H,self.S,self.V))
 
 	### ----------------------------------------------------------------
 	
@@ -151,6 +163,7 @@ class Segmentation(object):
 		self.H = Image.fromarray(ndimage.grey_erosion(self.H, size=(shape)))
 		self.S = Image.fromarray(ndimage.grey_erosion(self.S, size=(shape)))
 		self.V = Image.fromarray(ndimage.grey_erosion(self.V, size=(shape)))
+		return Image.merge('RGB',(self.H,self.S,self.V))
 
 	### ----------------------------------------------------------------
 	

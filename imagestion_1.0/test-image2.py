@@ -57,6 +57,12 @@ shape2 = (6,6)
 
 seg = Segmentation(imgFile)
 
+rgb1 = np.array(seg.erodeRGB(shape1))
+rgb2 = np.array(seg.dilateRGB(shape2))
+
+diff = rgb2 - rgb1
+toimage(diff).show()
+
 seg.rgb2hsv()
 seg.erodeHSV(shape2)
 seg.dilateHSV(shape1)
@@ -73,6 +79,13 @@ toimage(hsv).show()
 toimage(seg.rgb).show()
 toimage(final).show()
 
+seg.setRGB(final)
+img1 = np.array(seg.erodeRGB(shape1)) 
+img2 = np.array(seg.dilateRGB(shape2)) 
+
+diff2 = img2 - img1
+toimage(diff2).show()
+
 ########################################################################
 
 ## im1 = ndimage.imread(imgFile, flatten=True).astype(np.uint8)
@@ -85,7 +98,9 @@ toimage(final).show()
 ## #im3 = ndimage.grey_erosion(im3, size=(shape2)) 
 
 ## diff = im3 - im2
-## #toimage(diff).show()
+## toimage(diff).show()
+
+
 
 ## #im4 = ndimage.grey_erosion(diff, size=(shape1)) 
 ## #im4 = ndimage.grey_dilation(im4, size=(shape1)) 
@@ -134,7 +149,7 @@ toimage(final).show()
 
 ## rgb = Image.merge('RGB',(R,G,B))
 ## #rgb.show()
-## #toimage(rgb).show()
+## toimage(rgb).show()
 
 
 ## hsv = HSVColor(rgb)
@@ -240,7 +255,7 @@ toimage(final).show()
 
 ## #plotHistogram(hsv2, 256)
 
-## http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
+## #http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html
 ## #mu, sigma = 0, 0.1 # mean and standard deviation
 ## #s = np.random.normal(mu, sigma, 1000)
 ## #abs(mu - np.mean(s)) < 0.01
