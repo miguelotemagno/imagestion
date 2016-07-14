@@ -45,6 +45,9 @@ class Segmentation(object):
 	def __init__(self, pathImage):
 		self.imgFile = pathImage
 		self.rgb = Image.open(pathImage)
+		w,h = self.rgb.size
+		self.width = w
+		self.height = h
 		
 		r,g,b = self.rgb.split()
 		self.R = r
