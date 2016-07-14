@@ -204,8 +204,7 @@ class Segmentation(object):
 		v[v != 0] = 0x24
 
 		hsv = h | s | v
-		#hsv[hsv < 0x92] = 0
-		hsv[hsv != 0xFF] = 0
+		hsv[hsv < 0x92] = 0
 		
 		self.maskH = h
 		self.maskS = s
@@ -213,6 +212,17 @@ class Segmentation(object):
 		self.maskHSV = hsv
 		
 		return hsv
+
+	### ----------------------------------------------------------------
+	
+	def setHSVmask(self, mask):
+		h = mask[mask & 0x92]
+		s = mask[mask & 0x49]
+		v = mask[mask & 0x24]
+		self.maskH = h
+		self.maskS = s
+		self.maskV = v
+		self.maskHSV = mask
 
 	### ----------------------------------------------------------------
 	

@@ -61,7 +61,6 @@ rgb1 = np.array(seg.erodeRGB(shape1))
 rgb2 = np.array(seg.dilateRGB(shape2))
 
 diff = rgb2 - rgb1
-toimage(diff).show()
 
 seg.rgb2hsv()
 seg.erodeHSV(shape2)
@@ -69,21 +68,26 @@ seg.dilateHSV(shape1)
 seg.statisticalDispersionHSV()
 hsv = seg.getHSV()
 mask = seg.getHSVmask()
-final = seg.applyMask2Rgb(mask)
+invMask = ~mask
+mask[mask != 0xFF] = 0
+piel = seg.applyMask2Rgb(mask)
+invMask[invMask != 0xFF] = 0
+fondo = seg.applyMask2Rgb(invMask)
+
+seg.setRGB(piel)
+img1 = np.array(seg.erodeRGB(shape1)) 
+img2 = np.array(seg.dilateRGB(shape2)) 
+diff2 = img2 - img1
 
 toimage(seg.maskH).show()
 toimage(seg.maskS).show()
 toimage(seg.maskV).show()
-toimage(mask).show()
 toimage(hsv).show()
-toimage(seg.rgb).show()
-toimage(final).show()
-
-seg.setRGB(final)
-img1 = np.array(seg.erodeRGB(shape1)) 
-img2 = np.array(seg.dilateRGB(shape2)) 
-
-diff2 = img2 - img1
+toimage(mask).show()
+toimage(invMask).show()
+toimage(piel).show()
+toimage(fondo).show()
+toimage(diff).show()
 toimage(diff2).show()
 
 ########################################################################
