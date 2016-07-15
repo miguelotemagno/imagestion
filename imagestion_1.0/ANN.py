@@ -4,7 +4,7 @@ import string
 from json import *
 
 class ANN:
-	def __init__(self, inputs, outputs, hidden, rate=0.5):
+	def __init__(self, inputs, hidden, outputs, rate=0.5):
 		self.datos_ent = [
 			[[0,0], [0]],
 			[[0,1], [1]],
@@ -87,7 +87,7 @@ class ANN:
 		return self.act_sal[:]
 
 	def retropropagacion(self, objetivo):
-		self.addLog('retropropagacion('+str(objetivo)+','+str(l)+')')  
+		self.addLog('retropropagacion('+str(objetivo)+','+str(self.l)+')')  
 		## global nodos_ent, nodos_ocu, nodos_sal, pesos_ent, pesos_sal
 		## global act_ent, act_ocu, act_sal, log
 		if len(objetivo) != self.nodos_sal:
@@ -108,12 +108,12 @@ class ANN:
 		for j in range(self.nodos_ocu):
 			for k in range(self.nodos_sal):
 				cambio = delta_salida[k] * self.act_ocu[j]
-				pesos_sal[j][k] = pesos_sal[j][k] + self.l * self.cambio
+				self.pesos_sal[j][k] = self.pesos_sal[j][k] + self.l * cambio
 				
 		for i in range(self.nodos_ent):
 			for j in range(self.nodos_ocu):
 				cambio = delta_oculto[j] * self.act_ent[i]
-				pesos_ent[i][j] = pesos_ent[i][j] + self.l * self.cambio
+				self.pesos_ent[i][j] = self.pesos_ent[i][j] + self.l * cambio
 				
 		error = 0.0
 		for k in range(len(objetivo)):
@@ -124,9 +124,11 @@ class ANN:
 
 	def clasificar(self, patron):
 		for p in patron:
-			self.addLog (p[0], '->', self.actualiza_nodos(p[0]))
+			print '%s -> %s' % (p[0], self.actualiza_nodos(p[0]))
 			
 	def entrenar_perceptron(self, patron, max_iter=1000):
+		self.setData(patron)
+		
 		for i in range(max_iter):
 			self.addLog(str(i)+'.----------------')
 			error = 0.0
@@ -139,8 +141,8 @@ class ANN:
 			if error < 0.001:
 				break
 			
-	def addLog(str):
+	def addLog(self,str):
 		if self.debug:
-			log.append(str)        
+			self.log.append(str)        
     
 

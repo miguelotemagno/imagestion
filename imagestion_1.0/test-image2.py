@@ -16,6 +16,7 @@ from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.structure import TanhLayer
 import pickle
+from ANN import *
 
 #-----------------------------------------------------------------------
 
@@ -106,40 +107,48 @@ diff2 = img2 - img1
 #http://pybrain.org/docs/quickstart/dataset.html
 ds = SupervisedDataSet(3, 1)
 hist = {}
+muestra1 = []
+muestra2 = []
 
 i = 0
 for y in range(seg.height):
+	if i > 10:
+		break
 	for x in range(seg.width):
 		r,g,b = piel.getpixel((x,y))
 		key = "x%02x%02x%02x" % (r, g, b)
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			## print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r/255, g/255, b/255), (1))
+			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
+			ds.addSample((r, g, b), (1))
+			## ds.append([[r, g, b], [1]])
+			muestra1 = [r, g, b]
 			i += 1
 			
 i = 0
 for y in range(seg.height):
+	if i > 10:
+		break
 	for x in range(seg.width):
 		r,g,b = fondo.getpixel((x,y))
 		key = "x%02x%02x%02x" % (r, g, b)
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			## print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r/255, g/255, b/255), (0))
+			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
+			ds.addSample((r, g, b), (0))
+			## ds.append([[r, g, b], [0]])
+			muestra2 = [r, g, b]
 			i += 1
 			
 
 print '#########################'
 #http://pybrain.org/docs/api/supervised/trainers.html#pybrain.supervised.trainers.BackpropTrainer
 #http://pybrain.org/docs/quickstart/training.html
-
 net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
-
 trainer = BackpropTrainer(net, ds)
-epochs = 1000
+epochs = 5000
 threshold = 0.05
 error = 1
 
@@ -152,15 +161,20 @@ while error > threshold:
 	if epochs <= 0:
 		break
 	
-    
+
 print ("epochs:%d error:%f" % (epochs,error))
-print net.activate([0, 0, 0])
-print net.activate([0, 1, 0])
-print net.activate([1, 0, 0])
-print net.activate([1, 1, 0])
+print net.activate([muestra1[0], muestra1[1], muestra1[2]])
+print net.activate([muestra2[0], muestra2[1], muestra2[2]])
+
+## net = ANN(3, 4, 1, 0.001)
+## net.iniciar_perceptron()
+## net.entrenar_perceptron(ds, 5000)
+
+## net.clasificar(ds)
+
 
 #http://stackoverflow.com/questions/6006187/how-to-save-and-recover-pybrain-training
-fileObject = open('color-neuralnet.bkp', 'w')
+fileObject = open('color-neuralnet2.bkp', 'w')
 
 pickle.dump(net, fileObject)
 
