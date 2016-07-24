@@ -15,8 +15,9 @@ from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.structure import TanhLayer
+from pybrain.structure import FeedForwardNetwork
 import pickle
-from ANN import *
+## from ANN import *
 
 #-----------------------------------------------------------------------
 
@@ -121,9 +122,9 @@ for y in range(seg.height):
 		
 		if (r|g|b and hist[key] == 0) :
 			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r, g, b), (1))
+			ds.addSample((r/256, g/256, b/256), (1))
 			## ds.append([[r, g, b], [1]])
-			muestra1 = [r, g, b]
+			muestra1 = [r/256, g/256, b/256]
 			i += 1
 			
 i = 0
@@ -137,15 +138,16 @@ for y in range(seg.height):
 		
 		if (r|g|b and hist[key] == 0) :
 			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r, g, b), (0))
-			## ds.append([[r, g, b], [0]])
-			muestra2 = [r, g, b]
+			ds.addSample((r/256, g/256, b/256), (0))
+			## ds.append([[r/256, g/256, b/256], [0]])
+			muestra2 = [r/256, g/256, b/256]
 			i += 1
 			
 
 print '#########################'
 #http://pybrain.org/docs/api/supervised/trainers.html#pybrain.supervised.trainers.BackpropTrainer
 #http://pybrain.org/docs/quickstart/training.html
+#http://pybrain.org/docs/tutorial/netmodcon.html#netmodcon
 net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
 trainer = BackpropTrainer(net, ds)
 epochs = 5000
