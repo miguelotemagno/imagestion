@@ -6,6 +6,12 @@ import numpy as np
 #http://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python
 #https://www.tensorflow.org/versions/r0.9/tutorials/mnist/beginners/index.html
 #https://www.tensorflow.org/versions/r0.9/get_started/index.html#introduction
+#https://github.com/tensorflow/tensorflow/issues/1965   (fix problem: AttributeError: type object 'NewBase' has no attribute 'is_abstract')
+
+## # Ubuntu/Linux 64-bit
+## $ sudo apt-get install python-pip python-dev
+## # Ubuntu/Linux 64-bit, CPU only, Python 2.7
+## $ export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.9.0-cp27-none-linux_x86_64.whl
 
 HIDDEN_NODES = 10
 
