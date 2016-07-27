@@ -39,12 +39,16 @@ sess = tf.Session()
 sess.run(init_op)
 
 xTrain = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-yTrain = np.array([[1, 0], [0, 1], [0, 1], [1, 0]])
+yTrain = np.array([[1,0], [0,1], [0,1], [1,0]])
+
+print xTrain
+print yTrain
 
 for i in xrange(500):
-  _, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
 
-  if i % 10 == 0:
-    print "Step:", i, "Current loss:", loss_val
-    for x_input in [[0, 0], [0, 1], [1, 0], [1, 1]]:
-      print x_input, sess.run(y, feed_dict={x: [x_input]})
+	if i % 10 == 0:
+		print "Step:", i, "Current loss:", loss_val
+		for x_input in [[0, 0], [0, 1], [1, 0], [1, 1]]:
+			result = sess.run(y, feed_dict={x: [x_input]})
+			print "%s => %s" % (x_input, result)

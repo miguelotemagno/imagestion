@@ -113,34 +113,34 @@ muestra2 = []
 
 i = 0
 for y in range(seg.height):
-	if i > 10:
-		break
+	## if i > 10:
+		## break
 	for x in range(seg.width):
 		r,g,b = piel.getpixel((x,y))
 		key = "x%02x%02x%02x" % (r, g, b)
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r/256, g/256, b/256), (1))
-			## ds.append([[r, g, b], [1]])
-			muestra1 = [r/256, g/256, b/256]
+			muestra1 = [float(r)/256, float(g)/256, float(b)/256]
+			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra1)
+			ds.addSample((float(r)/256, float(g)/256, float(b)/256), (1))
+			## ds.append([muestra1, [1]])
 			i += 1
 			
 i = 0
 for y in range(seg.height):
-	if i > 10:
-		break
+	## if i > 10:
+		## break
 	for x in range(seg.width):
 		r,g,b = fondo.getpixel((x,y))
 		key = "x%02x%02x%02x" % (r, g, b)
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			print "%05d (%02x, %02x, %02x)" % (i,r,g,b)
-			ds.addSample((r/256, g/256, b/256), (0))
-			## ds.append([[r/256, g/256, b/256], [0]])
-			muestra2 = [r/256, g/256, b/256]
+			muestra2 = [float(r)/256, float(g)/256, float(b)/256]
+			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra2)
+			ds.addSample((float(r)/256, float(g)/256, float(b)/256), (0))
+			## ds.append([muestra2, [0]])
 			i += 1
 			
 
@@ -151,7 +151,7 @@ print '#########################'
 net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
 trainer = BackpropTrainer(net, ds)
 epochs = 5000
-threshold = 0.05
+threshold = 0.001
 error = 1
 
 ## trainer.trainUntilConvergence()
@@ -159,6 +159,7 @@ error = 1
 while error > threshold:
 	error = trainer.train()
 	epochs -= 1
+	## if epochs % 10 == 0:
 	print "%d) e -> %f" % (epochs, error)
 	if epochs <= 0:
 		break
