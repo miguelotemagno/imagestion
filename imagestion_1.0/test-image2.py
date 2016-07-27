@@ -97,7 +97,7 @@ diff2 = img2 - img1
 ## toimage(hsv).show()
 ## toimage(mask).show()
 ## toimage(invMask).show()
-## toimage(piel).show()
+toimage(piel).show()
 ## toimage(fondo).show()
 ## toimage(diff).show()
 ## toimage(diff2).show()
@@ -123,7 +123,7 @@ for y in range(seg.height):
 		if (r|g|b and hist[key] == 0) :
 			muestra1 = [float(r)/256, float(g)/256, float(b)/256]
 			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra1)
-			ds.addSample((float(r)/256, float(g)/256, float(b)/256), (1))
+			ds.addSample((muestra1[0], muestra1[1], muestra1[2]), (1))
 			## ds.append([muestra1, [1]])
 			i += 1
 			
@@ -137,9 +137,9 @@ for y in range(seg.height):
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			muestra2 = [float(r)/256, float(g)/256, float(b)/256]
+			muestra2 = [float(r)/255, float(g)/255, float(b)/255]
 			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra2)
-			ds.addSample((float(r)/256, float(g)/256, float(b)/256), (0))
+			ds.addSample((muestra2[0], muestra2[1], muestra2[2]), (0))
 			## ds.append([muestra2, [0]])
 			i += 1
 			
@@ -151,7 +151,7 @@ print '#########################'
 net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
 trainer = BackpropTrainer(net, ds)
 epochs = 5000
-threshold = 0.001
+threshold = 0.008
 error = 1
 
 ## trainer.trainUntilConvergence()
@@ -183,4 +183,15 @@ pickle.dump(net, fileObject)
 
 fileObject.close()
 
+# http://effbot.org/imagingbook/image.htm
+rgb = seg.rgb
+for y in range(seg.height):
+	for x in range(seg.width):
+		r,g,b = rgb.getpixel((x,y))
+		pixel = [float(r)/255, float(g)/255, float(b)/255]
+		test  = net.activate(pixel)
+		
+		if (test[0] < 0.5 ) :
+			rgb.putpixel((x,y), 0)
 
+toimage(rgb).show()

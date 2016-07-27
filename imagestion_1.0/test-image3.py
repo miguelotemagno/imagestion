@@ -62,6 +62,8 @@ def showImage(img, text):
 #  http://scikit-image.org
 #  https://sites.google.com/site/bustosmerino/home/segmentacion---color-de-piel
         
+print '1 #########################'
+
 imgFile = sys.argv[1]
 print imgFile
 shape1 = (2,2)
@@ -97,16 +99,17 @@ diff2 = img2 - img1
 ## toimage(hsv).show()
 ## toimage(mask).show()
 ## toimage(invMask).show()
-## toimage(piel).show()
+toimage(piel).show()
 ## toimage(fondo).show()
 ## toimage(diff).show()
 ## toimage(diff2).show()
 
 #-----------------------------------------------------------------------
 
+print '2 #########################'
 	
-#http://pybrain.org/docs/quickstart/dataset.html
-ds = [] #SupervisedDataSet(3, 1)
+#https://gist.github.com/pannous/2b8e2e05cf05a630b132
+ds = [] # Data set
 hist = {}
 muestra1 = []
 muestra2 = []
@@ -156,6 +159,8 @@ print yTrain
 
 #-----------------------------------------------------------------------
 
+print '3 #########################'
+
 HIDDEN_NODES = 10
 
 # Try to find values for W and b that compute y_data = W * x_data + b
@@ -188,7 +193,7 @@ sess = tf.Session()
 sess.run(init_op)
 
 
-print '#########################'
+print '4 #########################'
 
 for i in xrange(1000):
 	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
@@ -199,5 +204,20 @@ for i in xrange(1000):
 			result = sess.run(y, feed_dict={x: [x_input]})
 			print "%s => %s" % (x_input, result)
 
+print '5 #########################'
 
+# https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
+# https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
 
+# http://effbot.org/imagingbook/image.htm
+rgb = seg.rgb
+for yy in range(seg.height):
+	for xx in range(seg.width):
+		r,g,b = rgb.getpixel((xx,yy))
+		pixel = [float(r)/255, float(g)/255, float(b)/255]
+		test  = sess.run(y, feed_dict={x: [pixel]})
+		
+		if (test[0][0] < 0.6 ) :
+			rgb.putpixel((xx,yy), 0xFFFFFF)
+
+toimage(rgb).show()
