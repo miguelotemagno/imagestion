@@ -63,12 +63,14 @@ def showImage(img, text):
 #  https://sites.google.com/site/bustosmerino/home/segmentacion---color-de-piel
         
 imgFile = sys.argv[1]
+dbFile  = sys.argv[2]
 print imgFile
+print dbFile
 shape1 = (2,2)
 shape2 = (6,6)
 
 seg = Segmentation(imgFile)
-
+rgb = seg.rgb
 rgb1 = np.array(seg.erodeRGB(shape1))
 rgb2 = np.array(seg.dilateRGB(shape2))
 
@@ -145,24 +147,31 @@ for y in range(seg.height):
 			
 
 print '#########################'
+
 #http://pybrain.org/docs/api/supervised/trainers.html#pybrain.supervised.trainers.BackpropTrainer
 #http://pybrain.org/docs/quickstart/training.html
 #http://pybrain.org/docs/tutorial/netmodcon.html#netmodcon
-net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
+
+fileObject = open(dbFile, 'a+')
+try:
+	net = pickle.load(fileObject)
+except:
+	net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
+
 trainer = BackpropTrainer(net, ds)
 epochs = 5000
-threshold = 0.008
+threshold = 0.01
 error = 1
 
-## trainer.trainUntilConvergence()
+print "1.- Train Until Convergence #####################################"
+trainer.trainUntilConvergence()
 
-while error > threshold:
-	error = trainer.train()
-	epochs -= 1
-	## if epochs % 10 == 0:
-	print "%d) e -> %f" % (epochs, error)
-	if epochs <= 0:
-		break
+## while error > threshold:
+	## error = trainer.train()
+	## epochs -= 1
+	## print "%d) e -> %f" % (epochs, error)
+	## if epochs <= 0:
+		## break
 	
 
 print ("epochs:%d error:%f" % (epochs,error))
@@ -177,14 +186,13 @@ print net.activate([muestra2[0], muestra2[1], muestra2[2]])
 
 
 #http://stackoverflow.com/questions/6006187/how-to-save-and-recover-pybrain-training
-fileObject = open('color-neuralnet2.bkp', 'w')
-
 pickle.dump(net, fileObject)
 
 fileObject.close()
 
+print "2.- Segmentation ################################################"
+
 # http://effbot.org/imagingbook/image.htm
-rgb = seg.rgb
 for y in range(seg.height):
 	for x in range(seg.width):
 		r,g,b = rgb.getpixel((x,y))
