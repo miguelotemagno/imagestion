@@ -227,5 +227,3 @@ print '6.- Store data to file #########################'
 saver = tf.train.Saver()
 saver.save(sess, dbFile, global_step=None)
 
-
-
