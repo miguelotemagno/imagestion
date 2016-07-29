@@ -128,7 +128,7 @@ for y in range(seg.height):
 		pixel = [float(r)/255, float(g)/255, float(b)/255]
 		test  = net.activate(pixel)
 		
-		if (test[0] < 0.5 ) :
+		if (test[0] < 0.6 ) :
 			rgb.putpixel((x,y), 0)
 
 toimage(rgb).show()

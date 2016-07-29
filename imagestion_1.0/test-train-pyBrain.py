@@ -124,7 +124,7 @@ for y in range(seg.height):
 		
 		if (r|g|b and hist[key] == 0) :
 			muestra1 = [float(r)/256, float(g)/256, float(b)/256]
-			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra1)
+			print "%05d (%02x, %02x, %02x) => [1] %s" % (i,r,g,b, muestra1)
 			ds.addSample((muestra1[0], muestra1[1], muestra1[2]), (1))
 			## ds.append([muestra1, [1]])
 			i += 1
@@ -140,7 +140,7 @@ for y in range(seg.height):
 		
 		if (r|g|b and hist[key] == 0) :
 			muestra2 = [float(r)/255, float(g)/255, float(b)/255]
-			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra2)
+			print "%05d (%02x, %02x, %02x) => [0] %s" % (i,r,g,b, muestra2)
 			ds.addSample((muestra2[0], muestra2[1], muestra2[2]), (0))
 			## ds.append([muestra2, [0]])
 			i += 1
