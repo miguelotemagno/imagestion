@@ -62,15 +62,17 @@ def showImage(img, text):
 #  http://scikit-image.org
 #  https://sites.google.com/site/bustosmerino/home/segmentacion---color-de-piel
         
-print '1 #########################'
+print '1.- Working on image #########################'
 
 imgFile = sys.argv[1]
+dbFile = sys.argv[2]
 print imgFile
+print dbFile
 shape1 = (2,2)
 shape2 = (6,6)
 
 seg = Segmentation(imgFile)
-
+rgb = seg.rgb
 rgb1 = np.array(seg.erodeRGB(shape1))
 rgb2 = np.array(seg.dilateRGB(shape2))
 
@@ -106,7 +108,7 @@ toimage(piel).show()
 
 #-----------------------------------------------------------------------
 
-print '2 #########################'
+print '2.- Preparing data set #########################'
 	
 #https://gist.github.com/pannous/2b8e2e05cf05a630b132
 ds = [] # Data set
@@ -159,7 +161,7 @@ print yTrain
 
 #-----------------------------------------------------------------------
 
-print '3 #########################'
+print '3.- Initialization network #########################'
 
 HIDDEN_NODES = 10
 
@@ -193,7 +195,7 @@ sess = tf.Session()
 sess.run(init_op)
 
 
-print '4 #########################'
+print '4.- Training network #########################'
 
 for i in xrange(1000):
 	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
@@ -204,13 +206,12 @@ for i in xrange(1000):
 			result = sess.run(y, feed_dict={x: [x_input]})
 			print "%s => %s" % (x_input, result)
 
-print '5 #########################'
+print '5.- Perform segmentation #########################'
 
 # https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
 # https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
 
 # http://effbot.org/imagingbook/image.htm
-rgb = seg.rgb
 for yy in range(seg.height):
 	for xx in range(seg.width):
 		r,g,b = rgb.getpixel((xx,yy))
@@ -218,6 +219,13 @@ for yy in range(seg.height):
 		test  = sess.run(y, feed_dict={x: [pixel]})
 		
 		if (test[0][0] < 0.6 ) :
-			rgb.putpixel((xx,yy), 0xFFFFFF)
+			rgb.putpixel((xx,yy), 0)
 
 toimage(rgb).show()
+
+print '6.- Store data to file #########################'
+saver = tf.train.Saver()
+saver.save(sess, dbFile, global_step=None)
+
+
+

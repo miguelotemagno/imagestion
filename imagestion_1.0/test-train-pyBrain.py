@@ -5,7 +5,7 @@ from scipy.misc import toimage
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import colorsys, sys # Image
+import colorsys, sys, os
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
@@ -153,25 +153,34 @@ print '#########################'
 #http://pybrain.org/docs/tutorial/netmodcon.html#netmodcon
 
 fileObject = open(dbFile, 'a+')
-try:
-	net = pickle.load(fileObject)
-except:
-	net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
+newFile = False
 
-trainer = BackpropTrainer(net, ds)
-epochs = 5000
+try:
+	if os.stat(dbFile).st_size == 0 :
+		raise Exception("File %s is empty, proceed to create network" % (dbFile))
+	print "Loading %s for feed new data" % (dbFile)
+	net = pickle.load(fileObject)
+except Exception as e:
+	print e
+	net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
+	newFile = True
+
+epochs = 500
 threshold = 0.01
 error = 1
 
-print "1.- Train Until Convergence #####################################"
-trainer.trainUntilConvergence()
+trainer = BackpropTrainer(net, ds, threshold)
 
-## while error > threshold:
-	## error = trainer.train()
-	## epochs -= 1
-	## print "%d) e -> %f" % (epochs, error)
-	## if epochs <= 0:
-		## break
+## if newFile == True :
+	## while error > threshold:
+		## error = trainer.train()
+		## epochs -= 1
+		## print "%d) e -> %f" % (epochs, error)
+		## if epochs <= 0:
+			## break
+
+print "1.- Train Until Convergence #####################################"
+trainer.trainUntilConvergence(ds, epochs, True)
 	
 
 print ("epochs:%d error:%f" % (epochs,error))
