@@ -57,7 +57,6 @@ def showImage(img, text):
 #  http://scikit-image.org
 #  https://sites.google.com/site/bustosmerino/home/segmentacion---color-de-piel
         
-        
 print '1.- Working on image #########################'
 
 imgFile = sys.argv[1]
@@ -69,95 +68,11 @@ shape2 = (6,6)
 
 seg = Segmentation(imgFile)
 rgb = seg.rgb
-rgb1 = np.array(seg.erodeRGB(shape1))
-rgb2 = np.array(seg.dilateRGB(shape2))
-
-diff = rgb2 - rgb1
-
-seg.rgb2hsv()
-seg.erodeHSV(shape2)
-seg.dilateHSV(shape1)
-seg.statisticalDispersionHSV()
-hsv = seg.getHSV()
-mask = seg.getHSVmask()
-invMask = ~mask
-mask[mask != 0xFF] = 0
-piel = seg.applyMask2Rgb(mask)
-invMask[invMask != 0xFF] = 0
-fondo = seg.applyMask2Rgb(invMask)
-
-seg.setRGB(piel)
-img1 = np.array(seg.erodeRGB(shape1)) 
-img2 = np.array(seg.dilateRGB(shape2)) 
-diff2 = img2 - img1
-
-## toimage(seg.maskH).show()
-## toimage(seg.maskS).show()
-## toimage(seg.maskV).show()
-## toimage(hsv).show()
-## toimage(mask).show()
-## toimage(invMask).show()
-toimage(piel).show()
-## toimage(fondo).show()
-## toimage(diff).show()
-## toimage(diff2).show()
+toimage(rgb).show()
 
 #-----------------------------------------------------------------------
 
-print '2.- Preparing data set #########################'
-	
-#https://gist.github.com/pannous/2b8e2e05cf05a630b132
-ds = [] # Data set
-hist = {}
-muestra1 = []
-muestra2 = []
-outputs = []
-
-i = 0
-for y in range(seg.height):
-	
-	## if i > 10:  # comentar esta linea
-		## break   # comentar esta linea
-		
-	for x in range(seg.width):
-		r,g,b = piel.getpixel((x,y))
-		key = "x%02x%02x%02x" % (r, g, b)
-		hist[key] = hist[key] + 1 if key in hist else 0
-		
-		if (r|g|b and hist[key] == 0) :
-			muestra1 = [float(r)/256, float(g)/256, float(b)/256]
-			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra1)
-			ds.append(muestra1)
-			outputs.append([1,0])
-			i += 1
-			
-i = 0
-for y in range(seg.height):
-	
-	## if i > 10:  # comentar esta linea
-		## break   # comentar esta linea
-		
-	for x in range(seg.width):
-		r,g,b = fondo.getpixel((x,y))
-		key = "x%02x%02x%02x" % (r, g, b)
-		hist[key] = hist[key] + 1 if key in hist else 0
-		
-		if (r|g|b and hist[key] == 0) :
-			muestra2 = [float(r)/256, float(g)/256, float(b)/256]
-			print "%05d (%02x, %02x, %02x) => %s" % (i,r,g,b, muestra2)
-			ds.append(muestra2)
-			outputs.append([0,1])
-			i += 1
-			
-xTrain = np.array(ds)
-yTrain = np.array(outputs)
-
-print xTrain
-print yTrain
-
-#-----------------------------------------------------------------------
-
-print '3.- Initialization network #########################'
+print '2.- Initialization network #########################'
 
 HIDDEN_NODES = 10
 flags = tf.app.flags
@@ -169,7 +84,6 @@ FLAGS = flags.FLAGS
 # Try to find values for W and b that compute y_data = W * x_data + b
 # (We know that W should be 0.1 and b 0.3, but Tensorflow will
 # figure that out for us.)
-
 x = tf.placeholder(tf.float32, [None, 3])
 W_hidden = tf.Variable(tf.truncated_normal([3, HIDDEN_NODES], stddev=1./math.sqrt(3)))
 b_hidden = tf.Variable(tf.zeros([HIDDEN_NODES]))
@@ -178,7 +92,6 @@ hidden = tf.nn.relu(tf.matmul(x, W_hidden) + b_hidden)
 # Try to find values for W and b that compute y_data = W * x_data + b
 # (We know that W should be 0.1 and b 0.3, but Tensorflow will
 # figure that out for us.)
-
 W_logits = tf.Variable(tf.truncated_normal([HIDDEN_NODES, 2], stddev=1./math.sqrt(HIDDEN_NODES)))
 b_logits = tf.Variable(tf.zeros([2]))
 logits = tf.matmul(hidden, W_logits) + b_logits
@@ -200,45 +113,24 @@ sess.run(init_op)
 
 # http://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python
 if os.path.isfile(dbFile) :
-	print '3a.- Restore previous session #########################'
+	print '3.- Restore previous session #########################'
 	saver.restore(sess, dbFile)
 
-print '4.- Training network #########################'
+	print '4.- Perform segmentation #########################'
 
-for i in xrange(1000):
-	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+	# https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
+	# https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
+	# http://effbot.org/imagingbook/image.htm
+	for yy in range(seg.height):
+		for xx in range(seg.width):
+			r,g,b = rgb.getpixel((xx,yy))
+			pixel = [float(r)/255, float(g)/255, float(b)/255]
+			test  = sess.run(y, feed_dict={x: [pixel]})
+			
+			if (test[0][0] < 0.6 ) :
+				rgb.putpixel((xx,yy), 0)
 
-	if i % 100 == 0:
-		print "Step:", i, "Current loss:", loss_val
-		for x_input in [muestra1, muestra2]:
-			result = sess.run(y, feed_dict={x: [x_input]})
-			print "%s => %s" % (x_input, result)
+	toimage(rgb).show()
 
-print '5.- Perform segmentation #########################'
-
-# https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
-# https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
-# http://effbot.org/imagingbook/image.htm
-
-for yy in range(seg.height):
-	for xx in range(seg.width):
-		r,g,b = rgb.getpixel((xx,yy))
-		pixel = [float(r)/255, float(g)/255, float(b)/255]
-		test  = sess.run(y, feed_dict={x: [pixel]})
-		
-		if (test[0][0] < 0.6 ) :
-			rgb.putpixel((xx,yy), 0)
-
-toimage(rgb).show()
-
-print "write changes? (y/n): "
-k = sys.stdin.read(1)
-ch = sys.stdin.readline()
-
-if k == 'y':
-	print '6.- Store data to file #########################'
-	saver.save(sess, dbFile, global_step=None, latest_filename=None, meta_graph_suffix='meta', write_meta_graph=True)
-else:
-	print 'Changes dismissed'
 	
 	
