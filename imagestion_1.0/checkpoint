@@ -1,0 +1,2 @@
+model_checkpoint_path: "net-tensorflow.bkp"
+all_model_checkpoint_paths: "net-tensorflow.bkp"

@@ -101,7 +101,7 @@ diff2 = img2 - img1
 ## toimage(hsv).show()
 ## toimage(mask).show()
 ## toimage(invMask).show()
-toimage(piel).show()
+## toimage(piel).show()
 ## toimage(fondo).show()
 ## toimage(diff).show()
 ## toimage(diff2).show()
@@ -209,26 +209,24 @@ train_op = tf.train.GradientDescentOptimizer(0.2).minimize(loss)
 init_op = tf.initialize_all_variables()
 
 saver = tf.train.Saver()
-
+sess = tf.Session()
+sess.run(init_op)
 
 # http://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python
 if os.path.isfile(dbFile) :
-	with tf.Session() as sess:
-	  saver.restore(sess, dbFile)
-else :
-	print '4.- Training network #########################'
+	print '3a.- Restore previous session #########################'
+	saver.restore(sess, dbFile)
 
-	sess = tf.Session()
-	sess.run(init_op)
+print '4.- Training network #########################'
 
-	for i in xrange(1000):
-		_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+for i in xrange(1000):
+	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
 
-		if i % 100 == 0:
-			print "Step:", i, "Current loss:", loss_val
-			for x_input in [muestra1, muestra2]:
-				result = sess.run(y, feed_dict={x: [x_input]})
-				print "%s => %s" % (x_input, result)
+	if i % 100 == 0:
+		print "Step:", i, "Current loss:", loss_val
+		for x_input in [muestra1, muestra2]:
+			result = sess.run(y, feed_dict={x: [x_input]})
+			print "%s => %s" % (x_input, result)
 
 print '5.- Perform segmentation #########################'
 
@@ -245,12 +243,13 @@ for yy in range(seg.height):
 		if (test[0][0] < 0.6 ) :
 			rgb.putpixel((xx,yy), 0)
 
-toimage(rgb).show()
+## toimage(rgb).show()
 
 print '6.- Store data to file #########################'
-saver.save(sess, dbFile, global_step=None)
+## saver.save(sess, dbFile, global_step=0)
+saver.save(sess, dbFile, global_step=None, latest_filename=None, meta_graph_suffix='meta', write_meta_graph=True)
 
-if os.path.isfile(dbFile+'.meta') :
-	os.rename(dbFile+'.meta', dbFile)
+## if os.path.isfile(dbFile+'.meta') :
+	## os.rename(dbFile+'.meta', dbFile)
 	
 	
