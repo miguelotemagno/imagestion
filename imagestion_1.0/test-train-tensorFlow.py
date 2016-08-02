@@ -5,7 +5,7 @@ from scipy.misc import toimage
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import colorsys, sys # Image
+import colorsys, sys, os
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
@@ -164,6 +164,23 @@ print yTrain
 print '3.- Initialization network #########################'
 
 HIDDEN_NODES = 10
+flags = tf.app.flags
+FLAGS = flags.FLAGS
+
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/fully_connected_feed.py
+# Basic model parameters as external flags.
+
+## flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
+## flags.DEFINE_integer('max_steps', 2000, 'Number of steps to run trainer.')
+## flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')
+## flags.DEFINE_integer('hidden2', 32, 'Number of units in hidden layer 2.')
+## flags.DEFINE_integer('batch_size', 100, 'Batch size.  '
+                     ## 'Must divide evenly into the dataset sizes.')
+## flags.DEFINE_string('train_dir', 'data', 'Directory to put the training data.')
+## flags.DEFINE_boolean('fake_data', False, 'If true, uses fake data '
+                     ## 'for unit testing.')
+
+
 
 # Try to find values for W and b that compute y_data = W * x_data + b
 # (We know that W should be 0.1 and b 0.3, but Tensorflow will
@@ -191,20 +208,27 @@ train_op = tf.train.GradientDescentOptimizer(0.2).minimize(loss)
 
 init_op = tf.initialize_all_variables()
 
-sess = tf.Session()
-sess.run(init_op)
+saver = tf.train.Saver()
 
 
-print '4.- Training network #########################'
+# http://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python
+if os.path.isfile(dbFile) :
+	with tf.Session() as sess:
+	  saver.restore(sess, dbFile)
+else :
+	print '4.- Training network #########################'
 
-for i in xrange(1000):
-	_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+	sess = tf.Session()
+	sess.run(init_op)
 
-	if i % 100 == 0:
-		print "Step:", i, "Current loss:", loss_val
-		for x_input in [muestra1, muestra2]:
-			result = sess.run(y, feed_dict={x: [x_input]})
-			print "%s => %s" % (x_input, result)
+	for i in xrange(1000):
+		_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+
+		if i % 100 == 0:
+			print "Step:", i, "Current loss:", loss_val
+			for x_input in [muestra1, muestra2]:
+				result = sess.run(y, feed_dict={x: [x_input]})
+				print "%s => %s" % (x_input, result)
 
 print '5.- Perform segmentation #########################'
 
@@ -224,6 +248,9 @@ for yy in range(seg.height):
 toimage(rgb).show()
 
 print '6.- Store data to file #########################'
-saver = tf.train.Saver()
 saver.save(sess, dbFile, global_step=None)
 
+if os.path.isfile(dbFile+'.meta') :
+	os.rename(dbFile+'.meta', dbFile)
+	
+	
