@@ -14,33 +14,7 @@ from Segmentation import *
 import pickle
 import tensorflow as tf
 
-#-----------------------------------------------------------------------
-
-def HSVColor(img):
-    if isinstance(img,Image.Image):
-        r,g,b = img.split()
-        Hdat = []
-        Sdat = []
-        Vdat = [] 
-        for rd,gn,bl in zip(r.getdata(),g.getdata(),b.getdata()) :
-            h,s,v = colorsys.rgb_to_hsv(rd/255.,gn/255.,bl/255.)
-            Hdat.append(int(h*255.))
-            Sdat.append(int(s*255.))
-            Vdat.append(int(v*255.))
-        r.putdata(Hdat)
-        g.putdata(Sdat)
-        b.putdata(Vdat)
-        return Image.merge('RGB',(r,g,b))
-    else:
-        return None
-        
-def plotHistogram(arr, b):
-    hist, bins = np.histogram(arr, bins=b)
-    #width = 0.7 * (bins[1] - bins[0])
-    center = (bins[:-1] + bins[1:]) / 2
-    plt.bar(center, hist, align='center') #, width=width)
-    plt.show()
-    
+#-----------------------------------------------------------------------        
 # http://stackoverflow.com/questions/16373425/add-text-on-image-using-pil 
 def showImage(img, text):
     draw = ImageDraw.Draw(img)

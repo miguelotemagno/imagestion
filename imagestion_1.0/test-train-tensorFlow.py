@@ -156,6 +156,7 @@ print xTrain
 print yTrain
 
 #-----------------------------------------------------------------------
+# https://gist.github.com/vinhkhuc/e53a70f9e5c3f55852b0
 
 print '3.- Initialization network #########################'
 
@@ -218,6 +219,8 @@ print '5.- Perform segmentation #########################'
 
 # https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
 # https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
+# https://www.tensorflow.org/versions/r0.9/tutorials/mnist/tf/index.html
+# https://www.tensorflow.org/versions/r0.9/tutorials/mnist/pros/index.html
 # http://effbot.org/imagingbook/image.htm
 
 for yy in range(seg.height):
