@@ -23,6 +23,14 @@ def showImage(img, text):
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text((10, 10),text) #,font=font,fill=(255,255,255))
     img.show()
+
+## def evalPixel((r,g,b), sess):
+def evalPixel(pix, sess, y):
+	r,g,b = pix
+	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
+	test  = sess.run(y, feed_dict={x: [pixel]})
+	print test
+	return test[0][0]
    
 #-----------------------------------------------------------------------
 
@@ -42,7 +50,7 @@ shape2 = (6,6)
 
 seg = Segmentation(imgFile)
 rgb = seg.rgb
-toimage(rgb).show()
+## toimage(rgb).show()
 
 #-----------------------------------------------------------------------
 
@@ -97,13 +105,13 @@ if os.path.isfile(dbFile) :
 	# http://effbot.org/imagingbook/image.htm
 	for yy in range(seg.height):
 		for xx in range(seg.width):
-			r,g,b = rgb.getpixel((xx,yy))
-			pixel = [float(r)/255, float(g)/255, float(b)/255]
-			test  = sess.run(y, feed_dict={x: [pixel]})
-			
-			if (test[0][0] < 0.6 ) :
+			if (evalPixel(rgb.getpixel((xx,yy)), sess, y) < 0.6 ) :
 				rgb.putpixel((xx,yy), 0)
-
+				
+	## im = np.array(rgb)
+	## im[im > [128,128,128]] = 0
+	## im = [[evalPixel(x,sess,y) < 0.6 for x in row] for row in im]
+	
 	toimage(rgb).show()
 
 	
