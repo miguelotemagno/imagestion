@@ -25,7 +25,7 @@ def showImage(img, text):
     img.show()
 
 ## def evalPixel((r,g,b), sess):
-def evalPixel(pix, sess, y):
+def evalPixel(pix):
 	r,g,b = pix
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
 	test  = sess.run(y, feed_dict={x: [pixel]})
@@ -53,7 +53,7 @@ rgb = seg.rgb
 ## toimage(rgb).show()
 
 #-----------------------------------------------------------------------
-
+global sess, y
 print '2.- Initialization network #########################'
 
 HIDDEN_NODES = 10
@@ -90,6 +90,7 @@ train_op = tf.train.GradientDescentOptimizer(0.2).minimize(loss)
 init_op = tf.initialize_all_variables()
 
 saver = tf.train.Saver()
+
 sess = tf.Session()
 sess.run(init_op)
 
@@ -103,16 +104,16 @@ if os.path.isfile(dbFile) :
 	# https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
 	# https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
 	# http://effbot.org/imagingbook/image.htm
-	for yy in range(seg.height):
-		for xx in range(seg.width):
-			if (evalPixel(rgb.getpixel((xx,yy)), sess, y) < 0.6 ) :
-				rgb.putpixel((xx,yy), 0)
+	## for yy in range(seg.height):
+		## for xx in range(seg.width):
+			## if (evalPixel(rgb.getpixel((xx,yy)), sess, y) < 0.6 ) :
+				## rgb.putpixel((xx,yy), 0)
 				
-	## im = np.array(rgb)
-	## im[im > [128,128,128]] = 0
-	## im = [[evalPixel(x,sess,y) < 0.6 for x in row] for row in im]
+	im = np.array(rgb)
+	#im[im > [128,128,128]] = 0
+	im = [[evalPixel(x) < 0.6 for x in row] for row in im]
 	
-	toimage(rgb).show()
+	## toimage(rgb).show()
 
 	
 	
