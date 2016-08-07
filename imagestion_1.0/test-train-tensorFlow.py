@@ -160,6 +160,8 @@ print yTrain
 
 print '3.- Initialization network #########################'
 
+## http://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python€
+
 HIDDEN_NODES = 10
 flags = tf.app.flags
 FLAGS = flags.FLAGS

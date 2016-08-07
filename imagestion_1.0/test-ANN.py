@@ -53,6 +53,12 @@ def showImage(img, text):
     # draw.text((x, y),"Sample Text",(r,g,b))
     draw.text((10, 10),text) #,font=font,fill=(255,255,255))
     img.show()
+
+def evalPixel(pix, net):
+	r,g,b = pix
+	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
+	test  = net.actualiza_nodos(pixel)
+	return test[0]
    
 #-----------------------------------------------------------------------
 
@@ -177,14 +183,15 @@ toimage(rgb).show()
 
 for yy in range(seg.height):
 	for xx in range(seg.width):
-		r,g,b = rgb.getpixel((xx,yy))
-		pixel = [float(r)/255, float(g)/255, float(b)/255]
-		test  = net.actualiza_nodos(pixel)
-		
-		if (test[0] < 0.6 ) :
+		if (evalPixel(rgb.getpixel((xx,yy)), net) < 0.6) :
 			rgb.putpixel((xx,yy), 0)
 
 toimage(rgb).show()
+
+## im = np.array(rgb)
+## #im[evalPixel(x, net) < 0.6] = 0
+## im = [[evalPixel(x, net) < 0.6 for x in row] for row in im]
+## toimage(im).show()
 
 
 #http://stackoverflow.com/questions/6006187/how-to-save-and-recover-pybrain-training
