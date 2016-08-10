@@ -179,20 +179,23 @@ net.iniciar_perceptron()
 net.entrenar_perceptron(ds,epochs)
 
 print '5.- Perform segmentation #########################'
+## toimage(rgb).show()
+
+## for yy in range(seg.height):
+	## for xx in range(seg.width):
+		## if (evalPixel(rgb.getpixel((xx,yy)), net) < 0.6) :
+			## rgb.putpixel((xx,yy), 0)
+
+im = np.array(rgb)
+#im[evalPixel(x, net) < 0.6] = 0
+im = [[255 if evalPixel(x, net) > 0.6 else 0 for x in row] for row in im]
+r,g,b = rgb.split()
+r &= im
+g &= im
+b &= im
+rgb = Image.merge('RGB',(r,g,b))
+
 toimage(rgb).show()
-
-for yy in range(seg.height):
-	for xx in range(seg.width):
-		if (evalPixel(rgb.getpixel((xx,yy)), net) < 0.6) :
-			rgb.putpixel((xx,yy), 0)
-
-toimage(rgb).show()
-
-## im = np.array(rgb)
-## #im[evalPixel(x, net) < 0.6] = 0
-## im = [[evalPixel(x, net) < 0.6 for x in row] for row in im]
-## toimage(im).show()
-
 
 #http://stackoverflow.com/questions/6006187/how-to-save-and-recover-pybrain-training
 ## fileObject = open('neuralnet-ann.bkp', 'w')
