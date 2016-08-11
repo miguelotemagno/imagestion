@@ -21,7 +21,6 @@ def evalPixel(pix, sess, y):
 	r,g,b = pix
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
 	test  = sess.run(y, feed_dict={x: [pixel]})
-	print test
 	return test[0][0]
    
 #-----------------------------------------------------------------------
@@ -91,10 +90,12 @@ if os.path.isfile(dbFile) :
 	saver.restore(sess, dbFile)
 
 	print '4.- Perform segmentation #########################'
+	toimage(rgb).show()
 
-	# https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
-	# https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
-	# http://effbot.org/imagingbook/image.htm
+	## # https://www.tensorflow.org/versions/r0.9/get_started/basic_usage.html#tensors
+	## # https://www.tensorflow.org/versions/r0.9/resources/dims_types.html
+	## # http://effbot.org/imagingbook/image.htm
+	
 	## for yy in range(seg.height):
 		## for xx in range(seg.width):
 			## if (evalPixel(rgb.getpixel((xx,yy)), sess, y) < 0.6 ) :
@@ -102,7 +103,7 @@ if os.path.isfile(dbFile) :
 				
 	im = np.array(rgb)
 	#im[im > [128,128,128]] = 0
-	im = [[evalPixel(x, sess, y) < 0.6 for x in row] for row in im]
+	rgb = [[x if evalPixel(x, sess, y) < 0.6 else 0 for x in row] for row in im]
 	
 	toimage(rgb).show()
 
