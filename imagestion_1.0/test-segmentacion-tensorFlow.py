@@ -103,7 +103,7 @@ if os.path.isfile(dbFile) :
 				
 	im = np.array(rgb)
 	#im[im > [128,128,128]] = 0
-	rgb = [[x if evalPixel(x, sess, y) < 0.6 else 0 for x in row] for row in im]
+	rgb = [[x if evalPixel(x, sess, y) < 0.6 else (0,0,0) for x in row] for row in im]
 	
 	toimage(rgb).show()
 

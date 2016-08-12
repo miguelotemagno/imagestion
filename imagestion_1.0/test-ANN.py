@@ -179,7 +179,7 @@ net.iniciar_perceptron()
 net.entrenar_perceptron(ds,epochs)
 
 print '5.- Perform segmentation #########################'
-## toimage(rgb).show()
+toimage(rgb).show()
 
 ## for yy in range(seg.height):
 	## for xx in range(seg.width):
@@ -188,12 +188,7 @@ print '5.- Perform segmentation #########################'
 
 im = np.array(rgb)
 #im[evalPixel(x, net) < 0.6] = 0
-im = [[255 if evalPixel(x, net) > 0.6 else 0 for x in row] for row in im]
-r,g,b = rgb.split()
-r = Image.fromarray(np.array(r, np.uint8) & np.array(im, np.uint8))
-g = Image.fromarray(np.array(g, np.uint8) & np.array(im, np.uint8))
-b = Image.fromarray(np.array(b, np.uint8) & np.array(im, np.uint8))
-rgb = Image.merge('RGB',(r,g,b))
+rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
 
 toimage(rgb).show()
 
