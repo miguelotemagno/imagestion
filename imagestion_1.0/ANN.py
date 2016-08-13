@@ -4,7 +4,7 @@ import string
 from json import *
 
 class ANN:
-	def __init__(self, inputs, hidden, outputs, rate=0.5):
+	def __init__(self, inputs, hidden, outputs, rate=0.5, threshold=0.001):
 		self.datos_ent = [
 			[[0,0], [0]],
 			[[0,1], [1]],
@@ -13,7 +13,7 @@ class ANN:
 		]
 		
 		self.debug = True
-			
+		self.threshold = threshold
 		self.log = []
 		self.nodos_ent = inputs
 		self.nodos_ocu = hidden
@@ -138,11 +138,13 @@ class ANN:
 				self.actualiza_nodos(entradas)
 				error = error + self.retropropagacion(objetivo)
 			
-			if error < 0.001:
+			if error < self.threshold:
 				break
 			
 	def addLog(self,str):
 		if self.debug:
 			self.log.append(str)        
     
+	def exportJSON(self):
+		pass
 
