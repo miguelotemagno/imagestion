@@ -10,14 +10,14 @@ from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
 from Segmentation import *
-import json
+from ANN import *
 
+## import json
 ## from pybrain.tools.shortcuts import buildNetwork
 ## from pybrain.datasets import SupervisedDataSet
 ## from pybrain.supervised.trainers import BackpropTrainer
 ## from pybrain.structure import TanhLayer
 ## import pickle
-from ANN import *
 
 #-----------------------------------------------------------------------
 
@@ -202,8 +202,7 @@ ch = sys.stdin.readline()
 
 if k == 'y':
 	print '6.- Store data to file #########################'
-	with open(dbFile, "w") as text_file:
-		text_file.write(json.dumps(net.exportJSON(), sort_keys=True,indent=4, separators=(',', ': ')))
+	net.save(dbFile)
 
 else:
 	print 'Changes dismissed'

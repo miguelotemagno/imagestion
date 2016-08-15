@@ -4,6 +4,7 @@ import string
 import json
 
 class ANN:
+	
 	def __init__(self, inputs, hidden, outputs, rate=0.5, threshold=0.001):
 		self.datos_ent = [
 			[[0,0], [0]],
@@ -26,6 +27,7 @@ class ANN:
 		self.act_sal = []
 		pass
 
+	####################################################################
 
 	def exportJSON(self):
 		json = {
@@ -44,24 +46,39 @@ class ANN:
 			'dataOutput': self.act_sal
 		}
 		return json
-		pass
 
+	####################################################################
+		
+	def save(self, dbFile):
+		with open(dbFile, "w") as text_file:
+			text_file.write(json.dumps(net.exportJSON(), sort_keys=True,indent=4, separators=(',', ': ')))
+		pass
 	
+	####################################################################
+
 	def setData(self,data):
 		self.datos_ent = data
 		pass
 		
+	####################################################################
+
 	def matriz(self, x,y) :
 		m = []
 		for i in range(x):
 			m.append([0.0]*y)
 		return m
 
+	####################################################################
+
 	def sigmoide(self,x):
 		return math.tanh(x)
 
+	####################################################################
+
 	def dsigmoide(self,x):
 		return 1.0 - x**2
+
+	####################################################################
 
 	def iniciar_perceptron(self):
 		## global nodos_ent, nodos_ocu, nodos_sal, pesos_ent, pesos_sal
@@ -83,6 +100,8 @@ class ANN:
 		for j in range(self.nodos_ocu):
 			for k in range(self.nodos_sal):
 				self.pesos_sal[j][k] = random.uniform(-0.5, 0.5)
+
+	####################################################################
 
 	def actualiza_nodos(self, entradas):  
 		self.addLog('actualiza_nodos('+str(entradas)+')')  
@@ -106,6 +125,8 @@ class ANN:
 			self.act_sal[k] = self.sigmoide(sum)
 
 		return self.act_sal[:]
+
+	####################################################################
 
 	def retropropagacion(self, objetivo):
 		self.addLog('retropropagacion('+str(objetivo)+','+str(self.l)+')')  
@@ -143,10 +164,14 @@ class ANN:
 		self.addLog({'error':str(error), 'delta_salida':str(delta_salida), 'delta_oculto':str(delta_oculto), 'pesos_sal':str(self.pesos_sal), 'pesos_ent':str(self.pesos_ent)})
 		return error
 
+	####################################################################
+
 	def clasificar(self, patron):
 		for p in patron:
 			print '%s -> %s' % (p[0], self.actualiza_nodos(p[0]))
 			
+	####################################################################
+
 	def entrenar_perceptron(self, patron, max_iter=1000):
 		self.setData(patron)
 		
@@ -162,6 +187,8 @@ class ANN:
 			if error < self.threshold:
 				break
 			
+	####################################################################
+
 	def addLog(self,str):
 		if self.debug:
 			self.log.append(str)        
