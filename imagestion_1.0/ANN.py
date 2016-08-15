@@ -1,7 +1,7 @@
 import math
 import random
 import string
-from json import *
+import json
 
 class ANN:
 	def __init__(self, inputs, hidden, outputs, rate=0.5, threshold=0.001):
@@ -25,6 +25,27 @@ class ANN:
 		self.act_ocu = []
 		self.act_sal = []
 		pass
+
+
+	def exportJSON(self):
+		json = {
+			'inputs':  self.nodos_ent,
+			'outputs': self.nodos_sal,
+			'hiddens': self.nodos_ocu,
+			'rate':    self.l,
+			'wInputs': [
+				self.pesos_ent[x] for x in range(self.nodos_ent)
+			],
+			'wHidden': [
+				self.pesos_sal[x] for x in range(self.nodos_ocu)
+			],
+			'dataInput':  self.act_ent,
+			'dataHidden': self.act_ocu,
+			'dataOutput': self.act_sal
+		}
+		return json
+		pass
+
 	
 	def setData(self,data):
 		self.datos_ent = data
@@ -145,6 +166,4 @@ class ANN:
 		if self.debug:
 			self.log.append(str)        
     
-	def exportJSON(self):
-		pass
 
