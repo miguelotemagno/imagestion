@@ -2,6 +2,7 @@ import math
 import random
 import string
 import json
+from sys import *
 
 class ANN:
 	
@@ -33,7 +34,7 @@ class ANN:
 		json = {
 			'inputs':  self.nodos_ent,
 			'outputs': self.nodos_sal,
-			'hiddens': self.nodos_ocu,
+			'hidden':  self.nodos_ocu,
 			'rate':    self.l,
 			'wInputs': [
 				self.pesos_ent[x] for x in range(self.nodos_ent)
@@ -49,9 +50,43 @@ class ANN:
 
 	####################################################################
 		
+	def importJSON(self,js):
+		data = json.loads(js)
+		self.nodos_ent = data['inputs']
+		self.nodos_ocu = data['outputs']
+		self.nodos_sal = data['hidden']
+		self.l         = data['rate']
+		self.act_ent   = [None] * self.nodos_ent		
+		self.act_ocu   = [None] * self.nodos_ocu
+		self.act_sal   = [None] * self.nodos_sal
+		self.pesos_ent = self.matriz(self.nodos_ent, self.nodos_ocu)
+		self.pesos_sal = self.matriz(self.nodos_ocu, self.nodos_sal)
+
+		for x in range(len(data['dataInput'])):
+			self.act_ent[x] = data['dataInput'][x]
+
+		for x in range(len(data['dataHidden'])):
+			self.act_ocu[x] = data['dataHidden'][x]
+
+		for x in range(len(data['dataOutput'])):
+			self.act_sal[x] = data['dataOutput'][x]
+		pass
+		
+	####################################################################
+		
+	def load(self, dbFile):
+		f = open(dbFile, 'r')
+		jsNet = f.read();
+		f.close()
+		self.importJSON(jsNet)
+		print json.dumps(self.exportJSON(), sort_keys=True,indent=4, separators=(',', ': '))
+		pass
+		
+	####################################################################
+		
 	def save(self, dbFile):
 		with open(dbFile, "w") as text_file:
-			text_file.write(json.dumps(net.exportJSON(), sort_keys=True,indent=4, separators=(',', ': ')))
+			text_file.write(json.dumps(self.exportJSON(), sort_keys=True,indent=4, separators=(',', ': ')))
 		pass
 	
 	####################################################################

@@ -5,7 +5,7 @@ from scipy.misc import toimage
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import colorsys, sys # Image
+import colorsys, sys, os
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
@@ -176,11 +176,16 @@ error = 1
 ## print net.activate([muestra2[0], muestra2[1], muestra2[2]])
 
 net = ANN(3, 4, 1, threshold)
-net.iniciar_perceptron()
-net.entrenar_perceptron(ds,epochs)
+
+if os.path.isfile(dbFile) :
+	print '3.- Restore previous session #########################'
+	net.load(dbFile)
+else:
+	net.iniciar_perceptron()
+	net.entrenar_perceptron(ds,epochs)
 
 print '5.- Perform segmentation #########################'
-toimage(rgb).show()
+## toimage(rgb).show()
 
 ## for yy in range(seg.height):
 	## for xx in range(seg.width):
@@ -191,7 +196,7 @@ im = np.array(rgb)
 #im[evalPixel(x, net) < 0.6] = 0
 rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
 
-toimage(rgb).show()
+## toimage(rgb).show()
 
 #http://stackoverflow.com/questions/6006187/how-to-save-and-recover-pybrain-training
 ## fileObject = open('neuralnet-ann.bkp', 'w')
