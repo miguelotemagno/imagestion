@@ -53,8 +53,8 @@ class ANN:
 	def importJSON(self,js):
 		data = json.loads(js)
 		self.nodos_ent = data['inputs']
-		self.nodos_ocu = data['outputs']
-		self.nodos_sal = data['hidden']
+		self.nodos_sal = data['outputs']
+		self.nodos_ocu = data['hidden']
 		self.l         = data['rate']
 		self.act_ent   = [None] * self.nodos_ent		
 		self.act_ocu   = [None] * self.nodos_ocu
@@ -70,6 +70,14 @@ class ANN:
 
 		for x in range(len(data['dataOutput'])):
 			self.act_sal[x] = data['dataOutput'][x]
+			
+		for y in range(len(data['wInputs'])):
+			for x in range(len(data['wInputs'][y])):
+				self.pesos_ent[y][x] = data['wInputs'][y][x]
+			
+		for y in range(len(data['wHidden'])):
+			for x in range(len(data['wHidden'][y])):
+				self.pesos_sal[y][x] = data['wHidden'][y][x]
 		pass
 		
 	####################################################################
@@ -79,7 +87,6 @@ class ANN:
 		jsNet = f.read();
 		f.close()
 		self.importJSON(jsNet)
-		print json.dumps(self.exportJSON(), sort_keys=True,indent=4, separators=(',', ': '))
 		pass
 		
 	####################################################################
