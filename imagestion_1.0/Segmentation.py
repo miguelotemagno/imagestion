@@ -33,7 +33,7 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import colorsys, sys, math
+import colorsys, sys, math, os
 import numpy as np
 from scipy import ndimage
 from scipy import stats
@@ -42,17 +42,19 @@ from PIL import Image
 
 class Segmentation(object):
 	
-	def __init__(self, pathImage):
+	def __init__(self, pathImage = None):
 		self.imgFile = pathImage
-		self.rgb = Image.open(pathImage)
-		w,h = self.rgb.size
-		self.width = w
-		self.height = h
-		
-		r,g,b = self.rgb.split()
-		self.R = r
-		self.G = g
-		self.B = b
+		if pathImage and os.path.isfile(pathImage) :
+			self.setRGB(Image.open(pathImage))
+			self.splitRGB()
+		else:
+			self.rgb = None
+			self.width = None
+			self.height = None
+			self.R = None
+			self.G = None
+			self.B = None
+			
 		
 		self.hsv = None
 		self.H = None
@@ -90,6 +92,13 @@ class Segmentation(object):
 	
 	def setRGB(self, img):
 		self.rgb = img
+		w,h = self.rgb.size
+		self.width = w
+		self.height = h
+
+	### ----------------------------------------------------------------
+	
+	def splitRGB(self):
 		r,g,b = self.rgb.split()
 		self.R = r
 		self.G = g

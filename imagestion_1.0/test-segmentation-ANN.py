@@ -43,27 +43,27 @@ shape2 = (6,6)
 
 seg = Segmentation(imgFile)
 rgb = seg.rgb
-rgb1 = np.array(seg.erodeRGB(shape1))
-rgb2 = np.array(seg.dilateRGB(shape2))
+## rgb1 = np.array(seg.erodeRGB(shape1))
+## rgb2 = np.array(seg.dilateRGB(shape2))
 
-diff = rgb2 - rgb1
+## diff = rgb2 - rgb1
 
-seg.rgb2hsv()
-seg.erodeHSV(shape2)
-seg.dilateHSV(shape1)
-seg.statisticalDispersionHSV()
-hsv = seg.getHSV()
-mask = seg.getHSVmask()
-invMask = ~mask
-mask[mask != 0xFF] = 0
-piel = seg.applyMask2Rgb(mask)
-invMask[invMask != 0xFF] = 0
-fondo = seg.applyMask2Rgb(invMask)
+## seg.rgb2hsv()
+## seg.erodeHSV(shape2)
+## seg.dilateHSV(shape1)
+## seg.statisticalDispersionHSV()
+## hsv = seg.getHSV()
+## mask = seg.getHSVmask()
+## invMask = ~mask
+## mask[mask != 0xFF] = 0
+## piel = seg.applyMask2Rgb(mask)
+## invMask[invMask != 0xFF] = 0
+## fondo = seg.applyMask2Rgb(invMask)
 
-seg.setRGB(piel)
-img1 = np.array(seg.erodeRGB(shape1)) 
-img2 = np.array(seg.dilateRGB(shape2)) 
-diff2 = img2 - img1
+## seg.setRGB(piel)
+## img1 = np.array(seg.erodeRGB(shape1)) 
+## img2 = np.array(seg.dilateRGB(shape2)) 
+## diff2 = img2 - img1
 
 ## toimage(seg.maskH).show()
 ## toimage(seg.maskS).show()
@@ -80,10 +80,10 @@ diff2 = img2 - img1
 
 	
 #http://pybrain.org/docs/quickstart/dataset.html
-ds = [] #SupervisedDataSet(3, 1)
-hist = {}
-muestra1 = []
-muestra2 = []		
+## ds = [] #SupervisedDataSet(3, 1)
+## hist = {}
+## muestra1 = []
+## muestra2 = []		
 
 #http://pybrain.org/docs/api/supervised/trainers.html#pybrain.supervised.trainers.BackpropTrainer
 #http://pybrain.org/docs/quickstart/training.html
@@ -126,3 +126,13 @@ if os.path.isfile(dbFile) :
 	rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
 
 	toimage(rgb).show()
+	## im = Image.fromarray(rgb)
+	seg.setRGB(toimage(rgb))
+	seg.splitRGB()
+	
+	rgb1 = np.array(seg.erodeRGB(shape1))
+	rgb2 = np.array(seg.dilateRGB(shape2))
+
+	diff = rgb2 - rgb1
+	toimage(diff).show()
+
