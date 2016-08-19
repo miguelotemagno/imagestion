@@ -11,6 +11,7 @@ from scipy.optimize import curve_fit
 from scipy.misc import factorial
 from Segmentation import *
 from ANN import *
+from datetime import datetime
 
 ## import json
 ## from pybrain.tools.shortcuts import buildNetwork
@@ -116,23 +117,35 @@ if os.path.isfile(dbFile) :
 	print '5.- Perform segmentation #########################'
 	toimage(rgb).show()
 
+	## start = datetime.now()
 	## for yy in range(seg.height):
 		## for xx in range(seg.width):
 			## if (evalPixel(rgb.getpixel((xx,yy)), net) < 0.6) :
 				## rgb.putpixel((xx,yy), 0)
 
+	## stop = datetime.now()
+	## delay = stop - start
+	## print "delay: %d seg." % (delay)
+
 	im = np.array(rgb)
 	#im[evalPixel(x, net) < 0.6] = 0
+
+	start = datetime.now()
 	rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
+	
+	stop = datetime.now()
+	delay = stop - start
+	print "delay: %s seg." % (delay)
 
 	toimage(rgb).show()
 	## im = Image.fromarray(rgb)
 	seg.setRGB(toimage(rgb))
 	seg.splitRGB()
 	
-	rgb1 = np.array(seg.erodeRGB(shape1))
-	rgb2 = np.array(seg.dilateRGB(shape2))
-
-	diff = rgb2 - rgb1
+	## rgb1 = np.array(seg.erodeRGB(shape1))
+	## rgb2 = np.array(seg.dilateRGB(shape2))
+	## diff = rgb2 - rgb1
+	
+	diff = seg.getBorderBW(shape1,shape2)
 	toimage(diff).show()
 

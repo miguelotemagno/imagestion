@@ -244,5 +244,22 @@ class Segmentation(object):
 		b = Image.fromarray(self.B & mask)
 		rgb = Image.merge('RGB',(r,g,b))
 		return rgb
+
+	### ----------------------------------------------------------------
+	
+	def getBorder(self, shape1, shape2):
+		rgb1 = np.array(self.erodeRGB(shape1))
+		rgb2 = np.array(self.dilateRGB(shape2))
+		diff = rgb2 - rgb1
 		
+		return diff
+
+	### ----------------------------------------------------------------
+	
+	def getBorderBW(self, shape1, shape2):
+		rgb1 = np.array(self.erodeRGB(shape1))
+		rgb2 = np.array(self.dilateRGB(shape2))
+		diff = rgb2 - rgb1
+		
+		return diff
         
