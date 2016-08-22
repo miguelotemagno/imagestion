@@ -256,10 +256,6 @@ class Segmentation(object):
 
 	### ----------------------------------------------------------------
 	
-	def getBorderBW(self, shape1, shape2):
-		rgb1 = np.array(self.erodeRGB(shape1))
-		rgb2 = np.array(self.dilateRGB(shape2))
-		diff = rgb2 - rgb1
-		
-		return diff
-        
+	def color2grayScale(self, img):
+		bw   = img.convert('L') #makes it greyscale
+		return bw

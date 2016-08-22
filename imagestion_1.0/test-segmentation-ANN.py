@@ -79,36 +79,7 @@ rgb = seg.rgb
 
 #-----------------------------------------------------------------------
 
-	
-#http://pybrain.org/docs/quickstart/dataset.html
-## ds = [] #SupervisedDataSet(3, 1)
-## hist = {}
-## muestra1 = []
-## muestra2 = []		
-
-#http://pybrain.org/docs/api/supervised/trainers.html#pybrain.supervised.trainers.BackpropTrainer
-#http://pybrain.org/docs/quickstart/training.html
-## net = buildNetwork(3, 3, 1, bias=True, hiddenclass=TanhLayer)
-## trainer = BackpropTrainer(net, ds)
-epochs = 5000
-threshold = 0.05
-error = 1
-
-## trainer.trainUntilConvergence()
-
-## while error > threshold:
-	## error = trainer.train()
-	## epochs -= 1
-	## print "%d) e -> %f" % (epochs, error)
-	## if epochs <= 0:
-		## break
-	
-
-## print ("epochs:%d error:%f" % (epochs,error))
-## print net.activate([muestra1[0], muestra1[1], muestra1[2]])
-## print net.activate([muestra2[0], muestra2[1], muestra2[2]])
-
-net = ANN(3, 4, 1, threshold)
+net = ANN(3, 4, 1)
 
 if os.path.isfile(dbFile) :
 	print '3.- Restore previous session #########################'
@@ -116,16 +87,6 @@ if os.path.isfile(dbFile) :
 
 	print '5.- Perform segmentation #########################'
 	toimage(rgb).show()
-
-	## start = datetime.now()
-	## for yy in range(seg.height):
-		## for xx in range(seg.width):
-			## if (evalPixel(rgb.getpixel((xx,yy)), net) < 0.6) :
-				## rgb.putpixel((xx,yy), 0)
-
-	## stop = datetime.now()
-	## delay = stop - start
-	## print "delay: %d seg." % (delay)
 
 	im = np.array(rgb)
 	#im[evalPixel(x, net) < 0.6] = 0
@@ -138,14 +99,11 @@ if os.path.isfile(dbFile) :
 	print "delay: %s seg." % (delay)
 
 	toimage(rgb).show()
-	## im = Image.fromarray(rgb)
 	seg.setRGB(toimage(rgb))
 	seg.splitRGB()
-	
-	## rgb1 = np.array(seg.erodeRGB(shape1))
-	## rgb2 = np.array(seg.dilateRGB(shape2))
-	## diff = rgb2 - rgb1
-	
-	diff = seg.getBorderBW(shape1,shape2)
-	toimage(diff).show()
+		
+	diff = seg.getBorder(shape1,shape2)
+	# http://stackoverflow.com/questions/23935840/converting-an-rgb-image-to-grayscale-and-manipulating-the-pixel-data-in-python
+	bw = seg.color2grayScale(toimage(diff))
+	toimage(bw).show()
 
