@@ -259,3 +259,10 @@ class Segmentation(object):
 	def color2grayScale(self, img):
 		bw   = img.convert('L') #makes it greyscale
 		return bw
+
+	### ----------------------------------------------------------------
+	
+	def resize(self, img, w, h):
+		size = w,h
+		img.thumbnail(size, Image.ANTIALIAS)
+		return img

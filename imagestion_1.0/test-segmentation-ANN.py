@@ -43,7 +43,13 @@ shape1 = (2,2)
 shape2 = (6,6)
 
 seg = Segmentation(imgFile)
-rgb = seg.rgb
+w = 300
+h = int(round((seg.height * 300) / seg.width))
+rgb = seg.resize(seg.rgb,w,h)
+seg.setRGB(toimage(rgb))
+seg.splitRGB()
+
+
 ## rgb1 = np.array(seg.erodeRGB(shape1))
 ## rgb2 = np.array(seg.dilateRGB(shape2))
 
