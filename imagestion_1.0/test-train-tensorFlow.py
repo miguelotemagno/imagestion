@@ -61,9 +61,9 @@ invMask[invMask != 0xFF] = 0
 fondo = seg.applyMask2Rgb(invMask)
 
 seg.setRGB(piel)
-img1 = np.array(seg.erodeRGB(shape1)) 
-img2 = np.array(seg.dilateRGB(shape2)) 
-diff2 = img2 - img1
+## img1 = np.array(seg.erodeRGB(shape1)) 
+## img2 = np.array(seg.dilateRGB(shape2)) 
+## diff2 = img2 - img1
 
 ## toimage(seg.maskH).show()
 ## toimage(seg.maskS).show()
@@ -71,7 +71,7 @@ diff2 = img2 - img1
 ## toimage(hsv).show()
 ## toimage(mask).show()
 ## toimage(invMask).show()
-toimage(piel).show()
+## toimage(piel).show()
 ## toimage(fondo).show()
 ## toimage(diff).show()
 ## toimage(diff2).show()
@@ -199,6 +199,9 @@ print '5.- Perform segmentation #########################'
 # https://www.tensorflow.org/versions/r0.9/tutorials/mnist/pros/index.html
 # http://effbot.org/imagingbook/image.htm
 
+toimage(piel).show()
+start = datetime.now()
+
 for yy in range(seg.height):
 	for xx in range(seg.width):
 		r,g,b = rgb.getpixel((xx,yy))
@@ -207,6 +210,10 @@ for yy in range(seg.height):
 		
 		if (test[0][0] < 0.6 ) :
 			rgb.putpixel((xx,yy), 0)
+
+stop = datetime.now()
+delay = stop - start
+print "delay: %s seg." % (delay)
 
 toimage(rgb).show()
 

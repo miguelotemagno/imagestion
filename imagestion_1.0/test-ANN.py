@@ -79,6 +79,7 @@ seg = Segmentation(imgFile)
 rgb = seg.rgb
 rgb1 = np.array(seg.erodeRGB(shape1))
 rgb2 = np.array(seg.dilateRGB(shape2))
+toimage(rgb).show()
 
 diff = rgb2 - rgb1
 
@@ -121,7 +122,7 @@ muestra2 = []
 
 i = 0
 for y in range(seg.height):
-	if i > 10:
+	if i > 30:
 		break
 	for x in range(seg.width):
 		r,g,b = piel.getpixel((x,y))
@@ -137,7 +138,7 @@ for y in range(seg.height):
 			
 i = 0
 for y in range(seg.height):
-	if i > 10:
+	if i > 20:
 		break
 	for x in range(seg.width):
 		r,g,b = fondo.getpixel((x,y))
@@ -145,7 +146,7 @@ for y in range(seg.height):
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
 		if (r|g|b and hist[key] == 0) :
-			muestra2 = [float(r)/255, float(g)/255, float(b)/255]
+			muestra2 = [float(r)/256, float(g)/256, float(b)/256]
 			print "%05d (%02x, %02x, %02x) => [0] %s" % (i,r,g,b, muestra2)
 			## ds.addSample((muestra2[0], muestra2[1], muestra2[2]), (0))
 			ds.append([muestra2, [0]])

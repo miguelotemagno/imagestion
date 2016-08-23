@@ -44,7 +44,7 @@ shape2 = (6,6)
 
 seg = Segmentation(imgFile)
 w = 300
-h = int(round((seg.height * 300) / seg.width))
+h = int(round((seg.height * w) / seg.width))
 rgb = seg.resize(seg.rgb,w,h)
 seg.setRGB(toimage(rgb))
 seg.splitRGB()
@@ -90,26 +90,87 @@ net = ANN(3, 4, 1)
 if os.path.isfile(dbFile) :
 	print '3.- Restore previous session #########################'
 	net.load(dbFile)
+else:
+	print 'Neural network file is missing '
+	exit(0)
 
-	print '5.- Perform segmentation #########################'
-	toimage(rgb).show()
+print '5.- Perform segmentation #########################'
+toimage(rgb).show()
 
-	im = np.array(rgb)
-	#im[evalPixel(x, net) < 0.6] = 0
+im = np.array(rgb)
+#im[evalPixel(x, net) < 0.6] = 0
 
-	start = datetime.now()
-	rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
-	
-	stop = datetime.now()
-	delay = stop - start
-	print "delay: %s seg." % (delay)
+start = datetime.now()
+rgb = [[x if evalPixel(x, net) > 0.6 else (0,0,0) for x in row] for row in im]
 
-	toimage(rgb).show()
-	seg.setRGB(toimage(rgb))
-	seg.splitRGB()
+stop = datetime.now()
+delay = stop - start
+print "delay: %s seg." % (delay)
+
+toimage(rgb).show()
+seg.setRGB(toimage(rgb))
+seg.splitRGB()
+
+diff = seg.getBorder(shape1,shape2)
+# http://stackoverflow.com/questions/23935840/converting-an-rgb-image-to-grayscale-and-manipulating-the-pixel-data-in-python
+bw = seg.color2grayScale(toimage(diff))
+border = toimage(bw)
+border.show()
+
+print "continue? (y/n): "
+k = sys.stdin.read(1)
+ch = sys.stdin.readline()
+
+if k == 'n':
+	print 'exit #########################'
+	exit(0)
+
+case = sys.argv[3]
+ds = [] 
+hist = {}
+muestra1 = []
+muestra2 = []
+expect = [0,0,0,0,0]
+
+
+
+i = 0
+for y in range(seg.height):
+	if i > 30:
+		break
+	for x in range(seg.width):
+		r,g,b = border.getpixel((x,y))
+		xx = float(x)/seg.width
+		yy = float(y)/seg.height
+		key = "x%02x%02x%02x" % (r, g, b)
+		hist[key] = hist[key] + 1 if key in hist else 0
 		
-	diff = seg.getBorder(shape1,shape2)
-	# http://stackoverflow.com/questions/23935840/converting-an-rgb-image-to-grayscale-and-manipulating-the-pixel-data-in-python
-	bw = seg.color2grayScale(toimage(diff))
-	toimage(bw).show()
+		if (r|g|b > 0x1F and hist[key] == 0) :
+			muestra1 = [yy, xx, float(r)/256, float(g)/256, float(b)/256]
+			print "%05d (%02x, %02x, %02x) => [1] %s" % (i,r,g,b, muestra1)
+			ds.append([muestra1, expect])
+			i += 1
+		if (r|g|b <= 0x1F and hist[key] == 0) :
+			muestra2 = [yy, xx, float(r)/256, float(g)/256, float(b)/256]
+			print "%05d (%02x, %02x, %02x) => [1] %s" % (i,r,g,b, muestra2)
+			ds.append([muestra2, [0,0,0,0,0]])
+			i += 1
+			
 
+net = ANN(5, 4, 5, threshold)
+
+if os.path.isfile('fr-'+dbFile) :
+	print '3.- Restore previous session #########################'
+	net.load(dbFile)
+else:
+	net.iniciar_perceptron()
+
+net.entrenar_perceptron(ds,epochs)
+
+print "write changes? (y/n): "
+k = sys.stdin.read(1)
+ch = sys.stdin.readline()
+
+if k == 'y':
+	print '6.- Store data to file #########################'
+	net.save('fr-'+dbFile)
