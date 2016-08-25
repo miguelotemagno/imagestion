@@ -5,7 +5,7 @@ from scipy.misc import toimage
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import colorsys, sys, os
+import colorsys, sys, os, re
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
@@ -95,7 +95,9 @@ else:
 	exit(0)
 
 print '5.- Perform segmentation #########################'
-toimage(rgb).show()
+## toimage(rgb).show()
+
+print rgb
 
 im = np.array(rgb)
 #im[evalPixel(x, net) < 0.6] = 0
@@ -107,7 +109,7 @@ stop = datetime.now()
 delay = stop - start
 print "delay: %s seg." % (delay)
 
-toimage(rgb).show()
+## toimage(rgb).show()
 seg.setRGB(toimage(rgb))
 seg.splitRGB()
 
@@ -117,6 +119,8 @@ bw = seg.color2grayScale(toimage(diff))
 border = toimage(bw)
 border.show()
 
+print border
+
 print "continue? (y/n): "
 k = sys.stdin.read(1)
 ch = sys.stdin.readline()
@@ -125,13 +129,16 @@ if k == 'n':
 	print 'exit #########################'
 	exit(0)
 
-case = sys.argv[3]
+
 ds = [] 
 hist = {}
 muestra1 = []
 muestra2 = []
-expect = [0,0,0,0,0]
-
+expect = [0.0, 0.0, 0.0, 0.0, 0.0]
+expr = re.search('.+\W(\w+)[.]\w{3}', imgFile)
+item = expr.group(1)[-1:]
+idx = int(item) if re.search('^\d+$',item) else 0
+expect[idx] = 1.0
 
 
 i = 0
@@ -139,33 +146,37 @@ for y in range(seg.height):
 	if i > 30:
 		break
 	for x in range(seg.width):
-		r,g,b = border.getpixel((x,y))
+		col = border.getpixel((x,y))
 		xx = float(x)/seg.width
 		yy = float(y)/seg.height
-		key = "x%02x%02x%02x" % (r, g, b)
+		key = "x%02x" % (col)
 		hist[key] = hist[key] + 1 if key in hist else 0
 		
-		if (r|g|b > 0x1F and hist[key] == 0) :
-			muestra1 = [yy, xx, float(r)/256, float(g)/256, float(b)/256]
-			print "%05d (%02x, %02x, %02x) => [1] %s" % (i,r,g,b, muestra1)
+		if (col > 0x3F and hist[key] == 0) :
+			muestra1 = [yy, xx, float(col)/256]
+			print "%05d (%02x) => [1] %s" % (i,col, muestra1)
 			ds.append([muestra1, expect])
 			i += 1
-		if (r|g|b <= 0x1F and hist[key] == 0) :
-			muestra2 = [yy, xx, float(r)/256, float(g)/256, float(b)/256]
-			print "%05d (%02x, %02x, %02x) => [1] %s" % (i,r,g,b, muestra2)
-			ds.append([muestra2, [0,0,0,0,0]])
+		if (col <= 0x3F and hist[key] == 0) :
+			muestra2 = [yy, xx, float(col)/256]
+			print "%05d (%02x) => [0] %s" % (i,col, muestra2)
+			ds.append([muestra2, [1.0, 0.0, 0.0, 0.0, 0.0]])
 			i += 1
 			
 
-net = ANN(5, 4, 5, threshold)
+epochs = 5000
+threshold = 0.05
+error = 1
 
-if os.path.isfile('fr-'+dbFile) :
+net2 = ANN(3, 4, 5, threshold)
+
+if os.path.isfile(dbFile+'.recog') :
 	print '3.- Restore previous session #########################'
-	net.load(dbFile)
+	net2.load(dbFile+'.recog')
 else:
-	net.iniciar_perceptron()
+	net2.iniciar_perceptron()
 
-net.entrenar_perceptron(ds,epochs)
+net2.entrenar_perceptron(ds,epochs)
 
 print "write changes? (y/n): "
 k = sys.stdin.read(1)
@@ -173,4 +184,4 @@ ch = sys.stdin.readline()
 
 if k == 'y':
 	print '6.- Store data to file #########################'
-	net.save('fr-'+dbFile)
+	net2.save(dbFile+'.recog')
