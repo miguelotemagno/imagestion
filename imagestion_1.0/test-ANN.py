@@ -9,6 +9,7 @@ import colorsys, sys, os
 from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import curve_fit
 from scipy.misc import factorial
+from datetime import datetime
 from Segmentation import *
 from ANN import *
 
@@ -76,7 +77,12 @@ shape1 = (2,2)
 shape2 = (6,6)
 
 seg = Segmentation(imgFile)
-rgb = seg.rgb
+w = 300
+h = int(round((seg.height * w) / seg.width))
+rgb = seg.resize(seg.rgb,w,h)
+seg.setRGB(toimage(rgb))
+seg.splitRGB()
+
 rgb1 = np.array(seg.erodeRGB(shape1))
 rgb2 = np.array(seg.dilateRGB(shape2))
 toimage(rgb).show()
@@ -184,7 +190,13 @@ if os.path.isfile(dbFile) :
 else:
 	net.iniciar_perceptron()
 
+start = datetime.now()
+
 net.entrenar_perceptron(ds,epochs)
+
+stop = datetime.now()
+delay = stop - start
+print "delay: %s seg." % (delay)
 
 print '5.- Perform segmentation #########################'
 toimage(piel).show()

@@ -107,7 +107,7 @@ stop = datetime.now()
 delay = stop - start
 print "delay: %s seg." % (delay)
 
-## toimage(rgb).show()
+toimage(rgb).show()
 seg.setRGB(toimage(rgb))
 seg.splitRGB()
 
@@ -176,7 +176,13 @@ if os.path.isfile(dbFile+'.recog') :
 else:
 	net2.iniciar_perceptron()
 
+start = datetime.now()
+
 net2.entrenar_perceptron(ds,epochs)
+
+stop = datetime.now()
+delay = stop - start
+print "delay: %s seg." % (delay)
 
 print "write changes? (y/n): "
 k = sys.stdin.read(1)
