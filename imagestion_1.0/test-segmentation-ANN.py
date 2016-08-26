@@ -97,8 +97,6 @@ else:
 print '5.- Perform segmentation #########################'
 ## toimage(rgb).show()
 
-print rgb
-
 im = np.array(rgb)
 #im[evalPixel(x, net) < 0.6] = 0
 
@@ -118,8 +116,6 @@ diff = seg.getBorder(shape1,shape2)
 bw = seg.color2grayScale(toimage(diff))
 border = toimage(bw)
 border.show()
-
-print border
 
 print "continue? (y/n): "
 k = sys.stdin.read(1)
@@ -141,28 +137,32 @@ idx = int(item) if re.search('^\d+$',item) else 0
 expect[idx] = 1.0
 
 
-i = 0
-for y in range(seg.height):
-	if i > 30:
-		break
-	for x in range(seg.width):
-		col = border.getpixel((x,y))
-		xx = float(x)/seg.width
-		yy = float(y)/seg.height
-		key = "x%02x" % (col)
-		hist[key] = hist[key] + 1 if key in hist else 0
-		
-		if (col > 0x3F and hist[key] == 0) :
-			muestra1 = [yy, xx, float(col)/256]
-			print "%05d (%02x) => [1] %s" % (i,col, muestra1)
-			ds.append([muestra1, expect])
-			i += 1
-		if (col <= 0x3F and hist[key] == 0) :
-			muestra2 = [yy, xx, float(col)/256]
-			print "%05d (%02x) => [0] %s" % (i,col, muestra2)
-			ds.append([muestra2, [1.0, 0.0, 0.0, 0.0, 0.0]])
-			i += 1
+i = j =0
+for y in range(0,seg.height,3):
+	for x in range(0,seg.width,3):
+		dx = np.random.randint(0,2) + x
+		dy = np.random.randint(0,2) + y
+		col = border.getpixel((dx,dy))
+		if i+j < 1000 and col > 0:
+			xx = float(dx)/seg.width
+			yy = float(dy)/seg.height
+
+			if (col <= 0x1F and i < 500 and y%12 == 0 and x%12 == 0) :
+				muestra2 = [yy, xx, float(col)/256]
+				print "%05d (%02x, %d, %d) => [0] %s" % (i,col, dy, dx, muestra2)
+				ds.append([muestra2, [1.0, 0.0, 0.0, 0.0, 0.0]])
+				i += 1
+				border.putpixel((dx,dy),(64))
 			
+			if (col > 0x1F and j < 500 and y%6 == 0 and x%6 == 0) :
+				muestra1 = [yy, xx, float(col)/256]
+				print "%05d (%02x, %d, %d) => [1] %s" % (j,col, dy, dx, muestra1)
+				ds.append([muestra1, expect])
+				j += 1
+				border.putpixel((dx,dy),(255))
+
+			
+border.show()
 
 epochs = 5000
 threshold = 0.05
