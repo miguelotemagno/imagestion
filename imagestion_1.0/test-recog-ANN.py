@@ -23,10 +23,10 @@ from datetime import datetime
 #-----------------------------------------------------------------------
 
 def evalPixel(pix, net):
-	r,g,b = pix
-	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
-	test  = net.actualiza_nodos(pixel)
-	return test[0]
+	y,x,bw = pix
+	data = np.array([float(yy), float(xx), float(bw)/255])
+	test  = net.actualiza_nodos(data)
+	return test
    
 #-----------------------------------------------------------------------
 
@@ -106,16 +106,29 @@ else:
 
 start = datetime.now()
 
-## net.entrenar_perceptron(ds,epochs)
+recog = np.array([0,0,0,0,0])
+i = 1
+for y in range(0,seg.height,3):
+	for x in range(0,seg.width,3):
+		col = border.getpixel((x,y))
+		xx = float(x)/seg.width
+		yy = float(y)/seg.height
 
-## stop = datetime.now()
-## delay = stop - start
-## print "delay: %s seg." % (delay)
+		if (y%6 == 0 and x%6 == 0) :
+			result = evalPixel([yy, xx, float(col)/256], net)
+			## print "%05d (%02x, %d, %d) => %s" % (i, col, y, x, result)
+			recog = recog + result
+			i += 1
+			
+conclusion = recog / float(i)
 
-## print "write changes? (y/n): "
-## k = sys.stdin.read(1)
-## ch = sys.stdin.readline()
+print conclusion
+				
+stop = datetime.now()
+delay = stop - start
+print "delay: %s seg." % (delay)
 
-## if k == 'y':
-	## print '6.- Store data to file #########################'
-	## net2.save(dbFile+'.recog')
+
+# K-Nearest Neighbors
+# http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
+# http://scikit-learn.org/stable/modules/neighbors.html
