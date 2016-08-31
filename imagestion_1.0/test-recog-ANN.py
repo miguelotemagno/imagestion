@@ -132,3 +132,6 @@ print "delay: %s seg." % (delay)
 # K-Nearest Neighbors
 # http://machinelearningmastery.com/tutorial-to-implement-k-nearest-neighbors-in-python-from-scratch/
 # http://scikit-learn.org/stable/modules/neighbors.html
+
+# others
+# https://www.hindawi.com/journals/aans/2011/673016/

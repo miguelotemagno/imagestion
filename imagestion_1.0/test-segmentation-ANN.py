@@ -130,6 +130,7 @@ ds = []
 hist = {}
 muestra1 = []
 muestra2 = []
+muestra3 = []
 expect = [0.0, 0.0, 0.0, 0.0, 0.0]
 expr = re.search('.+\W(\w+)[.]\w{3}', imgFile)
 item = expr.group(1)[-1:]
@@ -137,27 +138,33 @@ idx = int(item) if re.search('^\d+$',item) else 0
 expect[idx] = 1.0
 
 
-i = j =0
+i = j = k = 0
 for y in range(0,seg.height,3):
 	for x in range(0,seg.width,3):
 		dx = np.random.randint(0,2) + x
 		dy = np.random.randint(0,2) + y
 		col = border.getpixel((dx,dy)) if (dx<seg.width and dy<seg.height) else 0
-		if i+j < 1000 and col > 0:
+		if i+j+k < 1500 :
 			xx = float(dx)/seg.width
 			yy = float(dy)/seg.height
 
-			if (col <= 0x1F and i < 500 and y%12 == 0 and x%12 == 0) :
+			if (col == 0 and k < 500 and y%24 == 0 and x%24 == 0) :
+				muestra3 = [yy, xx, float(col)/256]
+				print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
+				ds.append([muestra3, [1.0, 0.0, 0.0, 0.0, 0.0]])
+				k += 1
+				border.putpixel((dx,dy),(128))
+			
+			if (col & 0x1F > 0 and i < 500 and y%12 == 0 and x%12 == 0) :
 				muestra2 = [yy, xx, float(col)/256]
-				print "%05d (%02x, %d, %d) => [0] %s" % (i,col, dy, dx, expect)
-				## ds.append([muestra2, [1.0, 0.0, 0.0, 0.0, 0.0]])
+				print "%05d (%02x, %d, %d) => [-1] %s" % (i,col, dy, dx, expect)
 				ds.append([muestra2, expect])
 				i += 1
 				border.putpixel((dx,dy),(64))
 			
 			if (col > 0x1F and j < 500 and y%6 == 0 and x%6 == 0) :
 				muestra1 = [yy, xx, float(col)/256]
-				print "%05d (%02x, %d, %d) => [1] %s" % (j,col, dy, dx, expect)
+				print "%05d (%02x, %d, %d) => [+1] %s" % (j,col, dy, dx, expect)
 				ds.append([muestra1, expect])
 				j += 1
 				border.putpixel((dx,dy),(255))
@@ -179,6 +186,7 @@ else:
 
 start = datetime.now()
 
+print '4.- Training neural network #########################'
 net2.entrenar_perceptron(ds,epochs)
 
 stop = datetime.now()
