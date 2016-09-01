@@ -139,6 +139,8 @@ expect[idx] = 1.0
 
 
 i = j = k = 0
+vectors = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
+
 for y in range(0,seg.height,3):
 	for x in range(0,seg.width,3):
 		dx = np.random.randint(0,2) + x
