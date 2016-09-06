@@ -139,12 +139,14 @@ expect[idx] = 1.0
 
 
 i = j = k = 0
-vectors = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
+points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
 
 for y in range(0,seg.height,3):
 	for x in range(0,seg.width,3):
 		dx = np.random.randint(0,2) + x
 		dy = np.random.randint(0,2) + y
+		px = int(x/3)
+		py = int(y/3)
 		col = border.getpixel((dx,dy)) if (dx<seg.width and dy<seg.height) else 0
 		if i+j+k < 1500 :
 			xx = float(dx)/seg.width
@@ -170,6 +172,13 @@ for y in range(0,seg.height,3):
 				ds.append([muestra1, expect])
 				j += 1
 				border.putpixel((dx,dy),(255))
+		
+		mask  = int(1) if col > 0x1F else 0
+		mask |= int(2) if px > 0 and points[py][px-1] % 2 != 0 else 0
+		mask |= int(4) if py > 0 and points[py][py-1] % 2 != 0 else 0
+		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
+		points[py][px] = mask
+			
 
 			
 border.show()
