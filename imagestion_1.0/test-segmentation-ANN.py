@@ -27,7 +27,61 @@ def evalPixel(pix, net):
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
-   
+
+def isZero(y,x,vector,points):
+	vector[y][x] = [0.,0.]
+	
+def isOne(y,x,vector,points):
+	vector[y][x] = [1.,0.]
+	
+def isSetWithWall(y,x,vector,points):
+	v = vector[y][x-1]
+	a = math.pi  #180
+	vector[y][x] = [v[0]+1, a]
+	vector[y][x-1] = [0.,0.] if v[0] > 1 else v
+	
+def isSetWithCeil(y,x,vector,points):
+	v = vector[y-1][x]
+	a = math.pi/2  #90
+	vector[y][x] = [v[0]+1, a]
+	vector[y-1][x] = [0.,0.] if v[0] > 1 else v
+	
+def isSetWithCorner(y,x,vector,points):
+	pass
+	
+def isSetWithWallCeil(y,x,vector,points):
+	pass
+	
+def isSetWithWallCorner(y,x,vector,points):
+	pass
+	
+def isSetWithCeilCorner(y,x,vector,points):
+	pass
+	
+def isSetWithAll(y,x,vector,points):
+	pass
+	
+def noSetWithAll(y,x,vector,points):
+	pass
+	
+def noSetWithWall(y,x,vector,points):
+	pass
+	
+def noSetWithCeil(y,x,vector,points):
+	pass
+	
+def noSetWithCorner(y,x,vector,points):
+	pass
+	
+def noSetWithWallCeil(y,x,vector,points):
+	pass
+	
+def noSetWithWallCorner(y,x,vector,points):
+	pass
+	
+def noSetWithCeilCorner(y,x,vector,points):
+	pass
+	
 #-----------------------------------------------------------------------
 
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
@@ -107,7 +161,7 @@ stop = datetime.now()
 delay = stop - start
 print "delay: %s seg." % (delay)
 
-toimage(rgb).show()
+## toimage(rgb).show()
 seg.setRGB(toimage(rgb))
 seg.splitRGB()
 
@@ -115,7 +169,7 @@ diff = seg.getBorder(shape1,shape2)
 # http://stackoverflow.com/questions/23935840/converting-an-rgb-image-to-grayscale-and-manipulating-the-pixel-data-in-python
 bw = seg.color2grayScale(toimage(diff))
 border = toimage(bw)
-border.show()
+## border.show()
 
 print "continue? (y/n): "
 k = sys.stdin.read(1)
@@ -140,8 +194,29 @@ expect[idx] = 1.0
 
 i = j = k = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
+vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
+matrix = []
+vectorize = {
+	0: isZero,
+	1: isOne,
+	2: noSetWithWall,
+	3: isSetWithWall,
+	4: noSetWithCeil,
+	5: isSetWithCeil,
+	6: noSetWithWallCeil,
+	7: isSetWithWallCeil,
+	8: noSetWithCorner,
+	9: isSetWithCorner,
+	10:noSetWithWallCorner,
+	11:isSetWithWallCorner,
+	12:noSetWithCeilCorner,
+	13:isSetWithCeilCorner,
+	14:noSetWithAll,
+	15:isSetWithAll
+}
 
 for y in range(0,seg.height,3):
+	line = ""
 	for x in range(0,seg.width,3):
 		dx = np.random.randint(0,2) + x
 		dy = np.random.randint(0,2) + y
@@ -173,13 +248,17 @@ for y in range(0,seg.height,3):
 				j += 1
 				border.putpixel((dx,dy),(255))
 		
-		mask  = int(1) if col > 0x1F else 0
+		mask  = int(1) if col > 0x1F else int(0)
 		mask |= int(2) if px > 0 and points[py][px-1] % 2 != 0 else 0
-		mask |= int(4) if py > 0 and points[py][py-1] % 2 != 0 else 0
+		mask |= int(4) if py > 0 and points[py-1][px] % 2 != 0 else 0
 		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
 		points[py][px] = mask
-			
-
+		line = line + "%X" % (mask)	
+		vectorize[mask](py,px,vector,points)
+		
+	matrix.append(line)
+		
+print "\n".join(s for s in matrix)
 			
 border.show()
 
