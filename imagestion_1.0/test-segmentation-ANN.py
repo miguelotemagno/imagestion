@@ -47,10 +47,16 @@ def isSetWithCeil(y,x,vector,points):
 	vector[y-1][x] = [0.,0.] if v[0] > 1 else v
 	
 def isSetWithCorner(y,x,vector,points):
-	pass
+	v = vector[y-1][x-1]
+	a = math.pi/4  #45
+	vector[y][x] = [v[0]+1, a]
+	vector[y-1][x-1] = [0.,0.] if v[0] > 1 else v
 	
 def isSetWithWallCeil(y,x,vector,points):
-	pass
+	vc = vector[y-1][x]
+	vw = vector[y][x-1]
+	a = (vw[1] - vc[1])/2
+	## vector[y][x] = [1.,0.] if vw[1]>1 and vc[1]>1
 	
 def isSetWithWallCorner(y,x,vector,points):
 	pass
