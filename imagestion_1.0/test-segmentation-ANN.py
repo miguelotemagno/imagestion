@@ -29,63 +29,95 @@ def evalPixel(pix, net):
 	return test[0]
 
 def isZero(y,x,vector,points):
+	# 00
+	# 00
 	vector[y][x] = [0.,0.]
 	
 def isOne(y,x,vector,points):
+	# 00
+	# 01
 	vector[y][x] = [1.,0.]
 	
 def isSetWithWall(y,x,vector,points):
+	# 00
+	# 11
 	v = vector[y][x-1]
 	a = math.pi  #180
 	vector[y][x] = [v[0]+1, a]
 	vector[y][x-1] = [0.,0.] if v[0] > 1 else v
 	
 def isSetWithCeil(y,x,vector,points):
+	# 01
+	# 01
 	v = vector[y-1][x]
 	a = math.pi/2  #90
 	vector[y][x] = [v[0]+1, a]
 	vector[y-1][x] = [0.,0.] if v[0] > 1 else v
 	
 def isSetWithCorner(y,x,vector,points):
+	# 10
+	# 01
 	v = vector[y-1][x-1]
 	a = math.pi/4  #45
 	vector[y][x] = [v[0]+1, a]
 	vector[y-1][x-1] = [0.,0.] if v[0] > 1 else v
 	
 def isSetWithWallCeil(y,x,vector,points):
+	# 01
+	# 11
 	vc = vector[y-1][x]
 	vw = vector[y][x-1]
 	a = (vw[1] - vc[1])/2
 	## vector[y][x] = [1.,0.] if vw[1]>1 and vc[1]>1
 	
 def isSetWithWallCorner(y,x,vector,points):
+	# 10
+	# 11
 	pass
 	
 def isSetWithCeilCorner(y,x,vector,points):
+	# 11
+	# 01
 	pass
 	
 def isSetWithAll(y,x,vector,points):
+	# 11
+	# 11
 	pass
 	
 def noSetWithAll(y,x,vector,points):
+	# 11
+	# 10
 	pass
 	
 def noSetWithWall(y,x,vector,points):
+	# 00
+	# 10
 	pass
 	
 def noSetWithCeil(y,x,vector,points):
+	# 01
+	# 00
 	pass
 	
 def noSetWithCorner(y,x,vector,points):
+	# 10
+	# 00
 	pass
 	
 def noSetWithWallCeil(y,x,vector,points):
+	# 01
+	# 10
 	pass
 	
 def noSetWithWallCorner(y,x,vector,points):
+	# 10
+	# 10
 	pass
 	
 def noSetWithCeilCorner(y,x,vector,points):
+	# 11
+	# 00
 	pass
 	
 #-----------------------------------------------------------------------
