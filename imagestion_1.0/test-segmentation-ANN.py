@@ -58,7 +58,7 @@ def isSetWithCorner(y,x,vector,points):
 	# 10
 	# 01
 	v = vector[y-1][x-1]
-	a = math.pi/4  #45
+	a = 3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
 	vector[y-1][x-1] = [0.,0.] if v[0] > 1 else v
 	
