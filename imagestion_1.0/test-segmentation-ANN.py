@@ -44,7 +44,7 @@ def isSetWithWall(y,x,vector,points):
 	v = vector[y][x-1]
 	a = math.pi  #180
 	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if v[0] > 1 else v
+	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
 def isSetWithCeil(y,x,vector,points):
 	# 01
@@ -52,7 +52,7 @@ def isSetWithCeil(y,x,vector,points):
 	v = vector[y-1][x]
 	a = math.pi/2  #90
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x] = [0.,0.] if v[0] > 1 else v
+	vector[y-1][x] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
 def isSetWithCorner(y,x,vector,points):
 	# 10
@@ -60,7 +60,7 @@ def isSetWithCorner(y,x,vector,points):
 	v = vector[y-1][x-1]
 	a = 3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x-1] = [0.,0.] if v[0] > 1 else v
+	vector[y-1][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
 def isSetWithWallCeil(y,x,vector,points):
 	# 01
