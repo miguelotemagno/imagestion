@@ -28,94 +28,107 @@ def evalPixel(pix, net):
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
 
-def isZero(y,x,vector,points):
+def isZero(y,x,vector):
 	# 00
 	# 00
 	vector[y][x] = [0.,0.]
 	
-def isOne(y,x,vector,points):
+def isOne(y,x,vector):
 	# 00
 	# 01
 	vector[y][x] = [1.,0.]
 	
-def isSetWithWall(y,x,vector,points):
+def isSetWithWall(y,x,vector):
 	# 00
 	# 11
 	v = vector[y][x-1]
-	a = math.pi  #180
+	a = 180 #math.pi  #180
 	vector[y][x] = [v[0]+1, a]
 	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithCeil(y,x,vector,points):
+def isSetWithCeil(y,x,vector):
 	# 01
 	# 01
 	v = vector[y-1][x]
-	a = math.pi/2  #90
+	a = 90 #math.pi/2  #90
 	vector[y][x] = [v[0]+1, a]
 	vector[y-1][x] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithCorner(y,x,vector,points):
+def isSetWithCorner(y,x,vector):
 	# 10
 	# 01
 	v = vector[y-1][x-1]
-	a = 3*(math.pi/4)  #135
+	a = 135 #3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
 	vector[y-1][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithWallCeil(y,x,vector,points):
+def isSetWithWallCeil(y,x,vector):
 	# 01
 	# 11
-	vc = vector[y-1][x]
-	vw = vector[y][x-1]
-	a = (vw[1] - vc[1])/2
-	## vector[y][x] = [1.,0.] if vw[1]>1 and vc[1]>1
+	## vc = vector[y-1][x]
+	## vw = vector[y][x-1]
+	## a = (vw[1] - vc[1])/2
+	## vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	v = vector[y][x-1]
+	a = 180 #math.pi  #180
+	vector[y][x] = [v[0]+1, a]
+	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithWallCorner(y,x,vector,points):
+def isSetWithWallCorner(y,x,vector):
 	# 10
 	# 11
-	pass
+	v = vector[y][x-1]
+	a = 180 #math.pi  #180
+	vector[y][x] = [v[0]+1, a]
+	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithCeilCorner(y,x,vector,points):
+def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
-	pass
+	v = vector[y-1][x-1]
+	a = 135 #3*(math.pi/4)  #135
+	vector[y][x] = [v[0]+1, a]
+	vector[y-1][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def isSetWithAll(y,x,vector,points):
+def isSetWithAll(y,x,vector):
 	# 11
 	# 11
-	pass
+	v = vector[y][x-1]
+	a = 180 #math.pi  #180
+	vector[y][x] = [v[0]+1, a]
+	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	
-def noSetWithAll(y,x,vector,points):
+def noSetWithAll(y,x,vector):
 	# 11
 	# 10
 	pass
 	
-def noSetWithWall(y,x,vector,points):
+def noSetWithWall(y,x,vector):
 	# 00
 	# 10
 	pass
 	
-def noSetWithCeil(y,x,vector,points):
+def noSetWithCeil(y,x,vector):
 	# 01
 	# 00
 	pass
 	
-def noSetWithCorner(y,x,vector,points):
+def noSetWithCorner(y,x,vector):
 	# 10
 	# 00
 	pass
 	
-def noSetWithWallCeil(y,x,vector,points):
+def noSetWithWallCeil(y,x,vector):
 	# 01
 	# 10
 	pass
 	
-def noSetWithWallCorner(y,x,vector,points):
+def noSetWithWallCorner(y,x,vector):
 	# 10
 	# 10
 	pass
 	
-def noSetWithCeilCorner(y,x,vector,points):
+def noSetWithCeilCorner(y,x,vector):
 	# 11
 	# 00
 	pass
@@ -291,8 +304,8 @@ for y in range(0,seg.height,3):
 		mask |= int(4) if py > 0 and points[py-1][px] % 2 != 0 else 0
 		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
 		points[py][px] = mask
-		line = line + "%X" % (mask)	
-		vectorize[mask](py,px,vector,points)
+		line = line + "%X" % (mask)	n
+		vectorize[mask](py,px,vector)
 		
 	matrix.append(line)
 		
