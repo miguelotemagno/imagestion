@@ -31,7 +31,7 @@ def evalPixel(pix, net):
 def isZero(y,x,vector):
 	# 00
 	# 00
-	vector[y][x] = [0.,0.]
+	vector[y][x] = [-1.,-1.]
 	
 def isOne(y,x,vector):
 	# 00
@@ -44,7 +44,8 @@ def isSetWithWall(y,x,vector):
 	v = vector[y][x-1]
 	a = 180 #math.pi  #180
 	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	if vector[y][x-1][0] >= 1 :
+		vector[y][x-1] = [0.,0.] 
 	
 def isSetWithCeil(y,x,vector):
 	# 01
@@ -52,7 +53,7 @@ def isSetWithCeil(y,x,vector):
 	v = vector[y-1][x]
 	a = 90 #math.pi/2  #90
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y-1][x] = [0.,0.] if vector[y-1][x][0] > 1  else v
 	
 def isSetWithCorner(y,x,vector):
 	# 10
@@ -60,7 +61,7 @@ def isSetWithCorner(y,x,vector):
 	v = vector[y-1][x-1]
 	a = 135 #3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithWallCeil(y,x,vector):
 	# 01
@@ -72,7 +73,7 @@ def isSetWithWallCeil(y,x,vector):
 	v = vector[y][x-1]
 	a = 180 #math.pi  #180
 	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
 	
 def isSetWithWallCorner(y,x,vector):
 	# 10
@@ -80,7 +81,7 @@ def isSetWithWallCorner(y,x,vector):
 	v = vector[y][x-1]
 	a = 180 #math.pi  #180
 	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
 	
 def isSetWithCeilCorner(y,x,vector):
 	# 11
@@ -88,7 +89,7 @@ def isSetWithCeilCorner(y,x,vector):
 	v = vector[y-1][x-1]
 	a = 135 #3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithAll(y,x,vector):
 	# 11
@@ -96,7 +97,7 @@ def isSetWithAll(y,x,vector):
 	v = vector[y][x-1]
 	a = 180 #math.pi  #180
 	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
+	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
 	
 def noSetWithAll(y,x,vector):
 	# 11
@@ -247,6 +248,8 @@ i = j = k = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
 vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
+matrix1 = []
+matrix2 = []
 vectorize = {
 	0: isZero,
 	1: isOne,
@@ -268,6 +271,8 @@ vectorize = {
 
 for y in range(0,seg.height,3):
 	line = ""
+	line1 = ""
+	line2 = ""
 	for x in range(0,seg.width,3):
 		dx = np.random.randint(0,2) + x
 		dy = np.random.randint(0,2) + y
@@ -304,12 +309,23 @@ for y in range(0,seg.height,3):
 		mask |= int(4) if py > 0 and points[py-1][px] % 2 != 0 else 0
 		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
 		points[py][px] = mask
-		line = line + "%X" % (mask)	n
+		
+		line = line + "%X" % (mask)
+		
 		vectorize[mask](py,px,vector)
 		
+		line1 = line1 + " %3d" % (vector[py][px][0])
+		line2 = line2 + " %3d" % (vector[py][px][1])
+		
 	matrix.append(line)
+	matrix1.append(line1)
+	matrix2.append(line2)
 		
 print "\n".join(s for s in matrix)
+print "\n"
+print "\n".join(s for s in matrix1)
+print "\n"
+print "\n".join(s for s in matrix2)
 			
 border.show()
 
