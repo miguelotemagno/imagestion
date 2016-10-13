@@ -31,7 +31,7 @@ def evalPixel(pix, net):
 def isZero(y,x,vector):
 	# 00
 	# 00
-	vector[y][x] = [-1.,-1.]
+	vector[y][x] = [0.,0.]
 	
 def isOne(y,x,vector):
 	# 00
@@ -41,19 +41,23 @@ def isOne(y,x,vector):
 def isSetWithWall(y,x,vector):
 	# 00
 	# 11
-	v = vector[y][x-1]
-	a = 180 #math.pi  #180
-	vector[y][x] = [v[0]+1, a]
-	if vector[y][x-1][0] >= 1 :
-		vector[y][x-1] = [0.,0.] 
+	v = vector[y, x-1, 0]
+	a = 180. #math.pi  #180
+	## if float(v) > 1.:
+		## vector[y][x-1] = [-2.,-2.] 		
+	## else:
+		## vector[y][x-1] = [v+1., a] 
+
+	vector[y][x] = [v+1., a]
+	#vector[y][x-1] = [v+1., a]
 	
 def isSetWithCeil(y,x,vector):
 	# 01
 	# 01
-	v = vector[y-1][x]
+	v = vector[y-1][x][0]
 	a = 90 #math.pi/2  #90
-	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x] = [0.,0.] if vector[y-1][x][0] > 1  else v
+	vector[y][x] = [v+1, a]
+	vector[y-1][x] = [1.,0.]
 	
 def isSetWithCorner(y,x,vector):
 	# 10
@@ -70,34 +74,35 @@ def isSetWithWallCeil(y,x,vector):
 	## vw = vector[y][x-1]
 	## a = (vw[1] - vc[1])/2
 	## vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
-	v = vector[y][x-1]
-	a = 180 #math.pi  #180
-	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
+	v = vector[y-1,x,0]
+	a = 45 #math.pi  #180
+	#vector[y][x] = [1.,0.]
+	vector[y-1][x] = [0,0]
+	vector[y][x-1] = [v+1.,a] 
 	
 def isSetWithWallCorner(y,x,vector):
 	# 10
 	# 11
-	v = vector[y][x-1]
-	a = 180 #math.pi  #180
-	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
+	v = vector[y-1][x-1][0]
+	a = 135 #math.pi  #180
+	vector[y][x] = [v+1, a]
+	vector[y-1][x-1] = [0.,0.]
 	
 def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
-	v = vector[y-1][x-1]
+	v = vector[y-1][x-1][0]
 	a = 135 #3*(math.pi/4)  #135
-	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
+	vector[y][x] = [v+1, a]
+	vector[y-1][x-1] = [0.,0.] 
 	
 def isSetWithAll(y,x,vector):
 	# 11
 	# 11
 	v = vector[y][x-1]
 	a = 180 #math.pi  #180
-	vector[y][x] = [v[0]+1, a]
-	vector[y][x-1] = [0.,0.] if vector[y][x-1][0] > 1  else v
+	vector[y][x] = v
+	#vector[y][x-1] = [0.,0.]
 	
 def noSetWithAll(y,x,vector):
 	# 11
@@ -314,7 +319,7 @@ for y in range(0,seg.height,3):
 		
 		vectorize[mask](py,px,vector)
 		
-		line1 = line1 + " %3d" % (vector[py][px][0])
+		line1 = line1 + " %2d" % (vector[py][px][0])
 		line2 = line2 + " %3d" % (vector[py][px][1])
 		
 	matrix.append(line)
