@@ -41,15 +41,16 @@ def isOne(y,x,vector):
 def isSetWithWall(y,x,vector):
 	# 00
 	# 11
-	v = vector[y, x-1, 0]
+	v = vector[y, x-1]
 	a = 180. #math.pi  #180
-	## if float(v) > 1.:
-		## vector[y][x-1] = [-2.,-2.] 		
-	## else:
-		## vector[y][x-1] = [v+1., a] 
 
-	vector[y][x] = [v+1., a]
-	#vector[y][x-1] = [v+1., a]
+	s = "["+str(v[0])+"/"+str(v[1])+"]["+str(vector[y][x][0])+"/"+str(vector[y][x][1])+"]"
+	vector[y][x] = [v[0]+1., a]
+	
+	if v[0] > 0. and v[1] == a:
+		vector[y][x-1] = [0., 0.] 		
+
+	print "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t %s => [%d/%d][%d/%d]" % (s, vector[y][x-1][0], vector[y][x-1][1], vector[y][x][0], vector[y][x][1])
 	
 def isSetWithCeil(y,x,vector):
 	# 01
