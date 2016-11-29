@@ -44,13 +44,13 @@ def isSetWithWall(y,x,vector):
 	v = vector[y, x-1]
 	a = 180. #math.pi  #180
 
-	s = "["+str(v[0])+"/"+str(v[1])+"]["+str(vector[y][x][0])+"/"+str(vector[y][x][1])+"]"
+	# s = "["+str(v[0])+"/"+str(v[1])+"]["+str(vector[y][x][0])+"/"+str(vector[y][x][1])+"]"
 	vector[y][x] = [v[0]+1., a]
 	
-	if v[0] > 0. and v[1] == a:
-		vector[y][x-1] = [0., 0.] 		
+	## if v[0] > 0. and v[1] == a:
+		## vector[y][x-1] = [0., 0.] 		
 
-	print "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t %s => [%d/%d][%d/%d]" % (s, vector[y][x-1][0], vector[y][x-1][1], vector[y][x][0], vector[y][x][1])
+	# print "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t %s => [%d/%d][%d/%d]" % (s, vector[y][x-1][0], vector[y][x-1][1], vector[y][x][0], vector[y][x][1])
 	
 def isSetWithCeil(y,x,vector):
 	# 01
@@ -66,7 +66,7 @@ def isSetWithCorner(y,x,vector):
 	v = vector[y-1][x-1]
 	a = 135 #3*(math.pi/4)  #135
 	vector[y][x] = [v[0]+1, a]
-	vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
+	## vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithWallCeil(y,x,vector):
 	# 01
@@ -77,8 +77,7 @@ def isSetWithWallCeil(y,x,vector):
 	## vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	v = vector[y-1,x,0]
 	a = 45 #math.pi  #180
-	#vector[y][x] = [1.,0.]
-	vector[y-1][x] = [0,0]
+	## vector[y-1][x] = [0,0]
 	vector[y][x-1] = [v+1.,a] 
 	
 def isSetWithWallCorner(y,x,vector):
@@ -87,7 +86,7 @@ def isSetWithWallCorner(y,x,vector):
 	v = vector[y-1][x-1][0]
 	a = 135 #math.pi  #180
 	vector[y][x] = [v+1, a]
-	vector[y-1][x-1] = [0.,0.]
+	## vector[y-1][x-1] = [0.,0.]
 	
 def isSetWithCeilCorner(y,x,vector):
 	# 11
@@ -95,7 +94,7 @@ def isSetWithCeilCorner(y,x,vector):
 	v = vector[y-1][x-1][0]
 	a = 135 #3*(math.pi/4)  #135
 	vector[y][x] = [v+1, a]
-	vector[y-1][x-1] = [0.,0.] 
+	## vector[y-1][x-1] = [0.,0.] 
 	
 def isSetWithAll(y,x,vector):
 	# 11
@@ -321,7 +320,7 @@ for y in range(0,seg.height,3):
 		vectorize[mask](py,px,vector)
 		
 		line1 = line1 + " %2d" % (vector[py][px][0])
-		line2 = line2 + " %3d" % (vector[py][px][1])
+		line2 = line2 + "%3d" % (vector[py][px][1])
 		
 	matrix.append(line)
 	matrix1.append(line1)
