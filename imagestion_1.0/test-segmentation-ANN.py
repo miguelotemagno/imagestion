@@ -41,11 +41,11 @@ def isOne(y,x,vector):
 def isSetWithWall(y,x,vector):
 	# 00
 	# 11
-	v = vector[y, x-1]
+	v = vector[y][x-1][0]
 	a = 180. #math.pi  #180
 
 	# s = "["+str(v[0])+"/"+str(v[1])+"]["+str(vector[y][x][0])+"/"+str(vector[y][x][1])+"]"
-	vector[y][x] = [v[0]+1., a]
+	vector[y][x] = [v+1, a]
 	
 	## if v[0] > 0. and v[1] == a:
 		## vector[y][x-1] = [0., 0.] 		
@@ -58,14 +58,14 @@ def isSetWithCeil(y,x,vector):
 	v = vector[y-1][x][0]
 	a = 90 #math.pi/2  #90
 	vector[y][x] = [v+1, a]
-	vector[y-1][x] = [1.,0.]
+	#vector[y-1][x] = [1.,0.]
 	
 def isSetWithCorner(y,x,vector):
 	# 10
 	# 01
-	v = vector[y-1][x-1]
+	v = vector[y-1][x-1][0]
 	a = 135 #3*(math.pi/4)  #135
-	vector[y][x] = [v[0]+1, a]
+	vector[y][x] = [v+1, a]
 	## vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithWallCeil(y,x,vector):
@@ -75,7 +75,7 @@ def isSetWithWallCeil(y,x,vector):
 	## vw = vector[y][x-1]
 	## a = (vw[1] - vc[1])/2
 	## vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
-	v = vector[y-1,x,0]
+	v = vector[y-1][x][0]
 	a = 45 #math.pi  #180
 	## vector[y-1][x] = [0,0]
 	vector[y][x-1] = [v+1.,a] 
@@ -99,9 +99,9 @@ def isSetWithCeilCorner(y,x,vector):
 def isSetWithAll(y,x,vector):
 	# 11
 	# 11
-	v = vector[y][x-1]
+	v = vector[y][x-1][0]
 	a = 180 #math.pi  #180
-	vector[y][x] = v
+	vector[y][x] = [v, a]
 	#vector[y][x-1] = [0.,0.]
 	
 def noSetWithAll(y,x,vector):
