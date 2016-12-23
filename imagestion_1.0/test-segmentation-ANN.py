@@ -21,6 +21,7 @@ from datetime import datetime
 ## import pickle
 
 #-----------------------------------------------------------------------
+# https://es.wikipedia.org/wiki/Pendiente_(matematicas)
 
 def evalPixel(pix, net):
 	r,g,b = pix
