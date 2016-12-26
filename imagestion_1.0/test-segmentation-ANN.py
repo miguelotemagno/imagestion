@@ -23,6 +23,15 @@ from datetime import datetime
 #-----------------------------------------------------------------------
 # https://es.wikipedia.org/wiki/Pendiente_(matematicas)
 
+def calcSlope(y,x,y0,x0):
+	d = 0 if x != x0  else 0.0000000001
+	m = (y-y0)/(x - x0 + d)
+	return m
+	
+def calcAngle(slope):
+	angle = np.arctan(slope)
+	return (180*angle)/np.pi
+
 def evalPixel(pix, net):
 	r,g,b = pix
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
@@ -43,67 +52,78 @@ def isSetWithWall(y,x,vector):
 	# 00
 	# 11
 	v = vector[y][x-1][0]
-	a = 180. #math.pi  #180
-
-	# s = "["+str(v[0])+"/"+str(v[1])+"]["+str(vector[y][x][0])+"/"+str(vector[y][x][1])+"]"
-	vector[y][x] = [v+1, a]
+	a = vector[y][x-1][1] #math.pi  #180
+	m = calcSlope(y,x,y,x-1)
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	
 	## if v[0] > 0. and v[1] == a:
 		## vector[y][x-1] = [0., 0.] 		
 
-	# print "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t %s => [%d/%d][%d/%d]" % (s, vector[y][x-1][0], vector[y][x-1][1], vector[y][x][0], vector[y][x][1])
 	
 def isSetWithCeil(y,x,vector):
 	# 01
 	# 01
 	v = vector[y-1][x][0]
-	a = 90 #math.pi/2  #90
-	vector[y][x] = [v+1, a]
+	a = vector[y-1][x][1] #math.pi/2  #90
+	m = calcSlope(y,x,y-1,x)
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	#vector[y-1][x] = [1.,0.]
 	
 def isSetWithCorner(y,x,vector):
 	# 10
 	# 01
 	v = vector[y-1][x-1][0]
-	a = 135 #3*(math.pi/4)  #135
-	vector[y][x] = [v+1, a]
+	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	m = calcSlope(y,x,y-1,x-1)
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	## vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithWallCeil(y,x,vector):
 	# 01
 	# 11
-	## vc = vector[y-1][x]
-	## vw = vector[y][x-1]
-	## a = (vw[1] - vc[1])/2
-	## vector[y][x-1] = [0.,0.] if v[0] > 1 and v[1] == a else v
 	v = vector[y-1][x][0]
-	a = 45 #math.pi  #180
-	## vector[y-1][x] = [0,0]
-	vector[y][x-1] = [v+1.,a] 
+	a = vector[y-1][x][1] #math.pi  #180
+	m1= calcSlope(y,x,y-1,x)
+	m2= calcSlope(y,x,y,x-1)
+	m = (m1+m2)/2
+	t = calcAngle(m)
+	vector[y][x-1] = [v+1.,int((a+t)/2)] 
 	
 def isSetWithWallCorner(y,x,vector):
 	# 10
 	# 11
 	v = vector[y-1][x-1][0]
-	a = 135 #math.pi  #180
-	vector[y][x] = [v+1, a]
-	## vector[y-1][x-1] = [0.,0.]
+	a = vector[y-1][x-1][1] #math.pi  #180
+	m1 = calcSlope(y,x,y-1,x-1)
+	m2 = calcSlope(y,x,y,x-1)
+	m = (m1+m2)/2
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	
 def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
 	v = vector[y-1][x-1][0]
-	a = 135 #3*(math.pi/4)  #135
-	vector[y][x] = [v+1, a]
-	## vector[y-1][x-1] = [0.,0.] 
+	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	m1 = calcSlope(y,x,y-1,x-1)
+	m2 = calcSlope(y,x,y-1,x)
+	m = (m1+m2)/2
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	
 def isSetWithAll(y,x,vector):
 	# 11
 	# 11
 	v = vector[y][x-1][0]
-	a = 180 #math.pi  #180
-	vector[y][x] = [v, a]
-	#vector[y][x-1] = [0.,0.]
+	a = vector[y][x-1][1] #math.pi  #180
+	m1 = calcSlope(y,x,y-1,x-1)
+	m2 = calcSlope(y,x,y-1,x)
+	m3 = calcSlope(y,x,y,x-1)
+	m = (m1+m2+m3)/3
+	vector[y][x] = [v+1, a]
 	
 def noSetWithAll(y,x,vector):
 	# 11
@@ -291,21 +311,21 @@ for y in range(0,seg.height,3):
 
 			if (col == 0 and k < 500 and y%24 == 0 and x%24 == 0) :
 				muestra3 = [yy, xx, float(col)/256]
-				print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
+				## print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
 				ds.append([muestra3, [1.0, 0.0, 0.0, 0.0, 0.0]])
 				k += 1
 				border.putpixel((dx,dy),(128))
 			
 			if (col & 0x1F > 0 and i < 500 and y%12 == 0 and x%12 == 0) :
 				muestra2 = [yy, xx, float(col)/256]
-				print "%05d (%02x, %d, %d) => [-1] %s" % (i,col, dy, dx, expect)
+				## print "%05d (%02x, %d, %d) => [-1] %s" % (i,col, dy, dx, expect)
 				ds.append([muestra2, expect])
 				i += 1
 				border.putpixel((dx,dy),(64))
 			
 			if (col > 0x1F and j < 500 and y%6 == 0 and x%6 == 0) :
 				muestra1 = [yy, xx, float(col)/256]
-				print "%05d (%02x, %d, %d) => [+1] %s" % (j,col, dy, dx, expect)
+				## print "%05d (%02x, %d, %d) => [+1] %s" % (j,col, dy, dx, expect)
 				ds.append([muestra1, expect])
 				j += 1
 				border.putpixel((dx,dy),(255))
@@ -316,16 +336,16 @@ for y in range(0,seg.height,3):
 		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
 		points[py][px] = mask
 		
-		line = line + "%X" % (mask)
+		line = line + "%X" % (mask)   ##
 		
 		vectorize[mask](py,px,vector)
 		
-		line1 = line1 + " %2d" % (vector[py][px][0])
-		line2 = line2 + "%3d" % (vector[py][px][1])
+		line1 = line1 + " %2d" % (vector[py][px][0])   ##
+		line2 = line2 + "%3d" % (vector[py][px][1])    ##
 		
-	matrix.append(line)
-	matrix1.append(line1)
-	matrix2.append(line2)
+	matrix.append(line)    ##
+	matrix1.append(line1)  ##
+	matrix2.append(line2)  ##
 		
 print "\n".join(s for s in matrix)
 print "\n"
