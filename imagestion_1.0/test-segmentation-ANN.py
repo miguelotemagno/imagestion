@@ -55,7 +55,7 @@ def isSetWithWall(y,x,vector):
 	a = vector[y][x-1][1] #math.pi  #180
 	m = calcSlope(y,x,y,x-1)
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	
 	## if v[0] > 0. and v[1] == a:
 		## vector[y][x-1] = [0., 0.] 		
@@ -68,7 +68,7 @@ def isSetWithCeil(y,x,vector):
 	a = vector[y-1][x][1] #math.pi/2  #90
 	m = calcSlope(y,x,y-1,x)
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	#vector[y-1][x] = [1.,0.]
 	
 def isSetWithCorner(y,x,vector):
@@ -78,7 +78,7 @@ def isSetWithCorner(y,x,vector):
 	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
 	m = calcSlope(y,x,y-1,x-1)
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	## vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
 	
 def isSetWithWallCeil(y,x,vector):
@@ -90,7 +90,7 @@ def isSetWithWallCeil(y,x,vector):
 	m2= calcSlope(y,x,y,x-1)
 	m = (m1+m2)/2
 	t = calcAngle(m)
-	vector[y][x-1] = [v+1.,int((a+t)/2)] 
+	vector[y][x-1] = [1.,int((a+t)/2)] 
 	
 def isSetWithWallCorner(y,x,vector):
 	# 10
@@ -101,7 +101,7 @@ def isSetWithWallCorner(y,x,vector):
 	m2 = calcSlope(y,x,y,x-1)
 	m = (m1+m2)/2
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	
 def isSetWithCeilCorner(y,x,vector):
 	# 11
@@ -112,7 +112,7 @@ def isSetWithCeilCorner(y,x,vector):
 	m2 = calcSlope(y,x,y-1,x)
 	m = (m1+m2)/2
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	
 def isSetWithAll(y,x,vector):
 	# 11
@@ -124,11 +124,18 @@ def isSetWithAll(y,x,vector):
 	m3 = calcSlope(y,x,y,x-1)
 	m = (m1+m2+m3)/3
 	t = calcAngle(m)
-	vector[y][x] = [v+1, int((a+t)/2)]
+	vector[y][x] = [1, int((a+t)/2)]
 	
 def noSetWithAll(y,x,vector):
 	# 11
 	# 10
+	v = vector[y-1][x][0]
+	a = vector[y-1][x][1] #3*(math.pi/4)  #135
+	m1= calcSlope(y,x-1,y-1,x-1)
+	m2= calcSlope(y,x-1,y,x)
+	m = (m1+m2)/2
+	t = calcAngle(m)
+	vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
 def noSetWithWall(y,x,vector):
@@ -156,7 +163,7 @@ def noSetWithWallCeil(y,x,vector):
 	a = vector[y-1][x][1] #3*(math.pi/4)  #135
 	m = calcSlope(y,x-1,y-1,x)
 	t = calcAngle(m)
-	vector[y][x-1] = [v+1, int((a+t)/2)]
+	vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
 def noSetWithWallCorner(y,x,vector):
@@ -166,7 +173,7 @@ def noSetWithWallCorner(y,x,vector):
 	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
 	m = calcSlope(y,x-1,y-1,x-1)
 	t = calcAngle(m)
-	vector[y][x-1] = [v+1, int((a+t)/2)]
+	vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
 def noSetWithCeilCorner(y,x,vector):
@@ -176,7 +183,7 @@ def noSetWithCeilCorner(y,x,vector):
 	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
 	m = calcSlope(y-1,x,y-1,x-1)
 	t = calcAngle(m)
-	vector[y-1][x] = [v+1, int((a+t)/2)]
+	vector[y-1][x] = [1, int((a+t)/2)]
 	pass
 	
 #-----------------------------------------------------------------------
