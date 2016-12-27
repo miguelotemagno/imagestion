@@ -30,7 +30,7 @@ def calcSlope(y,x,y0,x0):
 	
 def calcAngle(slope):
 	angle = np.arctan(slope)
-	return (180*angle)/np.pi
+	return 180 - (180*angle)/np.pi
 
 def evalPixel(pix, net):
 	r,g,b = pix
@@ -123,7 +123,8 @@ def isSetWithAll(y,x,vector):
 	m2 = calcSlope(y,x,y-1,x)
 	m3 = calcSlope(y,x,y,x-1)
 	m = (m1+m2+m3)/3
-	vector[y][x] = [v+1, a]
+	t = calcAngle(m)
+	vector[y][x] = [v+1, int((a+t)/2)]
 	
 def noSetWithAll(y,x,vector):
 	# 11
@@ -133,31 +134,49 @@ def noSetWithAll(y,x,vector):
 def noSetWithWall(y,x,vector):
 	# 00
 	# 10
+	isOne(y,x-1,vector)
 	pass
 	
 def noSetWithCeil(y,x,vector):
 	# 01
 	# 00
+	isOne(y-1,x,vector)
 	pass
 	
 def noSetWithCorner(y,x,vector):
 	# 10
 	# 00
+	isOne(y-1,x-1,vector)
 	pass
 	
 def noSetWithWallCeil(y,x,vector):
 	# 01
 	# 10
+	v = vector[y-1][x][0]
+	a = vector[y-1][x][1] #3*(math.pi/4)  #135
+	m = calcSlope(y,x-1,y-1,x)
+	t = calcAngle(m)
+	vector[y][x-1] = [v+1, int((a+t)/2)]
 	pass
 	
 def noSetWithWallCorner(y,x,vector):
 	# 10
 	# 10
+	v = vector[y-1][x-1][0]
+	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	m = calcSlope(y,x-1,y-1,x-1)
+	t = calcAngle(m)
+	vector[y][x-1] = [v+1, int((a+t)/2)]
 	pass
 	
 def noSetWithCeilCorner(y,x,vector):
 	# 11
 	# 00
+	v = vector[y-1][x-1][0]
+	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	m = calcSlope(y-1,x,y-1,x-1)
+	t = calcAngle(m)
+	vector[y-1][x] = [v+1, int((a+t)/2)]
 	pass
 	
 #-----------------------------------------------------------------------
@@ -305,25 +324,25 @@ for y in range(0,seg.height,3):
 		px = int(x/3)
 		py = int(y/3)
 		col = border.getpixel((dx,dy)) if (dx<seg.width and dy<seg.height) else 0
-		if i+j+k < 1500 :
+		if i+j+k < 1800 :
 			xx = float(dx)/seg.width
 			yy = float(dy)/seg.height
 
-			if (col == 0 and k < 500 and y%24 == 0 and x%24 == 0) :
+			if (col == 0 and k < 600 and y%24 == 0 and x%24 == 0) :
 				muestra3 = [yy, xx, float(col)/256]
 				## print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
 				ds.append([muestra3, [1.0, 0.0, 0.0, 0.0, 0.0]])
 				k += 1
 				border.putpixel((dx,dy),(128))
 			
-			if (col & 0x1F > 0 and i < 500 and y%12 == 0 and x%12 == 0) :
+			if (col & 0x1F > 0 and i < 600 and y%12 == 0 and x%12 == 0) :
 				muestra2 = [yy, xx, float(col)/256]
 				## print "%05d (%02x, %d, %d) => [-1] %s" % (i,col, dy, dx, expect)
 				ds.append([muestra2, expect])
 				i += 1
 				border.putpixel((dx,dy),(64))
 			
-			if (col > 0x1F and j < 500 and y%6 == 0 and x%6 == 0) :
+			if (col > 0x1F and j < 600 and y%6 == 0 and x%6 == 0) :
 				muestra1 = [yy, xx, float(col)/256]
 				## print "%05d (%02x, %d, %d) => [+1] %s" % (j,col, dy, dx, expect)
 				ds.append([muestra1, expect])
