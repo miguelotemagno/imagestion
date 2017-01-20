@@ -24,6 +24,14 @@ from datetime import datetime
 # https://es.wikipedia.org/wiki/Pendiente_(matematicas)
 # https://es.wikipedia.org/wiki/Regresion_lineal
 # https://youtu.be/GAmzwIkGFgE
+#
+# Y=[], X=[]
+#
+# m = (mean(X)*mean(Y) - mean(X*Y)) / (sqr(mean(X)) - mean(sqr(X)))
+#
+# b = mean(Y) - m*mean(X)
+#
+# y = m*x + b
 
 def calcSlope(y,x,y0,x0):
 	d = 0 if x != x0  else 0.0000000001
