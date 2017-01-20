@@ -22,6 +22,8 @@ from datetime import datetime
 
 #-----------------------------------------------------------------------
 # https://es.wikipedia.org/wiki/Pendiente_(matematicas)
+# https://es.wikipedia.org/wiki/Regresion_lineal
+# https://youtu.be/GAmzwIkGFgE
 
 def calcSlope(y,x,y0,x0):
 	d = 0 if x != x0  else 0.0000000001
@@ -52,7 +54,7 @@ def isSetWithWall(y,x,vector):
 	# 00
 	# 11
 	v = vector[y][x-1][0]
-	a = vector[y][x-1][1] #math.pi  #180
+	a = vector[y][x-1][1] 
 	m = calcSlope(y,x,y,x-1)
 	t = calcAngle(m)
 	vector[y][x] = [1, int((a+t)/2)]
@@ -65,7 +67,7 @@ def isSetWithCeil(y,x,vector):
 	# 01
 	# 01
 	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] #math.pi/2  #90
+	a = vector[y-1][x][1] 
 	m = calcSlope(y,x,y-1,x)
 	t = calcAngle(m)
 	vector[y][x] = [1, int((a+t)/2)]
@@ -75,7 +77,7 @@ def isSetWithCorner(y,x,vector):
 	# 10
 	# 01
 	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x-1][1] 
 	m = calcSlope(y,x,y-1,x-1)
 	t = calcAngle(m)
 	vector[y][x] = [1, int((a+t)/2)]
@@ -85,7 +87,7 @@ def isSetWithWallCeil(y,x,vector):
 	# 01
 	# 11
 	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] #math.pi  #180
+	a = vector[y-1][x][1] 
 	m1= calcSlope(y,x,y-1,x)
 	m2= calcSlope(y,x,y,x-1)
 	m = (m1+m2)/2
@@ -96,7 +98,7 @@ def isSetWithWallCorner(y,x,vector):
 	# 10
 	# 11
 	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] #math.pi  #180
+	a = vector[y-1][x-1][1] 
 	m1 = calcSlope(y,x,y-1,x-1)
 	m2 = calcSlope(y,x,y,x-1)
 	m = (m1+m2)/2
@@ -107,7 +109,7 @@ def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
 	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x-1][1] 
 	m1 = calcSlope(y,x,y-1,x-1)
 	m2 = calcSlope(y,x,y-1,x)
 	m = (m1+m2)/2
@@ -118,7 +120,7 @@ def isSetWithAll(y,x,vector):
 	# 11
 	# 11
 	v = vector[y][x-1][0]
-	a = vector[y][x-1][1] #math.pi  #180
+	a = vector[y][x-1][1] 
 	m1 = calcSlope(y,x,y-1,x-1)
 	m2 = calcSlope(y,x,y-1,x)
 	m3 = calcSlope(y,x,y,x-1)
@@ -130,7 +132,7 @@ def noSetWithAll(y,x,vector):
 	# 11
 	# 10
 	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x][1] 
 	m1= calcSlope(y,x-1,y-1,x-1)
 	m2= calcSlope(y,x-1,y,x)
 	m = (m1+m2)/2
@@ -160,7 +162,7 @@ def noSetWithWallCeil(y,x,vector):
 	# 01
 	# 10
 	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x][1] 
 	m = calcSlope(y,x-1,y-1,x)
 	t = calcAngle(m)
 	vector[y][x-1] = [1, int((a+t)/2)]
@@ -170,7 +172,7 @@ def noSetWithWallCorner(y,x,vector):
 	# 10
 	# 10
 	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x-1][1] 
 	m = calcSlope(y,x-1,y-1,x-1)
 	t = calcAngle(m)
 	vector[y][x-1] = [1, int((a+t)/2)]
@@ -180,7 +182,7 @@ def noSetWithCeilCorner(y,x,vector):
 	# 11
 	# 00
 	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] #3*(math.pi/4)  #135
+	a = vector[y-1][x-1][1] 
 	m = calcSlope(y-1,x,y-1,x-1)
 	t = calcAngle(m)
 	vector[y-1][x] = [1, int((a+t)/2)]
