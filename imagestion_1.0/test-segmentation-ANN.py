@@ -42,6 +42,9 @@ def linearRegression(Y,X):
 	b = mY - m*mX
 	return [m,b]
 	
+def linearEcuation(m,x,b):
+	return m*x + b
+	
 def calcSlope(y,x,y0,x0):
 	d = 0 if x != x0  else 0.0000000001
 	m = (y-y0)/(x - x0 + d)
