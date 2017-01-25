@@ -33,6 +33,15 @@ from datetime import datetime
 #
 # y = m*x + b
 
+def linearRegression(Y,X):
+	mY = np.mean(Y)
+	mX = np.mean(X)
+	mXY = np.mean(Y*X)
+	sqrX = [i**2 for i in X]
+	m = (mX*mY - mXY) / (mx**2 - np.mean(sqrX))
+	b = mY - m*mX
+	return [m,b]
+	
 def calcSlope(y,x,y0,x0):
 	d = 0 if x != x0  else 0.0000000001
 	m = (y-y0)/(x - x0 + d)
