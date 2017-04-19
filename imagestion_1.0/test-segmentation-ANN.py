@@ -20,6 +20,17 @@ from datetime import datetime
 ## from pybrain.structure import TanhLayer
 ## import pickle
 
+#### Instalacion:
+#
+# sudo apt-get install scipy numpy
+# sudo apt-get install python-matplotlib
+#
+#### Ejemplo de uso
+#
+# python test-segmentation-ANN.py /home/miguel/images/formas/A.jpg ./color-ann.bkp
+#
+####
+
 #-----------------------------------------------------------------------
 # https://es.wikipedia.org/wiki/Pendiente_(matematicas)
 # https://es.wikipedia.org/wiki/Regresion_lineal
@@ -32,6 +43,7 @@ from datetime import datetime
 # b = mean(Y) - m*mean(X)
 #
 # y = m*x + b
+#-----------------------------------------------------------------------
 
 def linearRegression(Y,X):
 	mY = np.mean(Y)
