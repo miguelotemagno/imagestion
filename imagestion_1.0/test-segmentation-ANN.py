@@ -400,18 +400,18 @@ for y in range(0,seg.height,3):
 		
 		vectorize[mask](py,px,vector)
 		
-		line1 = line1 + " %2d" % (vector[py][px][0])   ##
-		line2 = line2 + "%3d" % (vector[py][px][1])    ##
+		## line1 = line1 + " %2d" % (vector[py][px][0])   ##
+		## line2 = line2 + "%3d" % (vector[py][px][1])    ##
 		
 	matrix.append(line)    ##
-	matrix1.append(line1)  ##
-	matrix2.append(line2)  ##
+	## matrix1.append(line1)  ##
+	## matrix2.append(line2)  ##
 		
 print "\n".join(s for s in matrix)
 print "\n"
-print "\n".join(s for s in matrix1)
-print "\n"
-print "\n".join(s for s in matrix2)
+## print "\n".join(s for s in matrix1)
+## print "\n"
+## print "\n".join(s for s in matrix2)
 			
 border.show()
 
