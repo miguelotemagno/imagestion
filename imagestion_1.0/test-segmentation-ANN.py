@@ -71,6 +71,11 @@ def evalPixel(pix, net):
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
+	
+def getPointsPath(y, x, vector, P):
+	P.append([y,x])
+	
+	return P
 
 def isZero(y,x,vector):
 	# 00
