@@ -72,8 +72,26 @@ def evalPixel(pix, net):
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
 	
-def getPointsPath(y, x, vector, P):
+def getPointsPath(y, x, vector, p, P):
 	P.append([y,x])
+	vectorize = {
+		0: isZero,
+		1: isOne,
+		2: noSetWithWall,
+		3: isSetWithWall,
+		4: noSetWithCeil,
+		5: isSetWithCeil,
+		6: noSetWithWallCeil,
+		7: isSetWithWallCeil,
+		8: noSetWithCorner,
+		9: isSetWithCorner,
+		10:noSetWithWallCorner,
+		11:isSetWithWallCorner,
+		12:noSetWithCeilCorner,
+		13:isSetWithCeilCorner,
+		14:noSetWithAll,
+		15:isSetWithAll
+	}
 	
 	return P
 
