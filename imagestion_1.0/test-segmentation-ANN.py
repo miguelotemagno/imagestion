@@ -72,8 +72,7 @@ def evalPixel(pix, net):
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
 	
-def getPointsPath(y, x, vector, p, P):
-	P.append([y,x])
+def getPointsPath(y, x, points, p, P):
 	vectorize = {
 		0: isZero,
 		1: isOne,
@@ -92,62 +91,73 @@ def getPointsPath(y, x, vector, p, P):
 		14:noSetWithAll,
 		15:isSetWithAll
 	}
-	
+	point = vectorize[points[y,x]](y, x, points, p, P)
+	if point:
+		P.append(point)
+		
 	return P
 
-def isZero(y,x,vector):
+def isZero(y, x, points, p, P):
 	# 00
 	# 00
-	vector[y][x] = [0.,0.]
+	return None
 	
-def isOne(y,x,vector):
+def isOne(y, x, points, p, P):
 	# 00
-	# 01
-	vector[y][x] = [1.,0.]
+	# 01	
+	return [y,x]
 	
-def isSetWithWall(y,x,vector):
+def isSetWithWall(y, x, points, p, P):
 	# 00
 	# 11
-	v = vector[y][x-1][0]
-	a = vector[y][x-1][1] 
-	m = calcSlope(y,x,y,x-1)
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
+	q = calcSlope(y,x, y,x-1)
+	R = getPointsPath(y, x-1, points, p, P)	
 	
-	## if v[0] > 0. and v[1] == a:
-		## vector[y][x-1] = [0., 0.] 		
+	if q == p:
+		return	[y,x] 
+	else:
+		R.append([y,x])
+		return R
 
 	
-def isSetWithCeil(y,x,vector):
+def isSetWithCeil(y, x, points, p, P):
 	# 01
 	# 01
-	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] 
-	m = calcSlope(y,x,y-1,x)
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
-	#vector[y-1][x] = [1.,0.]
+	q = calcSlope(y,x, y-1,x)
+	R = getPointsPath(y-1, x, points, p, P)	
 	
-def isSetWithCorner(y,x,vector):
+	if q == p:
+		return	[y,x] 
+	else:
+		R.append([y,x])
+		return R
+	
+def isSetWithCorner(y, x, points, p, P):
 	# 10
 	# 01
-	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] 
-	m = calcSlope(y,x,y-1,x-1)
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
-	## vector[y-1][x-1] = [0.,0.] if vector[y-1][x-1][0] > 1  else v
+	q = calcSlope(y,x, y-1,x-1)
+	R = getPointsPath(y-1, x-1, points, p, P)	
 	
-def isSetWithWallCeil(y,x,vector):
+	if q == p:
+		return	[y,x] 
+	else:
+		R.append([y,x])
+		return R
+	
+def isSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 11
-	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] 
-	m1= calcSlope(y,x,y-1,x)
-	m2= calcSlope(y,x,y,x-1)
-	m = (m1+m2)/2
-	t = calcAngle(m)
-	vector[y][x-1] = [1.,int((a+t)/2)] 
+	q = calcSlope(y,x, y-1,x)
+	R = getPointsPath(y-1, x, points, p, P)	
+	s = calcSlope(y,x, y,x-1)
+	S = getPointsPath(y, x-1, points, p, P)	
+	
+	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
+	if q == p:
+		return	[y,x] 
+	else:
+		R.append([y,x])
+		return R
 	
 def isSetWithWallCorner(y,x,vector):
 	# 10
@@ -421,7 +431,7 @@ for y in range(0,seg.height,3):
 		
 		line = line + "%X" % (mask)   ##
 		
-		vectorize[mask](py,px,vector)
+		## vectorize[mask](py,px,vector)
 		
 		## line1 = line1 + " %2d" % (vector[py][px][0])   ##
 		## line2 = line2 + "%3d" % (vector[py][px][1])    ##
