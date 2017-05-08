@@ -148,28 +148,44 @@ def isSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 11
 	q = calcSlope(y,x, y-1,x)
-	R = getPointsPath(y-1, x, points, p, P)	
-	s = calcSlope(y,x, y,x-1)
-	S = getPointsPath(y, x-1, points, p, P)	
+	Q = getPointsPath(y-1, x, points, p, P)	
+	r = calcSlope(y,x, y,x-1)
+	R = getPointsPath(y, x-1, points, p, P)	
 	
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
 	if q == p:
-		return	[y,x] 
+		P.append([y,x])
 	else:
-		R.append([y,x])
-		return R
+		P.append(Q)
+		
+	if r == p:
+		P.append([y,x])
+	else:
+		P.append(R)
+		
+	return P
 	
-def isSetWithWallCorner(y,x,vector):
+def isSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 11
-	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] 
-	m1 = calcSlope(y,x,y-1,x-1)
-	m2 = calcSlope(y,x,y,x-1)
-	m = (m1+m2)/2
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
-	
+	q = calcSlope(y,x, y-1,x-1)
+	Q = getPointsPath(y-1, x-1, points, p, P)	
+	r = calcSlope(y,x, y-1,x)
+	R = getPointsPath(y-1, x, points, p, P)	
+		
+	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
+	if q == p:
+		P.append([y,x])
+	else:
+		P.append(Q)
+		
+	if r == p:
+		P.append([y,x])
+	else:
+		P.append(R)
+		
+	return P
+
 def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
