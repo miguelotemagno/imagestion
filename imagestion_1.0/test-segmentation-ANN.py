@@ -136,10 +136,10 @@ def isSetWithCorner(y, x, points, p, P):
 	# 10
 	# 01
 	q = calcSlope(y,x, y-1,x-1)
-	R = getPointsPath(y-1, x-1, points, p, P)	
+	R = getPointsPath(y-1, x-1, points, q, P)	
 	
 	if q == p:
-		return	[y,x] 
+		return [y,x] 
 	else:
 		R.append([y,x])
 		return R
@@ -148,20 +148,18 @@ def isSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 11
 	q = calcSlope(y,x, y-1,x)
-	Q = getPointsPath(y-1, x, points, p, P)	
 	r = calcSlope(y,x, y,x-1)
-	R = getPointsPath(y, x-1, points, p, P)	
 	
+	P.append([y,x])
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	if q == p:
-		P.append([y,x])
-	else:
-		P.append(Q)
+
+	t = p if q == p else q
+	Q = getPointsPath(y-1, x, points, q, P)      
+	P.append(Q)
 		
-	if r == p:
-		P.append([y,x])
-	else:
-		P.append(R)
+	t = p if r == p else r
+	R = getPointsPath(y, x-1, points, r, P)	
+	P.append(R)
 		
 	return P
 	
@@ -169,9 +167,9 @@ def isSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 11
 	q = calcSlope(y,x, y-1,x-1)
-	Q = getPointsPath(y-1, x-1, points, p, P)	
-	r = calcSlope(y,x, y-1,x)
-	R = getPointsPath(y-1, x, points, p, P)	
+	Q = getPointsPath(y-1, x-1, points, q, P)	
+	r = calcSlope(y,x, y,x-1)
+	R = getPointsPath(y, x-1, points, r, P)	
 		
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
 	if q == p:
@@ -189,13 +187,23 @@ def isSetWithWallCorner(y, x, points, p, P):
 def isSetWithCeilCorner(y,x,vector):
 	# 11
 	# 01
-	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] 
-	m1 = calcSlope(y,x,y-1,x-1)
-	m2 = calcSlope(y,x,y-1,x)
-	m = (m1+m2)/2
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
+	q = calcSlope(y,x, y-1,x-1)
+	Q = getPointsPath(y-1, x-1, points, q, P)	
+	r = calcSlope(y,x, y-1,x)
+	R = getPointsPath(y-1, x, points, r, P)	
+		
+	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
+	if q == p:
+		P.append([y,x])
+	else:
+		P.append(Q)
+		
+	if r == p:
+		P.append([y,x])
+	else:
+		P.append(R)
+		
+	return P
 	
 def isSetWithAll(y,x,vector):
 	# 11
