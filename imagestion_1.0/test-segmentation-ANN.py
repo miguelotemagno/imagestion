@@ -150,72 +150,76 @@ def isSetWithWallCeil(y, x, points, p, P):
 	q = calcSlope(y,x, y-1,x)
 	r = calcSlope(y,x, y,x-1)
 	
-	P.append([y,x])
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-
 	t = p if q == p else q
-	Q = getPointsPath(y-1, x, points, q, P)      
+	Q = getPointsPath(y-1, x, points, t, P)      
 	P.append(Q)
 		
 	t = p if r == p else r
-	R = getPointsPath(y, x-1, points, r, P)	
+	R = getPointsPath(y, x-1, points, t, P)	
 	P.append(R)
 		
+	P.append([y,x])
 	return P
 	
 def isSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 11
 	q = calcSlope(y,x, y-1,x-1)
-	Q = getPointsPath(y-1, x-1, points, q, P)	
 	r = calcSlope(y,x, y,x-1)
-	R = getPointsPath(y, x-1, points, r, P)	
 		
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	if q == p:
-		P.append([y,x])
-	else:
-		P.append(Q)
+	t = p if q == p else q
+	Q = getPointsPath(y-1, x-1, points, q, P)	
+	P.append(Q)
 		
-	if r == p:
-		P.append([y,x])
-	else:
-		P.append(R)
+	t = p if r == p else r
+	R = getPointsPath(y, x-1, points, r, P)	
+	P.append(R)
 		
+	P.append([y,x])
 	return P
 
-def isSetWithCeilCorner(y,x,vector):
+def isSetWithCeilCorner(y, x, points, p, P):
 	# 11
 	# 01
 	q = calcSlope(y,x, y-1,x-1)
-	Q = getPointsPath(y-1, x-1, points, q, P)	
 	r = calcSlope(y,x, y-1,x)
-	R = getPointsPath(y-1, x, points, r, P)	
 		
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	if q == p:
-		P.append([y,x])
-	else:
-		P.append(Q)
+	t = p if q == p else q
+	Q = getPointsPath(y-1, x-1, points, q, P)	
+	P.append(Q)
 		
-	if r == p:
-		P.append([y,x])
-	else:
-		P.append(R)
+	t = p if r == p else r
+	R = getPointsPath(y-1, x, points, r, P)	
+	P.append(R)
 		
+	P.append([y,x])
 	return P
 	
-def isSetWithAll(y,x,vector):
+def isSetWithAll(y, x, points, p, P):
 	# 11
 	# 11
-	v = vector[y][x-1][0]
-	a = vector[y][x-1][1] 
-	m1 = calcSlope(y,x,y-1,x-1)
-	m2 = calcSlope(y,x,y-1,x)
-	m3 = calcSlope(y,x,y,x-1)
-	m = (m1+m2+m3)/3
-	t = calcAngle(m)
-	vector[y][x] = [1, int((a+t)/2)]
+	q = calcSlope(y,x, y-1,x-1)
+	r = calcSlope(y,x, y-1,x)
+	s = calcSlope(y,x, y,x-1)
+		
+	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
+	t = p if q == p else q
+	Q = getPointsPath(y-1, x-1, points, q, P)	
+	P.append(Q)
+		
+	t = p if r == p else r
+	R = getPointsPath(y-1, x, points, r, P)	
+	P.append(R)
+		
+	t = p if s == p else s
+	S = getPointsPath(y, x-1, points, s, P)	
+	P.append(S)
+		
+	P.append([y,x])
+	return P
 	
 def noSetWithAll(y,x,vector):
 	# 11
