@@ -459,6 +459,9 @@ for y in range(0,seg.height,3):
 		
 		line = line + "%X" % (mask)   ##
 		
+		if mask == 8: #noSetWithCorner
+			pass
+		
 		## vectorize[mask](py,px,vector)
 		
 		## line1 = line1 + " %2d" % (vector[py][px][0])   ##
