@@ -1,3 +1,4 @@
+import json
 import scipy
 from scipy import ndimage
 from scipy import stats
@@ -12,6 +13,7 @@ from scipy.misc import factorial
 from Segmentation import *
 from ANN import *
 from datetime import datetime
+
 
 ## import json
 ## from pybrain.tools.shortcuts import buildNetwork
@@ -221,64 +223,64 @@ def isSetWithAll(y, x, points, p, P):
 	P.append([y,x])
 	return P
 	
-def noSetWithAll(y,x,vector):
+def noSetWithAll(y, x, points, p, P):
 	# 11
 	# 10
-	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] 
-	m1= calcSlope(y,x-1,y-1,x-1)
-	m2= calcSlope(y,x-1,y,x)
-	m = (m1+m2)/2
-	t = calcAngle(m)
-	vector[y][x-1] = [1, int((a+t)/2)]
+	## v = vector[y-1][x][0]
+	## a = vector[y-1][x][1] 
+	## m1= calcSlope(y,x-1,y-1,x-1)
+	## m2= calcSlope(y,x-1,y,x)
+	## m = (m1+m2)/2
+	## t = calcAngle(m)
+	## vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
-def noSetWithWall(y,x,vector):
+def noSetWithWall(y, x, points, p, P):
 	# 00
 	# 10
-	isOne(y,x-1,vector)
+	isOne(y,x-1, points, p, P)
 	pass
 	
-def noSetWithCeil(y,x,vector):
+def noSetWithCeil(y, x, points, p, P):
 	# 01
 	# 00
-	isOne(y-1,x,vector)
+	isOne(y-1,x, points, p, P)
 	pass
 	
-def noSetWithCorner(y,x,vector):
+def noSetWithCorner(y, x, points, p, P):
 	# 10
 	# 00
-	isOne(y-1,x-1,vector)
+	isOne(y-1,x-1, points, p, P)
 	pass
 	
-def noSetWithWallCeil(y,x,vector):
+def noSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 10
-	v = vector[y-1][x][0]
-	a = vector[y-1][x][1] 
-	m = calcSlope(y,x-1,y-1,x)
-	t = calcAngle(m)
-	vector[y][x-1] = [1, int((a+t)/2)]
+	## v = vector[y-1][x][0]
+	## a = vector[y-1][x][1] 
+	## m = calcSlope(y,x-1,y-1,x)
+	## t = calcAngle(m)
+	## vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
-def noSetWithWallCorner(y,x,vector):
+def noSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 10
-	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] 
-	m = calcSlope(y,x-1,y-1,x-1)
-	t = calcAngle(m)
-	vector[y][x-1] = [1, int((a+t)/2)]
+	## v = vector[y-1][x-1][0]
+	## a = vector[y-1][x-1][1] 
+	## m = calcSlope(y,x-1,y-1,x-1)
+	## t = calcAngle(m)
+	## vector[y][x-1] = [1, int((a+t)/2)]
 	pass
 	
-def noSetWithCeilCorner(y,x,vector):
+def noSetWithCeilCorner(y, x, points, p, P):
 	# 11
 	# 00
-	v = vector[y-1][x-1][0]
-	a = vector[y-1][x-1][1] 
-	m = calcSlope(y-1,x,y-1,x-1)
-	t = calcAngle(m)
-	vector[y-1][x] = [1, int((a+t)/2)]
+	## v = vector[y-1][x-1][0]
+	## a = vector[y-1][x-1][1] 
+	## m = calcSlope(y-1,x,y-1,x-1)
+	## t = calcAngle(m)
+	## vector[y-1][x] = [1, int((a+t)/2)]
 	pass
 	
 #-----------------------------------------------------------------------
@@ -397,6 +399,7 @@ vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
 matrix1 = []
 matrix2 = []
+lCord = []
 vectorize = {
 	0: isZero,
 	1: isOne,
@@ -460,6 +463,7 @@ for y in range(0,seg.height,3):
 		line = line + "%X" % (mask)   ##
 		
 		if mask == 8: #noSetWithCorner
+			getPointsPath(py, px, points, 0, lCord)
 			pass
 		
 		## vectorize[mask](py,px,vector)
@@ -476,7 +480,8 @@ print "\n"
 ## print "\n".join(s for s in matrix1)
 ## print "\n"
 ## print "\n".join(s for s in matrix2)
-			
+print (json.dumps(lCord, sort_keys=True,indent=4, separators=(',', ': ')))
+
 border.show()
 
 epochs = 5000
