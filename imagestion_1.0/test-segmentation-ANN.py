@@ -102,56 +102,78 @@ def getPointsPath(y, x, points, p, P):
 def isZero(y, x, points, p, P):
 	# 00
 	# 00
+	
+	## print "0000 "
+	
 	return None
 	
 def isOne(y, x, points, p, P):
 	# 00
 	# 01	
-	return [y,x]
+	
+	## print "0001 "
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+	
+	return ret
 	
 def isSetWithWall(y, x, points, p, P):
 	# 00
 	# 11
+
+	## print "0011 "
+	
 	q = calcSlope(y,x, y,x-1)
 	R = getPointsPath(y, x-1, points, p, P)	
+	ret = "%d,%d" % (y,x)   ##[y,x] 
 	
 	if q == p:
-		return	[y,x] 
+		return	ret 
 	else:
-		R.append([y,x])
+		R.append(ret)
 		return R
 
 	
 def isSetWithCeil(y, x, points, p, P):
 	# 01
 	# 01
+
+	## print "0101 "
+	
 	q = calcSlope(y,x, y-1,x)
 	R = getPointsPath(y-1, x, points, p, P)	
-	
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+
 	if q == p:
-		return	[y,x] 
+		return	ret 
 	else:
-		R.append([y,x])
+		R.append(ret)
 		return R
 	
 def isSetWithCorner(y, x, points, p, P):
 	# 10
 	# 01
+
+	## print "1001 "
+	
 	q = calcSlope(y,x, y-1,x-1)
 	R = getPointsPath(y-1, x-1, points, q, P)	
-	
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+
 	if q == p:
-		return [y,x] 
+		return ret 
 	else:
-		R.append([y,x])
+		R.append(ret)
 		return R
 	
 def isSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 11
+	
+	## print "\n0111 "
+
 	q = calcSlope(y,x, y-1,x)
 	r = calcSlope(y,x, y,x-1)
-	
+
 	## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
 	t = p if q == p else q
 	Q = getPointsPath(y-1, x, points, t, P)      
@@ -161,12 +183,17 @@ def isSetWithWallCeil(y, x, points, p, P):
 	R = getPointsPath(y, x-1, points, t, P)	
 	P.append(R)
 		
-	P.append([y,x])
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+	P.append(ret)
+	
 	return P
 	
 def isSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 11
+	
+	## print "\n1011 "
+
 	q = calcSlope(y,x, y-1,x-1)
 	r = calcSlope(y,x, y,x-1)
 		
@@ -179,12 +206,17 @@ def isSetWithWallCorner(y, x, points, p, P):
 	R = getPointsPath(y, x-1, points, r, P)	
 	P.append(R)
 		
-	P.append([y,x])
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+	P.append(ret)
+	
 	return P
 
 def isSetWithCeilCorner(y, x, points, p, P):
 	# 11
 	# 01
+	
+	## print "\n1101 "
+
 	q = calcSlope(y,x, y-1,x-1)
 	r = calcSlope(y,x, y-1,x)
 		
@@ -197,12 +229,17 @@ def isSetWithCeilCorner(y, x, points, p, P):
 	R = getPointsPath(y-1, x, points, r, P)	
 	P.append(R)
 		
-	P.append([y,x])
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+	P.append(ret)
+	
 	return P
 	
 def isSetWithAll(y, x, points, p, P):
 	# 11
 	# 11
+	
+	## print "\n1111 "
+
 	q = calcSlope(y,x, y-1,x-1)
 	r = calcSlope(y,x, y-1,x)
 	s = calcSlope(y,x, y,x-1)
@@ -220,12 +257,17 @@ def isSetWithAll(y, x, points, p, P):
 	S = getPointsPath(y, x-1, points, s, P)	
 	P.append(S)
 		
-	P.append([y,x])
+	ret = "%d,%d" % (y,x)   ##[y,x] 
+	P.append(ret)
+	
 	return P
 	
 def noSetWithAll(y, x, points, p, P):
 	# 11
 	# 10
+	
+	## print "1110 "
+
 	## v = vector[y-1][x][0]
 	## a = vector[y-1][x][1] 
 	## m1= calcSlope(y,x-1,y-1,x-1)
@@ -238,24 +280,36 @@ def noSetWithAll(y, x, points, p, P):
 def noSetWithWall(y, x, points, p, P):
 	# 00
 	# 10
+	
+	## print "0010 "
+
 	isOne(y,x-1, points, p, P)
 	pass
 	
 def noSetWithCeil(y, x, points, p, P):
 	# 01
 	# 00
+	
+	## print "0100 "
+
 	isOne(y-1,x, points, p, P)
 	pass
 	
 def noSetWithCorner(y, x, points, p, P):
 	# 10
 	# 00
+	
+	## print "1000 "
+
 	isOne(y-1,x-1, points, p, P)
 	pass
 	
 def noSetWithWallCeil(y, x, points, p, P):
 	# 01
 	# 10
+	
+	## print "1101 "
+
 	## v = vector[y-1][x][0]
 	## a = vector[y-1][x][1] 
 	## m = calcSlope(y,x-1,y-1,x)
@@ -266,6 +320,9 @@ def noSetWithWallCeil(y, x, points, p, P):
 def noSetWithWallCorner(y, x, points, p, P):
 	# 10
 	# 10
+	
+	## print "1010 "
+
 	## v = vector[y-1][x-1][0]
 	## a = vector[y-1][x-1][1] 
 	## m = calcSlope(y,x-1,y-1,x-1)
@@ -276,6 +333,9 @@ def noSetWithWallCorner(y, x, points, p, P):
 def noSetWithCeilCorner(y, x, points, p, P):
 	# 11
 	# 00
+	
+	## print "1100 "
+
 	## v = vector[y-1][x-1][0]
 	## a = vector[y-1][x-1][1] 
 	## m = calcSlope(y-1,x,y-1,x-1)
@@ -393,7 +453,7 @@ idx = int(item) if re.search('^\d+$',item) else 0
 expect[idx] = 1.0
 
 
-i = j = k = 0
+i = j = k = lastX = lastY = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
 vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
@@ -463,7 +523,10 @@ for y in range(0,seg.height,3):
 		line = line + "%X" % (mask)   ##
 		
 		if mask == 8: #noSetWithCorner
-			getPointsPath(py, px, points, 0, lCord)
+			## getPointsPath(py-1, px-1, points, 0, lCord)
+			## print "x:%d , y:%d   %s" % (px,py,points)
+			lastX = px -1
+			lastY = py -1
 			pass
 		
 		## vectorize[mask](py,px,vector)
@@ -480,9 +543,25 @@ print "\n"
 ## print "\n".join(s for s in matrix1)
 ## print "\n"
 ## print "\n".join(s for s in matrix2)
+
+getPointsPath(lastY, lastX, points, 0, lCord)
+print "x:%d , y:%d   %s" % (lastX,lastY,lCord)
+
 print (json.dumps(lCord, sort_keys=True,indent=4, separators=(',', ': ')))
 
 border.show()
+
+
+
+print "continue? (y/n): "
+k = sys.stdin.read(1)
+ch = sys.stdin.readline()
+
+if k == 'n':
+	print 'exit #########################'
+	exit(0)
+
+
 
 epochs = 5000
 threshold = 0.05
