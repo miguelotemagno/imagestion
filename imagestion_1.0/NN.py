@@ -58,7 +58,7 @@ def actualiza_nodos(entradas):
         for j in range(nodos_ocu):
             sum = sum + pesos_sal[j][k] * act_ocu[j]
         act_sal[k] = sigmoide(sum)
-
+        
     return act_sal[:]
 
 def retropropagacion(objetivo,l):

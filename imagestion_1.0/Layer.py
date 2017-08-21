@@ -239,6 +239,7 @@ class Layer(object):
             self.padre.addLog("ERROR Layer.getNodeName(%d,%d): Layer.id:%d" % (z,y,self.id))
             self.padre.panic = True 
             raise err
+
             
     def addLog(self,str):
         if self.padre.debug :
@@ -276,4 +277,3 @@ class Layer(object):
         for x in xrange(data['cant']):
             self.nodos[x].setConfiguracion(data['nodos'][x])
         pass
-        

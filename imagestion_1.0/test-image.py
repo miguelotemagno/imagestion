@@ -56,6 +56,7 @@ from datetime import datetime
 # 1503                ims.append(self._new(self.im.getband(i)))
 # 1504        return tuple(ims)
 
+<<<<<< imagestion_1.0
 imgFile = sys.argv[1]
 print imgFile
 img = Imagen(imgFile)

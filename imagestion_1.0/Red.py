@@ -77,6 +77,7 @@ class Net(object):
             size   = layers[i]
             max    = size if size > max else max
             #                     (capa,neurons,inputs,function,layers,padre)
+
             self.layers[i] = Layer(i,size,inputs,funciones[i],self.layers,self)
             self.neuronas += size
             self.capaMax = max
@@ -91,6 +92,7 @@ class Net(object):
     * feedForward
     * 
     * @param inputs[]
+
     * @return Double[]
     * 
     * Propagacion hacia adelante del la red neuronal, devolviendo una salida
@@ -120,6 +122,7 @@ class Net(object):
        
         return inputs
                 
+
     """
     /** 
      * entrenar
@@ -215,8 +218,7 @@ class Net(object):
         
         try:
             for ciclo in range(epochs):
-                self.addLog(">> ciclo:"+str(ciclo)+" ====================================================================================================================")
-                
+                self.addLog(">> ciclo:"+str(ciclo)+" ====================================================================================================================")                
                 self.error = self.train(inputs,outputs)
                 self.addLog(">> errorCuadratico = "+str(self.error))
                 self.addHistory({self.error:self.getPesos()})

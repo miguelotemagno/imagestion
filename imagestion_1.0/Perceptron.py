@@ -85,6 +85,7 @@ class Perceptron(object):
             suma += self.bias * self.wBias
             
         self.neta = suma 
+
         return self.neta
         
     def calcular(self):
@@ -93,6 +94,7 @@ class Perceptron(object):
         res  = self.fnTransf.exe(suma)
         self.padre.addLog(">> res:%f = %s(%f)" % (res,self.fnTransf.funciones[self.fnTransf.tipo],suma))
         self.salida = res
+
         return res
 
     """
@@ -145,6 +147,7 @@ class Perceptron(object):
     
     def setSalida(self,salida):
         self.salida = salida
+
         
     def setPeso(self,idx,peso):
         self.pesos[idx] = peso
@@ -165,6 +168,7 @@ class Perceptron(object):
             self.entradas[n] = inputs[n]
         pass
         
+
     def addLog(self,str):
         if self.padre.debug :
             self.padre.addLog(str)
@@ -182,6 +186,7 @@ class Perceptron(object):
             'pesos':self.pesos,
             'bias':self.bias,
             'wBias':self.wBias
+
         }
 
         return data
