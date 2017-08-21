@@ -33,6 +33,13 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
+#~ https://askubuntu.com/questions/156484/how-do-i-install-python-imaging-library-pil
+#~ sudo apt-get update && sudo apt-get -y upgrade
+#~ sudo apt-get install python-pillow
+#~ sudo apt-get install python-pip
+#~ sudo apt-get install python-imaging
+#~ sudo pip install pil
+
 import colorsys, sys, math, os
 import numpy as np
 from scipy import ndimage
