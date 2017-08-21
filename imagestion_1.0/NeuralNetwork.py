@@ -1,7 +1,7 @@
 # +-----------------------------------------------------------------------+
 # | IMAGESTION                                                            |
 # |                                                                       |
-# | Copyright (C) 2010-Today, GNUCHILE.CL   - Santiago de Chile           |
+# | Copyright (C) 2010-Today, GNUCHILE.CL  -  Santiago de Chile           |
 # | Licensed under the GNU GPL                                            |
 # |                                                                       |
 # | Redistribution and use in source and binary forms, with or without    |
@@ -33,61 +33,14 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-## http://docs.python.org/reference/index.html
-import sys
-from Imagen import *
-from datetime import datetime
+from Activacion import *
+from random import *
+from json import *
+from sys import *
+import random
 
-## http://luispedro.org/pymorph-apidocs/html/genindex.html
-
-## REALIZAR CAMBIOS EN: 
-## sudo gedit /usr/lib/python2.6/dist-packages/PIL/Image.py
-## http://hg.effbot.org/pil-2009-raclette/changeset/fb7ce579f5f9
-##
-# 1494    def split(self):
-# 1495        "Split image into bands"
-# 1496
-# 1497        self.load()
-# 1498        if self.im.bands == 1:
-# 1499            ims = [self.copy()]
-# 1500        else:
-# 1501            ims = []
-# 1502            for i in range(self.im.bands):
-# 1503                ims.append(self._new(self.im.getband(i)))
-# 1504        return tuple(ims)
-
-<<<<<< imagestion_1.0
-imgFile = sys.argv[1]
-print imgFile
-img = Imagen(imgFile)
-print 'ancho:', img.getAncho() ,' alto:', img.getAlto()
-
-#r = img.getR()
-#g = img.getG()
-#b = img.getB()
-
-#r.show()
-#g.show()
-#b.show()
-
-img.getRGB().show()
-
-#g = img._erode(img.getG())
-#G = img._erode(G)
-#g = img._dilate(g)
-
-#G.show()
-
-#g.show()
-
-start = datetime.now()
-
-img.dilate()
-img.erode()
-
-stop = datetime.now()
-delay = stop - start
-
-print delay
-
-img.getRGB().show()
+class NeuralNetwork:
+    def __init__(self,inputs,outputs,layers,function):
+        self.func     = Activacion(function)
+        
+        pass

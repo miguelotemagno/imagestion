@@ -34,7 +34,7 @@
 # +-----------------------------------------------------------------------+
 
 from Activacion import *
-from json import *
+import json
 import random
 
 class Perceptron(object):
@@ -45,25 +45,27 @@ class Perceptron(object):
     """
 
     def __init__(self,name,inputs,funcion,padre,capa):
-        self.entradas = [0 for x in xrange(inputs)] 
+        self.entradas = [0 for x in range(inputs)] 
         self.nInputs  = inputs
         self.name     = name
         self.padre    = padre
         self.capa     = capa
-        self.bias     = 1.0
-        self.wBias    = random.uniform(-0.5,0.5) if capa==0 else 0.0
-        self.salida   = 0.0
-        self.neta     = 0.0
         self.delta    = 0.0
         self.error    = 0.0
         self.funcion  = funcion
         self.fnTransf = Activacion(funcion)
         self.fnTransf.padre = padre
         self.expect   = 0
-        self.pesos    = [random.uniform(-0.5,0.5) for x in xrange(inputs)]
-        #self.pesos = [1.0 for x in xrange(inputs)] if self.capa == 0 else [random.uniform(-0.5,0.5) for x in xrange(inputs)]
+        self.reInit()
         pass
-        
+    
+    def reInit(self):
+        min, max = (self.padre.min,self.padre.max)
+        self.pesos    = [random.uniform(min, max) for x in range(self.nInputs)]
+        self.wBias    = random.uniform(min, max) #if self.capa==0 else 1.0        
+        self.bias     = 1.0
+        self.salida   = 1.0
+       
     def getSumPesosEntradas(self):
         i    = 0
         suma = 0.0
@@ -71,7 +73,7 @@ class Perceptron(object):
         try:
             for i in range(len(self.entradas)):
                 suma += self.entradas[i] * self.pesos[i]
-                #self.addLog(str(suma)+" = "+str(self.entradas[i])+" * "+str(self.pesos[i]))
+                #self.padre.addLog(">> nodo[%s].neta:%f += i[%d]:%f * w[%d]:%f" % (self.name,suma,i,self.entradas[i],i,self.pesos[i]))
             pass
             
         except:
@@ -79,14 +81,20 @@ class Perceptron(object):
             self.addLog ("ERROR en Perceptron.getSumPesosEntradas() - Iteracion i="+str(i))
             self.addLog (err)
         
-        self.neta = suma + self.bias*self.wBias
+        if self.padre.layers[self.capa].isHidden:
+            suma += self.bias * self.wBias
+            
+        self.neta = suma 
+
         return self.neta
         
     def calcular(self):
         #self.addLog("Perceptron.calcular(name:"+self.name+", entradas:"+str(self.entradas)+')')
         suma = self.getSumPesosEntradas()
         res  = self.fnTransf.exe(suma)
-        self.setSalida(res)
+        self.padre.addLog(">> res:%f = %s(%f)" % (res,self.fnTransf.funciones[self.fnTransf.tipo],suma))
+        self.salida = res
+
         return res
 
     """
@@ -104,44 +112,42 @@ class Perceptron(object):
     #  y derivables (la funcion sigmoidal pertenece a este tipo de funciones).
     #
     """         
-    def setDelta(self,d):
-        self.delta = d
-        pass
-        
-    def getDelta(self):
-        return self.delta
-        pass
-        
-    def getErrorDelta(self):
-        return self.fnTransf.train(self.salida) * self.error
-        pass
+    def setDelta(self, val):
+        self.delta = val
+    
+    """
+    #  getErrorDelta
+    #             error = error + delta_salida[0..k] * pesos_sal[j][0..k]
+    #             delta_oculto[j] = fnSigmoidal(entrada_ocu[j]) * error
+    #
+    """
+         
+    def getErrorDelta(self, delta):
+        self.delta = delta
+        error = self.fnTransf.train(self.salida) * self.delta
+        self.error = error
+        self.padre.addLog(">> errorDelta:%f = %s(%f) * %f" % (self.error,self.fnTransf.derivadas[self.fnTransf.tipo],self.salida,self.delta))
+        return self.error
      
     def getCoeficiente(self,i):
-        return self.pesos[i] * self.delta
-     
-    def setBias(self,bias):
-        self.bias = bias
-        pass
+        try:
+            coef = self.pesos[i] * self.delta
+            self.padre.addLog(">> nodo[%s].peso(%d).getCoeficiente: %f = w:%f * d:%f ; Layer.id:%d" % (self.name,i,coef,self.pesos[i],self.delta,self.capa))
+            return coef
+        except:
+            err = exc_info()
+            self.padre.addLog("ERROR Perceptron.getCoeficiente(%d): Layer.id:%d" % (i,self.capa))
+            self.padre.panic = True 
+            self.padre.addLog(str(err)+" - "+str(self.getConfiguracion()))
+            raise err
     
-    def getBias(self):
-        return self.bias
+    def setBias(self, rate):
+        self.wBias += rate * self.delta
+        pass
     
     def setSalida(self,salida):
         self.salida = salida
-        pass
-        
-    def getSalida(self):
-        return self.salida
-    
-    def getSalidaNeta(self):
-        return self.neta
-    
-    def getwBias(self):
-        return self.wBias
-    
-    def setwBias(self,bias):
-        self.wBias = bias
-        pass
+
         
     def setPeso(self,idx,peso):
         self.pesos[idx] = peso
@@ -150,40 +156,19 @@ class Perceptron(object):
     def getPeso(self,idx):
         return self.pesos[idx]
     
+    def getEntrada(self,idx):
+        return self.entradas[idx]
+    
     def getPesos(self):
         pesos = self.pesos
-        pesos.add(self.wBias)
         return pesos    
         
-    def setError(self,err):
-        self.error = err
-        pass
-        
-    def getError(self):
-        return self.error
-    
-    def setId(self,id):
-        self.id = id
-        pass
-        
-    def getId(seld):
-        return self.id
-    
-    def inicializarPesos(self):
-        pass
-        
-    def getEntradas(self):
-        return self.entradas
-        pass
-        
     def setEntradas(self,inputs):
-        for n in xrange(self.nInputs):
+        for n in range(len(inputs)):
             self.entradas[n] = inputs[n]
         pass
         
-    def setConfiguracion(self):
-        pass
-        
+
     def addLog(self,str):
         if self.padre.debug :
             self.padre.addLog(str)
@@ -192,15 +177,16 @@ class Perceptron(object):
         data = {
             'name':self.name,
             'capa':self.capa,
-            'bias':self.bias,
-            'wBias':self.wBias,
             'error':self.error,
             'nInputs':self.nInputs,
             'funcion':self.funcion,
             'entradas':self.entradas,
             'salida':self.salida,
             'delta':self.delta,
-            'pesos':self.pesos
+            'pesos':self.pesos,
+            'bias':self.bias,
+            'wBias':self.wBias
+
         }
 
         return data
@@ -208,8 +194,6 @@ class Perceptron(object):
     def setConfiguracion(self,data):
         self.name = data['name']
         self.capa = data['capa']
-        self.bias = data['bias']
-        self.wBias = data['wBias']
         self.error = data['error']
         self.funcion = data['funcion']
         self.entradas = data['entradas']
@@ -217,6 +201,8 @@ class Perceptron(object):
         self.delta = data['delta']
         self.pesos = data['pesos']
         self.nInputs = data['nInputs']
+        self.bias = data['bias']
+        self.wBias = data['wBias']
                     
     def printLog(self):
         #print dumps(self.log, sort_keys=True,indent=4, separators=(',', ': '))
