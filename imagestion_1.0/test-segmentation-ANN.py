@@ -453,7 +453,7 @@ idx = int(item) if re.search('^\d+$',item) else 0
 expect[idx] = 1.0
 
 
-i = j = k = lastX = lastY = 0
+i = j = k = lastX = lastY = firstX = firstY = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
 vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
@@ -522,6 +522,11 @@ for y in range(0,seg.height,3):
 		
 		line = line + "%X" % (mask)   ##
 		
+		if mask == 1 and firstX * firstY != 0: #isOne
+			firstX = px
+			firstY = py
+			pass
+			
 		if mask == 8: #noSetWithCorner
 			## getPointsPath(py-1, px-1, points, 0, lCord)
 			## print "x:%d , y:%d   %s" % (px,py,points)
@@ -544,12 +549,13 @@ print "\n"
 ## print "\n"
 ## print "\n".join(s for s in matrix2)
 
-getPointsPath(lastY, lastX, points, 0, lCord)
-print "x:%d , y:%d   %s" % (lastX,lastY,lCord)
+border.show()
+
+getPointsPath(firstY, firstX, points, 0, lCord)
+print "x:%d , y:%d   %s" % (firstX,firstY,lCord)
 
 print (json.dumps(lCord, sort_keys=True,indent=4, separators=(',', ': ')))
 
-border.show()
 
 
 
