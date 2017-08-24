@@ -455,29 +455,9 @@ expect[idx] = 1.0
 
 i = j = k = lastX = lastY = firstX = firstY = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
-vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
+#~ vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
-matrix1 = []
-matrix2 = []
 lCord = []
-vectorize = {
-	0: isZero,
-	1: isOne,
-	2: noSetWithWall,
-	3: isSetWithWall,
-	4: noSetWithCeil,
-	5: isSetWithCeil,
-	6: noSetWithWallCeil,
-	7: isSetWithWallCeil,
-	8: noSetWithCorner,
-	9: isSetWithCorner,
-	10:noSetWithWallCorner,
-	11:isSetWithWallCorner,
-	12:noSetWithCeilCorner,
-	13:isSetWithCeilCorner,
-	14:noSetWithAll,
-	15:isSetWithAll
-}
 
 for y in range(0,seg.height,3):
 	line = ""
@@ -489,23 +469,23 @@ for y in range(0,seg.height,3):
 		px = int(x/3)
 		py = int(y/3)
 		col = border.getpixel((dx,dy)) if (dx<seg.width and dy<seg.height) else 0
-		if i+j+k < 1800 :
+		if i+j+k < 2000 :
 			xx = float(dx)/seg.width
 			yy = float(dy)/seg.height
 
-			if (col == 0 and k < 600 and y%24 == 0 and x%24 == 0) :
-				muestra3 = [yy, xx, float(col)/256]
-				## print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
-				ds.append([muestra3, [1.0, 0.0, 0.0, 0.0, 0.0]])
-				k += 1
-				border.putpixel((dx,dy),(128))
+			#~ if (col == 0 and k < 600 and y%30 == 0 and x%30 == 0) :
+				#~ muestra3 = [yy, xx, float(col)/256]
+				#~ ## print "%05d (%02x, %d, %d) => [0] %s" % (k,col, dy, dx, [1.0, 0.0, 0.0, 0.0, 0.0])
+				#~ ds.append([muestra3, [1.0, 0.0, 0.0, 0.0, 0.0]])
+				#~ k += 1
+				#~ border.putpixel((dx,dy),(64))
 			
-			if (col & 0x1F > 0 and i < 600 and y%12 == 0 and x%12 == 0) :
+			if (col & 0x1F > 0 and i < 600 and y%9 == 0 and x%9 == 0) :
 				muestra2 = [yy, xx, float(col)/256]
 				## print "%05d (%02x, %d, %d) => [-1] %s" % (i,col, dy, dx, expect)
 				ds.append([muestra2, expect])
 				i += 1
-				border.putpixel((dx,dy),(64))
+				border.putpixel((dx,dy),(255))
 			
 			if (col > 0x1F and j < 600 and y%6 == 0 and x%6 == 0) :
 				muestra1 = [yy, xx, float(col)/256]
@@ -514,7 +494,7 @@ for y in range(0,seg.height,3):
 				j += 1
 				border.putpixel((dx,dy),(255))
 		
-		mask  = int(1) if col > 0x1F else int(0)
+		mask  = int(1) if col >= 0x1F else int(0)
 		mask |= int(2) if px > 0 and points[py][px-1] % 2 != 0 else 0
 		mask |= int(4) if py > 0 and points[py-1][px] % 2 != 0 else 0
 		mask |= int(8) if py > 0 and px > 0 and points[py-1][px-1] % 2 != 0 else 0
@@ -533,15 +513,8 @@ for y in range(0,seg.height,3):
 			lastX = px -1
 			lastY = py -1
 			pass
-		
-		## vectorize[mask](py,px,vector)
-		
-		## line1 = line1 + " %2d" % (vector[py][px][0])   ##
-		## line2 = line2 + "%3d" % (vector[py][px][1])    ##
-		
+				
 	matrix.append(line)    ##
-	## matrix1.append(line1)  ##
-	## matrix2.append(line2)  ##
 		
 print "\n".join(s for s in matrix)
 print "\n"
