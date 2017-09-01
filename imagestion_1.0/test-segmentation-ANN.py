@@ -74,34 +74,36 @@ def evalPixel(pix, net):
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
 	
-def getPointsPath(y, x, points, p, P):
-	point = [[0,0,0],
-	         [0,0,0],
-	         [0,0,0]]
+def getPointsPath(y, x, points, HM, LP):   
+	#~ y, x: coords in points[y,x] 
+	#~ points: reduced picture 
+	#~ HM: Hash Memory
+	#~ LP: List Points
+	mask = 0L
 
-	point[0][0] = 1 if points[y][x] & 8 != 0 else 0
-	point[0][1] = 1 if points[y][x] & 4 != 0 else 0
-	point[1][0] = 1 if points[y][x] & 2 != 0 else 0
-	point[1][1] = 1 if points[y][x] & 1 != 0 else 0
-	point[0][2] = 1 if points[y][x+1] & 4 != 0 else 0
-	point[1][2] = 1 if points[y][x+1] & 1 != 0 else 0
-	point[2][0] = 1 if points[y+1][x] & 2 != 0 else 0
-	point[2][1] = 1 if points[y+1][x] & 1 != 0 else 0
-	point[2][2] = 1 if points[y+1][x+1] & 1 != 0 else 0
+	mask |= 0b100000000 if points[y][x] & 8 != 0 else mask
+	mask |= 0b010000000 if points[y][x] & 4 != 0 else mask
+	mask |= 0b000100000 if points[y][x] & 2 != 0 else mask
+	mask |= 0b000010000 if points[y][x] & 1 != 0 else mask
+	mask |= 0b001000000 if points[y][x+1] & 4 != 0 else mask
+	mask |= 0b000001000 if points[y][x+1] & 1 != 0 else mask
+	mask |= 0b000000100 if points[y+1][x] & 2 != 0 else mask
+	mask |= 0b000000010 if points[y+1][x] & 1 != 0 else mask
+	mask |= 0b000000001 if points[y+1][x+1] & 1 != 0 else mask
 
 	vectorize = {
-		0:  goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
-		1:  goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
-		2:  goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
-		3:  goSE,    ## [[0,0,0], [0,1,0], [0,0,1]]
-		4:  goS,     ## [[0,0,0], [0,1,0], [0,1,0]]
-		5:  goSW,    ## [[0,0,0], [0,1,0], [1,0,0]]
-		6:  goW,     ## [[0,0,0], [1,1,0], [0,0,0]]
-		7:  goNW,    ## [[1,0,0], [0,1,0], [0,0,0]]
-		8:  goN2S,   ## [[0,1,0], [0,1,0], [0,1,0]]
-		9:  gow2E,   ## [[0,0,0], [1,1,1], [0,0,0]]
-		9:  goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
-		10: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
+		0b010010000: goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
+		0b001010000: goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
+		0b000011000: goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
+		0b000010001: goSE,    ## [[0,0,0], [0,1,0], [0,0,1]]
+		0b000010010: goS,     ## [[0,0,0], [0,1,0], [0,1,0]]
+		0b000010100: goSW,    ## [[0,0,0], [0,1,0], [1,0,0]]
+		0b000110000: goW,     ## [[0,0,0], [1,1,0], [0,0,0]]
+		0b100010000: goNW,    ## [[1,0,0], [0,1,0], [0,0,0]]
+		0b010010010: goN2S,   ## [[0,1,0], [0,1,0], [0,1,0]]
+		0b000111000: goW2E,   ## [[0,0,0], [1,1,1], [0,0,0]]
+		0b100010001: goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
+		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
 	point = vectorize[points[y,x]](y, x, points, p, P)
 	if point:
@@ -109,14 +111,89 @@ def getPointsPath(y, x, points, p, P):
 		
 	return P
 
-def goN(y, x, points, p, P):
-	# 00
-	# 00
-	
-	## print "0000 "
-	
+def goN(y, x, points, HM, LP):   
+	# [[0,1,0], 
+	#~ [0,1,0], 
+	#~ [0,0,0]]
+		
 	return None
 	
+def goNE(y, x, points, HM, LP):   
+	# [[0,0,1], 
+	#~ [0,1,0], 
+	#~ [0,0,0]]
+		
+	return None
+	
+def goE(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [0,1,1], 
+	#~ [0,0,0]]
+		
+	return None
+	
+def goSE(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [0,1,0], 
+	#~ [0,0,1]]
+		
+	return None
+	
+def goS(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [0,1,0], 
+	#~ [0,1,0]]
+		
+	return None
+	
+def goSW(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [0,1,0], 
+	#~ [1,0,0]]
+		
+	return None
+	
+def goW(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [1,1,0], 
+	#~ [0,0,0]]
+		
+	return None
+	
+def goNW(y, x, points, HM, LP):   
+	# [[1,0,0], 
+	#~ [0,1,0], 
+	#~ [0,0,0]]
+		
+	return None
+	
+def goN2S(y, x, points, HM, LP):   
+	# [[0,1,0], 
+	#~ [0,1,0], 
+	#~ [0,1,0]]
+		
+	return None
+	
+def gow2E(y, x, points, HM, LP):   
+	# [[0,0,0], 
+	#~ [1,1,1], 
+	#~ [0,0,0]]
+		
+	return None
+
+def goSW2NE(y, x, points, HM, LP):   
+	# [[1,0,0], 
+	#~ [0,1,0], 
+	#~ [0,0,1]]
+		
+	return None
+
+def goNW2SE(y, x, points, HM, LP):   
+	# [[0,0,1], 
+	#~ [0,1,0], 
+	#~ [1,0,0]]
+		
+	return None
 
 #-----------------------------------------------------------------------
 
