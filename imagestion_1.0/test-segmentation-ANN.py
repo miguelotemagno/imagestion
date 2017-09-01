@@ -75,33 +75,33 @@ def evalPixel(pix, net):
 	return test[0]
 	
 def getPointsPath(y, x, points, p, P):
-	point = [[0,0,0], [0,0,0], [0,0,0]]
+	point = [[0,0,0],
+	         [0,0,0],
+	         [0,0,0]]
+
+	point[0][0] = 1 if points[y][x] & 8 != 0 else 0
+	point[0][1] = 1 if points[y][x] & 4 != 0 else 0
+	point[1][0] = 1 if points[y][x] & 2 != 0 else 0
+	point[1][1] = 1 if points[y][x] & 1 != 0 else 0
+	point[0][2] = 1 if points[y][x+1] & 4 != 0 else 0
+	point[1][2] = 1 if points[y][x+1] & 1 != 0 else 0
+	point[2][0] = 1 if points[y+1][x] & 2 != 0 else 0
+	point[2][1] = 1 if points[y+1][x] & 1 != 0 else 0
+	point[2][2] = 1 if points[y+1][x+1] & 1 != 0 else 0
+
 	vectorize = {
-		#~ 0: isZero,
-		#~ 1: isOne,
-		#~ 2: noSetWithWall,
-		#~ 3: isSetWithWall,
-		#~ 4: noSetWithCeil,
-		#~ 5: isSetWithCeil,
-		#~ 6: noSetWithWallCeil,
-		#~ 7: isSetWithWallCeil,
-		#~ 8: noSetWithCorner,
-		#~ 9: isSetWithCorner,
-		#~ 10:noSetWithWallCorner,
-		#~ 11:isSetWithWallCorner,
-		#~ 12:noSetWithCeilCorner,
-		#~ 13:isSetWithCeilCorner,
-		#~ 14:noSetWithAll,
-		#~ 15:isSetWithAll
-		
-		0: goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
-		1: goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
-		2: goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
-		3: goSE,    ## [[0,0,0], [0,1,0], [0,0,1]]
-		4: goS,     ## [[0,0,0], [0,1,0], [0,1,0]]
-		5: goSW,    ## [[0,0,0], [0,1,0], [1,0,0]]
-		6: goW,     ## [[0,0,0], [1,1,0], [0,0,0]]
-		7: goNW,    ## [[1,0,0], [0,1,0], [0,0,0]]
+		0:  goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
+		1:  goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
+		2:  goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
+		3:  goSE,    ## [[0,0,0], [0,1,0], [0,0,1]]
+		4:  goS,     ## [[0,0,0], [0,1,0], [0,1,0]]
+		5:  goSW,    ## [[0,0,0], [0,1,0], [1,0,0]]
+		6:  goW,     ## [[0,0,0], [1,1,0], [0,0,0]]
+		7:  goNW,    ## [[1,0,0], [0,1,0], [0,0,0]]
+		8:  goN2S,   ## [[0,1,0], [0,1,0], [0,1,0]]
+		9:  gow2E,   ## [[0,0,0], [1,1,1], [0,0,0]]
+		9:  goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
+		10: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
 	point = vectorize[points[y,x]](y, x, points, p, P)
 	if point:
@@ -109,250 +109,15 @@ def getPointsPath(y, x, points, p, P):
 		
 	return P
 
-#~ def isZero(y, x, points, p, P):
-	#~ # 00
-	#~ # 00
+def goN(y, x, points, p, P):
+	# 00
+	# 00
 	
-	#~ ## print "0000 "
+	## print "0000 "
 	
-	#~ return None
+	return None
 	
-#~ def isOne(y, x, points, p, P):
-	#~ # 00
-	#~ # 01	
-	
-	#~ ## print "0001 "
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	
-	#~ return ret
-	
-#~ def isSetWithWall(y, x, points, p, P):
-	#~ # 00
-	#~ # 11
 
-	#~ ## print "0011 "
-	
-	#~ q = calcSlope(y,x, y,x-1)
-	#~ R = getPointsPath(y, x-1, points, p, P)	
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	
-	#~ if q == p:
-		#~ return	ret 
-	#~ else:
-		#~ R.append(ret)
-		#~ return R
-
-	
-#~ def isSetWithCeil(y, x, points, p, P):
-	#~ # 01
-	#~ # 01
-
-	#~ ## print "0101 "
-	
-	#~ q = calcSlope(y,x, y-1,x)
-	#~ R = getPointsPath(y-1, x, points, p, P)	
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-
-	#~ if q == p:
-		#~ return	ret 
-	#~ else:
-		#~ R.append(ret)
-		#~ return R
-	
-#~ def isSetWithCorner(y, x, points, p, P):
-	#~ # 10
-	#~ # 01
-
-	#~ ## print "1001 "
-	
-	#~ q = calcSlope(y,x, y-1,x-1)
-	#~ R = getPointsPath(y-1, x-1, points, q, P)	
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-
-	#~ if q == p:
-		#~ return ret 
-	#~ else:
-		#~ R.append(ret)
-		#~ return R
-	
-#~ def isSetWithWallCeil(y, x, points, p, P):
-	#~ # 01
-	#~ # 11
-	
-	#~ ## print "\n0111 "
-
-	#~ q = calcSlope(y,x, y-1,x)
-	#~ r = calcSlope(y,x, y,x-1)
-
-	#~ ## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	#~ t = p if q == p else q
-	#~ Q = getPointsPath(y-1, x, points, t, P)      
-	#~ P.append(Q)
-		
-	#~ t = p if r == p else r
-	#~ R = getPointsPath(y, x-1, points, t, P)	
-	#~ P.append(R)
-		
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	#~ P.append(ret)
-	
-	#~ return P
-	
-#~ def isSetWithWallCorner(y, x, points, p, P):
-	#~ # 10
-	#~ # 11
-	
-	#~ ## print "\n1011 "
-
-	#~ q = calcSlope(y,x, y-1,x-1)
-	#~ r = calcSlope(y,x, y,x-1)
-		
-	#~ ## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	#~ t = p if q == p else q
-	#~ Q = getPointsPath(y-1, x-1, points, q, P)	
-	#~ P.append(Q)
-		
-	#~ t = p if r == p else r
-	#~ R = getPointsPath(y, x-1, points, r, P)	
-	#~ P.append(R)
-		
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	#~ P.append(ret)
-	
-	#~ return P
-
-#~ def isSetWithCeilCorner(y, x, points, p, P):
-	#~ # 11
-	#~ # 01
-	
-	#~ ## print "\n1101 "
-
-	#~ q = calcSlope(y,x, y-1,x-1)
-	#~ r = calcSlope(y,x, y-1,x)
-		
-	#~ ## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	#~ t = p if q == p else q
-	#~ Q = getPointsPath(y-1, x-1, points, q, P)	
-	#~ P.append(Q)
-		
-	#~ t = p if r == p else r
-	#~ R = getPointsPath(y-1, x, points, r, P)	
-	#~ P.append(R)
-		
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	#~ P.append(ret)
-	
-	#~ return P
-	
-#~ def isSetWithAll(y, x, points, p, P):
-	#~ # 11
-	#~ # 11
-	
-	#~ ## print "\n1111 "
-
-	#~ q = calcSlope(y,x, y-1,x-1)
-	#~ r = calcSlope(y,x, y-1,x)
-	#~ s = calcSlope(y,x, y,x-1)
-		
-	#~ ## TODO:  buscar forma de bifurcar en dos listas en funcion de la pendiente en cuestion
-	#~ t = p if q == p else q
-	#~ Q = getPointsPath(y-1, x-1, points, q, P)	
-	#~ P.append(Q)
-		
-	#~ t = p if r == p else r
-	#~ R = getPointsPath(y-1, x, points, r, P)	
-	#~ P.append(R)
-		
-	#~ t = p if s == p else s
-	#~ S = getPointsPath(y, x-1, points, s, P)	
-	#~ P.append(S)
-		
-	#~ ret = "%d,%d" % (y,x)   ##[y,x] 
-	#~ P.append(ret)
-	
-	#~ return P
-	
-#~ def noSetWithAll(y, x, points, p, P):
-	#~ # 11
-	#~ # 10
-	
-	#~ ## print "1110 "
-
-	#~ ## v = vector[y-1][x][0]
-	#~ ## a = vector[y-1][x][1] 
-	#~ ## m1= calcSlope(y,x-1,y-1,x-1)
-	#~ ## m2= calcSlope(y,x-1,y,x)
-	#~ ## m = (m1+m2)/2
-	#~ ## t = calcAngle(m)
-	#~ ## vector[y][x-1] = [1, int((a+t)/2)]
-	#~ pass
-	
-#~ def noSetWithWall(y, x, points, p, P):
-	#~ # 00
-	#~ # 10
-	
-	#~ ## print "0010 "
-
-	#~ isOne(y,x-1, points, p, P)
-	#~ pass
-	
-#~ def noSetWithCeil(y, x, points, p, P):
-	#~ # 01
-	#~ # 00
-	
-	#~ ## print "0100 "
-
-	#~ isOne(y-1,x, points, p, P)
-	#~ pass
-	
-#~ def noSetWithCorner(y, x, points, p, P):
-	#~ # 10
-	#~ # 00
-	
-	#~ ## print "1000 "
-
-	#~ isOne(y-1,x-1, points, p, P)
-	#~ pass
-	
-#~ def noSetWithWallCeil(y, x, points, p, P):
-	#~ # 01
-	#~ # 10
-	
-	#~ ## print "1101 "
-
-	#~ ## v = vector[y-1][x][0]
-	#~ ## a = vector[y-1][x][1] 
-	#~ ## m = calcSlope(y,x-1,y-1,x)
-	#~ ## t = calcAngle(m)
-	#~ ## vector[y][x-1] = [1, int((a+t)/2)]
-	#~ pass
-	
-#~ def noSetWithWallCorner(y, x, points, p, P):
-	#~ # 10
-	#~ # 10
-	
-	#~ ## print "1010 "
-
-	#~ ## v = vector[y-1][x-1][0]
-	#~ ## a = vector[y-1][x-1][1] 
-	#~ ## m = calcSlope(y,x-1,y-1,x-1)
-	#~ ## t = calcAngle(m)
-	#~ ## vector[y][x-1] = [1, int((a+t)/2)]
-	#~ pass
-	
-#~ def noSetWithCeilCorner(y, x, points, p, P):
-	#~ # 11
-	#~ # 00
-	
-	#~ ## print "1100 "
-
-	#~ ## v = vector[y-1][x-1][0]
-	#~ ## a = vector[y-1][x-1][1] 
-	#~ ## m = calcSlope(y-1,x,y-1,x-1)
-	#~ ## t = calcAngle(m)
-	#~ ## vector[y-1][x] = [1, int((a+t)/2)]
-	#~ pass
-	
 #-----------------------------------------------------------------------
 
 # Referencias: http://www.scipy-lectures.org/advanced/image_processing/
