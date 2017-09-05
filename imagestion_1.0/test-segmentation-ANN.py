@@ -77,8 +77,8 @@ def evalPixel(pix, net):
 def getPointsPath(y, x, points, exist,lCord):
 	#~ y, x: coords in points[y,x] 
 	#~ points: reduced picture 
-	#~ HM: Hash Memory
-	#~ LP: List Points
+	#~ exist: matrix with true/false each point existence
+	#~ LP: List coordinates for each point
 	mask = 0L
 
 	mask |= 0b100000000 if points[y][x] & 8 != 0 else mask
@@ -105,22 +105,22 @@ def getPointsPath(y, x, points, exist,lCord):
 		0b100010001: goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
 		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
-	point = vectorize[points[y,x]](y, x, points, exist,lCord)
-	if point:
-		lCord.append(point)
-		
+
+	vectorize[points[y,x]](y, x, points, exist,lCord)
+
 	return lCord
 
 def goN(y, x, points, exist,lCord):
 	# [[0,1,0], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-	if exist[y-1,x]	== True :
-		return [y,x]
+	if exist[y-1][x] == True :
+		None
 	else:
-		lCord.append(getPointsPath(y-1, x, points, exist,lCord))
-		return lCord
-	
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y-1, x, points, exist, lCord))
+
 def goNE(y, x, points, exist,lCord):
 	# [[0,0,1], 
 	#~ [0,1,0], 
