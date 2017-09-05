@@ -52,7 +52,7 @@ def linearRegression(Y,X):
 	mX = np.mean(X)
 	mXY = np.mean(Y*X)
 	sqrX = [i**2 for i in X]
-	m = (mX*mY - mXY) / (mx**2 - np.mean(sqrX))
+	m = (mX*mY - mXY) / (mX**2 - np.mean(sqrX))
 	b = mY - m*mX
 	return [m,b]
 	
@@ -74,7 +74,7 @@ def evalPixel(pix, net):
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
 	
-def getPointsPath(y, x, points, HM, LP):   
+def getPointsPath(y, x, points, exist,lCord):
 	#~ y, x: coords in points[y,x] 
 	#~ points: reduced picture 
 	#~ HM: Hash Memory
@@ -105,90 +105,93 @@ def getPointsPath(y, x, points, HM, LP):
 		0b100010001: goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
 		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
-	point = vectorize[points[y,x]](y, x, points, p, P)
+	point = vectorize[points[y,x]](y, x, points, exist,lCord)
 	if point:
-		P.append(point)
+		lCord.append(point)
 		
-	return P
+	return lCord
 
-def goN(y, x, points, HM, LP):   
+def goN(y, x, points, exist,lCord):
 	# [[0,1,0], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-		
-	return None
+	if exist[y-1,x]	== True :
+		return [y,x]
+	else:
+		lCord.append(getPointsPath(y-1, x, points, exist,lCord))
+		return lCord
 	
-def goNE(y, x, points, HM, LP):   
+def goNE(y, x, points, exist,lCord):
 	# [[0,0,1], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
 		
 	return None
 	
-def goE(y, x, points, HM, LP):   
+def goE(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,1], 
 	#~ [0,0,0]]
 		
 	return None
 	
-def goSE(y, x, points, HM, LP):   
+def goSE(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,1]]
 		
 	return None
 	
-def goS(y, x, points, HM, LP):   
+def goS(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [0,1,0]]
 		
 	return None
 	
-def goSW(y, x, points, HM, LP):   
+def goSW(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [1,0,0]]
 		
 	return None
 	
-def goW(y, x, points, HM, LP):   
+def goW(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [1,1,0], 
 	#~ [0,0,0]]
 		
 	return None
 	
-def goNW(y, x, points, HM, LP):   
+def goNW(y, x, points, exist,lCord):
 	# [[1,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
 		
 	return None
 	
-def goN2S(y, x, points, HM, LP):   
+def goN2S(y, x, points, exist,lCord):
 	# [[0,1,0], 
 	#~ [0,1,0], 
 	#~ [0,1,0]]
 		
 	return None
 	
-def gow2E(y, x, points, HM, LP):   
+def goW2E(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [1,1,1], 
 	#~ [0,0,0]]
 		
 	return None
 
-def goSW2NE(y, x, points, HM, LP):   
+def goSW2NE(y, x, points, exist,lCord):
 	# [[1,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,1]]
 		
 	return None
 
-def goNW2SE(y, x, points, HM, LP):   
+def goNW2SE(y, x, points, exist,lCord):
 	# [[0,0,1], 
 	#~ [0,1,0], 
 	#~ [1,0,0]]
@@ -309,7 +312,6 @@ i = j = k = lastX = lastY = firstX = firstY = 0
 points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
 #~ vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
-lCord = []
 
 for y in range(0,seg.height,3):
 	line = ""
@@ -376,8 +378,10 @@ print "\n"
 
 border.show()
 
+lCord = []
+exist = np.zeros((seg.height, seg.width), dtype=np.bool)
 getPointsPath(firstY, firstX, points, 0, lCord)
-print "x:%d , y:%d   %s" % (firstX,firstY,lCord)
+print "x:%d , y:%d   %s" % (firstX,firstY,exist,lCord)
 
 print (json.dumps(lCord, sort_keys=True,indent=4, separators=(',', ': ')))
 
