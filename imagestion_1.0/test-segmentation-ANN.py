@@ -92,6 +92,7 @@ def getPointsPath(y, x, points, exist,lCord):
 	mask |= 0b000000001 if points[y+1][x+1] & 1 != 0 else mask
 
 	vectorize = {
+		0b000010000: alone,   ## [[0,0,0], [0,1,0], [0,0,0]]
 		0b010010000: goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
 		0b001010000: goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
 		0b000011000: goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
@@ -110,9 +111,16 @@ def getPointsPath(y, x, points, exist,lCord):
 
 	return lCord
 
-def goN(y, x, points, exist,lCord):
-	# [[0,1,0], 
+def alone(y, x, points, exist,lCord):
+	# [[0,0,0],
 	#~ [0,1,0], 
+	#~ [0,0,0]]
+	lCord.append([y,x])
+	exist[y][x] = True
+
+def goN(y, x, points, exist,lCord):
+	# [[0,1,0],
+	#~ [0,1,0],
 	#~ [0,0,0]]
 	if exist[y-1][x] == True :
 		None
@@ -125,43 +133,67 @@ def goNE(y, x, points, exist,lCord):
 	# [[0,0,1], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-		
-	return None
-	
+	if exist[y-1][x+1] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y-1, x+1, points, exist, lCord))
+
 def goE(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,1], 
 	#~ [0,0,0]]
-		
-	return None
+	if exist[y][x+1] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y, x+1, points, exist, lCord))
 	
 def goSE(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,1]]
-		
-	return None
+	if exist[y+1][x+1] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y+1, x+1, points, exist, lCord))
 	
 def goS(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [0,1,0]]
-		
-	return None
+	if exist[y+1][x] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y+1, x, points, exist, lCord))
 	
 def goSW(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [0,1,0], 
 	#~ [1,0,0]]
-		
-	return None
+	if exist[y+1][x-1] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y+1, x-1, points, exist, lCord))
 	
 def goW(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [1,1,0], 
 	#~ [0,0,0]]
-		
-	return None
+	if exist[y][x-1] == True :
+		None
+	else:
+		lCord.append([y,x])
+		exist[y][x] = True
+		lCord.append(getPointsPath(y, x-1, points, exist, lCord))
 	
 def goNW(y, x, points, exist,lCord):
 	# [[1,0,0], 
