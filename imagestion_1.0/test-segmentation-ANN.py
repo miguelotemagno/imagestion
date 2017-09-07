@@ -79,6 +79,7 @@ def getPointsPath(y, x, points, exist,lCord):
 	#~ points: reduced picture 
 	#~ exist: matrix with true/false each point existence
 	#~ LP: List coordinates for each point
+	data = points[y,x]
 	mask = 0L
 
 	mask |= 0b100000000 if points[y][x] & 8 != 0 else mask
@@ -107,7 +108,14 @@ def getPointsPath(y, x, points, exist,lCord):
 		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
 
-	vectorize[points[y,x]](y, x, points, exist,lCord)
+	lCord.append([y, x])
+	exist[y,x] = True
+
+	if data in vectorize :
+		vectorize[data](y, x, points, exist,lCord)
+	else:
+		# TODO ver como generar nuevas listas al encontrar angulos
+		None
 
 	return lCord
 
@@ -115,8 +123,7 @@ def alone(y, x, points, exist,lCord):
 	# [[0,0,0],
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-	lCord.append([y,x])
-	exist[y][x] = True
+	None
 
 def goN(y, x, points, exist,lCord):
 	# [[0,1,0],
@@ -125,8 +132,6 @@ def goN(y, x, points, exist,lCord):
 	if exist[y-1][x] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y-1, x, points, exist, lCord))
 
 def goNE(y, x, points, exist,lCord):
@@ -136,8 +141,6 @@ def goNE(y, x, points, exist,lCord):
 	if exist[y-1][x+1] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y-1, x+1, points, exist, lCord))
 
 def goE(y, x, points, exist,lCord):
@@ -147,8 +150,6 @@ def goE(y, x, points, exist,lCord):
 	if exist[y][x+1] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y, x+1, points, exist, lCord))
 	
 def goSE(y, x, points, exist,lCord):
@@ -158,8 +159,6 @@ def goSE(y, x, points, exist,lCord):
 	if exist[y+1][x+1] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y+1, x+1, points, exist, lCord))
 	
 def goS(y, x, points, exist,lCord):
@@ -169,8 +168,6 @@ def goS(y, x, points, exist,lCord):
 	if exist[y+1][x] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y+1, x, points, exist, lCord))
 	
 def goSW(y, x, points, exist,lCord):
@@ -180,8 +177,6 @@ def goSW(y, x, points, exist,lCord):
 	if exist[y+1][x-1] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y+1, x-1, points, exist, lCord))
 	
 def goW(y, x, points, exist,lCord):
@@ -191,44 +186,45 @@ def goW(y, x, points, exist,lCord):
 	if exist[y][x-1] == True :
 		None
 	else:
-		lCord.append([y,x])
-		exist[y][x] = True
 		lCord.append(getPointsPath(y, x-1, points, exist, lCord))
 	
 def goNW(y, x, points, exist,lCord):
 	# [[1,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-		
-	return None
+	if exist[y-1][x-1] == True :
+		None
+	else:
+		lCord.append(getPointsPath(y-1, x-1, points, exist, lCord))
 	
 def goN2S(y, x, points, exist,lCord):
 	# [[0,1,0], 
 	#~ [0,1,0], 
 	#~ [0,1,0]]
-		
-	return None
-	
+	goN(y, x, points, exist, lCord)
+	goS(y, x, points, exist, lCord)
+
 def goW2E(y, x, points, exist,lCord):
 	# [[0,0,0], 
 	#~ [1,1,1], 
 	#~ [0,0,0]]
-		
-	return None
+	goW(y, x, points, exist,lCord)
+	goE(y, x, points, exist,lCord)
 
 def goSW2NE(y, x, points, exist,lCord):
 	# [[1,0,0], 
 	#~ [0,1,0], 
 	#~ [0,0,1]]
-		
-	return None
+	goSW(y, x, points, exist,lCord)
+	goNE(y, x, points, exist,lCord)
 
 def goNW2SE(y, x, points, exist,lCord):
 	# [[0,0,1], 
 	#~ [0,1,0], 
 	#~ [1,0,0]]
+	goNW(y, x, points, exist,lCord)
+	goSE(y, x, points, exist,lCord)
 		
-	return None
 
 #-----------------------------------------------------------------------
 
@@ -317,7 +313,7 @@ diff = seg.getBorder(shape1,shape2)
 # http://stackoverflow.com/questions/23935840/converting-an-rgb-image-to-grayscale-and-manipulating-the-pixel-data-in-python
 bw = seg.color2grayScale(toimage(diff))
 border = toimage(bw)
-## border.show()
+border.show()
 
 print "continue? (y/n): "
 k = sys.stdin.read(1)
@@ -341,7 +337,7 @@ expect[idx] = 1.0
 
 
 i = j = k = lastX = lastY = firstX = firstY = 0
-points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1))
+points = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1), dtype=np.int)
 #~ vector = np.zeros(shape=(int(seg.height/3)+1, int(seg.width/3)+1, 2))
 matrix = []
 
@@ -412,10 +408,10 @@ border.show()
 
 lCord = []
 exist = np.zeros((seg.height, seg.width), dtype=np.bool)
-getPointsPath(firstY, firstX, points, 0, lCord)
-print "x:%d , y:%d   %s" % (firstX,firstY,exist,lCord)
+coords = getPointsPath(firstY, firstX, points, exist, lCord)
+print "x:%d , y:%d   %s" % (firstX,firstY,coords)
 
-print (json.dumps(lCord, sort_keys=True,indent=4, separators=(',', ': ')))
+print (json.dumps(coords, sort_keys=True,indent=4, separators=(',', ': ')))
 
 
 
