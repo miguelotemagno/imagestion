@@ -108,6 +108,15 @@ def getPointsPath(y, x, points, exist,lCord):
 		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
 	}
 
+	turn = {
+		0b011010000: goN2NE,  ## [[0,1,1], [0,1,0], [0,0,0]]
+		0b010011000: goN2E,   ## [[0,1,0], [0,1,1], [0,0,0]]
+		0b010010001: goN2SE,  ## [[0,1,0], [0,1,0], [0,0,1]]
+		0b010010100: goN2SW,  ## [[0,1,0], [0,1,0], [1,0,0]]
+		0b010110000: goN2W,   ## [[0,1,0], [1,1,0], [0,0,0]]
+		0b110010100: goN2NW,  ## [[0,1,0], [1,1,0], [0,0,0]]
+	}
+
 	lCord.append([y, x])
 	exist[y,x] = True
 
@@ -115,7 +124,7 @@ def getPointsPath(y, x, points, exist,lCord):
 		vectorize[data](y, x, points, exist,lCord)
 	else:
 		# TODO ver como generar nuevas listas al encontrar angulos
-		None
+		turn[data](y, x, points, exist, lCord)
 
 	return lCord
 
@@ -225,6 +234,42 @@ def goNW2SE(y, x, points, exist,lCord):
 	goNW(y, x, points, exist,lCord)
 	goSE(y, x, points, exist,lCord)
 		
+def goN2NE(y, x, points, exist,lCord):
+	# [[0,1,1],
+	#~ [0,1,0],
+	#~ [0,0,0]]
+	None
+
+def goN2E(y, x, points, exist,lCord):
+	# [[0,1,0],
+	#~ [0,1,1],
+	#~ [0,0,0]]
+	None
+
+def goN2SE(y, x, points, exist,lCord):
+	# [[0,1,0],
+	#~ [0,1,0],
+	#~ [0,0,1]]
+	None
+
+def goN2SW(y, x, points, exist,lCord):
+	# [[0,1,0],
+	#~ [0,1,0],
+	#~ [1,0,0]]
+	None
+
+def goN2W(y, x, points, exist,lCord):
+	# [[0,1,0],
+	#~ [1,1,0],
+	#~ [0,0,0]]
+	None
+
+def goN2NW(y, x, points, exist,lCord):
+	# [[1,1,0],
+	#~ [0,1,0],
+	#~ [0,0,0]]
+	None
+
 
 #-----------------------------------------------------------------------
 
