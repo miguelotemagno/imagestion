@@ -124,7 +124,8 @@ def getPointsPath(y, x, points, exist,lCord):
 		vectorize[data](y, x, points, exist,lCord)
 	else:
 		# TODO ver como generar nuevas listas al encontrar angulos
-		turn[data](y, x, points, exist, lCord)
+		# turn[data](y, x, points, exist, lCord)
+		pass
 
 	return lCord
 
@@ -132,14 +133,14 @@ def alone(y, x, points, exist,lCord):
 	# [[0,0,0],
 	#~ [0,1,0], 
 	#~ [0,0,0]]
-	None
+	pass
 
 def goN(y, x, points, exist,lCord):
 	# [[0,1,0],
 	#~ [0,1,0],
 	#~ [0,0,0]]
 	if exist[y-1][x] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y-1, x, points, exist, lCord))
 
@@ -148,7 +149,7 @@ def goNE(y, x, points, exist,lCord):
 	#~ [0,1,0], 
 	#~ [0,0,0]]
 	if exist[y-1][x+1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y-1, x+1, points, exist, lCord))
 
@@ -157,7 +158,7 @@ def goE(y, x, points, exist,lCord):
 	#~ [0,1,1], 
 	#~ [0,0,0]]
 	if exist[y][x+1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y, x+1, points, exist, lCord))
 	
@@ -166,7 +167,7 @@ def goSE(y, x, points, exist,lCord):
 	#~ [0,1,0], 
 	#~ [0,0,1]]
 	if exist[y+1][x+1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y+1, x+1, points, exist, lCord))
 	
@@ -175,7 +176,7 @@ def goS(y, x, points, exist,lCord):
 	#~ [0,1,0], 
 	#~ [0,1,0]]
 	if exist[y+1][x] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y+1, x, points, exist, lCord))
 	
@@ -184,7 +185,7 @@ def goSW(y, x, points, exist,lCord):
 	#~ [0,1,0], 
 	#~ [1,0,0]]
 	if exist[y+1][x-1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y+1, x-1, points, exist, lCord))
 	
@@ -193,7 +194,7 @@ def goW(y, x, points, exist,lCord):
 	#~ [1,1,0], 
 	#~ [0,0,0]]
 	if exist[y][x-1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y, x-1, points, exist, lCord))
 	
@@ -202,7 +203,7 @@ def goNW(y, x, points, exist,lCord):
 	#~ [0,1,0], 
 	#~ [0,0,0]]
 	if exist[y-1][x-1] == True :
-		None
+		pass
 	else:
 		lCord.append(getPointsPath(y-1, x-1, points, exist, lCord))
 	
@@ -238,37 +239,37 @@ def goN2NE(y, x, points, exist,lCord):
 	# [[0,1,1],
 	#~ [0,1,0],
 	#~ [0,0,0]]
-	None
+	pass
 
 def goN2E(y, x, points, exist,lCord):
 	# [[0,1,0],
 	#~ [0,1,1],
 	#~ [0,0,0]]
-	None
+	pass
 
 def goN2SE(y, x, points, exist,lCord):
 	# [[0,1,0],
 	#~ [0,1,0],
 	#~ [0,0,1]]
-	None
+	pass
 
 def goN2SW(y, x, points, exist,lCord):
 	# [[0,1,0],
 	#~ [0,1,0],
 	#~ [1,0,0]]
-	None
+	pass
 
 def goN2W(y, x, points, exist,lCord):
 	# [[0,1,0],
 	#~ [1,1,0],
 	#~ [0,0,0]]
-	None
+	pass
 
 def goN2NW(y, x, points, exist,lCord):
 	# [[1,1,0],
 	#~ [0,1,0],
 	#~ [0,0,0]]
-	None
+	pass
 
 
 #-----------------------------------------------------------------------
