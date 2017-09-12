@@ -42,6 +42,27 @@ class Image2Vector(object):
 		self.points = points
 		pass
 
+	def linearRegression(self,Y, X):
+		mY = np.mean(Y)
+		mX = np.mean(X)
+		mXY = np.mean(Y * X)
+		sqrX = [i ** 2 for i in X]
+		m = (mX * mY - mXY) / (mX ** 2 - np.mean(sqrX))
+		b = mY - m * mX
+		return [m, b]
+
+	def linearEcuation(self,m, x, b):
+		return m * x + b
+
+	def calcSlope(y, x, y0, x0):
+		d = 0 if x != x0  else 0.0000000001
+		m = (y - y0) / (x - x0 + d)
+		return m
+
+	def calcAngle(self,slope):
+		angle = np.arctan(slope)
+		return 180 - (180 * angle) / np.pi
+
 	def getPointsPath(self, y, x):
 		#  y, x: coords in points[y,x]
 		#  points: reduced picture
@@ -60,45 +81,54 @@ class Image2Vector(object):
 		mask |= 0b000000010 if self.points[y + 1][x] & 1 != 0 else mask
 		mask |= 0b000000001 if self.points[y + 1][x + 1] & 1 != 0 else mask
 
-		vectorize = {
-			0b000010000: alone,  ## [[0,0,0], [0,1,0], [0,0,0]]
-			0b010010000: goN,  ## [[0,1,0], [0,1,0], [0,0,0]]
-			0b001010000: goNE,  ## [[0,0,1], [0,1,0], [0,0,0]]
-			0b000011000: goE,  ## [[0,0,0], [0,1,1], [0,0,0]]
-			0b000010001: goSE,  ## [[0,0,0], [0,1,0], [0,0,1]]
-			0b000010010: goS,  ## [[0,0,0], [0,1,0], [0,1,0]]
-			0b000010100: goSW,  ## [[0,0,0], [0,1,0], [1,0,0]]
-			0b000110000: goW,  ## [[0,0,0], [1,1,0], [0,0,0]]
-			0b100010000: goNW,  ## [[1,0,0], [0,1,0], [0,0,0]]
-			0b010010010: goN2S,  ## [[0,1,0], [0,1,0], [0,1,0]]
-			0b000111000: goW2E,  ## [[0,0,0], [1,1,1], [0,0,0]]
-			0b100010001: goSW2NE,  ## [[1,0,0], [0,1,0], [0,0,1]]
-			0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
-		}
+		print "%s -> %s\n" % (bin(data), bin(mask))
 
-		turn = {
-			0b011010000: goN2NE,  ## [[0,1,1], [0,1,0], [0,0,0]]
-			0b010011000: goN2E,  ## [[0,1,0], [0,1,1], [0,0,0]]
-			0b010010001: goN2SE,  ## [[0,1,0], [0,1,0], [0,0,1]]
-			0b010010100: goN2SW,  ## [[0,1,0], [0,1,0], [1,0,0]]
-			0b010110000: goN2W,  ## [[0,1,0], [1,1,0], [0,0,0]]
-			0b110010100: goN2NW,  ## [[0,1,0], [1,1,0], [0,0,0]]
+		vectorize = {
+			0b000000000: nothing,  ## [[0,0,0], [0,0,0], [0,0,0]]
+			0b000010000: alone,    ## [[0,0,0], [0,1,0], [0,0,0]]
+			0b010010000: goN,      ## [[0,1,0], [0,1,0], [0,0,0]]
+			0b001010000: goNE,     ## [[0,0,1], [0,1,0], [0,0,0]]
+			0b000011000: goE,      ## [[0,0,0], [0,1,1], [0,0,0]]
+			0b000010001: goSE,     ## [[0,0,0], [0,1,0], [0,0,1]]
+			0b000010010: goS,      ## [[0,0,0], [0,1,0], [0,1,0]]
+			0b000010100: goSW,     ## [[0,0,0], [0,1,0], [1,0,0]]
+			0b000110000: goW,      ## [[0,0,0], [1,1,0], [0,0,0]]
+			0b100010000: goNW,     ## [[1,0,0], [0,1,0], [0,0,0]]
+			0b010010010: goN2S,    ## [[0,1,0], [0,1,0], [0,1,0]]
+			0b000111000: goW2E,    ## [[0,0,0], [1,1,1], [0,0,0]]
+			0b100010001: goSW2NE,  ## [[1,0,0], [0,1,0], [0,0,1]]
+			0b001010100: goNW2SE,  ## [[0,0,1], [0,1,0], [1,0,0]]
+			0b011010000: goN2NE,   ## [[0,1,1], [0,1,0], [0,0,0]]
+			0b010011000: goN2E,    ## [[0,1,0], [0,1,1], [0,0,0]]
+			0b010010001: goN2SE,   ## [[0,1,0], [0,1,0], [0,0,1]]
+			0b010010100: goN2SW,   ## [[0,1,0], [0,1,0], [1,0,0]]
+			0b010110000: goN2W,    ## [[0,1,0], [1,1,0], [0,0,0]]
+			0b110010100: goN2NW,   ## [[0,1,0], [1,1,0], [0,0,0]]
+			0b000011010: goS2E,    ## [[0,0,0], [0,1,1], [0,1,0]]
+            0b000011100: goSW2E,   ## [[0,0,0], [0,1,1], [1,0,0]]
+			0b110110000: goN2W2NW  ## [[1,1,0], [1,1,0], [0,0,0]]
 		}
 
 		self.lCord.append([y, x])
 		self.exist[y, x] = True
 
-		if data in vectorize:
-			vectorize[data](y, x, self)
+		if mask in vectorize:
+			vectorize[mask](y, x, self)
 		else:
 			# TODO ver como generar nuevas listas al encontrar angulos
-			# turn[data](y, x, self)
+			print "%s --> Not found!\n" % (bin(mask))
 			pass
 
 		return self.lCord
 
 
 def alone(y, x, inst):
+	# [[0,0,0],
+	#  [0,1,0],
+	#  [0,0,0]]
+	pass
+
+def nothing(y, x, inst):
 	# [[0,0,0],
 	#  [0,1,0],
 	#  [0,0,0]]
@@ -208,36 +238,72 @@ def goN2NE(y, x, inst):
 	# [[0,1,1],
 	#  [0,1,0],
 	#  [0,0,0]]
+	goN(y, x, inst)
+	goNE(y, x, inst)
 	pass
 
 def goN2E(y, x, inst):
 	# [[0,1,0],
 	#  [0,1,1],
 	#  [0,0,0]]
+	goN(y, x, inst)
+	goE(y, x, inst)
 	pass
 
 def goN2SE(y, x, inst):
 	# [[0,1,0],
 	#  [0,1,0],
 	#  [0,0,1]]
+	goN(y, x, inst)
+	goSE(y, x, inst)
 	pass
 
 def goN2SW(y, x, inst):
 	# [[0,1,0],
 	#  [0,1,0],
 	#  [1,0,0]]
+	goN(y, x, inst)
+	goSW(y, x, inst)
 	pass
 
 def goN2W(y, x, inst):
 	# [[0,1,0],
 	#  [1,1,0],
 	#  [0,0,0]]
+	goN(y, x, inst)
+	goW(y, x, inst)
 	pass
 
 def goN2NW(y, x, inst):
 	# [[1,1,0],
 	#  [0,1,0],
 	#  [0,0,0]]
+	goN(y, x, inst)
+	goNW(y, x, inst)
 	pass
 
+def goS2E(y, x, inst):
+	# [[0,0,0],
+	#  [0,1,1],
+	#  [0,1,0]]
+	goE(y, x, inst)
+	goS(y, x, inst)
+	pass
+
+def goSW2E(y, x, inst):
+	# [[0,0,0],
+	#  [0,1,1],
+	#  [1,0,0]]
+	goE(y, x, inst)
+	goSW(y, x, inst)
+	pass
+
+def goN2W2NW(y, x, inst):
+	# [[1,1,0],
+	#  [1,1,0],
+	#  [0,0,0]]
+	goN(y, x, inst)
+	goW(y, x, inst)
+	goNW(y, x, inst)
+	pass
 

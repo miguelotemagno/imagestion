@@ -12,6 +12,7 @@ from scipy.optimize import curve_fit
 from scipy.misc import factorial
 from Segmentation import *
 from ANN import *
+from Image2Vector import *
 from datetime import datetime
 
 
@@ -47,230 +48,11 @@ from datetime import datetime
 # y = m*x + b
 #-----------------------------------------------------------------------
 
-def linearRegression(Y,X):
-	mY = np.mean(Y)
-	mX = np.mean(X)
-	mXY = np.mean(Y*X)
-	sqrX = [i**2 for i in X]
-	m = (mX*mY - mXY) / (mX**2 - np.mean(sqrX))
-	b = mY - m*mX
-	return [m,b]
-	
-def linearEcuation(m,x,b):
-	return m*x + b
-	
-def calcSlope(y,x,y0,x0):
-	d = 0 if x != x0  else 0.0000000001
-	m = (y-y0)/(x - x0 + d)
-	return m
-	
-def calcAngle(slope):
-	angle = np.arctan(slope)
-	return 180 - (180*angle)/np.pi
-
 def evalPixel(pix, net):
 	r,g,b = pix
 	pixel = np.array([float(r)/255, float(g)/255, float(b)/255])
 	test  = net.actualiza_nodos(pixel)
 	return test[0]
-	
-def getPointsPath(y, x, points, exist,lCord):
-	#~ y, x: coords in points[y,x] 
-	#~ points: reduced picture 
-	#~ exist: matrix with true/false each point existence
-	#~ LP: List coordinates for each point
-	data = points[y,x]
-	mask = 0L
-
-	mask |= 0b100000000 if points[y][x] & 8 != 0 else mask
-	mask |= 0b010000000 if points[y][x] & 4 != 0 else mask
-	mask |= 0b000100000 if points[y][x] & 2 != 0 else mask
-	mask |= 0b000010000 if points[y][x] & 1 != 0 else mask
-	mask |= 0b001000000 if points[y][x+1] & 4 != 0 else mask
-	mask |= 0b000001000 if points[y][x+1] & 1 != 0 else mask
-	mask |= 0b000000100 if points[y+1][x] & 2 != 0 else mask
-	mask |= 0b000000010 if points[y+1][x] & 1 != 0 else mask
-	mask |= 0b000000001 if points[y+1][x+1] & 1 != 0 else mask
-
-	vectorize = {
-		0b000010000: alone,   ## [[0,0,0], [0,1,0], [0,0,0]]
-		0b010010000: goN,     ## [[0,1,0], [0,1,0], [0,0,0]]
-		0b001010000: goNE,    ## [[0,0,1], [0,1,0], [0,0,0]]
-		0b000011000: goE,     ## [[0,0,0], [0,1,1], [0,0,0]]
-		0b000010001: goSE,    ## [[0,0,0], [0,1,0], [0,0,1]]
-		0b000010010: goS,     ## [[0,0,0], [0,1,0], [0,1,0]]
-		0b000010100: goSW,    ## [[0,0,0], [0,1,0], [1,0,0]]
-		0b000110000: goW,     ## [[0,0,0], [1,1,0], [0,0,0]]
-		0b100010000: goNW,    ## [[1,0,0], [0,1,0], [0,0,0]]
-		0b010010010: goN2S,   ## [[0,1,0], [0,1,0], [0,1,0]]
-		0b000111000: goW2E,   ## [[0,0,0], [1,1,1], [0,0,0]]
-		0b100010001: goSW2NE, ## [[1,0,0], [0,1,0], [0,0,1]]
-		0b001010100: goNW2SE  ## [[0,0,1], [0,1,0], [1,0,0]]
-	}
-
-	turn = {
-		0b011010000: goN2NE,  ## [[0,1,1], [0,1,0], [0,0,0]]
-		0b010011000: goN2E,   ## [[0,1,0], [0,1,1], [0,0,0]]
-		0b010010001: goN2SE,  ## [[0,1,0], [0,1,0], [0,0,1]]
-		0b010010100: goN2SW,  ## [[0,1,0], [0,1,0], [1,0,0]]
-		0b010110000: goN2W,   ## [[0,1,0], [1,1,0], [0,0,0]]
-		0b110010100: goN2NW,  ## [[0,1,0], [1,1,0], [0,0,0]]
-	}
-
-	lCord.append([y, x])
-	exist[y,x] = True
-
-	if data in vectorize :
-		vectorize[data](y, x, points, exist,lCord)
-	else:
-		# TODO ver como generar nuevas listas al encontrar angulos
-		# turn[data](y, x, points, exist, lCord)
-		pass
-
-	return lCord
-
-def alone(y, x, points, exist,lCord):
-	# [[0,0,0],
-	#~ [0,1,0], 
-	#~ [0,0,0]]
-	pass
-
-def goN(y, x, points, exist,lCord):
-	# [[0,1,0],
-	#~ [0,1,0],
-	#~ [0,0,0]]
-	if exist[y-1][x] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y-1, x, points, exist, lCord))
-
-def goNE(y, x, points, exist,lCord):
-	# [[0,0,1], 
-	#~ [0,1,0], 
-	#~ [0,0,0]]
-	if exist[y-1][x+1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y-1, x+1, points, exist, lCord))
-
-def goE(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [0,1,1], 
-	#~ [0,0,0]]
-	if exist[y][x+1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y, x+1, points, exist, lCord))
-	
-def goSE(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [0,1,0], 
-	#~ [0,0,1]]
-	if exist[y+1][x+1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y+1, x+1, points, exist, lCord))
-	
-def goS(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [0,1,0], 
-	#~ [0,1,0]]
-	if exist[y+1][x] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y+1, x, points, exist, lCord))
-	
-def goSW(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [0,1,0], 
-	#~ [1,0,0]]
-	if exist[y+1][x-1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y+1, x-1, points, exist, lCord))
-	
-def goW(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [1,1,0], 
-	#~ [0,0,0]]
-	if exist[y][x-1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y, x-1, points, exist, lCord))
-	
-def goNW(y, x, points, exist,lCord):
-	# [[1,0,0], 
-	#~ [0,1,0], 
-	#~ [0,0,0]]
-	if exist[y-1][x-1] == True :
-		pass
-	else:
-		lCord.append(getPointsPath(y-1, x-1, points, exist, lCord))
-	
-def goN2S(y, x, points, exist,lCord):
-	# [[0,1,0], 
-	#~ [0,1,0], 
-	#~ [0,1,0]]
-	goN(y, x, points, exist, lCord)
-	goS(y, x, points, exist, lCord)
-
-def goW2E(y, x, points, exist,lCord):
-	# [[0,0,0], 
-	#~ [1,1,1], 
-	#~ [0,0,0]]
-	goW(y, x, points, exist,lCord)
-	goE(y, x, points, exist,lCord)
-
-def goSW2NE(y, x, points, exist,lCord):
-	# [[1,0,0], 
-	#~ [0,1,0], 
-	#~ [0,0,1]]
-	goSW(y, x, points, exist,lCord)
-	goNE(y, x, points, exist,lCord)
-
-def goNW2SE(y, x, points, exist,lCord):
-	# [[0,0,1], 
-	#~ [0,1,0], 
-	#~ [1,0,0]]
-	goNW(y, x, points, exist,lCord)
-	goSE(y, x, points, exist,lCord)
-		
-def goN2NE(y, x, points, exist,lCord):
-	# [[0,1,1],
-	#~ [0,1,0],
-	#~ [0,0,0]]
-	pass
-
-def goN2E(y, x, points, exist,lCord):
-	# [[0,1,0],
-	#~ [0,1,1],
-	#~ [0,0,0]]
-	pass
-
-def goN2SE(y, x, points, exist,lCord):
-	# [[0,1,0],
-	#~ [0,1,0],
-	#~ [0,0,1]]
-	pass
-
-def goN2SW(y, x, points, exist,lCord):
-	# [[0,1,0],
-	#~ [0,1,0],
-	#~ [1,0,0]]
-	pass
-
-def goN2W(y, x, points, exist,lCord):
-	# [[0,1,0],
-	#~ [1,1,0],
-	#~ [0,0,0]]
-	pass
-
-def goN2NW(y, x, points, exist,lCord):
-	# [[1,1,0],
-	#~ [0,1,0],
-	#~ [0,0,0]]
-	pass
-
 
 #-----------------------------------------------------------------------
 
@@ -452,10 +234,14 @@ print "\n"
 
 border.show()
 
-lCord = []
-exist = np.zeros((seg.height, seg.width), dtype=np.bool)
-coords = getPointsPath(firstY, firstX, points, exist, lCord)
-print "x:%d , y:%d   %s" % (firstX,firstY,coords)
+# lCord = []
+# exist = np.zeros((seg.height, seg.width), dtype=np.bool)
+# coords = getPointsPath(firstY, firstX, points, exist, lCord)
+
+vector = Image2Vector(points)
+coords = vector.getPointsPath(lastY,lastX)
+
+print "x:%d , y:%d   %s" % (lastX,lastY,coords)
 
 print (json.dumps(coords, sort_keys=True,indent=4, separators=(',', ': ')))
 
