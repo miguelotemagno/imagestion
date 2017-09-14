@@ -81,6 +81,17 @@ class Image2Vector(object):
 		mask |= 0b000000010 if self.points[y + 1][x] & 1 != 0 else mask
 		mask |= 0b000000001 if self.points[y + 1][x + 1] & 1 != 0 else mask
 
+		(N, NE, E, SE, S, SW, W, NW) = (
+			0b010010000,  ## [[0,1,0], [0,1,0], [0,0,0]]
+			0b001010000,  ## [[0,0,1], [0,1,0], [0,0,0]]
+			0b000011000,  ## [[0,0,0], [0,1,1], [0,0,0]]
+			0b000010001,  ## [[0,0,0], [0,1,0], [0,0,1]]
+			0b000010010,  ## [[0,0,0], [0,1,0], [0,1,0]]
+			0b000010100,  ## [[0,0,0], [0,1,0], [1,0,0]]
+			0b000110000,  ## [[0,0,0], [1,1,0], [0,0,0]]
+			0b100010000   ## [[1,0,0], [0,1,0], [0,0,0]]
+		)
+
 		print "%s -> %s\n" % (bin(data), bin(mask))
 
 		vectorize = {
@@ -94,19 +105,21 @@ class Image2Vector(object):
 			0b000010100: goSW,     ## [[0,0,0], [0,1,0], [1,0,0]]
 			0b000110000: goW,      ## [[0,0,0], [1,1,0], [0,0,0]]
 			0b100010000: goNW,     ## [[1,0,0], [0,1,0], [0,0,0]]
+
 			0b010010010: goN2S,    ## [[0,1,0], [0,1,0], [0,1,0]]
 			0b000111000: goW2E,    ## [[0,0,0], [1,1,1], [0,0,0]]
 			0b100010001: goSW2NE,  ## [[1,0,0], [0,1,0], [0,0,1]]
 			0b001010100: goNW2SE,  ## [[0,0,1], [0,1,0], [1,0,0]]
-			0b011010000: goN2NE,   ## [[0,1,1], [0,1,0], [0,0,0]]
-			0b010011000: goN2E,    ## [[0,1,0], [0,1,1], [0,0,0]]
-			0b010010001: goN2SE,   ## [[0,1,0], [0,1,0], [0,0,1]]
-			0b010010100: goN2SW,   ## [[0,1,0], [0,1,0], [1,0,0]]
-			0b010110000: goN2W,    ## [[0,1,0], [1,1,0], [0,0,0]]
-			0b110010100: goN2NW,   ## [[0,1,0], [1,1,0], [0,0,0]]
-			0b000011010: goS2E,    ## [[0,0,0], [0,1,1], [0,1,0]]
-            0b000011100: goSW2E,   ## [[0,0,0], [0,1,1], [1,0,0]]
-			0b110110000: goN2W2NW  ## [[1,1,0], [1,1,0], [0,0,0]]
+
+			# 0b011010000: goN2NE,   ## [[0,1,1], [0,1,0], [0,0,0]]
+			# 0b010011000: goN2E,    ## [[0,1,0], [0,1,1], [0,0,0]]
+			# 0b010010001: goN2SE,   ## [[0,1,0], [0,1,0], [0,0,1]]
+			# 0b010010100: goN2SW,   ## [[0,1,0], [0,1,0], [1,0,0]]
+			# 0b010110000: goN2W,    ## [[0,1,0], [1,1,0], [0,0,0]]
+			# 0b110010100: goN2NW,   ## [[0,1,0], [1,1,0], [0,0,0]]
+			# 0b000011010: goS2E,    ## [[0,0,0], [0,1,1], [0,1,0]]
+			# 0b000011100: goSW2E,   ## [[0,0,0], [0,1,1], [1,0,0]]
+			# 0b110110000: goN2W2NW  ## [[1,1,0], [1,1,0], [0,0,0]]
 		}
 
 		self.lCord.append([y, x])
@@ -117,6 +130,22 @@ class Image2Vector(object):
 		else:
 			# TODO ver como generar nuevas listas al encontrar angulos
 			print "%s --> Not found!\n" % (bin(mask))
+			if mask & N:
+				vectorize[N](y, x, self)
+			if mask & NE:
+				vectorize[NE](y, x, self)
+			if mask & E:
+				vectorize[E](y, x, self)
+			if mask & SE:
+				vectorize[SE](y, x, self)
+			if mask & S:
+				vectorize[S](y, x, self)
+			if mask & SW:
+				vectorize[SW](y, x, self)
+			if mask & W:
+				vectorize[W](y, x, self)
+			if mask & NW:
+				vectorize[NW](y, x, self)
 			pass
 
 		return self.lCord
@@ -141,6 +170,7 @@ def goN(y, x, inst):
 	if inst.exist[y - 1][x] == True:
 		pass
 	else:
+		print "goN "
 		inst.lCord.append(inst.getPointsPath(y - 1, x))
 
 def goNE(y, x, inst):
@@ -150,6 +180,7 @@ def goNE(y, x, inst):
 	if inst.exist[y - 1][x + 1] == True:
 		pass
 	else:
+		print "goNE "
 		inst.lCord.append(inst.getPointsPath(y - 1, x + 1))
 
 def goE(y, x, inst):
@@ -159,6 +190,7 @@ def goE(y, x, inst):
 	if inst.exist[y][x + 1] == True:
 		pass
 	else:
+		print "goE "
 		inst.lCord.append(inst.getPointsPath(y, x + 1))
 
 def goSE(y, x, inst):
@@ -168,6 +200,7 @@ def goSE(y, x, inst):
 	if inst.exist[y + 1][x + 1] == True:
 		pass
 	else:
+		print "goSE "
 		inst.lCord.append(inst.getPointsPath(y + 1, x + 1))
 
 def goS(y, x, inst):
@@ -177,6 +210,7 @@ def goS(y, x, inst):
 	if inst.exist[y + 1][x] == True:
 		pass
 	else:
+		print "goS "
 		inst.lCord.append(inst.getPointsPath(y + 1, x))
 
 def goSW(y, x, inst):
@@ -186,6 +220,7 @@ def goSW(y, x, inst):
 	if inst.exist[y + 1][x - 1] == True:
 		pass
 	else:
+		print "goSW "
 		inst.lCord.append(inst.getPointsPath(y + 1, x - 1))
 
 def goW(y, x, inst):
@@ -195,6 +230,7 @@ def goW(y, x, inst):
 	if inst.exist[y][x - 1] == True:
 		pass
 	else:
+		print "goW "
 		inst.lCord.append(inst.getPointsPath(y, x - 1))
 
 def goNW(y, x, inst):
@@ -204,6 +240,7 @@ def goNW(y, x, inst):
 	if inst.exist[y - 1][x - 1] == True:
 		pass
 	else:
+		print "goNW "
 		inst.lCord.append(inst.getPointsPath(y - 1, x - 1))
 
 def goN2S(y, x, inst):
@@ -298,12 +335,11 @@ def goSW2E(y, x, inst):
 	goSW(y, x, inst)
 	pass
 
-def goN2W2NW(y, x, inst):
-	# [[1,1,0],
-	#  [1,1,0],
-	#  [0,0,0]]
-	goN(y, x, inst)
-	goW(y, x, inst)
-	goNW(y, x, inst)
-	pass
-
+# def goN2W2NW(y, x, inst):
+# 	# [[1,1,0],
+# 	#  [1,1,0],
+# 	#  [0,0,0]]
+# 	goN(y, x, inst)
+# 	goW(y, x, inst)
+# 	goNW(y, x, inst)
+# 	pass
