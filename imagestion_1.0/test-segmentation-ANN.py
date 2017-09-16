@@ -239,11 +239,11 @@ border.show()
 # coords = getPointsPath(firstY, firstX, points, exist, lCord)
 
 vector = Image2Vector(points)
-coords = vector.getPointsPath(lastY,lastX)
+vector.getPointsPath(lastY,lastX)
 
-print "x:%d , y:%d   %s" % (lastX,lastY,coords)
+print "x:%d , y:%d   %s" % (lastX,lastY,str(vector.lCord))
 
-print (json.dumps(coords, sort_keys=True,indent=4, separators=(',', ': ')))
+print (json.dumps(vector.lCord, sort_keys=True,indent=4, separators=(',', ': ')))
 
 
 

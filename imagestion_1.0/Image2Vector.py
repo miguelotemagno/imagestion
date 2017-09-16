@@ -121,6 +121,7 @@ class Image2Vector(object):
 			# 0b110110000: goN2W2NW  ## [[1,1,0], [1,1,0], [0,0,0]]
 		}
 
+		coords = []
 		self.exist[y, x] = True
 
 		if mask in vectorize:
@@ -131,44 +132,45 @@ class Image2Vector(object):
 		else:
 			# TODO ver como generar nuevas listas al encontrar angulos
 			print "%s --> Not found!\n" % (bin(mask))
+			lN = lNE = lE = lSE = lS = lSW = lW = lNW = []
+
 			if mask & N:
-				coords = vectorize[N](y, x, self)
-				print 'N '+str(coords)
-				self.lCord.append(coords)
+				lN = vectorize[N](y, x, self)
+				# print 'N '+str(lN)
 			if mask & NE:
-				coords = vectorize[NE](y, x, self)
-				print 'NE '+str(coords)
-				self.lCord.append(coords)
+				lNE = vectorize[NE](y, x, self)
+				# print 'NE '+str(lNE)
 			if mask & E:
-				coords = vectorize[E](y, x, self)
-				print 'E '+str(coords)
-				self.lCord.append(coords)
+				lE = vectorize[E](y, x, self)
+				# print 'E '+str(lE)
 			if mask & SE:
-				coords = vectorize[SE](y, x, self)
-				print 'SE '+str(coords)
-				self.lCord.append(coords)
+				lSE = vectorize[SE](y, x, self)
+				# print 'SE '+str(lSE)
 			if mask & S:
-				coords = vectorize[S](y, x, self)
-				print 'S '+str(coords)
-				self.lCord.append(coords)
+				lS = vectorize[S](y, x, self)
+				# print 'S '+str(lS)
 			if mask & SW:
-				coords = vectorize[SW](y, x, self)
-				print 'SW '+str(coords)
-				self.lCord.append(coords)
+				lSW = vectorize[SW](y, x, self)
+				# print 'SW '+str(lSW)
 			if mask & W:
-				coords = vectorize[W](y, x, self)
-				print 'W '+str(coords)
-				self.lCord.append(coords)
+				lW = vectorize[W](y, x, self)
+				# print 'W '+str(lW)
 			if mask & NW:
-				coords = vectorize[NW](y, x, self)
-				print 'NW '+str(coords)
-				self.lCord.append(coords)
+				lNW = vectorize[NW](y, x, self)
+				# print 'NW '+str(lNW)
 
-			coords = self.lCord
+			coords = coords if not(lN)  else coords + lN
+			coords = coords if not(lNE)  else coords + lNE
+			coords = coords if not(lE)  else coords + lE
+			coords = coords if not(lSE) else coords + lSE
+			coords = coords if not(lS)  else coords + lS
+			coords = coords if not(lSW)  else coords + lSW
+			coords = coords if not(lW)  else coords + lW
+			coords = coords if not(lNW)  else coords + lNW
 			print coords
-			self.lCord = []
+			self.lCord.append(coords)
 
-		return self.lCord
+		return coords
 
 
 def alone(y, x, inst):
@@ -181,7 +183,7 @@ def nothing(y, x, inst):
 	# [[0,0,0],
 	#  [0,1,0],
 	#  [0,0,0]]
-	return [y,x]
+	return [[y,x]]
 
 def goN(y, x, inst):
 	# [[0,1,0],
@@ -190,7 +192,7 @@ def goN(y, x, inst):
 	if inst.exist[y - 1][x] == True:
 		return []
 	else:
-		lCoords = [y,x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y - 1, x))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -202,7 +204,7 @@ def goNE(y, x, inst):
 	if inst.exist[y - 1][x + 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y - 1, x + 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -214,7 +216,7 @@ def goE(y, x, inst):
 	if inst.exist[y][x + 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y, x + 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -226,7 +228,7 @@ def goSE(y, x, inst):
 	if inst.exist[y + 1][x + 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y + 1, x + 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -238,7 +240,7 @@ def goS(y, x, inst):
 	if inst.exist[y + 1][x] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y + 1, x))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -250,7 +252,7 @@ def goSW(y, x, inst):
 	if inst.exist[y + 1][x - 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y + 1, x - 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -262,7 +264,7 @@ def goW(y, x, inst):
 	if inst.exist[y][x - 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y, x - 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
@@ -274,7 +276,7 @@ def goNW(y, x, inst):
 	if inst.exist[y - 1][x - 1] == True:
 		return []
 	else:
-		lCoords = [y, x]
+		lCoords = [[y,x]]
 		coords = inst.lCord.append(inst.getPointsPath(y - 1, x - 1))
 		lCoords = lCoords if not coords else lCoords + coords
 		return lCoords
