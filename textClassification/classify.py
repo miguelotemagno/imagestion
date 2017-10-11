@@ -35,15 +35,18 @@
 
 import zlib
 import numpy as np
+import subprocess as sp
+import os
 from ANN import *
 
-class Classify(object):
+class Classify:
 	def __init__(self):
 		self.net = ANN(3, 4, 1)
 		self.filter = None
-		self.fromFile = 'cat'
-		self.fromWeb = 'links -dump'
-		self.command = "%s %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
+		self.fromFile = 'loadFromFile.sh'
+		self.fromWeb = 'loadFromWeb.sh'
+		self.path = os.getcwd()
+		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
 		pass
 
@@ -60,10 +63,10 @@ class Classify(object):
 		self.net.save(file)
 
 	def loadFromFile(self,source):
-		self.text = self.command % (self.fromFile, source)
+		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
 
 	def loadFromWeb(self,source):
-		self.text = self.command % (self.fromWeb, source)
+		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
 
 
