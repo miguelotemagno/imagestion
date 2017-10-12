@@ -37,11 +37,12 @@ import zlib
 import numpy as np
 import subprocess as sp
 import os
+import re
 from ANN import *
 
 class Classify:
 	def __init__(self):
-		self.net = ANN(3, 4, 1)
+		self.net = ANN(2, 3, 1)
 		self.filter = None
 		self.fromFile = 'loadFromFile.sh'
 		self.fromWeb = 'loadFromWeb.sh'
@@ -56,7 +57,7 @@ class Classify:
 		return crc/maxValue
 
 	def loadFilter(self, file):
-		self.filter = ANN(3, 4, 1)
+		self.filter = ANN(2, 3, 1)
 		self.filter.load(file)
 
 	def saveNet(self,file):
@@ -68,5 +69,30 @@ class Classify:
 	def loadFromWeb(self,source):
 		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
+	def process(self):
+		list = self.text.split("\n")
+		reg = re.compile('(\d+)\s+(\w+)')
+		counts = []
+		words = []
+		trainData = []
+		maxVal = 1
 
+		for line in list:
+			expr = reg.search(line)
+			if expr:
+				(n, word) = expr.group(1,2)
+				val = int(n)
+				#print "[%d] [%s] [%f]" % (int(n), word, self.getCRC(word))
+				counts.append(val)
+				words.append(self.getCRC(word))
+				maxVal = val if val > maxVal else maxVal
 
+		for i in xrange(len(words)):
+			val = 1.0 * counts[i]/maxVal
+			word = words[i]
+			trainData.append([[val,word], [1]])
+
+		print trainData
+
+		# self.net.iniciar_perceptron();
+		# self.net.entrenar_perceptron(trainData)
