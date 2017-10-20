@@ -49,6 +49,7 @@ class Classify:
 		self.path = os.getcwd()
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
+		self.trainData = None
 		pass
 
 	def getCRC(self, text):
@@ -57,8 +58,34 @@ class Classify:
 		return crc/maxValue
 
 	def loadFilter(self, file):
-		self.filter = ANN(2, 3, 1)
+		self.filter = ANN(1, 3, 1)
 		self.filter.load(file)
+
+	def trainFilter(self, file):
+		self.loadFromFile(file)
+		self.filter = ANN(1, 3, 1)
+
+		list = self.text.split("\n")
+		reg = re.compile('(\d+)\s+(\w+)')
+		words = []
+		trainData = []
+
+		for line in list:
+			expr = reg.search(line)
+			if expr:
+				(n, word) = expr.group(1,2)
+				crc = self.getCRC(word)
+				#print "[%s] [%s] [%f]" % (n, word, crc)
+				words.append(crc)
+
+		for i in xrange(len(words)):
+			word = words[i]
+			trainData.append([[word], [1]])
+
+		self.filter.iniciar_perceptron();
+		self.filter.entrenar_perceptron(trainData)
+		output = "%s/%s.json" % (self.path, file)
+		self.filter.save(output)
 
 	def saveNet(self,file):
 		self.net.save(file)
@@ -82,9 +109,15 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				#print "[%d] [%s] [%f]" % (int(n), word, self.getCRC(word))
+				crc = self.getCRC(word)
+				eval = self.filter.actualiza_nodos([crc]) if self.filter else [0.0]
+
+				if eval[0] > 0.5:
+					continue
+
+				print "[%d] [%s] [%f] [%f]" % (int(n), word, crc, eval[0])
 				counts.append(val)
-				words.append(self.getCRC(word))
+				words.append(crc)
 				maxVal = val if val > maxVal else maxVal
 
 		for i in xrange(len(words)):
@@ -92,7 +125,9 @@ class Classify:
 			word = words[i]
 			trainData.append([[val,word], [1]])
 
-		print trainData
+		#print trainData
 
-		# self.net.iniciar_perceptron();
-		# self.net.entrenar_perceptron(trainData)
+		self.net.iniciar_perceptron();
+		self.net.entrenar_perceptron(trainData)
+		#self.net.clasificar(trainData)
+

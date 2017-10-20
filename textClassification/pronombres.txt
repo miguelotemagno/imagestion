@@ -1,0 +1,32 @@
+ yo, mí, conmigo
+ tú, vos, usted, ti, contigo
+ él, ella, ello, sí, consigo
+ nosotros nosotras
+ ustedes  vosotros
+ vosotras
+ ellos, ellas, sí,
+ me, nos
+ te, se, os
+ lo, la, le, los, las, les, se
+ mío, mía, míos, mías
+ tuyo, tuya, tuyos, tuyas
+ suyo suya suyos suyas
+ nuestro  nuestra nuestros nuestras
+ vuestro vuestra vuestros vuestras
+ suyo suya suyos suyas
+ este esta esto estos estas
+ ese esa eso esos esas
+ aquel, aquella aquello aquellos aquellas
+ Que
+ Cual Cuales
+ Donde
+ Quien Quienes
+ Cuyo Cuyos
+ Cardinales
+ Ordinales
+ Multiplicativos
+ Partitivos
+ Quién Quienes
+ Cuál/es Cuáles
+ Cuánto Cuánta Cuántos Cuántas
+ uno, algo, alguien, alguno, bastante, cualquiera, nadie, ninguno, otro, quienquiera
