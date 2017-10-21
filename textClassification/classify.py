@@ -39,6 +39,8 @@ import subprocess as sp
 import os
 import re
 from ANN import *
+from random import randint
+
 
 class Classify:
 	def __init__(self):
@@ -58,12 +60,12 @@ class Classify:
 		return crc/maxValue
 
 	def loadFilter(self, file):
-		self.filter = ANN(1, 3, 1)
+		self.filter = ANN(2, 3, 1)
 		self.filter.load(file)
 
 	def trainFilter(self, file):
 		self.loadFromFile(file)
-		self.filter = ANN(1, 3, 1)
+		self.filter = ANN(2, 3, 1)
 
 		list = self.text.split("\n")
 		reg = re.compile('(\d+)\s+(\w+)')
@@ -74,16 +76,21 @@ class Classify:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word)
-				#print "[%s] [%s] [%f]" % (n, word, crc)
+				crc = self.getCRC(word) #/(10*len(word))
+				print "[%s] [%s] [%f]" % (n, word, crc)
 				words.append(crc)
 
 		for i in xrange(len(words)):
 			word = words[i]
-			trainData.append([[word], [1]])
+			trainData.append([[1, word], [0]])
+			#if i%2 == 0:
+			wrd = self.wordGenerate()
+			gen = self.getCRC(wrd) #/(10*len(wrd))
+			trainData.append([[0, gen], [1]])
 
-		self.filter.iniciar_perceptron();
+		self.filter.iniciar_perceptron()
 		self.filter.entrenar_perceptron(trainData)
+		self.filter.clasificar(trainData)
 		output = "%s/%s.json" % (self.path, file)
 		self.filter.save(output)
 
@@ -109,13 +116,14 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				crc = self.getCRC(word)
-				eval = self.filter.actualiza_nodos([crc]) if self.filter else [0.0]
+				crc = self.getCRC(word)   #/(10*len(word))
+				eval = self.filter.actualiza_nodos([val/10, crc]) if self.filter else [0.0]
 
-				if eval[0] > 0.5:
+				if abs(eval[0]) < 0.5:
 					continue
 
 				print "[%d] [%s] [%f] [%f]" % (int(n), word, crc, eval[0])
+
 				counts.append(val)
 				words.append(crc)
 				maxVal = val if val > maxVal else maxVal
@@ -131,3 +139,13 @@ class Classify:
 		self.net.entrenar_perceptron(trainData)
 		#self.net.clasificar(trainData)
 
+	def wordGenerate(self):
+		n = randint(2,5)
+		vocals = ['a','e','i','o','u']
+		word = chr(randint(97, 122))
+		for i in xrange(0,n):
+			ascii = randint(97,122)
+			word = word + vocals[randint(0,4)] + chr(ascii)
+			#word = word + chr(ascii)
+
+		return word
