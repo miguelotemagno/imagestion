@@ -60,12 +60,12 @@ class Classify:
 		return crc/maxValue
 
 	def loadFilter(self, file):
-		self.filter = ANN(2, 3, 1)
+		self.filter = ANN(3, 3, 1)
 		self.filter.load(file)
 
 	def trainFilter(self, file):
 		self.loadFromFile(file)
-		self.filter = ANN(2, 3, 1)
+		self.filter = ANN(3, 3, 1)
 
 		list = self.text.split("\n")
 		reg = re.compile('(\d+)\s+(\w+)')
@@ -76,17 +76,17 @@ class Classify:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word) #/(10*len(word))
+				crc = self.getCRC(word) #* len(word)
 				print "[%s] [%s] [%f]" % (n, word, crc)
-				words.append(crc)
+				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
-			word = words[i]
-			trainData.append([[1, word], [0]])
+			(crc, lenw) = words[i]
+			trainData.append([[1, crc, lenw], [0]])
 			#if i%2 == 0:
 			wrd = self.wordGenerate()
-			gen = self.getCRC(wrd) #/(10*len(wrd))
-			trainData.append([[0, gen], [1]])
+			gen = self.getCRC(wrd) #* len(wrd)
+			trainData.append([[0, gen, len(wrd)], [1]])
 
 		self.filter.iniciar_perceptron()
 		self.filter.entrenar_perceptron(trainData)
@@ -116,8 +116,8 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				crc = self.getCRC(word)   #/(10*len(word))
-				eval = self.filter.actualiza_nodos([val/10, crc]) if self.filter else [0.0]
+				crc = self.getCRC(word) #* len(word)
+				eval = self.filter.actualiza_nodos([val/10, crc, len(word)]) if self.filter else [0.0]
 
 				if abs(eval[0]) < 0.5:
 					continue
@@ -149,3 +149,4 @@ class Classify:
 			#word = word + chr(ascii)
 
 		return word
+		
