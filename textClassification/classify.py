@@ -34,13 +34,12 @@
 # +-----------------------------------------------------------------------+
 
 import zlib
-import numpy as np
 import subprocess as sp
 import os
 import re
 from ANN import *
 from random import randint
-
+from math import log
 
 class Classify:
 	def __init__(self):
@@ -55,9 +54,9 @@ class Classify:
 		pass
 
 	def getCRC(self, text):
-		maxValue = 0xffffffff * 1.0
+		#maxValue = 0xffffffff * 1.0
 		crc = zlib.crc32(text) % (1<<32)
-		return crc/maxValue
+		return log(crc) #crc/maxValue
 
 	def loadFilter(self, file):
 		self.filter = ANN(3, 3, 1)
@@ -76,17 +75,17 @@ class Classify:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word) #* len(word)
+				crc = self.getCRC(word) / len(word)
 				print "[%s] [%s] [%f]" % (n, word, crc)
 				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
 			(crc, lenw) = words[i]
 			trainData.append([[1, crc, lenw], [0]])
-			#if i%2 == 0:
-			wrd = self.wordGenerate()
-			gen = self.getCRC(wrd) #* len(wrd)
-			trainData.append([[0, gen, len(wrd)], [1]])
+			if i%15 == 0:
+				wrd = self.wordGenerate()
+				gen = self.getCRC(wrd) / len(wrd)
+				trainData.append([[0, gen, len(wrd)], [1]])
 
 		self.filter.iniciar_perceptron()
 		self.filter.entrenar_perceptron(trainData)
@@ -117,9 +116,9 @@ class Classify:
 				(n, word) = expr.group(1,2)
 				val = int(n)
 				crc = self.getCRC(word) #* len(word)
-				eval = self.filter.actualiza_nodos([val/10, crc, len(word)]) if self.filter else [0.0]
+				eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
 
-				if abs(eval[0]) < 0.5:
+				if abs(eval[0]) > 0.5:
 					continue
 
 				print "[%d] [%s] [%f] [%f]" % (int(n), word, crc, eval[0])
