@@ -7,6 +7,6 @@ print "train\n"
 c.loadFilter('filtro.txt.json')
 
 print "filter\n"
-#c.loadFromWeb('www.emol.cl')
-c.loadFromFile('libro.txt')
+c.loadFromWeb('www.emol.cl')
+#c.loadFromFile('libro.txt')
 c.process()

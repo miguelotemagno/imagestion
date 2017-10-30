@@ -115,7 +115,7 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				crc = self.getCRC(word) #* len(word)
+				crc = self.getCRC(word) / len(word)
 				eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
 
 				if abs(eval[0]) > 0.5:
