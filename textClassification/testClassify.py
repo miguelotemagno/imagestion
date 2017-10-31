@@ -3,10 +3,10 @@ from classify import *
 c = Classify()
 
 print "train\n"
-#c.trainFilter('filtro.txt')
-c.loadFilter('filtro.txt.json')
+c.trainFilter('filtro.txt')
+#c.loadFilter('filtro.txt.json')
 
 print "filter\n"
-c.loadFromWeb('www.emol.cl')
+#c.loadFromWeb('www.emol.cl')
 #c.loadFromFile('libro.txt')
-c.process()
+#c.process()

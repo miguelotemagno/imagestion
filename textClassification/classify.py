@@ -40,6 +40,7 @@ import re
 from ANN import *
 from random import randint
 from math import log
+import tensorflow as tf
 
 class Classify:
 	def __init__(self):
@@ -70,28 +71,43 @@ class Classify:
 		reg = re.compile('(\d+)\s+(\w+)')
 		words = []
 		trainData = []
+		expect = []
 
 		for line in list:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
 				crc = self.getCRC(word) / len(word)
-				print "[%s] [%s] [%f]" % (n, word, crc)
+				print "[%s] [%s] [%f] [%d]" % (n, word, crc, len(word))
 				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
 			(crc, lenw) = words[i]
-			trainData.append([[1, crc, lenw], [0]])
+			#trainData.append([[1, crc, lenw], [0]])
+			trainData.append([1, crc, lenw])
+			expect.append([0])
+
 			if i%15 == 0:
 				wrd = self.wordGenerate()
 				gen = self.getCRC(wrd) / len(wrd)
-				trainData.append([[0, gen, len(wrd)], [1]])
+				#trainData.append([[0, gen, len(wrd)], [1]])
+				trainData.append([0, gen, len(wrd)])
+				expect.append([1])
 
-		self.filter.iniciar_perceptron()
-		self.filter.entrenar_perceptron(trainData)
-		self.filter.clasificar(trainData)
-		output = "%s/%s.json" % (self.path, file)
-		self.filter.save(output)
+		# self.filter.iniciar_perceptron()
+		# self.filter.entrenar_perceptron(trainData)
+		# self.filter.clasificar(trainData)
+		# output = "%s/%s.json" % (self.path, file)
+		# self.filter.save(output)
+
+		sess = self.prepareTensor(trainData, expect)
+
+		saver = tf.train.Saver()
+		saver.save(sess, self.path+'/'+file+'.tfdb',
+		           global_step=None,
+		           latest_filename=None,
+		           meta_graph_suffix='meta',
+		           write_meta_graph=True)
 
 	def saveNet(self,file):
 		self.net.save(file)
@@ -148,4 +164,43 @@ class Classify:
 			#word = word + chr(ascii)
 
 		return word
-		
+
+	def prepareTensor(self, xTrain, yTrain):
+		HIDDEN_NODES = 3
+
+		x = tf.placeholder(tf.float32, [None, 3])
+		W_hidden = tf.Variable(tf.truncated_normal([3, HIDDEN_NODES], stddev=1. / math.sqrt(3)))
+		b_hidden = tf.Variable(tf.zeros([HIDDEN_NODES]))
+		hidden = tf.nn.relu(tf.matmul(x, W_hidden) + b_hidden)
+
+		W_logits = tf.Variable(tf.truncated_normal([HIDDEN_NODES, 2], stddev=1. / math.sqrt(HIDDEN_NODES)))
+		b_logits = tf.Variable(tf.zeros([2]))
+		logits = tf.matmul(hidden, W_logits) + b_logits
+
+		y = tf.nn.softmax(logits)
+		#y = tf.nn.tanh(logits)
+
+		y_input = tf.placeholder(tf.float32, [None, 1])
+
+		cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits, y_input)
+		loss = tf.reduce_mean(cross_entropy)
+
+		train_op = tf.train.GradientDescentOptimizer(0.2).minimize(loss)
+		init_op = tf.initialize_all_variables()
+
+		sess = tf.Session()
+		sess.run(init_op)
+
+		print xTrain
+		print yTrain
+
+		for i in xrange(1000):
+			_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
+
+			if i % 10 == 0:
+				print "Step:", i, "Current loss:", loss_val
+				for x_input in [xTrain]:
+					result = sess.run(y, feed_dict={x: [x_input]})
+					print "%s => %s" % (x_input, result)
+
+		return sess
