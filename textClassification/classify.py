@@ -52,6 +52,7 @@ class Classify:
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
 		self.trainData = None
+		self.sess = None
 		pass
 
 	def getCRC(self, text):
@@ -60,8 +61,12 @@ class Classify:
 		return log(crc) #crc/maxValue
 
 	def loadFilter(self, file):
-		self.filter = ANN(3, 3, 1)
-		self.filter.load(file)
+		# self.filter = ANN(3, 3, 1)
+		# self.filter.load(file)
+		path = '%s/%s' % (self.path,file)
+		with tf.Session() as self.filter:
+			saver = tf.train.import_meta_graph(path+'.meta')
+			saver.restore(self.filter, path)
 
 	def trainFilter(self, file):
 		self.loadFromFile(file)
@@ -87,7 +92,7 @@ class Classify:
 			trainData.append([1, crc, lenw])
 			expect.append([0])
 
-			if i%15 == 0:
+			if i%5 == 0:
 				wrd = self.wordGenerate()
 				gen = self.getCRC(wrd) / len(wrd)
 				#trainData.append([[0, gen, len(wrd)], [1]])
@@ -167,40 +172,39 @@ class Classify:
 
 	def prepareTensor(self, xTrain, yTrain):
 		HIDDEN_NODES = 3
+		sess = tf.InteractiveSession()
 
-		x = tf.placeholder(tf.float32, [None, 3])
-		W_hidden = tf.Variable(tf.truncated_normal([3, HIDDEN_NODES], stddev=1. / math.sqrt(3)))
-		b_hidden = tf.Variable(tf.zeros([HIDDEN_NODES]))
-		hidden = tf.nn.relu(tf.matmul(x, W_hidden) + b_hidden)
+		x = tf.placeholder("float", [None, 3])
+		y_ = tf.placeholder("float", [None, 1])
 
-		W_logits = tf.Variable(tf.truncated_normal([HIDDEN_NODES, 2], stddev=1. / math.sqrt(HIDDEN_NODES)))
-		b_logits = tf.Variable(tf.zeros([2]))
-		logits = tf.matmul(hidden, W_logits) + b_logits
+		W = tf.Variable(tf.random_uniform([3, HIDDEN_NODES], -.01, .01))
+		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01))
+		hidden = tf.nn.relu(tf.matmul(x,W) + b)
 
-		y = tf.nn.softmax(logits)
-		#y = tf.nn.tanh(logits)
+		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1))
+		b2 = tf.Variable(tf.zeros([2]))
+		hidden2 = tf.matmul(hidden, W2)  # +b2
 
-		y_input = tf.placeholder(tf.float32, [None, 1])
+		y = tf.nn.softmax(hidden2)
+		#y = tf.nn.tanh(hidden2)
 
-		cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits, y_input)
-		loss = tf.reduce_mean(cross_entropy)
+		cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
+		train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
 
-		train_op = tf.train.GradientDescentOptimizer(0.2).minimize(loss)
-		init_op = tf.initialize_all_variables()
+		tf.initialize_all_variables().run()
+		for step in range(1000):
+			feed_dict = {x: xTrain, y_: yTrain}  # feed the net with our inputs and desired outputs.
+			e, a = sess.run([cross_entropy, train_step], feed_dict)
+			if e < 1: break  # early stopping yay
 
-		sess = tf.Session()
-		sess.run(init_op)
+		#print "%s => %s" % (xTrain, yTrain)
+		correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))  # argmax along dim-1
+		accuracy = tf.reduce_mean(
+			tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
 
-		print xTrain
-		print yTrain
+		print "accuracy %s" % (accuracy.eval({x: xTrain, y_: yTrain}))
 
-		for i in xrange(1000):
-			_, loss_val = sess.run([train_op, loss], feed_dict={x: xTrain, y_input: yTrain})
-
-			if i % 10 == 0:
-				print "Step:", i, "Current loss:", loss_val
-				for x_input in [xTrain]:
-					result = sess.run(y, feed_dict={x: [x_input]})
-					print "%s => %s" % (x_input, result)
+		learned_output = tf.argmax(y, 1)
+		print learned_output.eval({x: xTrain})
 
 		return sess

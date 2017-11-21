@@ -94,60 +94,113 @@ import numpy as np
 ########################################################################
 
 
-X = tf.placeholder(tf.float32, shape=[4,2], name = 'X')
-Y = tf.placeholder(tf.float32, shape=[4,1], name = 'Y')
+# X = tf.placeholder(tf.float32, shape=[4,2], name = 'X')
+# Y = tf.placeholder(tf.float32, shape=[4,1], name = 'Y')
+#
+# W = tf.Variable(tf.truncated_normal([2,2]), name = "W")
+# w = tf.Variable(tf.truncated_normal([2,1]), name = "w")
+#
+# c = tf.Variable(tf.zeros([4,2]), name = "c")
+# b = tf.Variable(tf.zeros([4,1]), name = "b")
+#
+# with tf.name_scope("hidden_layer") as scope:
+#     h = tf.nn.relu(tf.add(tf.matmul(X, W),c))
+#
+# with tf.name_scope("output") as scope:
+#     y_estimated = tf.sigmoid(tf.add(tf.matmul(h,w),b))
+#
+# with tf.name_scope("loss") as scope:
+#     loss = tf.reduce_mean(tf.squared_difference(y_estimated, Y))
+#
+# with tf.name_scope("train") as scope:
+#     train_step = tf.train.GradientDescentOptimizer(0.01).minimize(loss)
+#
+# INPUT_XOR = [[0,0],[0,1],[1,0],[1,1]]
+# OUTPUT_XOR = [[0],[1],[1],[0]]
+#
+# init = tf.global_variables_initializer()
+# sess = tf.Session()
+#
+# writer = tf.summary.FileWriter("./logs/xor_logs", sess.graph)
+#
+# sess.run(init)
+#
+# t_start = time.clock()
+# for epoch in range(100001):
+#     sess.run(train_step, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR})
+#     if epoch % 10000 == 0:
+#         print("_"*80)
+#         print('Epoch: ', epoch)
+#         print('   y_estimated: ')
+#         for element in sess.run(y_estimated, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR}):
+#             print('    ',element)
+#         print('   W: ')
+#         for element in sess.run(W):
+#             print('    ',element)
+#         print('   c: ')
+#         for element in sess.run(c):
+#             print('    ',element)
+#         print('   w: ')
+#         for element in sess.run(w):
+#             print('    ',element)
+#         print('   b ')
+#         for element in sess.run(b):
+#             print('    ',element)
+#         print('   loss: ', sess.run(loss, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR}))
+# t_end = time.clock()
+# print("_"*80)
+# print('Elapsed time ', t_end - t_start)
+#
 
-W = tf.Variable(tf.truncated_normal([2,2]), name = "W")
-w = tf.Variable(tf.truncated_normal([2,1]), name = "w")
 
-c = tf.Variable(tf.zeros([4,2]), name = "c")
-b = tf.Variable(tf.zeros([4,1]), name = "b")
 
-with tf.name_scope("hidden_layer") as scope:
-    h = tf.nn.relu(tf.add(tf.matmul(X, W),c))
 
-with tf.name_scope("output") as scope:
-    y_estimated = tf.sigmoid(tf.add(tf.matmul(h,w),b))
+sess = tf.InteractiveSession()
 
-with tf.name_scope("loss") as scope:
-    loss = tf.reduce_mean(tf.squared_difference(y_estimated, Y))
+# Desired input output mapping of XOR function:
+x_ = [[0, 0], [0, 1], [1, 0], [1, 1]] # input
+#labels=[0,      1,      1,      0]   # output =>
+expect=[[1,0],  [0,1],  [0,1], [1,0]] # ONE HOT REPRESENTATION! 'class' [1,0]==0 [0,1]==1
 
-with tf.name_scope("train") as scope:
-    train_step = tf.train.GradientDescentOptimizer(0.01).minimize(loss)
+# x = tf.Variable(x_)
+x = tf.placeholder("float", [None,2]) #  can we feed directly?
+y_ = tf.placeholder("float", [None, 2]) # two output classes
 
-INPUT_XOR = [[0,0],[0,1],[1,0],[1,1]]
-OUTPUT_XOR = [[0],[1],[1],[0]]
+number_hidden_nodes = 20 # 20 outputs to create some room for negatives and positives
 
-init = tf.global_variables_initializer()
-sess = tf.Session()
+W = tf.Variable(tf.random_uniform([2, number_hidden_nodes], -.01, .01))
+b = tf.Variable(tf.random_uniform([number_hidden_nodes], -.01, .01))
+hidden  = tf.nn.relu(tf.matmul(x,W) + b) # first layer.
 
-writer = tf.summary.FileWriter("./logs/xor_logs", sess.graph)
+ # the XOR function is the first nontrivial function, for which a two layer network is needed.
+W2 = tf.Variable(tf.random_uniform([number_hidden_nodes,2], -.1, .1))
+b2 = tf.Variable(tf.zeros([2]))
+hidden2 = tf.matmul(hidden, W2)#+b2
 
-sess.run(init)
+y = tf.nn.softmax(hidden2)
 
-t_start = time.clock()
-for epoch in range(100001):
-    sess.run(train_step, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR})
-    if epoch % 10000 == 0:
-        print("_"*80)
-        print('Epoch: ', epoch)
-        print('   y_estimated: ')
-        for element in sess.run(y_estimated, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR}):
-            print('    ',element)
-        print('   W: ')
-        for element in sess.run(W):
-            print('    ',element)
-        print('   c: ')
-        for element in sess.run(c):
-            print('    ',element)
-        print('   w: ')
-        for element in sess.run(w):
-            print('    ',element)
-        print('   b ')
-        for element in sess.run(b):
-            print('    ',element)
-        print('   loss: ', sess.run(loss, feed_dict={X: INPUT_XOR, Y: OUTPUT_XOR}))
-t_end = time.clock()
-print("_"*80)
-print('Elapsed time ', t_end - t_start)
+
+# Define loss and optimizer
+cross_entropy = -tf.reduce_sum(y_*tf.log(y))
+train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
+
+# Train
+tf.initialize_all_variables().run()
+for step in range(1000):
+    feed_dict={x: x_, y_:expect } # feed the net with our inputs and desired outputs.
+    e,a=sess.run([cross_entropy,train_step],feed_dict)
+    if e<1:break # early stopping yay
+    print "step %d : entropy %s" % (step,e) # error/loss should decrease over time
+
+
+# Test trained model
+correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1)) # argmax along dim-1
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float")) # [True, False, True, True] -> [1,0,1,1] -> 0.75.
+
+print "accuracy %s"%(accuracy.eval({x: x_, y_: expect}))
+
+learned_output=tf.argmax(y,1)
+print learned_output.eval({x: x_})
+
+
 

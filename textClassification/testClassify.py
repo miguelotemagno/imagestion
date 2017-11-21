@@ -4,7 +4,7 @@ c = Classify()
 
 print "train\n"
 c.trainFilter('filtro.txt')
-#c.loadFilter('filtro.txt.json')
+c.loadFilter('filtro.txt.tfdb')
 
 print "filter\n"
 #c.loadFromWeb('www.emol.cl')
