@@ -169,6 +169,16 @@ class Classify:
 			#word = word + chr(ascii)
 
 		return word
+		
+	def defineFilterVariables(self):
+		self.HIDDEN_NODES = 3
+		self.x = tf.placeholder("float", [None, 3])
+		self.y_ = tf.placeholder("float", [None, 1])
+		self.W = tf.Variable(tf.random_uniform([3, self.HIDDEN_NODES], -.01, .01))
+		self.b = tf.Variable(tf.random_uniform([self.HIDDEN_NODES], -.01, .01))
+		self.W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1))
+		self.b2 = tf.Variable(tf.zeros([2]))
+		pass
 
 	def prepareTensor(self, xTrain, yTrain):
 		HIDDEN_NODES = 3
