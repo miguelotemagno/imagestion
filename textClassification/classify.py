@@ -172,49 +172,43 @@ class Classify:
 		
 	def defineFilterVariables(self):
 		self.HIDDEN_NODES = 3
-		self.x = tf.placeholder("float", [None, 3])
-		self.y_ = tf.placeholder("float", [None, 1])
-		self.W = tf.Variable(tf.random_uniform([3, self.HIDDEN_NODES], -.01, .01))
-		self.b = tf.Variable(tf.random_uniform([self.HIDDEN_NODES], -.01, .01))
-		self.W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1))
-		self.b2 = tf.Variable(tf.zeros([2]))
+		self.x = tf.placeholder("float", [None, 3], name="x")
+		self.y_ = tf.placeholder("float", [None, 1], name="y_")
+		self.W = tf.Variable(tf.random_uniform([3, self.HIDDEN_NODES], -.01, .01), name="W")
+		self.b = tf.Variable(tf.random_uniform([self.HIDDEN_NODES], -.01, .01), name="b")
+		self.W2 = tf.Variable(tf.random_uniform([self.HIDDEN_NODES, 2], -.1, .1), name="W2")
+		self.b2 = tf.Variable(tf.zeros([2]), name="b2")
 		pass
 
 	def prepareTensor(self, xTrain, yTrain):
-		HIDDEN_NODES = 3
-		sess = tf.InteractiveSession()
 
-		x = tf.placeholder("float", [None, 3])
-		y_ = tf.placeholder("float", [None, 1])
-
-		W = tf.Variable(tf.random_uniform([3, HIDDEN_NODES], -.01, .01))
-		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01))
-		hidden = tf.nn.relu(tf.matmul(x,W) + b)
-
-		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1))
-		b2 = tf.Variable(tf.zeros([2]))
-		hidden2 = tf.matmul(hidden, W2)  # +b2
+		sess = tf.InteractiveSession()		
+		self.defineFilterVariables()
+		
+		hidden = tf.nn.relu(tf.matmul(self.x,self.W) + self.b)
+		hidden2 = tf.matmul(hidden, self.W2)  # +b2
 
 		y = tf.nn.softmax(hidden2)
 		#y = tf.nn.tanh(hidden2)
 
-		cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
+		cross_entropy = -tf.reduce_sum(self.y_ * tf.log(y))
 		train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
 
-		tf.initialize_all_variables().run()
+		tf.global_variables_initializer().run()
+		#tf.initialize_all_variables().run()
 		for step in range(1000):
-			feed_dict = {x: xTrain, y_: yTrain}  # feed the net with our inputs and desired outputs.
+			feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
 			e, a = sess.run([cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay
 
 		#print "%s => %s" % (xTrain, yTrain)
-		correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))  # argmax along dim-1
+		correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
 		accuracy = tf.reduce_mean(
 			tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
 
-		print "accuracy %s" % (accuracy.eval({x: xTrain, y_: yTrain}))
+		print "accuracy %s" % (accuracy.eval({self.x: xTrain, self.y_: yTrain}))
 
 		learned_output = tf.argmax(y, 1)
-		print learned_output.eval({x: xTrain})
-
+		print learned_output.eval({self.x: xTrain})
+		
 		return sess
