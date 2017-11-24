@@ -105,10 +105,10 @@ class Classify:
 		# output = "%s/%s.json" % (self.path, file)
 		# self.filter.save(output)
 
-		sess = self.prepareTensor(trainData, expect)
+		self.filter = self.prepareTensor(trainData, expect)
 
 		saver = tf.train.Saver()
-		saver.save(sess, self.path+'/'+file+'.tfdb',
+		saver.save(self.filter, self.path+'/'+file+'.tfdb',
 		           global_step=None,
 		           latest_filename=None,
 		           meta_graph_suffix='meta',
@@ -131,13 +131,17 @@ class Classify:
 		trainData = []
 		maxVal = 1
 
+		self.defineFilterVariables()
+		self.y = self.defineTensorFilter()
+
 		for line in list:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
 				crc = self.getCRC(word) / len(word)
-				eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
+				#eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
+				eval = self.filter.run(self.y, feed_dict={self.x: [val, crc, len(word)]}) if self.filter else [0.0, 0.0]
 
 				if abs(eval[0]) > 0.5:
 					continue
@@ -180,18 +184,17 @@ class Classify:
 		self.b2 = tf.Variable(tf.zeros([2]), name="b2")
 		pass
 
+	def defineTensorFilter(self):
+		return tf.nn.softmax(tf.matmul(tf.nn.relu(tf.matmul(self.x,self.W) + self.b), self.W2))
+
 	def prepareTensor(self, xTrain, yTrain):
 
 		sess = tf.InteractiveSession()		
 		self.defineFilterVariables()
-		
-		hidden = tf.nn.relu(tf.matmul(self.x,self.W) + self.b)
-		hidden2 = tf.matmul(hidden, self.W2)  # +b2
-
-		y = tf.nn.softmax(hidden2)
+		self.y = self.defineTensorFilter()
 		#y = tf.nn.tanh(hidden2)
 
-		cross_entropy = -tf.reduce_sum(self.y_ * tf.log(y))
+		cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
 		train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
 
 		tf.global_variables_initializer().run()
@@ -202,13 +205,14 @@ class Classify:
 			if e < 1: break  # early stopping yay
 
 		#print "%s => %s" % (xTrain, yTrain)
-		correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
+		correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
 		accuracy = tf.reduce_mean(
 			tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
 
 		print "accuracy %s" % (accuracy.eval({self.x: xTrain, self.y_: yTrain}))
 
-		learned_output = tf.argmax(y, 1)
-		print learned_output.eval({self.x: xTrain})
-		
+		#learned_output = tf.argmax(y, 1)
+		#print learned_output.eval({self.x: xTrain})
+		print sess.run(self.y, feed_dict={self.x: xTrain})
+
 		return sess
