@@ -139,23 +139,29 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				crc = self.getCRC(word) / len(word)
+				maxVal = val if val > maxVal else maxVal
+
+		for line in list:
+			expr = reg.search(line)
+			if expr:
+				(n, word) = expr.group(1,2)
+				val = int(n)
+				crc = 1.0 * (self.getCRC(word) / len(word))
 				#eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
-				eval = self.filter.run(self.y, feed_dict={self.x: [val, crc, len(word)]}) if self.filter else [0.0, 0.0]
+				eval = self.filter.run(self.y, feed_dict={self.x: [val/maxVal, crc, len(word)]}) if self.filter else [0.0, 0.0]
 
 				if abs(eval[0]) > 0.5:
 					continue
 
-				print "[%d] [%s] [%f] [%f]" % (int(n), word, crc, eval[0])
+				print "[%d] [%s] [%f] => [%f]" % (val, word, crc, eval[0])
 
-				counts.append(val)
+				counts.append(1.0 * (val/maxVal))
 				words.append(crc)
-				maxVal = val if val > maxVal else maxVal
 
 		for i in xrange(len(words)):
-			val = 1.0 * counts[i]/maxVal
+			val = counts[i]
 			word = words[i]
-			trainData.append([[val,word], [1]])
+			trainData.append([[val,word], [1.0]])
 
 		#print trainData
 
