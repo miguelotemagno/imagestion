@@ -83,21 +83,23 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				crc = self.getCRC(word) / len(word)
-				print "[%s] [%s] [%f] [%d]" % (n, word, crc, len(word))
+				print "[%s] [%s] [%f] [%d]" % (word, n, crc, len(word))
 				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
 			(crc, lenw) = words[i]
-			#trainData.append([[1, crc, lenw], [0]])
-			trainData.append([1, crc, lenw])
-			expect.append([0])
+			data = [1.0, crc, 1.0*lenw]
+			#trainData.append([data, [0]])
+			trainData.append(data)
+			expect.append([0.0])
 
 			if i%5 == 0:
 				wrd = self.wordGenerate()
 				gen = self.getCRC(wrd) / len(wrd)
-				#trainData.append([[0, gen, len(wrd)], [1]])
-				trainData.append([0, gen, len(wrd)])
-				expect.append([1])
+				data = [0.0, gen, 1.0*len(wrd)]
+				#trainData.append([data, [1]])
+				trainData.append(data)
+				expect.append([1.0])
 
 		# self.filter.iniciar_perceptron()
 		# self.filter.entrenar_perceptron(trainData)
@@ -129,9 +131,9 @@ class Classify:
 		counts = []
 		words = []
 		trainData = []
-		maxVal = 1
+		maxVal = 1.0
 
-		self.defineFilterVariables()
+		#self.defineFilterVariables()
 		self.y = self.defineTensorFilter()
 
 		for line in list:
@@ -139,23 +141,30 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				val = int(n)
-				maxVal = val if val > maxVal else maxVal
+				maxVal = 1.0 * val if val > maxVal else maxVal
+
+
+		print "maxval:%f\n" % (maxVal)
 
 		for line in list:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
-				val = int(n)
+				val = (1.0 * int(n)) / maxVal
 				crc = 1.0 * (self.getCRC(word) / len(word))
-				#eval = self.filter.actualiza_nodos([val, crc, len(word)]) if self.filter else [0.0]
-				eval = self.filter.run(self.y, feed_dict={self.x: [val/maxVal, crc, len(word)]}) if self.filter else [0.0, 0.0]
+				data = [val, crc, 1.0*len(word)]
 
-				if abs(eval[0]) > 0.5:
+				#eval = self.filter.actualiza_nodos(data) if self.filter else [0.0]
+				eval = self.filter.run(self.y, feed_dict={self.x: [data]}) if self.filter else [0.0, 0.0]
+
+				print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
+
+				if abs(eval[0][0]) < 0.5:
 					continue
 
-				print "[%d] [%s] [%f] => [%f]" % (val, word, crc, eval[0])
+				print "--------------------------> [%s] [%f] [%f] => [%f]" % (word, val, crc, eval[0][0])
 
-				counts.append(1.0 * (val/maxVal))
+				counts.append(1.0 * val)
 				words.append(crc)
 
 		for i in xrange(len(words)):
@@ -220,5 +229,6 @@ class Classify:
 		#learned_output = tf.argmax(y, 1)
 		#print learned_output.eval({self.x: xTrain})
 		print sess.run(self.y, feed_dict={self.x: xTrain})
+		#print sess.run(self.y, feed_dict={self.x: [[2.0, 10.711832, 2.0]]})
 
 		return sess
