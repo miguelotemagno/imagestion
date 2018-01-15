@@ -64,10 +64,11 @@ class Classify:
 		# self.filter = ANN(3, 3, 1)
 		# self.filter.load(file)
 		path = '%s/%s' % (self.path,file)
-		with tf.Session() as self.filter:
-			saver = tf.train.import_meta_graph(path+'.meta')
-			saver.restore(self.filter, path)
-
+		
+		self.filter = tf.Session()
+		saver = tf.train.import_meta_graph(path+'.meta')
+		saver.restore(self.filter, path)
+		
 	def trainFilter(self, file):
 		self.loadFromFile(file)
 		self.filter = ANN(3, 3, 1)
@@ -107,10 +108,10 @@ class Classify:
 		# output = "%s/%s.json" % (self.path, file)
 		# self.filter.save(output)
 
-		self.filter = self.prepareTensor(trainData, expect)
-
-		saver = tf.train.Saver()
-		saver.save(self.filter, self.path+'/'+file+'.tfdb',
+		with tf.Session() as self.sess:
+			self.prepareTensor(trainData, expect)
+			saver = tf.train.Saver()
+			saver.save(self.sess, self.path+'/'+file+'.tfdb',
 		           global_step=None,
 		           latest_filename=None,
 		           meta_graph_suffix='meta',
@@ -133,8 +134,6 @@ class Classify:
 		trainData = []
 		maxVal = 1.0
 
-		#self.defineFilterVariables()
-		self.y = self.defineTensorFilter()
 
 		for line in list:
 			expr = reg.search(line)
@@ -145,7 +144,9 @@ class Classify:
 
 
 		print "maxval:%f\n" % (maxVal)
-
+		
+		#self.defineFilterModel()
+		
 		for line in list:
 			expr = reg.search(line)
 			if expr:
@@ -189,19 +190,6 @@ class Classify:
 
 		return word
 		
-	def defineFilterVariables(self):
-		self.HIDDEN_NODES = 3
-		self.x = tf.placeholder("float", [None, 3], name="x")
-		self.y_ = tf.placeholder("float", [None, 1], name="y_")
-		self.W = tf.Variable(tf.random_uniform([3, self.HIDDEN_NODES], -.01, .01), name="W")
-		self.b = tf.Variable(tf.random_uniform([self.HIDDEN_NODES], -.01, .01), name="b")
-		self.W2 = tf.Variable(tf.random_uniform([self.HIDDEN_NODES, 2], -.1, .1), name="W2")
-		self.b2 = tf.Variable(tf.zeros([2]), name="b2")
-		pass
-
-	def defineTensorFilter(self):
-		return tf.nn.softmax(tf.matmul(tf.nn.relu(tf.matmul(self.x,self.W) + self.b), self.W2))
-
 	def defineFilterModel(self):
 		HIDDEN_NODES = 3
 		self.x = tf.placeholder("float", [None, 3], name="x")
@@ -216,37 +204,22 @@ class Classify:
 		return tf.train.GradientDescentOptimizer(0.2).minimize(self.cross_entropy)		
 
 	def prepareTensor(self, xTrain, yTrain):
-		"""
-		sess = tf.InteractiveSession()		
-		self.defineFilterVariables()
-		self.y = self.defineTensorFilter()
-		#y = tf.nn.tanh(hidden2)
-		cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
-		train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
-		"""
-		train_step = defineFilterModel();
-		#tf.global_variables_initializer().run()
-		#tf.initialize_all_variables().run()
-		
-		init = tf.initialize_all_variables()
-		sess = tf.Session()
-		sess.run(init)
+		train_step = self.defineFilterModel();
+		init = tf.global_variables_initializer()
 
+		self.sess.run(init)
 		for step in range(1000):
 			feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
-			e, a = sess.run([self.cross_entropy, train_step], feed_dict)
+			e, a = self.sess.run([self.cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay
 
 		#print "%s => %s" % (xTrain, yTrain)
-		correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
-		accuracy = tf.reduce_mean(
-			tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
+		#correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
+		#accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
 
-		print "accuracy %s" % (accuracy.eval({self.x: xTrain, self.y_: yTrain}))
+		#print "accuracy %s" % (accuracy.eval({self.x: xTrain, self.y_: yTrain}))
 
 		#learned_output = tf.argmax(y, 1)
 		#print learned_output.eval({self.x: xTrain})
-		print sess.run(self.y, feed_dict={self.x: xTrain})
+		print self.sess.run(self.y, feed_dict={self.x: xTrain})
 		#print sess.run(self.y, feed_dict={self.x: [[2.0, 10.711832, 2.0]]})
-
-		return sess
