@@ -69,6 +69,10 @@ class Classify:
 		saver = tf.train.import_meta_graph(path+'.meta')
 		saver.restore(self.filter, path)
 		
+		graph = tf.get_default_graph()
+		self.x = graph.get_tensor_by_name("x")
+		self.y_ = graph.get_tensor_by_name("y_")
+		
 	def trainFilter(self, file):
 		self.loadFromFile(file)
 		self.filter = ANN(3, 3, 1)
@@ -156,8 +160,10 @@ class Classify:
 				data = [val, crc, 1.0*len(word)]
 
 				#eval = self.filter.actualiza_nodos(data) if self.filter else [0.0]
-				eval = self.filter.run(self.y, feed_dict={self.x: [data]}) if self.filter else [0.0, 0.0]
-
+				eval = self.filter.run(self.y_, feed_dict={self.x: [data]}) if self.filter else [0.0, 0.0]
+				#feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
+				#e, a = self.filter.run([self.cross_entropy, train_step], feed_dict)
+			
 				print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
 
 				if abs(eval[0][0]) < 0.5:
