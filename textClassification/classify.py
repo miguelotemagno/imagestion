@@ -202,21 +202,39 @@ class Classify:
 	def defineTensorFilter(self):
 		return tf.nn.softmax(tf.matmul(tf.nn.relu(tf.matmul(self.x,self.W) + self.b), self.W2))
 
-	def prepareTensor(self, xTrain, yTrain):
+	def defineFilterModel(self):
+		HIDDEN_NODES = 3
+		self.x = tf.placeholder("float", [None, 3], name="x")
+		self.y_ = tf.placeholder("float", [None, 1], name="y_")
+		W = tf.Variable(tf.random_uniform([3, HIDDEN_NODES], -.01, .01), name="W")
+		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01), name="b")
+		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1), name="W2")
+		b2 = tf.Variable(tf.zeros([2]), name="b2")
+		self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))
 
+		self.cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
+		return tf.train.GradientDescentOptimizer(0.2).minimize(self.cross_entropy)		
+
+	def prepareTensor(self, xTrain, yTrain):
+		"""
 		sess = tf.InteractiveSession()		
 		self.defineFilterVariables()
 		self.y = self.defineTensorFilter()
 		#y = tf.nn.tanh(hidden2)
-
 		cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
 		train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
-
-		tf.global_variables_initializer().run()
+		"""
+		train_step = defineFilterModel();
+		#tf.global_variables_initializer().run()
 		#tf.initialize_all_variables().run()
+		
+		init = tf.initialize_all_variables()
+		sess = tf.Session()
+		sess.run(init)
+
 		for step in range(1000):
 			feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
-			e, a = sess.run([cross_entropy, train_step], feed_dict)
+			e, a = sess.run([self.cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay
 
 		#print "%s => %s" % (xTrain, yTrain)
