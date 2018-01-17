@@ -69,12 +69,25 @@ class Classify:
 		# self.filter = ANN(3, 3, 1)
 		# self.filter.load(file)
 		path = '%s/%s' % (self.path,file)
-		self.defineFilterModel()
-		init = tf.global_variables_initializer()
+		#self.defineFilterModel()
+		#init = tf.global_variables_initializer()
+		#self.filter.run(init)				
+		
+		tf.reset_default_graph()
+		
+		HIDDEN_NODES = 3
+		self.x = tf.placeholder("float", [None, 3], name="x")
+		self.y_ = tf.placeholder("float", [None, 1], name="y_")		
+		W = tf.get_variable("W", shape=[3, HIDDEN_NODES])
+		b = tf.get_variable("b", shape=[HIDDEN_NODES])
+		W2 = tf.get_variable("W2", shape=[HIDDEN_NODES,2])
+		b = tf.get_variable("b2", shape=[2])
+		
 		self.filter = tf.Session()
-		self.filter.run(init)		
-		saver = tf.train.import_meta_graph(path+'.meta')
+		saver = tf.train.Saver()
 		saver.restore(self.filter, path)
+		
+		self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))		
 				
 	##########################################################################		           
 	
@@ -104,7 +117,7 @@ class Classify:
 			if expr:
 				(n, word) = expr.group(1,2)
 				crc = self.getCRC(word) / len(word)
-				print "[%s] [%s] [%f] [%d]" % (word, n, crc, len(word))
+				#print "[%s] [%s] [%f] [%d]" % (word, n, crc, len(word))
 				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
@@ -153,7 +166,6 @@ class Classify:
 		words = []
 		trainData = []
 		maxVal = 1.0
-
 
 		for line in list:
 			expr = reg.search(line)
@@ -233,7 +245,7 @@ class Classify:
 	##########################################################################		           
 
 	def prepareTensor(self, xTrain, yTrain):
-		print "=> defineFilterModel\n"
+		print "=> prepareTensor\n"
 		train_step = self.defineFilterModel();
 		init = tf.global_variables_initializer()
 
