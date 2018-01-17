@@ -55,25 +55,41 @@ class Classify:
 		self.sess = None
 		pass
 
+	##########################################################################		           
+	
 	def getCRC(self, text):
 		#maxValue = 0xffffffff * 1.0
 		crc = zlib.crc32(text) % (1<<32)
 		return log(crc) #crc/maxValue
 
+	##########################################################################		           
+	
 	def loadFilter(self, file):
+		print "=> loadFilter (%s)\n" % (file)
 		# self.filter = ANN(3, 3, 1)
 		# self.filter.load(file)
 		path = '%s/%s' % (self.path,file)
-		
+		self.defineFilterModel()
+		init = tf.global_variables_initializer()
 		self.filter = tf.Session()
+		self.filter.run(init)		
 		saver = tf.train.import_meta_graph(path+'.meta')
 		saver.restore(self.filter, path)
-		
-		graph = tf.get_default_graph()
-		self.x = graph.get_tensor_by_name("x")
-		self.y_ = graph.get_tensor_by_name("y_")
-		
+				
+	##########################################################################		           
+	
+	def saveFilter(self,file):
+		saver = tf.train.Saver()
+		saver.save(self.sess, self.path+'/'+file+'.tfdb',
+	           global_step=None,
+	           latest_filename=None,
+	           meta_graph_suffix='meta',
+	           write_meta_graph=True)
+		           
+	##########################################################################		           
+	
 	def trainFilter(self, file):
+		print "=> trainFilter (%s)\n" % (file)
 		self.loadFromFile(file)
 		self.filter = ANN(3, 3, 1)
 
@@ -106,31 +122,31 @@ class Classify:
 				trainData.append(data)
 				expect.append([1.0])
 
-		# self.filter.iniciar_perceptron()
-		# self.filter.entrenar_perceptron(trainData)
-		# self.filter.clasificar(trainData)
-		# output = "%s/%s.json" % (self.path, file)
-		# self.filter.save(output)
-
 		with tf.Session() as self.sess:
 			self.prepareTensor(trainData, expect)
-			saver = tf.train.Saver()
-			saver.save(self.sess, self.path+'/'+file+'.tfdb',
-		           global_step=None,
-		           latest_filename=None,
-		           meta_graph_suffix='meta',
-		           write_meta_graph=True)
+			self.saveFilter(file)
 
+	##########################################################################		           
+	
 	def saveNet(self,file):
 		self.net.save(file)
 
+	##########################################################################		           
+
 	def loadFromFile(self,source):
+		print "=> loadFromFile (%s)\n" % (source)
 		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
 
+	##########################################################################		           
+
 	def loadFromWeb(self,source):
+		print "=> loadFromWeb (%s)\n" % (source)
 		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
+	##########################################################################		           
+
 	def process(self):
+		print "=> process\n"
 		list = self.text.split("\n")
 		reg = re.compile('(\d+)\s+(\w+)')
 		counts = []
@@ -146,33 +162,33 @@ class Classify:
 				val = int(n)
 				maxVal = 1.0 * val if val > maxVal else maxVal
 
-
 		print "maxval:%f\n" % (maxVal)
 		
-		#self.defineFilterModel()
-		
-		for line in list:
-			expr = reg.search(line)
-			if expr:
-				(n, word) = expr.group(1,2)
-				val = (1.0 * int(n)) / maxVal
-				crc = 1.0 * (self.getCRC(word) / len(word))
-				data = [val, crc, 1.0*len(word)]
-
-				#eval = self.filter.actualiza_nodos(data) if self.filter else [0.0]
-				eval = self.filter.run(self.y_, feed_dict={self.x: [data]}) if self.filter else [0.0, 0.0]
-				#feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
-				#e, a = self.filter.run([self.cross_entropy, train_step], feed_dict)
-			
-				print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
-
-				if abs(eval[0][0]) < 0.5:
-					continue
-
-				print "--------------------------> [%s] [%f] [%f] => [%f]" % (word, val, crc, eval[0][0])
-
-				counts.append(1.0 * val)
-				words.append(crc)
+		with tf.Session() as filter:			
+			for line in list:
+				expr = reg.search(line)
+				if expr:
+					(n, word) = expr.group(1,2)
+					val = (1.0 * int(n)) / maxVal
+					crc = 1.0 * (self.getCRC(word) / len(word))
+					data = [val, crc, 1.0*len(word)]
+	
+					#eval = self.filter.actualiza_nodos(data) if self.filter else [0.0]
+					#eval = self.filter.run(self.y_, feed_dict={self.x: [data]}) if self.filter else [0.0, 0.0]
+					#feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
+					#e, a = self.filter.run([self.cross_entropy, train_step], feed_dict)
+	
+					eval = filter.run(self.y, feed_dict={self.x: [data]})
+				
+					print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
+	
+					if abs(eval[0][0]) < 0.5:
+						continue
+	
+					print "--------------------------> [%s] [%f] [%f] => [%f]" % (word, val, crc, eval[0][0])
+	
+					counts.append(1.0 * val)
+					words.append(crc)
 
 		for i in xrange(len(words)):
 			val = counts[i]
@@ -185,6 +201,8 @@ class Classify:
 		self.net.entrenar_perceptron(trainData)
 		#self.net.clasificar(trainData)
 
+	##########################################################################		           
+
 	def wordGenerate(self):
 		n = randint(2,5)
 		vocals = ['a','e','i','o','u']
@@ -195,8 +213,11 @@ class Classify:
 			#word = word + chr(ascii)
 
 		return word
+
+	##########################################################################		           
 		
 	def defineFilterModel(self):
+		print "=> defineFilterModel\n"
 		HIDDEN_NODES = 3
 		self.x = tf.placeholder("float", [None, 3], name="x")
 		self.y_ = tf.placeholder("float", [None, 1], name="y_")
@@ -209,7 +230,10 @@ class Classify:
 		self.cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
 		return tf.train.GradientDescentOptimizer(0.2).minimize(self.cross_entropy)		
 
+	##########################################################################		           
+
 	def prepareTensor(self, xTrain, yTrain):
+		print "=> defineFilterModel\n"
 		train_step = self.defineFilterModel();
 		init = tf.global_variables_initializer()
 
@@ -220,12 +244,5 @@ class Classify:
 			if e < 1: break  # early stopping yay
 
 		#print "%s => %s" % (xTrain, yTrain)
-		#correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))  # argmax along dim-1
-		#accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))  # [True, False, True, True] -> [1,0,1,1] -> 0.75.
-
-		#print "accuracy %s" % (accuracy.eval({self.x: xTrain, self.y_: yTrain}))
-
-		#learned_output = tf.argmax(y, 1)
-		#print learned_output.eval({self.x: xTrain})
 		print self.sess.run(self.y, feed_dict={self.x: xTrain})
 		#print sess.run(self.y, feed_dict={self.x: [[2.0, 10.711832, 2.0]]})
