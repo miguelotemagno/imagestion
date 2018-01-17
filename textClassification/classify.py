@@ -64,6 +64,16 @@ class Classify:
 
 	##########################################################################		           
 	
+	def saveFilter(self,file):
+		saver = tf.train.Saver()
+		saver.save(self.sess, self.path+'/'+file+'.tfdb',
+	           global_step=None,
+	           latest_filename=None,
+	           meta_graph_suffix='meta',
+	           write_meta_graph=True)
+		           
+	##########################################################################		           
+	
 	def loadFilter(self, file):
 		print "=> loadFilter (%s)\n" % (file)
 		# self.filter = ANN(3, 3, 1)
@@ -78,27 +88,44 @@ class Classify:
 		HIDDEN_NODES = 3
 		self.x = tf.placeholder("float", [None, 3], name="x")
 		self.y_ = tf.placeholder("float", [None, 1], name="y_")		
-		W = tf.get_variable("W", shape=[3, HIDDEN_NODES])
-		b = tf.get_variable("b", shape=[HIDDEN_NODES])
-		W2 = tf.get_variable("W2", shape=[HIDDEN_NODES,2])
-		b = tf.get_variable("b2", shape=[2])
 		
-		self.filter = tf.Session()
-		saver = tf.train.Saver()
-		saver.restore(self.filter, path)
+		W = tf.get_variable("W", shape=[3, HIDDEN_NODES]) #, initializer = tf.zeros_initializer)
+		b = tf.get_variable("b", shape=[HIDDEN_NODES]) #, initializer = tf.zeros_initializer)
+		W2 = tf.get_variable("W2", shape=[HIDDEN_NODES,2]) #, initializer = tf.zeros_initializer)
+		b2 = tf.get_variable("b2", shape=[2]) #, initializer = tf.zeros_initializer)
 		
 		self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))		
-				
-	##########################################################################		           
-	
-	def saveFilter(self,file):
+		
+		
+		self.filter = tf.Session()
+		#self.defineFilterModel()
+		#init = tf.global_variables_initializer()
+		#self.filter.run(init)
 		saver = tf.train.Saver()
-		saver.save(self.sess, self.path+'/'+file+'.tfdb',
-	           global_step=None,
-	           latest_filename=None,
-	           meta_graph_suffix='meta',
-	           write_meta_graph=True)
-		           
+		
+		#W.initializer.run(session=self.filter)
+		#b.initializer.run(session=self.filter)
+		#W2.initializer.run(session=self.filter)
+		#b2.initializer.run(session=self.filter)
+		
+		saver.restore(self.filter, path)
+						
+	##########################################################################		           
+		
+	def defineFilterModel(self):
+		print "=> defineFilterModel\n"
+		HIDDEN_NODES = 3
+		self.x = tf.placeholder("float", [None, 3], name="x")
+		self.y_ = tf.placeholder("float", [None, 1], name="y_")
+		W = tf.Variable(tf.random_uniform([3, HIDDEN_NODES], -.01, .01), name="W")
+		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01), name="b")
+		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1), name="W2")
+		b2 = tf.Variable(tf.zeros([2]), name="b2")
+		self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))
+
+		self.cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
+		return tf.train.GradientDescentOptimizer(0.2).minimize(self.cross_entropy)		
+
 	##########################################################################		           
 	
 	def trainFilter(self, file):
@@ -190,6 +217,7 @@ class Classify:
 					#feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
 					#e, a = self.filter.run([self.cross_entropy, train_step], feed_dict)
 	
+					#data = [1.0, crc, 1.0*lenw]
 					eval = filter.run(self.y, feed_dict={self.x: [data]})
 				
 					print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
@@ -225,22 +253,6 @@ class Classify:
 			#word = word + chr(ascii)
 
 		return word
-
-	##########################################################################		           
-		
-	def defineFilterModel(self):
-		print "=> defineFilterModel\n"
-		HIDDEN_NODES = 3
-		self.x = tf.placeholder("float", [None, 3], name="x")
-		self.y_ = tf.placeholder("float", [None, 1], name="y_")
-		W = tf.Variable(tf.random_uniform([3, HIDDEN_NODES], -.01, .01), name="W")
-		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01), name="b")
-		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 2], -.1, .1), name="W2")
-		b2 = tf.Variable(tf.zeros([2]), name="b2")
-		self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))
-
-		self.cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
-		return tf.train.GradientDescentOptimizer(0.2).minimize(self.cross_entropy)		
 
 	##########################################################################		           
 
