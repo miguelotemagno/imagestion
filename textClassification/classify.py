@@ -33,7 +33,7 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import zlib
+#import zlib
 import subprocess as sp
 import os
 import re
@@ -51,7 +51,7 @@ class Classify:
 		self.path = os.getcwd()
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
-		self.maxValue = self.getBase32('electroencefalografia');
+		self.maxValue = self.getBase32('Electroencefalografistas');
 		self.trainData = None
 		self.sess = None
 		pass
@@ -62,12 +62,10 @@ class Classify:
 		result = i = 0
 		
 		for letter in text.upper():
-			result += (ord(letter) - 65) * 32**i
-			i += 1
-			if(i > 12):
-				break			
+			result += (ord(letter) - 65 + 2) * 32**i
+			i += 1	
 			
-		return float(result)
+		return log(result)
 
 	##########################################################################		           
 	
