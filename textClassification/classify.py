@@ -218,15 +218,14 @@ class Classify:
 					#e, a = self.filter.run([self.cross_entropy, train_step], feed_dict)
 	
 					#data = [1.0, crc, 1.0*lenw]
-					eval = filter.run(self.y, feed_dict={self.x: [data]})
-				
-					print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
-	
+					eval = self.filter.run(self.y, feed_dict={self.x: [data]})
+					
 					if abs(eval[0][0]) < 0.5:
+						print "--------------------------> [%s] [%f] [%f] => [%f]" % (word, val, crc, eval[0][0])
 						continue
-	
-					print "--------------------------> [%s] [%f] [%f] => [%f]" % (word, val, crc, eval[0][0])
-	
+					else:
+						print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
+								
 					counts.append(1.0 * val)
 					words.append(crc)
 
