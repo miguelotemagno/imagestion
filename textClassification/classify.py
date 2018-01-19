@@ -60,11 +60,12 @@ class Classify:
 	##########################################################################		           
 	
 	def getBase32(self, text):
-		result = i = 0
+		result = 0
+		i = len(text)
 		
 		for letter in text.upper():
-			result += (ord(letter) - 65) * 32**i
-			i += 1	
+			result += (ord(letter) - 65) * (32**i)
+			i -= 1	
 			
 		return log(result+2)
 
@@ -150,7 +151,7 @@ class Classify:
 
 		for i in xrange(len(words)):
 			(word, crc, n, lenw) = words[i]
-			print "%s: [%s] [%f] [%d]" % (word, n, crc, len(word))
+			print "%s: [%f20] [%s] [%f]" % (word, crc, n, lenw)
 			#data = [val, crc, len(word)/maxLen]
 			data = [0.5, crc, lenw]
 			#trainData.append([data, [0]])
