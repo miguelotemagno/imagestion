@@ -51,16 +51,31 @@ class Classify:
 		self.path = os.getcwd()
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
+		self.maxValue = self.getBase32('electroencefalografia');
 		self.trainData = None
 		self.sess = None
 		pass
 
 	##########################################################################		           
 	
+	def getBase32(self, text):
+		result = i = 0
+		
+		for letter in text.upper():
+			result += (ord(letter) - 65) * 32**i
+			i += 1
+			if(i > 12):
+				break			
+			
+		return float(result)
+
+	##########################################################################		           
+	
 	def getCRC(self, text):
-		#maxValue = 0xffffffff * 1.0
-		crc = zlib.crc32(text) % (1<<32)
-		return log(crc) #crc/maxValue
+		#crc = zlib.crc32(text) % (1<<32)
+		crc = self.getBase32(text)
+		return crc/self.maxValue		
+		#return log(crc) #crc/maxValue
 
 	##########################################################################		           
 	
@@ -143,8 +158,8 @@ class Classify:
 			expr = reg.search(line)
 			if expr:
 				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word) / len(word)
-				#print "[%s] [%s] [%f] [%d]" % (word, n, crc, len(word))
+				crc = self.getCRC(word) 
+				print "[%s] [%s] [%f] [%d]" % (word, n, crc, len(word))
 				words.append([crc, len(word)])
 
 		for i in xrange(len(words)):
@@ -156,7 +171,7 @@ class Classify:
 
 			if i%5 == 0:
 				wrd = self.wordGenerate()
-				gen = self.getCRC(wrd) / len(wrd)
+				gen = self.getCRC(wrd) 
 				data = [0.0, gen, 1.0*len(wrd)]
 				#trainData.append([data, [1]])
 				trainData.append(data)
