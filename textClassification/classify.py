@@ -60,12 +60,12 @@ class Classify:
 	##########################################################################		           
 	
 	def getBase32(self, text):
-		result = 0
-		i = len(text)
+		result = i = 0
 		
-		for letter in text.upper():
+		#for letter in list(reversed(list(text.upper()))):
+		for letter in list(text.upper()):		
 			result += (ord(letter) - 65) * (32**i)
-			i -= 1	
+			i += 1	
 			
 		return log(result+2)
 
