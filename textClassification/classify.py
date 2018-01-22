@@ -95,16 +95,18 @@ class Classify:
 		tf.reset_default_graph()
 		
 		INPUTS = 3
-		HIDDEN_NODES = 3
+		LAYER1_NODES = 4
+		LAYER2_NODES = 3
+		LAYER3_NODES = 2
 		self.x = tf.placeholder("float", [None, 3], name="x")
 		self.y_ = tf.placeholder("float", [None, 1], name="y_")		
 		
-		W = tf.get_variable("W", shape=[INPUTS, HIDDEN_NODES])
-		b = tf.get_variable("b", shape=[HIDDEN_NODES])
-		W2 = tf.get_variable("W2", shape=[HIDDEN_NODES,4]) 
-		b2 = tf.get_variable("b2", shape=[4]) 
-		W3 = tf.get_variable("W3", shape=[4,2]) 
-		b3 = tf.get_variable("b3", shape=[2]) 
+		W = tf.get_variable("W", shape=[INPUTS, LAYER1_NODES])
+		b = tf.get_variable("b", shape=[LAYER1_NODES])
+		W2 = tf.get_variable("W2", shape=[LAYER1_NODES,LAYER2_NODES]) 
+		b2 = tf.get_variable("b2", shape=[LAYER2_NODES]) 
+		W3 = tf.get_variable("W3", shape=[LAYER2_NODES,LAYER3_NODES]) 
+		b3 = tf.get_variable("b3", shape=[LAYER3_NODES]) 
 		
 		#self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))		
 		layer1 = tf.matmul(self.x,W) + b
@@ -121,16 +123,18 @@ class Classify:
 	def defineFilterModel(self):
 		print "=> defineFilterModel\n"
 		INPUTS = 3
-		HIDDEN_NODES = 3
+		LAYER1_NODES = 4
+		LAYER2_NODES = 3
+		LAYER3_NODES = 2
 		self.x = tf.placeholder("float", [None, INPUTS], name="x")
 		self.y_ = tf.placeholder("float", [None, 1], name="y_")
 		
-		W = tf.Variable(tf.random_uniform([INPUTS, HIDDEN_NODES], -.01, .01), name="W")
-		b = tf.Variable(tf.random_uniform([HIDDEN_NODES], -.01, .01), name="b")
-		W2 = tf.Variable(tf.random_uniform([HIDDEN_NODES, 4], -.01, .01), name="W2")
-		b2 = tf.Variable(tf.zeros([4]), name="b2")
-		W3 = tf.Variable(tf.random_uniform([4, 2], -.1, .1), name="W3")
-		b3 = tf.Variable(tf.zeros([2]), name="b3")
+		W = tf.Variable(tf.random_uniform([INPUTS, LAYER1_NODES],      -.01, .01), name="W")
+		b = tf.Variable(tf.random_uniform([LAYER1_NODES],              -.01, .01), name="b")
+		W2 = tf.Variable(tf.random_uniform([LAYER1_NODES, LAYER2_NODES], -.1, .1), name="W2")
+		b2 = tf.Variable(tf.zeros([LAYER2_NODES]),                                 name="b2")
+		W3 = tf.Variable(tf.random_uniform([LAYER2_NODES, LAYER3_NODES],   -1, 1), name="W3")
+		b3 = tf.Variable(tf.zeros([LAYER3_NODES]),                                 name="b3")
 		
 		layer1 = tf.matmul(self.x,W) + b
 		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
