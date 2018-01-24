@@ -40,6 +40,7 @@ import re
 from ANN import *
 from random import randint
 from math import log
+import numpy as np
 import tensorflow as tf
 
 class Classify:
@@ -55,6 +56,7 @@ class Classify:
 		self.maxValue = self.getBase32(self.largestWord);
 		self.trainData = None
 		self.sess = None
+		self.data = []
 		pass
 
 	##########################################################################		           
@@ -181,10 +183,12 @@ class Classify:
 				#trainData.append([data, [1]])
 				trainData.append(data)
 				expect.append([1.0])
-
-		with tf.Session() as self.sess:
-			self.prepareTensor(trainData, expect)
-			self.saveFilter(file)
+		
+		self.data = trainData
+		
+		#with tf.Session() as self.sess:
+		#	self.prepareTensor(trainData, expect)
+		#	self.saveFilter(file)
 
 	##########################################################################		           
 	
