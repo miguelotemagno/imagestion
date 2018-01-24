@@ -14,7 +14,8 @@ def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
     plt.savefig(file)
 
 c = Classify()
-x = y = []
+x = []
+y = []
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
@@ -24,8 +25,8 @@ if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 		x.append(i[1])
 		y.append(i[2])
 	
-	plotHistogram(x, 1, 'x.png')
-	plotHistogram(y, 1, 'y.png')
+	plotHistogram(x, 200, 'x.png')
+	plotHistogram(y, 200, 'y.png')
 
 if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	c.loadFilter('filtro.txt.tfdb')
