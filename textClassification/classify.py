@@ -179,16 +179,16 @@ class Classify:
 			if i%3 == 0:
 				wrd = self.wordGenerate()
 				gen = self.getCRC(wrd) 
-				data = [0.0005, gen, len(wrd)]
+				data = [0.0005, gen, len(wrd)/maxLen]
 				#trainData.append([data, [1]])
 				trainData.append(data)
 				expect.append([1.0])
 		
 		self.data = trainData
 		
-		#with tf.Session() as self.sess:
-		#	self.prepareTensor(trainData, expect)
-		#	self.saveFilter(file)
+		with tf.Session() as self.sess:
+			self.prepareTensor(trainData, expect)
+			self.saveFilter(file)
 
 	##########################################################################		           
 	
