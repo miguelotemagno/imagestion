@@ -65,7 +65,7 @@ class Classify:
 		result = i = 0
 		
 		for letter in list(reversed(list(text.upper()))):
-			result += (ord(letter) - 65) * (32**i)
+			result += (ord(letter) - 64) * (32**i)
 			i += 1	
 			
 		return log(result+2)
@@ -75,6 +75,12 @@ class Classify:
 	def getCRC(self, text):
 		crc = self.getBase32(text)
 		return crc/self.maxValue		
+
+	##########################################################################		           
+	
+	def getHex2List(self, text):
+		l = list(hex(int(round(self.getCRC(text) * 10**18))))
+		return l[2:]
 
 	##########################################################################		           
 	
