@@ -90,18 +90,17 @@ class Classify:
 	
 	def loadFilter(self, file):
 		print "=> loadFilter (%s)\n" % (file)
-		# self.filter = ANN(3, 3, 1)
-		# self.filter.load(file)
 		path = '%s/%s' % (self.path,file)
 		
 		tf.reset_default_graph()
 		
-		INPUTS = 3
-		LAYER1_NODES = 4
+		INPUTS = 2
+		OUTPUTS = 2
+		LAYER1_NODES = 3
 		LAYER2_NODES = 3
 		LAYER3_NODES = 2
-		self.x = tf.placeholder("float", [None, 3], name="x")
-		self.y_ = tf.placeholder("float", [None, 1], name="y_")		
+		self.x = tf.placeholder("float", [None, INPUTS], name="x")
+		self.y_ = tf.placeholder("float", [None, OUTPUTS], name="y_")		
 		
 		W = tf.get_variable("W", shape=[INPUTS, LAYER1_NODES])
 		b = tf.get_variable("b", shape=[LAYER1_NODES])
@@ -110,7 +109,6 @@ class Classify:
 		W3 = tf.get_variable("W3", shape=[LAYER2_NODES,LAYER3_NODES]) 
 		b3 = tf.get_variable("b3", shape=[LAYER3_NODES]) 
 		
-		#self.y = tf.nn.softmax( tf.matmul( tf.nn.relu( tf.matmul(self.x,W) + b), W2))		
 		layer1 = tf.matmul(self.x,W) + b
 		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
 		layer3 = tf.matmul(tf.nn.relu(layer2), W3) #+ b3
@@ -124,12 +122,13 @@ class Classify:
 		
 	def defineFilterModel(self):
 		print "=> defineFilterModel\n"
-		INPUTS = 3
-		LAYER1_NODES = 4
+		INPUTS = 2
+		OUTPUTS = 2
+		LAYER1_NODES = 3
 		LAYER2_NODES = 3
 		LAYER3_NODES = 2
 		self.x = tf.placeholder("float", [None, INPUTS], name="x")
-		self.y_ = tf.placeholder("float", [None, 1], name="y_")
+		self.y_ = tf.placeholder("float", [None, OUTPUTS], name="y_")
 		
 		W = tf.Variable(tf.random_uniform([INPUTS, LAYER1_NODES],      -.01, .01), name="W")
 		b = tf.Variable(tf.random_uniform([LAYER1_NODES],              -.01, .01), name="b")
@@ -171,18 +170,18 @@ class Classify:
 			(word, crc, n, lenw) = words[i]
 			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
 			#data = [val, crc, len(word)/maxLen]
-			data = [0.5, crc, lenw]
+			data = [crc, lenw]
 			#trainData.append([data, [0]])
 			trainData.append(data)
-			expect.append([0.0])
+			expect.append([0.0, 0.0])
 
-			if i%3 == 0:
+			if i%2 == 0:
 				wrd = self.wordGenerate()
 				gen = self.getCRC(wrd) 
-				data = [0.0005, gen, len(wrd)/maxLen]
+				data = [gen, len(wrd)/maxLen]
 				#trainData.append([data, [1]])
 				trainData.append(data)
-				expect.append([1.0])
+				expect.append([1.0, 1.0])
 		
 		self.data = trainData
 		
@@ -238,15 +237,15 @@ class Classify:
 					#val = log(int(n)) / maxVal
 					crc = self.getCRC(word)
 					#data = [1.0, crc, lenw]
-					data = [val, crc, len(word)/maxLen]
+					data = [crc, len(word)/maxLen]
 	
 					eval = self.filter.run(self.y, feed_dict={self.x: [data]})
 					
-					if abs(eval[0][0]) < 0.5:
-						print "--------------------------> %s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
+					if abs(eval[0][0]) > 0.5:
+						print "--------------------------> %s: [%f] [%f] => [%f]" % (word,data[0],data[1], eval[0][0])
 						continue
 					else:
-						print "%s: [%f] [%f] [%f] => [%f]" % (word,data[0],data[1],data[2], eval[0][0])
+						print "%s: [%f] [%f] => [%f]" % (word,data[0],data[1], eval[0][0])
 								
 					counts.append(val)
 					words.append(crc)
@@ -284,7 +283,7 @@ class Classify:
 		init = tf.global_variables_initializer()
 
 		self.sess.run(init)
-		for step in range(5000):
+		for step in range(10000):
 			feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
 			e, a = self.sess.run([self.cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay

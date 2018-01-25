@@ -19,19 +19,20 @@ y = []
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
-	c.trainFilter('filtro.txt')
+	c.trainFilter('preposiciones.txt')
 	
 	for i in c.data:
-		x.append(i[1])
-		y.append(i[2])
+		x.append(i[0])
+		y.append(i[1])
 	
 	plotHistogram(x, 200, 'x.png')
 	plotHistogram(y, 200, 'y.png')
 
 if sys.argv[1] == 'test' or sys.argv[1] == 'all':
-	c.loadFilter('filtro.txt.tfdb')
+	#c.loadFilter('filtro.txt.tfdb')
+	c.loadFilter('preposiciones.txt.tfdb')
 	
 	print "filter\n"
-	#c.loadFromWeb('www.emol.cl')    ## sudo apt-get install links
-	c.loadFromFile('libro.txt')
+	c.loadFromWeb('www.emol.cl')    ## sudo apt-get install links
+	#c.loadFromFile('libro.txt')
 	c.process()
