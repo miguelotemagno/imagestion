@@ -45,7 +45,7 @@ import tensorflow as tf
 
 class Classify:
 	def __init__(self):
-		self.net = ANN(2, 3, 1)
+		#self.net = ANN(2, 3, 1)
 		self.filter = None
 		self.fromFile = 'loadFromFile.sh'
 		self.fromWeb = 'loadFromWeb.sh'
@@ -80,7 +80,7 @@ class Classify:
 	
 	def getHex2List(self, text):
 		l = list(hex(int(round(self.getCRC(text) * 10**18))))
-		return l[2:]
+		return [int(x,16)/16.0 for x in l[2:]]
 
 	##########################################################################		           
 	
@@ -100,7 +100,7 @@ class Classify:
 		
 		tf.reset_default_graph()
 		
-		INPUTS = 2
+		INPUTS = 14
 		OUTPUTS = 2
 		LAYER1_NODES = 3
 		LAYER2_NODES = 3
@@ -128,7 +128,7 @@ class Classify:
 		
 	def defineFilterModel(self):
 		print "=> defineFilterModel\n"
-		INPUTS = 2
+		INPUTS = 14
 		OUTPUTS = 2
 		LAYER1_NODES = 3
 		LAYER2_NODES = 3
@@ -136,13 +136,13 @@ class Classify:
 		self.x = tf.placeholder("float", [None, INPUTS], name="x")
 		self.y_ = tf.placeholder("float", [None, OUTPUTS], name="y_")
 		
-		W = tf.Variable(tf.random_uniform([INPUTS, LAYER1_NODES],      -.01, .01), name="W")
-		b = tf.Variable(tf.random_uniform([LAYER1_NODES],              -.01, .01), name="b")
-		W2 = tf.Variable(tf.random_uniform([LAYER1_NODES, LAYER2_NODES], -.1, .1), name="W2")
-		b2 = tf.Variable(tf.zeros([LAYER2_NODES]),                                 name="b2")
-		W3 = tf.Variable(tf.random_uniform([LAYER2_NODES, LAYER3_NODES],   -1, 1), name="W3")
-		b3 = tf.Variable(tf.zeros([LAYER3_NODES]),                                 name="b3")
-		
+		W = tf.Variable(tf.random_uniform([INPUTS, LAYER1_NODES],        -.01, .01), name="W")
+		b = tf.Variable(tf.random_uniform([LAYER1_NODES],                -.01, .01), name="b")
+		W2 = tf.Variable(tf.random_uniform([LAYER1_NODES, LAYER2_NODES],  -.1,  .1), name="W2")
+		b2 = tf.Variable(tf.zeros([LAYER2_NODES]),                                   name="b2")
+		W3 = tf.Variable(tf.random_uniform([LAYER2_NODES, LAYER3_NODES], -1.0, 1.0), name="W3")
+		b3 = tf.Variable(tf.zeros([LAYER3_NODES]),                                   name="b3")
+		 
 		layer1 = tf.matmul(self.x,W) + b
 		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
 		layer3 = tf.matmul(tf.nn.relu(layer2), W3) #+ b3
@@ -164,31 +164,26 @@ class Classify:
 		words = []
 		trainData = []
 		expect = []
+		i = 0
 
 		for line in list:
 			expr = reg.search(line)
 			if expr:
-				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word) 
-				words.append([word, crc, n, len(word)/maxLen])
+				i += 1
+				(n, word) = expr.group(1,2)				
+				data = self.getHex2List(word)
+				trainData.append(data[0:14])
+				expect.append([0.0, 0.0])	
+				print word+": [0] "+str(data)
+					
+				if i%2 == 0:
+					wrd = self.wordGenerate()
+					data = self.getHex2List(wrd)
+					trainData.append(data[0:14])
+					expect.append([1.0, 1.0])	
+					print wrd+": [1] "+str(data)
 
-		for i in xrange(len(words)):
-			(word, crc, n, lenw) = words[i]
-			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
-			#data = [val, crc, len(word)/maxLen]
-			data = [crc, lenw]
-			#trainData.append([data, [0]])
-			trainData.append(data)
-			expect.append([0.0, 0.0])
-
-			if i%2 == 0:
-				wrd = self.wordGenerate()
-				gen = self.getCRC(wrd) 
-				data = [gen, len(wrd)/maxLen]
-				#trainData.append([data, [1]])
-				trainData.append(data)
-				expect.append([1.0, 1.0])
-		
+						
 		self.data = trainData
 		
 		with tf.Session() as self.sess:
@@ -241,20 +236,20 @@ class Classify:
 					(n, word) = expr.group(1,2)
 					val = int(n) / maxVal
 					#val = log(int(n)) / maxVal
-					crc = self.getCRC(word)
+					crc = self.getHex2List(word)
 					#data = [1.0, crc, lenw]
-					data = [crc, len(word)/maxLen]
+					data = crc[0:14]
 	
 					eval = self.filter.run(self.y, feed_dict={self.x: [data]})
 					
-					if abs(eval[0][0]) > 0.5:
-						print "--------------------------> %s: [%f] [%f] => [%f]" % (word,data[0],data[1], eval[0][0])
+					if abs(eval[0][0]) < 0.5:
+						print "--------------------------> %s: %s => [%f]" % (word,str(data), eval[0][0])
 						continue
 					else:
-						print "%s: [%f] [%f] => [%f]" % (word,data[0],data[1], eval[0][0])
+						print "%s: %s => [%f]" % (word,str(data), eval[0][0])
 								
 					counts.append(val)
-					words.append(crc)
+					words.append(data)
 		"""
 		for i in xrange(len(words)):
 			val = counts[i]
@@ -289,7 +284,7 @@ class Classify:
 		init = tf.global_variables_initializer()
 
 		self.sess.run(init)
-		for step in range(10000):
+		for step in range(1000):
 			feed_dict = {self.x: xTrain, self.y_: yTrain}  # feed the net with our inputs and desired outputs.
 			e, a = self.sess.run([self.cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay

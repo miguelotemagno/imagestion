@@ -1,9 +1,9 @@
 from classify import *
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')             ##
-import matplotlib.mlab as mlab    ## sudo apt-get install python-matplotlib
-import matplotlib.pyplot as plt   ##
+#import matplotlib                 ##
+#matplotlib.use('Agg')             ##
+#import matplotlib.mlab as mlab    ## sudo apt-get install python-matplotlib
+#import matplotlib.pyplot as plt   ##
 import sys
 
 def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
@@ -25,8 +25,8 @@ if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 		x.append(i[0])
 		y.append(i[1])
 	
-	plotHistogram(x, 200, 'x.png')
-	plotHistogram(y, 200, 'y.png')
+	#plotHistogram(x, 200, 'x.png')
+	#plotHistogram(y, 200, 'y.png')
 
 if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	#c.loadFilter('filtro.txt.tfdb')
