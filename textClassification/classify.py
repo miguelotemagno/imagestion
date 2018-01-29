@@ -192,6 +192,48 @@ class Classify:
 
 	##########################################################################		           
 	
+	def trainFilter2x2(self, file):
+		print "=> trainFilter (%s)\n" % (file)
+		self.loadFromFile(file)
+		maxLen = float(len(self.largestWord))
+
+		list = self.text.split("\n")
+		reg = re.compile('(\d+)\s+(\w+)')
+		words = []
+		trainData = []
+		expect = []
+
+		for line in list:
+			expr = reg.search(line)
+			if expr:
+				(n, word) = expr.group(1,2)
+				crc = self.getCRC(word) 
+				words.append([word, crc, n, len(word)/maxLen])
+
+		for i in xrange(len(words)):
+			(word, crc, n, lenw) = words[i]
+			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
+			data = [crc, lenw]
+			trainData.append(data)
+			expect.append([0.0, 0.0])
+
+			if i%2 == 0:
+				wrd = self.wordGenerate()
+				gen = self.getCRC(wrd) 
+				data = [gen, len(wrd)/maxLen]
+				#trainData.append([data, [1]])
+				trainData.append(data)
+				expect.append([1.0, 1.0])
+		
+		self.data = trainData
+		
+		with tf.Session() as self.sess:
+			self.prepareTensor(trainData, expect)
+			self.saveFilter(file)
+
+	##########################################################################		           
+
+	
 	def saveNet(self,file):
 		self.net.save(file)
 
