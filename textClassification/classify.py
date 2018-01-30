@@ -57,6 +57,13 @@ class Classify:
 		self.trainData = None
 		self.sess = None
 		self.data = []
+		self.filterParams = {
+			'INPUTS'       : 2,   # 15
+			'OUTPUTS'      : 1,
+			'LAYER1_NODES' : 3,
+			'LAYER2_NODES' : 3,
+			'LAYER3_NODES' : 2
+		}
 		pass
 
 	##########################################################################
@@ -113,20 +120,17 @@ class Classify:
 		
 		tf.reset_default_graph()
 		
-		INPUTS = 2   # 15
-		OUTPUTS = 2
-		LAYER1_NODES = 3
-		LAYER2_NODES = 3
-		LAYER3_NODES = 2
-		self.x = tf.placeholder("float", [None, INPUTS], name="x")
-		self.y_ = tf.placeholder("float", [None, OUTPUTS], name="y_")		
+		fp = self.filterParams
 		
-		W = tf.get_variable("W", shape=[INPUTS, LAYER1_NODES])
-		b = tf.get_variable("b", shape=[LAYER1_NODES])
-		W2 = tf.get_variable("W2", shape=[LAYER1_NODES,LAYER2_NODES]) 
-		b2 = tf.get_variable("b2", shape=[LAYER2_NODES]) 
-		W3 = tf.get_variable("W3", shape=[LAYER2_NODES,LAYER3_NODES]) 
-		b3 = tf.get_variable("b3", shape=[LAYER3_NODES]) 
+		self.x = tf.placeholder("float", [None, fp['INPUTS']], name="x")
+		self.y_ = tf.placeholder("float", [None, fp['OUTPUTS']], name="y_")		
+		
+		W  = tf.get_variable("W",  shape=[fp['INPUTS'],       fp['LAYER1_NODES']])
+		b  = tf.get_variable("b",  shape=[fp['LAYER1_NODES']])
+		W2 = tf.get_variable("W2", shape=[fp['LAYER1_NODES'], fp['LAYER2_NODES']]) 
+		b2 = tf.get_variable("b2", shape=[fp['LAYER2_NODES']]) 
+		W3 = tf.get_variable("W3", shape=[fp['LAYER2_NODES'], fp['LAYER3_NODES']]) 
+		b3 = tf.get_variable("b3", shape=[fp['LAYER3_NODES']]) 
 		
 		layer1 = tf.matmul(self.x,W) + b
 		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
@@ -141,20 +145,18 @@ class Classify:
 		
 	def defineFilterModel(self):
 		print "=> defineFilterModel\n"
-		INPUTS = 2  # 15
-		OUTPUTS = 2
-		LAYER1_NODES = 3
-		LAYER2_NODES = 3
-		LAYER3_NODES = 2
-		self.x = tf.placeholder("float", [None, INPUTS], name="x")
-		self.y_ = tf.placeholder("float", [None, OUTPUTS], name="y_")
+
+		fp = self.filterParams
 		
-		W = tf.Variable(tf.random_uniform([INPUTS, LAYER1_NODES],        -.01, .01), name="W")
-		b = tf.Variable(tf.random_uniform([LAYER1_NODES],                -.01, .01), name="b")
-		W2 = tf.Variable(tf.random_uniform([LAYER1_NODES, LAYER2_NODES],  -.1,  .1), name="W2")
-		b2 = tf.Variable(tf.zeros([LAYER2_NODES]),                                   name="b2")
-		W3 = tf.Variable(tf.random_uniform([LAYER2_NODES, LAYER3_NODES], -1.0, 1.0), name="W3")
-		b3 = tf.Variable(tf.zeros([LAYER3_NODES]),                                   name="b3")
+		self.x = tf.placeholder("float", [None, fp['INPUTS']], name="x")
+		self.y_ = tf.placeholder("float", [None, fp['OUTPUTS']], name="y_")
+		
+		W = tf.Variable(tf.random_uniform([fp['INPUTS'], fp['LAYER1_NODES']],        -.01, .01), name="W")
+		b = tf.Variable(tf.random_uniform([fp['LAYER1_NODES']],                      -.01, .01), name="b")
+		W2 = tf.Variable(tf.random_uniform([fp['LAYER1_NODES'], fp['LAYER2_NODES']],  -.1,  .1), name="W2")
+		b2 = tf.Variable(tf.zeros([fp['LAYER2_NODES']]),                                         name="b2")
+		W3 = tf.Variable(tf.random_uniform([fp['LAYER2_NODES'], fp['LAYER3_NODES']], -1.0, 1.0), name="W3")
+		b3 = tf.Variable(tf.zeros([fp['LAYER3_NODES']]),                                         name="b3")
 		 
 		layer1 = tf.matmul(self.x,W) + b
 		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
@@ -228,7 +230,7 @@ class Classify:
 			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
 			data = [crc, lenw]
 			trainData.append(data)
-			expect.append([1.0, 1.0])
+			expect.append([1.0])
 
 			if i%2 == 0:
 				wrd = self.wordGenerate()
@@ -236,7 +238,7 @@ class Classify:
 				data = [gen, len(wrd)/maxLen]
 				#trainData.append([data, [1]])
 				trainData.append(data)
-				expect.append([0.0, 0.0])
+				expect.append([0.0])
 		
 		self.data = trainData
 		
@@ -245,7 +247,6 @@ class Classify:
 			self.saveFilter(file)
 
 	##########################################################################		           
-
 	
 	def saveNet(self,file):
 		self.net.save(file)
