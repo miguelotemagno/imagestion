@@ -59,7 +59,7 @@ class Classify:
 		self.data = []
 		pass
 
-	##########################################################################		           
+	##########################################################################
 	
 	def getBase32(self, text):
 		result = i = 0
@@ -70,13 +70,26 @@ class Classify:
 			
 		return log(result+2)
 
-	##########################################################################		           
+	##########################################################################
+
+	def gramarRules(self, text):
+		verb = re.compile('\w*(ar|AR|er|ER|ir|IR)$')
+		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
+		
+		if(verb.match(text)):
+			return .5
+		if(preposition.match(text)):
+			return .333
+			
+		return 1
+
+	##########################################################################
 	
 	def getCRC(self, text):
-		crc = self.getBase32(text)
+		crc = self.getBase32(text) * self.gramarRules(text)
 		return crc/self.maxValue		
 
-	##########################################################################		           
+	##########################################################################
 	
 	def getHex2List(self, text):
 		l = list(hex(int(round(self.getCRC(text) * 10**18))))
@@ -100,7 +113,7 @@ class Classify:
 		
 		tf.reset_default_graph()
 		
-		INPUTS = 14
+		INPUTS = 2   # 15
 		OUTPUTS = 2
 		LAYER1_NODES = 3
 		LAYER2_NODES = 3
@@ -128,7 +141,7 @@ class Classify:
 		
 	def defineFilterModel(self):
 		print "=> defineFilterModel\n"
-		INPUTS = 14
+		INPUTS = 2  # 15
 		OUTPUTS = 2
 		LAYER1_NODES = 3
 		LAYER2_NODES = 3
@@ -153,7 +166,7 @@ class Classify:
 
 	##########################################################################		           
 	
-	def trainFilter(self, file):
+	def trainFilter14x2(self, file):
 		print "=> trainFilter (%s)\n" % (file)
 		self.loadFromFile(file)
 		#self.filter = ANN(3, 3, 1)
@@ -215,7 +228,7 @@ class Classify:
 			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
 			data = [crc, lenw]
 			trainData.append(data)
-			expect.append([0.0, 0.0])
+			expect.append([1.0, 1.0])
 
 			if i%2 == 0:
 				wrd = self.wordGenerate()
@@ -223,7 +236,7 @@ class Classify:
 				data = [gen, len(wrd)/maxLen]
 				#trainData.append([data, [1]])
 				trainData.append(data)
-				expect.append([1.0, 1.0])
+				expect.append([0.0, 0.0])
 		
 		self.data = trainData
 		
@@ -280,11 +293,11 @@ class Classify:
 					#val = log(int(n)) / maxVal
 					crc = self.getHex2List(word)
 					#data = [1.0, crc, lenw]
-					data = crc[0:14]
+					data = crc[0:2]   # crc[0:14]
 	
 					eval = self.filter.run(self.y, feed_dict={self.x: [data]})
 					
-					if abs(eval[0][0]) < 0.5:
+					if abs(eval[0][0]) > 0.5:
 						print "--------------------------> %s: %s => [%f]" % (word,str(data), eval[0][0])
 						continue
 					else:

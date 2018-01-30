@@ -19,7 +19,7 @@ y = []
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
-	c.trainFilter('preposiciones.txt')
+	c.trainFilter2x2('preposiciones.txt')
 	
 	for i in c.data:
 		x.append(i[0])
@@ -33,6 +33,6 @@ if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	c.loadFilter('preposiciones.txt.tfdb')
 	
 	print "filter\n"
-	c.loadFromWeb('www.emol.cl')    ## sudo apt-get install links
+	c.loadFromWeb('es.wikipedia.org/wiki/Preposicion')    ## sudo apt-get install links
 	#c.loadFromFile('libro.txt')
 	c.process()
