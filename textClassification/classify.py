@@ -59,7 +59,7 @@ class Classify:
 		self.data = []
 		self.filterParams = {
 			'INPUTS'       : 2,   # 15
-			'OUTPUTS'      : 1,
+			'OUTPUTS'      : 2,
 			'LAYER1_NODES' : 3,
 			'LAYER2_NODES' : 3,
 			'LAYER3_NODES' : 2
@@ -82,6 +82,7 @@ class Classify:
 	def gramarRules(self, text):
 		verb = re.compile('\w*(ar|AR|er|ER|ir|IR)$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
+		adverb = re.compile('^(\w+mente|AR|er|ER|ir|IR)$')
 		
 		if(verb.match(text)):
 			return .5
@@ -133,8 +134,8 @@ class Classify:
 		b3 = tf.get_variable("b3", shape=[fp['LAYER3_NODES']]) 
 		
 		layer1 = tf.matmul(self.x,W) + b
-		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
-		layer3 = tf.matmul(tf.nn.relu(layer2), W3) #+ b3
+		layer2 = tf.matmul(tf.nn.sigmoid(layer1), W2) #+ b2
+		layer3 = tf.matmul(tf.nn.sigmoid(layer2), W3) #+ b3
 		self.y = tf.nn.softmax(layer3)		
 				
 		self.filter = tf.Session()
@@ -159,8 +160,10 @@ class Classify:
 		b3 = tf.Variable(tf.zeros([fp['LAYER3_NODES']]),                                         name="b3")
 		 
 		layer1 = tf.matmul(self.x,W) + b
-		layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
-		layer3 = tf.matmul(tf.nn.relu(layer2), W3) #+ b3
+		#layer2 = tf.matmul(tf.nn.relu(layer1), W2) #+ b2
+		layer2 = tf.matmul(tf.nn.sigmoid(layer1), W2) #+ b2
+		#layer3 = tf.matmul(tf.nn.relu(layer2), W3) #+ b3
+		layer3 = tf.matmul(tf.nn.sigmoid(layer2), W3) #+ b3
 		self.y = tf.nn.softmax(layer3)
 
 		self.cross_entropy = -tf.reduce_sum(self.y_ * tf.log(self.y))
@@ -234,36 +237,6 @@ class Classify:
 	def trainFilter2x2(self, file, details):
 		print "=> trainFilter\n"
 
-		"""
-		self.loadFromFile(file)
-		list = self.text.split("\n")
-		reg = re.compile('(\d+)\s+(\w+)')
-		words = []
-		trainData = []
-		expect = []
-
-		for line in list:
-			expr = reg.search(line)
-			if expr:
-				(n, word) = expr.group(1,2)
-				crc = self.getCRC(word) 
-				words.append([word, crc, n, len(word)/maxLen])
-
-		for i in xrange(len(words)):
-			(word, crc, n, lenw) = words[i]
-			print "%s: [%1.15f] [%s] [%f]" % (word, crc, n, lenw)
-			data = [crc, lenw]
-			trainData.append(data)
-			expect.append([1.0])
-
-			if i%2 == 0:
-				wrd = self.wordGenerate()
-				gen = self.getCRC(wrd) 
-				data = [gen, len(wrd)/maxLen]
-				#trainData.append([data, [1]])
-				trainData.append(data)
-				expect.append([0.0])
-		"""
 		(words, trainData, expect) = self.prepareTrainData(details)
 		for i in xrange(0,len(words)):
 			print "%s : %s => %s" % (str(words[i]), str(trainData[i]), str(expect[i]))
@@ -322,11 +295,11 @@ class Classify:
 					#val = log(int(n)) / maxVal
 					crc = self.getHex2List(word)
 					#data = [1.0, crc, lenw]
-					data = crc[0:2]   # crc[0:14]
+					data = [crc[0:2]]   # crc[0:14]
 	
-					eval = self.filter.run(self.y, feed_dict={self.x: [data]})
+					eval = self.filter.run(self.y, feed_dict={self.x: data})
 					
-					if abs(eval[0][0]) > 0.5:
+					if abs(eval[0][0]) > 0.2:
 						print "--------------------------> %s: %s => [%f]" % (word,str(data), eval[0][0])
 						continue
 					else:
@@ -375,7 +348,7 @@ class Classify:
 
 		for i in xrange(0,len(words)):
 			res = self.sess.run(self.y, feed_dict={self.x: [xTrain[i]]})
-			print "%s : %s => %s -> %s" % (str(words[i]), str(xTrain[i]), str(yTrain[i]), str(res))
+			print "%-25s : %-45s => %s ---> %-35s => %f" % (str(words[i]), str(xTrain[i]), str(yTrain[i]), str(res), round(res[0][0] * res[0][1] * 10))
 			
 		print "early stopping => step: %d, cross_entropy: %f\n" % (step, e)
 		#print sess.run(self.y, feed_dict={self.x: [[2.0, 10.711832, 2.0]]})
