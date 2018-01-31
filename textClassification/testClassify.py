@@ -19,7 +19,10 @@ y = []
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
-	c.trainFilter2x2('preposiciones.txt')
+	c.trainFilter2x2('preposiciones.txt', {
+		'preposiciones.txt' : [1.0]
+		
+		})
 	
 	for i in c.data:
 		x.append(i[0])

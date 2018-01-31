@@ -205,13 +205,37 @@ class Classify:
 			self.prepareTensor(trainData, expect)
 			self.saveFilter(file)
 
-	##########################################################################		           
+	##########################################################################
 	
-	def trainFilter2x2(self, file):
-		print "=> trainFilter (%s)\n" % (file)
-		self.loadFromFile(file)
-		maxLen = float(len(self.largestWord))
+	def prepareTrainData(self, details):
+		maxLen = float(len(self.largestWord))		
+		data = []
+		words = []
+		outputs = []
+		for file,expect in details.iteritems():
+			print "=> prepareTrainData: %s => %s\n" % (file, str(expect))
+			self.loadFromFile(file)
+			list = self.text.split("\n")
+			reg = re.compile('(\d+)\s+(\w+)')
 
+			for line in list:
+				expr = reg.search(line)
+				if expr:
+					(n, word) = expr.group(1,2)
+					crc = self.getCRC(word) 
+					words.append([n, word])
+					data.append([crc, len(word)/maxLen])
+					outputs.append(expect)
+		
+		return (words, data, outputs)
+
+	##########################################################################
+	
+	def trainFilter2x2(self, file, details):
+		print "=> trainFilter\n"
+
+		"""
+		self.loadFromFile(file)
 		list = self.text.split("\n")
 		reg = re.compile('(\d+)\s+(\w+)')
 		words = []
@@ -239,11 +263,15 @@ class Classify:
 				#trainData.append([data, [1]])
 				trainData.append(data)
 				expect.append([0.0])
-		
+		"""
+		(words, trainData, expect) = self.prepareTrainData(details)
+		for i in xrange(0,len(words)):
+			print "%s : %s => %s" % (str(words[i]), str(trainData[i]), str(expect[i]))
+			
 		self.data = trainData
 		
 		with tf.Session() as self.sess:
-			self.prepareTensor(trainData, expect)
+			self.prepareTensor(words, trainData, expect)
 			self.saveFilter(file)
 
 	##########################################################################		           
@@ -334,7 +362,7 @@ class Classify:
 
 	##########################################################################		           
 
-	def prepareTensor(self, xTrain, yTrain):
+	def prepareTensor(self, words, xTrain, yTrain):
 		print "=> prepareTensor\n"
 		train_step = self.defineFilterModel();
 		init = tf.global_variables_initializer()
@@ -345,6 +373,9 @@ class Classify:
 			e, a = self.sess.run([self.cross_entropy, train_step], feed_dict)
 			if e < 1: break  # early stopping yay
 
-		print self.sess.run(self.y, feed_dict={self.x: xTrain})
+		for i in xrange(0,len(words)):
+			res = self.sess.run(self.y, feed_dict={self.x: [xTrain[i]]})
+			print "%s : %s => %s -> %s" % (str(words[i]), str(xTrain[i]), str(yTrain[i]), str(res))
+			
 		print "early stopping => step: %d, cross_entropy: %f\n" % (step, e)
 		#print sess.run(self.y, feed_dict={self.x: [[2.0, 10.711832, 2.0]]})
