@@ -156,11 +156,22 @@ import numpy as np
 
 
 sess = tf.InteractiveSession()
-
+I = 1
+O = 0
 # Desired input output mapping of XOR function:
-x_ = [[0, 0], [0, 1], [1, 0], [1, 1]] # input
+x_ = [
+    [O, O],
+    [O, I],
+    [I, O],
+    [I, I]
+] # input
 #labels=[0,      1,      1,      0]   # output =>
-expect=[[1,0],  [0,1],  [0,1], [1,0]] # ONE HOT REPRESENTATION! 'class' [1,0]==0 [0,1]==1
+expect=[
+    [1,0],
+    [0,1],
+    [0,1],
+    [1,0]
+] # ONE HOT REPRESENTATION! 'class' [1,0]==0 [0,1]==1
 
 # x = tf.Variable(x_)
 x = tf.placeholder("float", [None,2]) #  can we feed directly?
@@ -170,7 +181,8 @@ number_hidden_nodes = 20 # 20 outputs to create some room for negatives and posi
 
 W = tf.Variable(tf.random_uniform([2, number_hidden_nodes], -.01, .01))
 b = tf.Variable(tf.random_uniform([number_hidden_nodes], -.01, .01))
-hidden  = tf.nn.relu(tf.matmul(x,W) + b) # first layer.
+#hidden  = tf.nn.relu(tf.matmul(x,W) + b) # first layer.
+hidden  = tf.nn.softmax(tf.matmul(x,W) + b) # first layer.
 
  # the XOR function is the first nontrivial function, for which a two layer network is needed.
 W2 = tf.Variable(tf.random_uniform([number_hidden_nodes,2], -.1, .1))
