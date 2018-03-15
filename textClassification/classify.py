@@ -82,13 +82,15 @@ class Classify:
 	def gramarRules(self, text):
 		verb = re.compile('\w*(ar|AR|er|ER|ir|IR)$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
-		adverb = re.compile('^(\w+mente|AR|er|ER|ir|IR)$')
+		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
 		
 		if(verb.match(text)):
 			return .5
 		if(preposition.match(text)):
 			return .333
-			
+		if(adverb.match(text)):
+			return .111
+
 		return 1
 
 	##########################################################################
