@@ -83,13 +83,16 @@ class Classify:
 		verb = re.compile('\w*(ar|AR|er|ER|ir|IR)$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		
+		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao]|cuant[ao]|doble|medi[ao]|tan|mas|aquel(la)?|dulce|cada)$')
+
 		if(verb.match(text)):
 			return .5
 		if(preposition.match(text)):
 			return .333
 		if(adverb.match(text)):
 			return .111
+		if(sustan.match(text)):
+			return .666
 
 		return 1
 
