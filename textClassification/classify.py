@@ -75,32 +75,35 @@ class Classify:
 			result += (ord(letter) - 64) * (32**i)
 			i += 1	
 			
-		return log(result+2)
+		return result + 2
 
 	##########################################################################
 
 	def gramarRules(self, text):
-		verb = re.compile('\w*(ar|AR|er|ER|ir|IR)$')
+		verb = re.compile('\w*(ar|er|ir)$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao]|cuant[ao]|doble|medi[ao]|tan|mas|aquel(la)?|dulce|cada)$')
+		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao]|(cuant|est)(o|a)[s]?|doble|medi[ao]|tan|mas|aquel(la)?|dulce|cada)$')
+		pronom = re.compile('^(el(lo|la)[s]?|la[s]?|lo[s]?|yo|tu|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|que)$')
 
 		if(verb.match(text)):
-			return .5
+			return 0x1
 		if(preposition.match(text)):
-			return .333
+			return 0x2
 		if(adverb.match(text)):
-			return .111
+			return 0x3
 		if(sustan.match(text)):
-			return .666
+			return 0x4
+		if(pronom.match(text)):
+			return 0x5
 
 		return 1
 
 	##########################################################################
 	
 	def getCRC(self, text):
-		crc = self.getBase32(text) * self.gramarRules(text)
-		return crc/self.maxValue		
+		crc = (self.getBase32(text) >> 3) | self.gramarRules(text)
+		return log(crc)/self.maxValue
 
 	##########################################################################
 	
