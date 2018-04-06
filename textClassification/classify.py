@@ -84,7 +84,7 @@ class Classify:
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
 		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao][s]?|(cuant|est)[oa][s]?|doble|medi[ao]|tan|mas|aquel(l[oa])?|dulce|cada)$')
-		pronom = re.compile('^(el((lo|la)[s]?)?|la[s]?|lo[s]?|yo|[ts]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|que)$')
+		pronom = re.compile('^((aqu)?el((lo|la)[s]?)?|la[s]?|lo[s]?|yo|[ts]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|alg(o|uien|un[oa]?)|cualquier[a]?)$')
 		adjet = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
 
 		if(adjet.match(text)):
