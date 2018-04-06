@@ -310,6 +310,7 @@ class Classify:
 				expr = reg.search(line)
 				if expr:
 					(n, word) = expr.group(1,2)
+					rule = self.gramarRules(word)
 					val = int(n) / maxVal
 					#val = log(int(n)) / maxVal
 					crc = self.getHex2List(word)
@@ -319,10 +320,10 @@ class Classify:
 					eval = self.filter.run(self.y, feed_dict={self.x: data})
 					
 					if abs(eval[0][0]) > 0.2:
-						print "--------------------------> %s: %s => [%f]" % (word,str(data), eval[0][0])
+						print "--------------------------> %d %s: %s => [%f]" % (rule,word,str(data), eval[0][0])
 						continue
 					else:
-						print "%s: %s => [%f]" % (word,str(data), eval[0][0])
+						print "%d %s: %s => [%f]" % (rule,word,str(data), eval[0][0])
 								
 					counts.append(val)
 					words.append(data)
