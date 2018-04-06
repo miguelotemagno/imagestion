@@ -81,13 +81,13 @@ class Classify:
 
 	def gramarRules(self, text):
 		verb = re.compile('\w*(ar|er|ir)$')
+		sustan = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao][s]?|(cuant|est)[oa][s]?|doble|medi[ao]|tan|mas|aquel(l[oa])?|dulce|cada)$')
-		pronom = re.compile('^((aqu)?el((lo|la)[s]?)?|la[s]?|lo[s]?|yo|[ts]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|alg(o|uien|un[oa]?)|cualquier[a]?)$')
-		adjet = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
+		adjet = re.compile('^(simple|mayor|\w+d[oa][s]?|\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\w+isim[oa])$')
+		pronom = re.compile('^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(est|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|con[mst]igo|bastante[s]?|cardinal(es)?|mi[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
 
-		if(adjet.match(text)):
+		if(sustan.match(text)):
 			return 0
 		if(verb.match(text)):
 			return 0x1
@@ -95,7 +95,7 @@ class Classify:
 			return 0x2
 		if(adverb.match(text)):
 			return 0x3
-		if(sustan.match(text)):
+		if(adjet.match(text)):
 			return 0x4
 		if(pronom.match(text)):
 			return 0x5
@@ -230,7 +230,7 @@ class Classify:
 	##########################################################################
 	
 	def prepareTrainData(self, details):
-		maxLen = float(len(self.largestWord))		
+		maxLen = float(len(self.largestWord))
 		data = []
 		words = []
 		outputs = []
@@ -245,7 +245,7 @@ class Classify:
 				if expr:
 					(n, word) = expr.group(1,2)
 					crc = self.getCRC(word)
-					words.append([n, word])
+					words.append([n, word, self.gramarRules(word)])
 					data.append([crc, len(word)/maxLen])
 					outputs.append(expect)
 		
