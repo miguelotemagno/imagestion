@@ -22,8 +22,8 @@ if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	c.trainFilter2x2('preposiciones.txt', {
 		#'adverbios.txt'        : [1.0, 0.0],
 		#'articulos.txt'     : [1.0, 0.0],
-		'preposiciones.txt' : [1, 0],
-		#'sustantivos.txt'   : [1, 0],
+		#'preposiciones.txt' : [1, 0],
+		'sustantivos.txt'   : [1, 0],
 		'pronombres.txt'    : [0, 1]
 		})
 	

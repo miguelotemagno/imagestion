@@ -53,7 +53,7 @@ class Classify:
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
 		self.largestWord = 'Electroencefalografistas'
-		self.maxValue = self.getBase32(self.largestWord);
+		self.maxValue = self.setWordID(self.largestWord);
 		self.trainData = None
 		self.sess = None
 		self.data = []
@@ -83,9 +83,12 @@ class Classify:
 		verb = re.compile('\w*(ar|er|ir)$')
 		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao]|(cuant|est)(o|a)[s]?|doble|medi[ao]|tan|mas|aquel(la)?|dulce|cada)$')
-		pronom = re.compile('^(el(lo|la)[s]?|la[s]?|lo[s]?|yo|tu|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|que)$')
+		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao][s]?|(cuant|est)[oa][s]?|doble|medi[ao]|tan|mas|aquel(l[oa])?|dulce|cada)$')
+		pronom = re.compile('^(el((lo|la)[s]?)?|la[s]?|lo[s]?|yo|[ts]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|que)$')
+		adjet = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
 
+		if(adjet.match(text)):
+			return 0
 		if(verb.match(text)):
 			return 0x1
 		if(preposition.match(text)):
@@ -97,18 +100,26 @@ class Classify:
 		if(pronom.match(text)):
 			return 0x5
 
-		return 1
+		return 0x7
 
 	##########################################################################
-	
+
+	def setWordID(self, text):
+		rule = self.gramarRules(text) * 100
+		crc = log(self.getBase32(text))
+		return rule + crc
+
+	##########################################################################
+
 	def getCRC(self, text):
-		crc = (self.getBase32(text) >> 3) | self.gramarRules(text)
-		return log(crc)/self.maxValue
+		crc = 1.0 * self.setWordID(text)
+		maxVal = 1.0 * self.maxValue
+		return crc / maxVal
 
 	##########################################################################
 	
 	def getHex2List(self, text):
-		l = list(hex(int(round(self.getCRC(text) * 10**18))))
+		l = list(hex(int(round(self.getCRC(text) * 10 ** 18))))
 		return [int(x,16)/16.0 for x in l[2:]]
 
 	##########################################################################		           
@@ -233,7 +244,7 @@ class Classify:
 				expr = reg.search(line)
 				if expr:
 					(n, word) = expr.group(1,2)
-					crc = self.getCRC(word) 
+					crc = self.getCRC(word)
 					words.append([n, word])
 					data.append([crc, len(word)/maxLen])
 					outputs.append(expect)
