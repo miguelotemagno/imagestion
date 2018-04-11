@@ -80,18 +80,20 @@ class Classify:
 	##########################################################################
 
 	def gramarRules(self, text):
-		verb = re.compile('\w*(ar|er|ir)$')
-		sustan = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
-		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
+		verb   = re.compile('^(\w+[ae]r|\w*ir)$')
+		artic  = re.compile('^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$')
+		sustan = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\w+[iea]n[oa][s]?)$')
+		prep   = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
 		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		adjet = re.compile('^(simple|mayor|\w{3,}d[oa][s]?|\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$')
-		pronom = re.compile('^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
+		adjet  = re.compile('^(simple|mayor|\w{3,}[^n]d[oa][s]?|\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$')
+		pronom = re.compile('^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)'+
+		                    '|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
 
 		if(sustan.match(text)):
 			return 0
 		if(verb.match(text)):
 			return 0x1
-		if(preposition.match(text)):
+		if(prep.match(text)):
 			return 0x2
 		if(adverb.match(text)):
 			return 0x3
@@ -99,6 +101,8 @@ class Classify:
 			return 0x4
 		if(pronom.match(text)):
 			return 0x5
+		if(artic.match(text)):
+			return 0x6
 
 		return 0x7
 
