@@ -2,6 +2,13 @@ import re
 
 class GrammarRules:
     def __init__(self):
+        self.verbs = {
+            'comer' : '^com(o|e[sn]?|mos)$',
+            'ir' : '^(v(oy|a(mos|[sn])?)$',
+            'escribir' : '^escrib(o|e[sn]?|imos)$',
+            'tomar' : '^tom(o|a([sn]|mos)?)$',
+            'conocer' : '^cono(zco|ce([sn]|mos)?)$'
+        }
         pass
 
     def isVerb(self):
@@ -29,3 +36,11 @@ class GrammarRules:
         return re.compile('^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|'+
                           '(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|'+
                           'con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
+
+    def getVerb(self,text):
+        for expr,verb in self.verbs.iteritems():
+            eval = re.compile(expr)
+            if eval.match(text):
+                return verb
+
+        return None
