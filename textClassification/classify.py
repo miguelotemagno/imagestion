@@ -91,19 +91,20 @@ class Classify:
 		pronom = self.rules.isPronom()
 
 
-		if(sustan.match(text)):
+		if sustan.match(text):
 			return 0
-		if(verb.match(text)):
+		if verb.match(text):
+			#if self.rules.getVerb(text) != None:
 			return 0x1
-		if(prep.match(text)):
+		if prep.match(text):
 			return 0x2
-		if(adverb.match(text)):
+		if adverb.match(text):
 			return 0x3
-		if(adjet.match(text)):
+		if adjet.match(text):
 			return 0x4
-		if(pronom.match(text)):
+		if pronom.match(text):
 			return 0x5
-		if(artic.match(text)):
+		if artic.match(text):
 			return 0x6
 
 		return 0x7
@@ -133,10 +134,10 @@ class Classify:
 	def saveFilter(self,file):
 		saver = tf.train.Saver()
 		saver.save(self.sess, self.path+'/'+file+'.tfdb',
-	           global_step=None,
-	           latest_filename=None,
-	           meta_graph_suffix='meta',
-	           write_meta_graph=True)
+                   global_step=None,
+                   latest_filename=None,
+                   meta_graph_suffix='meta',
+                   write_meta_graph=True)
 		           
 	##########################################################################		           
 	

@@ -7,9 +7,13 @@ class GrammarRules:
             'ir' : '^(v(oy|a(mos|[sn])?)$',
             'escribir' : '^escrib(o|e[sn]?|imos)$',
             'tomar' : '^tom(o|a([sn]|mos)?)$',
-            'conocer' : '^cono(zco|ce([sn]|mos)?)$'
+            'conocer' : '^cono(zco|ce([sn]|mos)?)$',
+            'jugar' : '^ju(gamos|eg[oa][sn]?)$',
+            'volver' : '^v(olvemos|uelv(o|e[sn]?))$',
+            'leer' : '^le(o|e(mos|[sn])?)$',
+            'estudiar' : '^estudi(o|a(mos|[sn])?)$',
+            'recorrer' : '^recorr(o|[ae](mos|[sn])?)$'
         }
-        pass
 
     def isVerb(self):
         return re.compile('^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$')
@@ -37,8 +41,8 @@ class GrammarRules:
                           '(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|'+
                           'con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
 
-    def getVerb(self,text):
-        for expr,verb in self.verbs.iteritems():
+    def getVerb(self, text):
+        for expr, verb in self.verbs.iteritems():
             eval = re.compile(expr)
             if eval.match(text):
                 return verb
