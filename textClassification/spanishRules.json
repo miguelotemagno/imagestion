@@ -1,0 +1,40 @@
+{
+	/*
+	 * 		"infinitivo|gerundio|participio" : "igp",
+	 * 		"indicativo presente" : "ip",
+	 * 		"indicativo preterito imperfecto" : "ipi",
+	 * 		"indicativo futuro" : "if",
+	 * 		"indicativo condicional : "ic",
+	 * 		"indicativo preterito perfecto simple" : "ipps",
+	 * 		"imperativo" : "i",
+	 * 		"subjuntivo presente" : "sp",
+	 * 		"subjuntivo preterito imperfecto" : "spi",
+	 * 		"subjuntivo preterito imperfecto 2" : "spi2",
+	 * 		"subjuntivo futuro" : "sf"
+	 */
+	"a" : {
+		"abrir" : {
+			"igp" : "ab(ri(r|endo)|ierto)",
+			"ip" : "abr(o|e[sn]?|imos)",
+			"ipi" : "abria([sn]|mos|is)?",
+			"if" : "abrir(e(is)?|a[sn]?|emos)",
+			"ic : "abrir(ia(mos|[sn]|is)?)",
+			"ipps" : "abri(o|mos|ste(is)?|eron)?",
+			"i" : "abr(e|id|a(mos|[sn])?)",
+			"sp" : "abra(mos|is|[sn])?",
+			"spi" : "abriera(mos|is|[sn])?",
+			"spi2" : "abriese(mos|is|[sn])?",
+			"sf" : "abriere(mos|is|[sn])?"
+		}
+	},
+    'comer' : '^com(o|e[sn]?|mos)$',
+    'ir' : '^(v(oy|a(mos|[sn])?)$',
+    'escribir' : '^escrib(o|e[sn]?|imos)$',
+    'tomar' : '^tom(o|a([sn]|mos)?)$',
+    'conocer' : '^cono(zco|ce([sn]|mos)?)$',
+    'jugar' : '^ju(gamos|eg[oa][sn]?)$',
+    'volver' : '^v(olvemos|uelv(o|e[sn]?))$',
+    'leer' : '^le(o|e(mos|[sn])?)$',
+    'estudiar' : '^estudi(o|a(mos|[sn])?)$',
+    'recorrer' : '^recorr(o|[ae](mos|[sn])?)$'
+}
