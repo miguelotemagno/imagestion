@@ -91,11 +91,11 @@ class Classify:
 		pronom = self.rules.isPronom()
 
 
-		if sustan.match(text):
-			return 0
 		if verb.match(text):
 			#if self.rules.getVerb(text) != None:
 			return 0x1
+		if sustan.match(text):
+			return 0
 		if prep.match(text):
 			return 0x2
 		if adverb.match(text):

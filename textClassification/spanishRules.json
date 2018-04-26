@@ -1,5 +1,5 @@
 {
-    "verb" : "^(\\w+[ae]r|\\w*ir|\\w+(mos|is|[sn]|ron|[ni]do))$",
+    "verb" : "^(\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|ron|[ni]do))$",
     "article" : "^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$",
     "adjetive" : "^(simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$",
     "sustantive" : "^(\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?)$",

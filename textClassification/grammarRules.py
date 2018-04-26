@@ -29,50 +29,49 @@ class GrammarRules:
 	####################################################################
 	
 	def isVerb(self):
-		return re.compile('^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$')
+		#return re.compile('^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$')
+		return re.compile(self.rules['verb'])
 
 	####################################################################
 	
 	def isArticle(self):
-		return re.compile('^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$')
+		return re.compile(self.rules['article'])
 
 	####################################################################
 	
 	def isAdjetive(self):
-		return re.compile('^(simple|mayor|\w{3,}[^n]d[oa][s]?|\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)'+
-						'[ao][s]?|tan|mas|dulce|cada|\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$')
+		return re.compile(self.rules['adjetive'])
 
 	####################################################################
 	
 	def isSustantive(self):
-		return re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|'+
-                          '(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?)$')
+		return re.compile(self.rules['sustantive'])
 
 	####################################################################
 	
 	def isPreposition(self):
-		return re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
+		return re.compile(self.rules['preposition'])
 
 	####################################################################
 	
 	def isAdverb(self):
-		return re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|'+
-                          'delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
+		return re.compile(self.rules['adverb'])
 
 	####################################################################
 	
 	def isPronom(self):
-		return re.compile('^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|'+
-						  '(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|'+
-						  'con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$')
+		return re.compile(self.rules['pronom'])
 
 	####################################################################
 	
 	def getVerb(self, text):
-		for expr, verb in self.verbs.iteritems():
-			eval = re.compile(expr)
-			if eval.match(text):
-				return verb
+		char = text[0]
+		if char in self.rules:
+			for hash, verb in self.rules[char].iteritems():
+				expr = '^('+'|'.join(hash.values())+')$'
+				eval = re.compile(expr)
+				if eval.match(text):
+					return verb
 
 		return None
         

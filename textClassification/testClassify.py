@@ -39,6 +39,6 @@ if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	c.loadFilter('preposiciones.txt.tfdb')
 	
 	print "filter\n"
-	c.loadFromWeb('www.emol.com')    ## sudo apt-get install links
+	c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir')    ## sudo apt-get install links
 	#c.loadFromFile('libro.txt')
 	c.process()
