@@ -1,200 +1,201 @@
 {
-	/*
-	 * 		"infinitivo|gerundio|participio" : "igp",
-	 * 		"indicativo presente" : "ip",
-	 * 		"indicativo preterito imperfecto" : "ipi",
-	 * 		"indicativo futuro" : "if",
-	 * 		"indicativo condicional : "ic",
-	 * 		"indicativo preterito perfecto simple" : "ipps",
-	 * 		"imperativo" : "i",
-	 * 		"subjuntivo presente" : "sp",
-	 * 		"subjuntivo preterito imperfecto" : "spi",
-	 * 		"subjuntivo preterito imperfecto 2" : "spi2",
-	 * 		"subjuntivo futuro" : "sf"
-	 */
+    "verb" : "^(\\w+[ae]r|\\w*ir|\\w+(mos|is|[sn]|ron|[ni]do))$",
+    "article" : "^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$",
+    "adjetive" : "^(simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$",
+    "sustantive" : "^(\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?)$",
+    "preposition" : "^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$",
+    "adverb" : "^(\\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$",
+    "pronom" : "^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$",	
+	
+	"_comment" : {
+  		"igp" : "infinitivo|gerundio|participio",
+ 		"ip" : "indicativo presente" ,
+  		"ipi" : "indicativo preterito imperfecto" ,
+  		"if" : "indicativo futuro" ,
+  		"ic" : "indicativo condicional",
+  		"ipps" : "indicativo preterito perfecto simple",
+  		"i" : "imperativo" ,
+  		"sp" : "subjuntivo presente" ,
+  		"spi" : "subjuntivo preterito imperfecto" ,
+  		"spi2" : "subjuntivo preterito imperfecto 2" ,
+  		"sf" : "subjuntivo futuro" 
+	},
+
 	"a" : {
 		"abrir" : {
-			"igp" : "ab(ri(r|endo)|ierto)",
-			"ip" : "abr(o|e[sn]?|imos)",
-			"ipi" : "abria([sn]|mos|is)?",
-			"if" : "abrir(e(is)?|a[sn]?|emos)",
-			"ic : "abrir(ia(mos|[sn]|is)?)",
+			"igp"  : "ab(ri(r|endo)|ierto)",
+			"ip"   : "abr(o|e[sn]?|imos)",
+			"ipi"  : "abria([sn]|mos|is)?",
+			"if"   : "abrir(e(is)?|a[sn]?|emos)",
+			"ic"    : "abrir(ia(mos|[sn]|is)?)",
 			"ipps" : "abri(o|mos|ste(is)?|eron)?",
-			"i" : "abr(e|id|a(mos|[sn])?)",
-			"sp" : "abra(mos|is|[sn])?",
-			"spi" : "abriera(mos|is|[sn])?",
+			"i"    : "abr(e|id|a(mos|[sn])?)",
+			"sp"   : "abra(mos|is|[sn])?",
+			"spi"  : "abriera(mos|is|[sn])?",
 			"spi2" : "abriese(mos|is|[sn])?",
-			"sf" : "abriere(mos|is|[sn])?"
+			"sf"   : "abriere(mos|is|[sn])?"
 		}
 	},
 	"b" : {},
 	"c" : {
 		"comer" : {
-			"igp" : "com(er|i(en)?do)",
-			"ip" : "com(o|e[sn]?|mos)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"igp"  : "com(er|i(en)?do)",
+			"ip"   : "com(o|e[sn]?|mos)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""			
+			"sf"   : ""			
 		},
 		"conocer" : {
 			"igp" : "conoc(er|i(en)?do)",
 			"ip" : "cono(zco|ce([sn]|mos)?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""			
+			"sf"   : ""			
 		}
 	},
 	"e" : {
 		"escribir" : {
 			"igp" : "escribi(r|endo|to)",
 			"ip" : "escrib(o|e[sn]?|imos)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""	
+			"sf"   : ""			
 		},
 	    "estudiar" : { 
 			"igp" : "estudia(r|a[n]?do)",
 			"ip" : "estudi(o|a(mos|[sn])?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""	
-    	},
-	}
+			"sf"   : ""			
+    	}
+	},
 	"i" : {
 		"ir" : {
 			"igp" : "yendo|ir|ido",
 			"ip" : "v(oy|a(mos|[sn])?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""	
+			"sf"   : ""			
 		}
-	}
+	},
 	"j" : {
 		"jugar" : {
 			"igp" : "juga(r|a[n]?do)",
 			"ip" : "ju(ga(is|mos)|eg[oa][sn]?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""	
+			"sf"   : ""			
 		}
 	},
 	"l" : {
 		"leer" : {
 			"igp" : "le(er|yendo|ido)",
 			"ip" : "le(o|e(mos|[sn])?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""				
+			"sf"   : ""			
 		}
 	},
 	"m" : {
 		"manejar" : {
 			"igp" : "maneja(r|[n]?do)",
 			"ip" : "manej(o|a(mos|[sn])?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""	
+			"sf"   : ""			
 		}
-	}
+	},
 	"r" : {
 		"recorrer" : {
 			"igp" : "recorr(er|i(en)?do)",
 			"ip" : "recorr(o|[ae](mos|[sn])?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""
+			"sf"   : ""			
 		}
 	},
 	"t" : {
 		"tomar" : {
 			"igp" : "toma(r|a[n]?do)",
 			"ip" : "tom(o|a([sn]|mos)?)",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""
+			"sf"   : ""			
 		}
 	},
 	"v" : {
 		"volver" : {
 			"igp" : "volv(er|iendo)|vuelto",
 			"ip" : "v(olvemos|uelv(o|e[sn]?))",
-			"ipi" : "",
-			"if" : "",
-			"ic : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
 			"ipps" : "",
-			"i" : "",
-			"sp" : "",
-			"spi" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
 			"spi2" : "",
-			"sf" : ""
+			"sf"   : ""			
 		}
-	}
-    
-    "verb" : "^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$",
-    "article" : "^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$",
-    "adjetive" : "^(simple|mayor|\w{3,}[^n]d[oa][s]?|\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$",
-    "sustantive" : "^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?)$",
-    "preposition" : "^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$",
-    "adverb" : "^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$",
-    "pronom" : "^(donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?|alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?|con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|ningun[oa]?|os|otr[oa][s]?|nadie)$"
+	}    
 }
