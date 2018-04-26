@@ -30,7 +30,7 @@
 	"b" : {},
 	"c" : {
 		"comer" : {
-			"igp" : "",
+			"igp" : "com(er|i(en)?do)",
 			"ip" : "com(o|e[sn]?|mos)",
 			"ipi" : "",
 			"if" : "",
@@ -43,7 +43,7 @@
 			"sf" : ""			
 		},
 		"conocer" : {
-			"igp" : "",
+			"igp" : "conoc(er|i(en)?do)",
 			"ip" : "cono(zco|ce([sn]|mos)?)",
 			"ipi" : "",
 			"if" : "",
@@ -56,17 +56,139 @@
 			"sf" : ""			
 		}
 	},
-	
-    'comer' : '^com(o|e[sn]?|mos)$',
-    'ir' : '^(v(oy|a(mos|[sn])?)$',
-    'escribir' : '^escrib(o|e[sn]?|imos)$',
-    'tomar' : '^tom(o|a([sn]|mos)?)$',
-    'conocer' : '^cono(zco|ce([sn]|mos)?)$',
-    'jugar' : '^ju(gamos|eg[oa][sn]?)$',
-    'volver' : '^v(olvemos|uelv(o|e[sn]?))$',
-    'leer' : '^le(o|e(mos|[sn])?)$',
-    'estudiar' : '^estudi(o|a(mos|[sn])?)$',
-    'recorrer' : '^recorr(o|[ae](mos|[sn])?)$',
+	"e" : {
+		"escribir" : {
+			"igp" : "escribi(r|endo|to)",
+			"ip" : "escrib(o|e[sn]?|imos)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""	
+		},
+	    "estudiar" : { 
+			"igp" : "estudia(r|a[n]?do)",
+			"ip" : "estudi(o|a(mos|[sn])?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""	
+    	},
+	}
+	"i" : {
+		"ir" : {
+			"igp" : "yendo|ir|ido",
+			"ip" : "v(oy|a(mos|[sn])?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""	
+		}
+	}
+	"j" : {
+		"jugar" : {
+			"igp" : "juga(r|a[n]?do)",
+			"ip" : "ju(ga(is|mos)|eg[oa][sn]?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""	
+		}
+	},
+	"l" : {
+		"leer" : {
+			"igp" : "le(er|yendo|ido)",
+			"ip" : "le(o|e(mos|[sn])?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""				
+		}
+	},
+	"m" : {
+		"manejar" : {
+			"igp" : "maneja(r|[n]?do)",
+			"ip" : "manej(o|a(mos|[sn])?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""	
+		}
+	}
+	"r" : {
+		"recorrer" : {
+			"igp" : "recorr(er|i(en)?do)",
+			"ip" : "recorr(o|[ae](mos|[sn])?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""
+		}
+	},
+	"t" : {
+		"tomar" : {
+			"igp" : "toma(r|a[n]?do)",
+			"ip" : "tom(o|a([sn]|mos)?)",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""
+		}
+	},
+	"v" : {
+		"volver" : {
+			"igp" : "volv(er|iendo)|vuelto",
+			"ip" : "v(olvemos|uelv(o|e[sn]?))",
+			"ipi" : "",
+			"if" : "",
+			"ic : "",
+			"ipps" : "",
+			"i" : "",
+			"sp" : "",
+			"spi" : "",
+			"spi2" : "",
+			"sf" : ""
+		}
+	}
     
     "verb" : "^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$",
     "article" : "^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$",
