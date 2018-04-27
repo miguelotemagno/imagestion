@@ -1,6 +1,7 @@
 import re
 import json
-from sys import *
+import sys
+
 
 class GrammarRules:
 	def jsonLoad(self, dbFile):
@@ -67,7 +68,7 @@ class GrammarRules:
 	def getVerb(self, text):
 		char = text[0]
 		if char in self.rules:
-			for hash, verb in self.rules[char].iteritems():
+			for verb, hash in self.rules[char].iteritems():
 				expr = '^('+'|'.join(hash.values())+')$'
 				eval = re.compile(expr)
 				if eval.match(text):

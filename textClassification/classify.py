@@ -92,8 +92,8 @@ class Classify:
 
 
 		if verb.match(text):
-			#if self.rules.getVerb(text) != None:
-			return 0x1
+			if self.rules.getVerb(text) != None:
+				return 0x1
 		if sustan.match(text):
 			return 0
 		if prep.match(text):
