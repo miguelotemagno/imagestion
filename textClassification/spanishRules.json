@@ -40,7 +40,7 @@
 	"c" : {
 		"comer" : {
 			"igp"  : "com(er|i(en)?do)",
-			"ip"   : "com(o|e[sn]?|mos)",
+			"ip"   : "com(o|e([sn]|is)?|mos)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -52,8 +52,8 @@
 			"sf"   : ""			
 		},
 		"conocer" : {
-			"igp" : "conoc(er|i(en)?do)",
-			"ip" : "cono(zco|ce([sn]|mos)?)",
+			"igp"  : "conoc(er|i(en)?do)",
+			"ip"   : "cono(zco|ce([sn]|mos)?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -62,7 +62,7 @@
 			"sp"   : "",
 			"spi"  : "",
 			"spi2" : "",
-			"sf"   : ""			
+			"sf"   : ""	
 		}
 	},
 	"e" : {
@@ -92,6 +92,21 @@
 			"spi2" : "",
 			"sf"   : ""			
     	}
+	},
+	"h" : {
+		"haber" : {
+			"igp"  : "hab(er|i(en)?do)",
+			"ip"   : "h(e(mos)?|a(y|[sn]|be(mos|is)))",
+			"ipi"  : "habia([sn]|mos|is)?",
+			"if"   : "habr(e(mos|is)?|a[sn]?)",
+			"ic"   : "habria([sn]|mos|is)?",
+			"ipps" : "hub(o|e|i(eron|ste(is)?|mos))",
+			"i"    : "h(e|aya(mos)?|abed)",
+			"sp"   : "haya([sn]|mos|is)?",
+			"spi"  : "hubiera([sn]|mos|is)?",
+			"spi2" : "hubiese([sn]|mos|is)?",
+			"sf"   : "hubiere([sn]|mos|is)?"	
+		}
 	},
 	"i" : {
 		"ir" : {
@@ -170,17 +185,17 @@
 	},
 	"t" : {
 		"tomar" : {
-			"igp" : "toma(r|a[n]?do)",
-			"ip" : "tom(o|a([sn]|mos)?)",
-			"ipi"  : "",
-			"if"   : "",
-			"ic"   : "",
-			"ipps" : "",
-			"i"    : "",
-			"sp"   : "",
-			"spi"  : "",
-			"spi2" : "",
-			"sf"   : ""			
+			"igp"  : "toma(r|a[n]?do)",
+			"ip"   : "tom(o|a([sn]|mos|is)?)",
+			"ipi"  : "tomaba(mos|is|[sn])?",
+			"if"   : "tomar(a[sn]?|e(mos|is)?)",
+			"ic"   : "tomaria([sn]|mos|is)?",
+			"ipps" : "tom(o|e|a(mos|ron|ste(is)?)?)",
+			"i"    : "tom(a[d]?|e(mos|n)?)",
+			"sp"   : "tome([sn]|is|mos)?",
+			"spi"  : "tomara([sn]|mos|is)?",
+			"spi2" : "tomase([sn]|mos|is)?",
+			"sf"   : "tomare([sn]|mos|is)?"
 		}
 	},
 	"v" : {
