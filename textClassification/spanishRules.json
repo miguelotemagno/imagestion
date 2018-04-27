@@ -1,5 +1,5 @@
 {
-    "verb" : "^(\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[ni]do))$",
+    "verb" : "^(\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do))$",
     "article" : "^([d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al)$",
     "adjetive" : "^(simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble|(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?|tan|mas|dulce|cada|\\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?))$",
     "sustantive" : "^(\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa])|\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?)$",
@@ -34,13 +34,78 @@
 			"spi"  : "abriera(mos|is|[sn])?",
 			"spi2" : "abriese(mos|is|[sn])?",
 			"sf"   : "abriere(mos|is|[sn])?"
-		}
+		},
+		"advertir" : {
+			"igp"  : "advert(ir|i(en)?do)",
+			"ip"   : "adv(iert(o|e([sn])?)|erti(mos|s))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"acudir" : {
+			"igp"  : "acud(ir|i(en)?do)",
+			"ip"   : "acud(o|e([sn])?|imos)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"agredir" : {
+			"igp"  : "agred(ir|i(en)?do)",
+			"ip"   : "agred(o|e([sn])?|imos)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		}		
 	},
 	"b" : {},
 	"c" : {
 		"comer" : {
 			"igp"  : "com(er|i(en)?do)",
 			"ip"   : "com(o|e([sn]|is)?|mos)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"controlar" : {
+			"igp"  : "controla(r|[n]?do)",
+			"ip"   : "control(o|e([sn]|is)?|a(mos)?)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"conseguir" : {
+			"igp"  : "cons(egui(r|do)|iguiendo)",
+			"ip"   : "cons(ig(o|ue[sn]?)|eguimos)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -65,6 +130,7 @@
 			"sf"   : "conociere(mos|is|[sn])?"	
 		}
 	},
+	"d" : {},
 	"e" : {
 		"escribir" : {
 			"igp"  : "escri(to|bi(r|endo))",
@@ -93,6 +159,8 @@
 			"sf"   : ""			
     	}
 	},
+	"f" : {},
+	"g" : {},
 	"h" : {
 		"haber" : {
 			"igp"  : "hab(er|i(en)?do)",
@@ -106,6 +174,19 @@
 			"spi"  : "hubiera([sn]|mos|is)?",
 			"spi2" : "hubiese([sn]|mos|is)?",
 			"sf"   : "hubiere([sn]|mos|is)?"	
+		},
+		"hervir"  : {
+			"igp"  : "h(ervir|(irvien|ervi)do)",
+			"ip"   : "h(ierv(o|e[sn]?)|ervi(s|mos))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
 		}
 	},
 	"i" : {
@@ -121,6 +202,45 @@
 			"spi"  : "fuera(mos|is|[sn])?",
 			"spi2" : "fuese(mos|is|[sn])?",
 			"sf"   : "fuere(mos|is|[sn])?"
+		},
+		"impedir" : {
+			"igp" : "imp(edir|(idien|edi)do)",
+			"ip" : "imp(edimos|id(o|e[sn]?))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"influir"  : {
+			"igp"  : "influ(ir|(yen|i)do)",
+			"ip"   : "influ(i(mos|s)|y(o|e[sn]?))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		},
+		"intervenir"  : {
+			"igp"  : "interv(enir|(eni|inien)do)",
+			"ip"   : "influ(i(mos|s)|y(o|e[sn]?))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
 		}
 	},
 	"j" : {
@@ -137,6 +257,9 @@
 			"spi2" : "",
 			"sf"   : ""			
 		}
+	},
+	"k" : {
+		"kilometrar" : {}
 	},
 	"l" : {
 		"leer" : {
@@ -179,8 +302,39 @@
 			"spi"  : "",
 			"spi2" : "",
 			"sf"   : ""			
+		},
+		"morir" : {
+			"igp" : "m(orir|u(iendo|erto))",
+			"ip" : "manej(o|a(mos|[sn])?)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
+		}		
+	},
+	"n" : {},
+	"o" : {},
+	"p" : {
+		"pedir" : {
+			"igp" : "p(edi(r|do)|idiendo)",
+			"ip" : "p(edimos|id(o|e[sn]?))",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""						
 		}
 	},
+	"q" : {},
 	"r" : {
 		"recorrer" : {
 			"igp" : "recorr(er|i(en)?do)",
@@ -196,6 +350,7 @@
 			"sf"   : ""			
 		}
 	},
+	"s" : {},
 	"t" : {
 		"tomar" : {
 			"igp"  : "toma(r|a[n]?do)",
@@ -224,6 +379,25 @@
 			"spi"  : "",
 			"spi2" : "",
 			"sf"   : ""			
+		},
+		"venir" : {
+			"igp"  : "v(enir|iniendo|uelto)",
+			"ip"   : "v(en(go|imos|is)|iene[sn]?)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""			
 		}
-	}    
+	},
+	"w" : {
+		"webear" : {}
+	},
+	"x" : {},
+	"y" : {},
+	"z" : {}
 }
