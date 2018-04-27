@@ -53,16 +53,16 @@
 		},
 		"conocer" : {
 			"igp"  : "conoc(er|i(en)?do)",
-			"ip"   : "cono(zco|ce([sn]|mos)?)",
-			"ipi"  : "",
-			"if"   : "",
-			"ic"   : "",
-			"ipps" : "",
-			"i"    : "",
-			"sp"   : "",
-			"spi"  : "",
-			"spi2" : "",
-			"sf"   : ""	
+			"ip"   : "cono(zco|ce([sn]|is|mos)?)",
+			"ipi"  : "conocia(mos|is|[sn])?",
+			"if"   : "conocer(e(mos|is)?|a[sn]?)",
+			"ic"   : "conoceria(mos|is|[sn])?",
+			"ipps" : "conoci(ste(is)?|o|mos|eron)?",
+			"i"    : "cono(ce|zca(mos|n)?)",
+			"sp"   : "conozca(mos|is|[sn])?",
+			"spi"  : "conociera(mos|is|[sn])?",
+			"spi2" : "conociese(mos|is|[sn])?",
+			"sf"   : "conociere(mos|is|[sn])?"	
 		}
 	},
 	"e" : {
@@ -110,17 +110,17 @@
 	},
 	"i" : {
 		"ir" : {
-			"igp" : "yendo|ir|ido",
-			"ip" : "v(oy|a(mos|[sn])?)",
-			"ipi"  : "",
-			"if"   : "",
-			"ic"   : "",
-			"ipps" : "",
-			"i"    : "",
-			"sp"   : "",
-			"spi"  : "",
-			"spi2" : "",
-			"sf"   : ""			
+			"igp"  : "yendo|ir|ido",
+			"ip"   : "v(oy|a(mos|[sn])?)",
+			"ipi"  : "ir(e(mos|is)?|a[sn]?|ia([sn]|is|mos)?)",
+			"if"   : "fu(i(mos|ste(is)?)?|e(ron)?)",
+			"ic"   : "v(e|aya(mos|n)?)",
+			"ipps" : "v(aya(mos|ais|[sn])?)",
+			"i"    : "v(e|aya(mos|n)?)",
+			"sp"   : "vaya(mos|is|[sn])?",
+			"spi"  : "fuera(mos|is|[sn])?",
+			"spi2" : "fuese(mos|is|[sn])?",
+			"sf"   : "fuere(mos|is|[sn])?"
 		}
 	},
 	"j" : {
