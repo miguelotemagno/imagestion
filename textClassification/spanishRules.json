@@ -140,8 +140,8 @@
 	},
 	"l" : {
 		"leer" : {
-			"igp" : "le(er|yendo|ido)",
-			"ip" : "le(o|e(mos|[sn])?)",
+			"igp"  : "le(er|yendo|ido)",
+			"ip"   : "le(o|e(mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -151,6 +151,19 @@
 			"spi"  : "",
 			"spi2" : "",
 			"sf"   : ""			
+		},
+		"lucir" : {
+			"igp"  : "luci(r|endo|do)",
+			"ip"   : "lu(zco|ce([sn]|is)?|ci(mos|s)?)",
+			"ipi"  : "lucia(mos|[sn]|is)?",
+			"if"   : "lucir(e(mos|is)?|a[sn]?)",
+			"ic"   : "luciria([sn]|mos|is)?",
+			"ipps" : "luci(o|mos|ste(is)?|ron)?",
+			"i"    : "lu(ce|cid|zca[sn]?)",
+			"sp"   : "luzca(mos|is|[sn])?",
+			"spi"  : "luciera(mos|is|[sn])?",
+			"spi2" : "luciese(mos|is|[sn])?",
+			"sf"   : "luciere(mos|is|[sn])?"	
 		}
 	},
 	"m" : {
@@ -200,8 +213,8 @@
 	},
 	"v" : {
 		"volver" : {
-			"igp" : "volv(er|iendo)|vuelto",
-			"ip" : "v(olvemos|uelv(o|e[sn]?))",
+			"igp"  : "volv(er|iendo)|vuelto",
+			"ip"   : "v(olvemos|uelv(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
