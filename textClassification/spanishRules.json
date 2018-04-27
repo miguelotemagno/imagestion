@@ -67,17 +67,17 @@
 	},
 	"e" : {
 		"escribir" : {
-			"igp" : "escribi(r|endo|to)",
-			"ip" : "escrib(o|e[sn]?|imos)",
-			"ipi"  : "",
-			"if"   : "",
-			"ic"   : "",
-			"ipps" : "",
-			"i"    : "",
-			"sp"   : "",
-			"spi"  : "",
-			"spi2" : "",
-			"sf"   : ""			
+			"igp"  : "escri(to|bi(r|endo))",
+			"ip"   : "escrib(o|e[sn]?|i(mo)?s)",
+			"ipi"  : "escribia(mos|is|[sn])?",
+			"if"   : "escribir(e(mos|is)?|a[sn]?)",
+			"ic"   : "escribiria(mos|is|[sn])?",
+			"ipps" : "escribi(ste(is)?|mos|o|eron)?",
+			"i"    : "escri(be|bid|ba(n|mos)?)",
+			"sp"   : "escriba(mos|is|[sn])?",
+			"spi"  : "escribiera(mos|is|[sn])?",
+			"spi2" : "escribiese(mos|is|[sn])?",
+			"sf"   : "escribiere(mos|is|[sn])?"	
 		},
 	    "estudiar" : { 
 			"igp" : "estudia(r|a[n]?do)",
