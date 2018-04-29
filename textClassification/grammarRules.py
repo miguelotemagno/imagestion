@@ -14,18 +14,6 @@ class GrammarRules:
 	
 	def __init__(self):
 		self.rules = self.jsonLoad("spanishRules.json")
-		self.verbs = {
-			'comer' : '^com(o|e[sn]?|mos)$',
-			'ir' : '^(v(oy|a(mos|[sn])?)$',
-			'escribir' : '^escrib(o|e[sn]?|imos)$',
-			'tomar' : '^tom(o|a([sn]|mos)?)$',
-			'conocer' : '^cono(zco|ce([sn]|mos)?)$',
-			'jugar' : '^ju(gamos|eg[oa][sn]?)$',
-			'volver' : '^v(olvemos|uelv(o|e[sn]?))$',
-			'leer' : '^le(o|e(mos|[sn])?)$',
-			'estudiar' : '^estudi(o|a(mos|[sn])?)$',
-			'recorrer' : '^recorr(o|[ae](mos|[sn])?)$'
-		}
 
 	####################################################################
 	
