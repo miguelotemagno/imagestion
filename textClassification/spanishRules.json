@@ -75,7 +75,7 @@
 			"sf"   : ""			
 		},
 		"agarrar" : {
-			"igp"  : "",
+			"igp"  : "agarra(r|[an]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -88,7 +88,7 @@
 			"sf"   : ""			
 		},
 		"andar" : {
-			"igp"  : "",
+			"igp"  : "anda(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -103,7 +103,7 @@
 	},
 	"b" : {
 		"beber" : {
-			"igp"  : "",
+			"igp"  : "beb(er|i[end]?o)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -116,17 +116,17 @@
 			"sf"   : ""			
 		},
 		"buscar" : {
-			"igp"  : "",
-			"ip"   : "",
-			"ipi"  : "",
-			"if"   : "",
-			"ic"   : "",
-			"ipps" : "",
-			"i"    : "",
-			"sp"   : "",
-			"spi"  : "",
-			"spi2" : "",
-			"sf"   : ""			
+			"igp"  : "busca(r|[n]do)",
+			"ip"   : "busc(o|a[sn]?|mos|is)",
+			"ipi"  : "buscaba([sn]|mos|is)?",
+			"if"   : "buscar(e(mos|is)|a[sn]?)",
+			"ic"   : "buscaria(mos|is|[sn])?",
+			"ipps" : "bus(que|co|ca(ste(is)?|ron|mos))",
+			"i"    : "bus(ca[d]?|que(mos|n)?)",
+			"sp"   : "busque([sn]|mos|is)?",
+			"spi"  : "bucara([sn]|mos|is)?",
+			"spi2" : "buscase([sn]|mos|is)?",
+			"sf"   : "buscare([sn]|mos|is)?"
 		}		
 	},
 	"c" : {
@@ -183,7 +183,7 @@
 			"sf"   : "conociere(mos|is|[sn])?"	
 		},
 		"caminar" : {
-			"igp"  : "",
+			"igp"  : "camina(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -196,7 +196,7 @@
 			"sf"   : ""			
 		},
 		"caer" : {
-			"igp"  : "",
+			"igp"  : "ca(er|(i|yen)do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -209,7 +209,7 @@
 			"sf"   : ""			
 		},
 		"cerrar" : {
-			"igp"  : "",
+			"igp"  : "cerra(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -222,7 +222,7 @@
 			"sf"   : ""			
 		},
 		"comenzar" : {
-			"igp"  : "",
+			"igp"  : "comenza(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -235,7 +235,7 @@
 			"sf"   : ""			
 		},
 		"comprar" : {
-			"igp"  : "",
+			"igp"  : "compra(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -276,7 +276,7 @@
 	},
 	"d" : {
 		"dar" : {
-			"igp"  : "",
+			"igp"  : "da(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -343,7 +343,7 @@
 			"sf"   : ""			
     	},
 		"estar" : {
-			"igp"  : "",
+			"igp"  : "esta(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -356,7 +356,7 @@
 			"sf"   : ""			
 		},
 		"encontrar" : {
-			"igp"  : "",
+			"igp"  : "encontra(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -382,7 +382,7 @@
 			"sf"   : ""			
 		},
 		"escuchar" : {
-			"igp"  : "",
+			"igp"  : "escucha(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -425,7 +425,7 @@
 			"sf"   : ""			
 		},
 		"hablar" : {
-			"igp"  : "",
+			"igp"  : "habla(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -449,7 +449,20 @@
 			"spi"  : "",
 			"spi2" : "",
 			"sf"   : ""			
-		}		
+		}	,
+		"huevear" : {
+			"igp"  : "huevea(r|[n]?do)",
+			"ip"   : "",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : ""
+		}
 	},
 	"i" : {
 		"ir" : {
@@ -551,7 +564,7 @@
 			"sf"   : "luciere(mos|is|[sn])?"	
 		},
 		"llegar" : {
-			"igp"  : "",
+			"igp"  : "llega(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -592,7 +605,7 @@
 			"sf"   : ""			
 		},
 		"mirar" : {
-			"igp"  : "",
+			"igp"  : "mira(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -607,7 +620,7 @@
 	},
 	"n" : {
 		"necesitar" : {
-			"igp"  : "",
+			"igp"  : "necesita(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -676,7 +689,7 @@
 			"sf"   : ""			
 		},
 		"pensar" : {
-			"igp"  : "",
+			"igp"  : "pensa(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -702,7 +715,7 @@
 			"sf"   : ""			
 		},
 		"pegar" : {
-			"igp"  : "",
+			"igp"  : "pega(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -786,7 +799,7 @@
 			"sf"   : ""			
 		},
 		"saltar" : {
-			"igp"  : "",
+			"igp"  : "salta(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -799,7 +812,7 @@
 			"sf"   : ""			
 		},
 		"sentar" : {
-			"igp"  : "",
+			"igp"  : "senta(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -853,7 +866,7 @@
 			"sf"   : ""			
 		},
 		"trabajar" : {
-			"igp"  : "",
+			"igp"  : "trabaja(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -879,7 +892,7 @@
 			"sf"   : ""			
 		},
 		"tocar" : {
-			"igp"  : "",
+			"igp"  : "toca(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -948,7 +961,7 @@
 	},
 	"w" : {
 		"wevear" : {
-			"igp"  : "",
+			"igp"  : "webea(r|[n]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
