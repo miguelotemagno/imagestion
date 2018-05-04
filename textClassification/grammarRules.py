@@ -18,38 +18,51 @@ class GrammarRules:
 	####################################################################
 	
 	def isVerb(self):
-		#return re.compile('^(\w+[ae]r|\w*ir|\w+(mos|is|[sn]|ron|[ni]do))$')
-		return re.compile(self.rules['verb'])
+		items = self.rules['verb']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isArticle(self):
-		return re.compile(self.rules['article'])
+		items = self.rules['article']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isAdjetive(self):
-		return re.compile(self.rules['adjetive'])
+		items = self.rules['adjetive']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isSustantive(self):
-		return re.compile(self.rules['sustantive'])
+		items = self.rules['sustantive']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isPreposition(self):
-		return re.compile(self.rules['preposition'])
+		items = self.rules['preposition']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isAdverb(self):
-		return re.compile(self.rules['adverb'])
+		items = self.rules['adverb']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
 	def isPronom(self):
-		return re.compile(self.rules['pronom'])
+		items = self.rules['pronom']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
 
 	####################################################################
 	
