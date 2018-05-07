@@ -268,7 +268,7 @@
 			"sf"   : ""			
 		},
 		"conducir" : {
-			"igp"  : "",
+			"igp"  : "conduci(r|[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -281,7 +281,7 @@
 			"sf"   : ""			
 		},
 		"comprender" : {
-			"igp"  : "",
+			"igp"  : "comprend(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -309,7 +309,7 @@
 			"sf"   : ""			
 		},
 		"decir" : {
-			"igp"  : "",
+			"igp"  : "decir|dic(iendo|ho)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -322,7 +322,7 @@
 			"sf"   : ""			
 		},
 		"dormir" : {
-			"igp"  : "",
+			"igp"  : "dormi(r|do)|durmiendo",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -389,7 +389,7 @@
 			"sf"   : ""			
 		},
 		"entender" : {
-			"igp"  : "",
+			"igp"  : "entend(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -458,7 +458,7 @@
 			"sf"   : ""			
 		},
 		"hacer" : {
-			"igp"  : "",
+			"igp"  : "hac(er|iendo)|hecho",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -655,7 +655,7 @@
 	},
 	"o" : {
 		"oir" : {
-			"igp"  : "",
+			"igp"  : "o(i(r|do)|yendo)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -683,7 +683,7 @@
 			"sf"   : ""						
 		},
 		"poner" : {
-			"igp"  : "",
+			"igp"  : "p(on(er|iendo)|uesto)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -696,7 +696,7 @@
 			"sf"   : ""			
 		},
 		"poder" : {
-			"igp"  : "",
+			"igp"  : "poder|pu(diendo|esto)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -722,7 +722,7 @@
 			"sf"   : ""			
 		},
 		"perder" : {
-			"igp"  : "",
+			"igp"  : "perd(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -750,7 +750,7 @@
 	},
 	"q" : {
 		"querer" : {
-			"igp"  : "",
+			"igp"  : "quer(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -780,7 +780,7 @@
 	},
 	"s" : {
 		"ser" : {
-			"igp"  : "",
+			"igp"  : "s(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -793,7 +793,7 @@
 			"sf"   : ""			
 		},
 		"saber" : {
-			"igp"  : "",
+			"igp"  : "sab(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -806,7 +806,7 @@
 			"sf"   : ""			
 		},
 		"salir" : {
-			"igp"  : "",
+			"igp"  : "sali(r|[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -845,7 +845,7 @@
 			"sf"   : ""			
 		},
 		"sentir" : {
-			"igp"  : "",
+			"igp"  : "s(enti(r|do)|intiendo)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -873,7 +873,7 @@
 			"sf"   : "tomare([sn]|mos|is)?"
 		},
 		"tener" : {
-			"igp"  : "",
+			"igp"  : "ten(er|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -899,7 +899,7 @@
 			"sf"   : ""			
 		},
 		"traer" : {
-			"igp"  : "",
+			"igp"  : "tra(er|(i|yen)do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -953,7 +953,7 @@
 			"sf"   : ""			
 		},
 		"vivir" : {
-			"igp"  : "",
+			"igp"  : "vivi(r|i[en]?do)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -966,7 +966,7 @@
 			"sf"   : ""			
 		},
 		"ver" : {
-			"igp"  : "",
+			"igp"  : "v(er|i(end|st)o)",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
