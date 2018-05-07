@@ -1,6 +1,6 @@
 {
     "verb"        : ["\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"],
-    "article"     : ["[d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al"],
+    "determiner"  : ["[d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al"],
     "adjetive"    : [
 						"simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble",
 						"(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?",
@@ -24,8 +24,9 @@
 						"[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?",
 						"alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
 						"con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]",
-						"ningun[oa]?|os|otr[oa][s]?|nadie"
+						"ningun[oa]?|os|otr[oa][s]?|nadie|que"
 					],
+	"interjection" : ["a[y]+|au|a[h]+|bah|che|guau|wow|hey|huy|ouch|o[h]+|pu[f]+|puaj|zas|s[h]+[t]?|"],
 	
 	"_comment" : {
   		"igp" : "infinitivo|gerundio|participio",
@@ -43,7 +44,7 @@
 
 	"a" : {
 		"abrir" : {
-			"igp"  : "ab(ri(r(se)?|endo)|ierto)",
+			"igp"  : "ab(ri(r|endo)|ierto)",
 			"ip"   : "abr(o|e[sn]?|imos|is)",
 			"ipi"  : "abria([sn]|mos|is)?",
 			"if"   : "abrir(e(is)?|a[sn]?|emos)",
@@ -860,7 +861,7 @@
 	},
 	"t" : {
 		"tomar" : {
-			"igp"  : "toma(r|a[n]?do)",
+			"igp"  : "toma(r|[n]?do)",
 			"ip"   : "tom(o|a([sn]|mos|is)?)",
 			"ipi"  : "tomaba(mos|is|[sn])?",
 			"if"   : "tomar(a[sn]?|e(mos|is)?)",

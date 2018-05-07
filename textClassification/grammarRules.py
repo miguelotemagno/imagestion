@@ -24,8 +24,8 @@ class GrammarRules:
 
 	####################################################################
 	
-	def isArticle(self):
-		items = self.rules['article']
+	def isDeterminer(self):
+		items = self.rules['determiner']
 		expr = '^(' + '|'.join(items) + ')$'
 		return re.compile(expr)
 
@@ -65,7 +65,14 @@ class GrammarRules:
 		return re.compile(expr)
 
 	####################################################################
-	
+
+	def isInterjection(self):
+		items = self.rules['interjection']
+		expr = '^(' + '|'.join(items) + ')$'
+		return re.compile(expr)
+
+	####################################################################
+
 	def getVerb(self, text):
 		char = text[0]
 		if char in self.rules:

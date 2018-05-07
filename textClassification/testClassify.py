@@ -5,6 +5,7 @@ import numpy as np
 #import matplotlib.mlab as mlab    ## sudo apt-get install python-matplotlib
 #import matplotlib.pyplot as plt   ##
 import sys
+import re
 
 def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
     hist, bins = np.histogram(arr, bins=b)
@@ -39,6 +40,26 @@ if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	c.loadFilter('preposiciones.txt.tfdb')
 	
 	print "filter\n"
-	c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir')    ## sudo apt-get install links
+	c.loadFromWeb('http://www.emol.cl')    ## sudo apt-get install links
+	#c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir')    ## sudo apt-get install links
 	#c.loadFromFile('libro.txt')
 	c.process()
+
+if sys.argv[1] == 'verb':
+	verbo = 'abrir'
+	if sys.argv[2] != '':
+		verbo = sys.argv[2]
+
+	c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb='+verbo)    ## sudo apt-get install links
+	# c.loadFromFile('libro.txt')
+	print "=> process\n"
+	list = c.text.split("\n")
+	reg = re.compile('(\d+)\s+(\w+)')
+
+	for line in list:
+		expr = reg.search(line)
+		if expr:
+			(n, word) = expr.group(1, 2)
+			print "%s: %d" % (word, c.gramarRules(word))
+
+

@@ -83,19 +83,18 @@ class Classify:
 
 	def gramarRules(self, text):
 		verb   = self.rules.isVerb()
-		artic  = self.rules.isArticle()
+		det    = self.rules.isDeterminer()
 		sustan = self.rules.isSustantive()
 		prep   = self.rules.isPreposition()
 		adverb = self.rules.isAdverb()
 		adjet  = self.rules.isAdjetive()
 		pronom = self.rules.isPronom()
+		interjection = self.rules.isInterjection()
 
 
 		if verb.match(text):
 			if self.rules.getVerb(text) != None:
 				return 0x1
-		if sustan.match(text):
-			return 0
 		if prep.match(text):
 			return 0x2
 		if adverb.match(text):
@@ -104,10 +103,14 @@ class Classify:
 			return 0x4
 		if pronom.match(text):
 			return 0x5
-		if artic.match(text):
+		if det.match(text):
 			return 0x6
+		if interjection.match(text):
+			return 0
+		if sustan.match(text):
+			return 0x7
 
-		return 0x7
+		return 0x8
 
 	##########################################################################
 
