@@ -1,10 +1,16 @@
 {
     "verb"        : ["\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"],
     "determiner"  : {
-		"defined" :       ["el|(la|lo)[s]?"],
-		"undefined" :     ["un(a[s]?|os)?"],
+		"article" :       ["el|(la|lo)[s]?","un(a[s]?|os)?"],
+		"undefined" :     ["algun([oa][s]?)?|casi|demasiad[oa][s]?|muy"],
 		"demonstrative" : ["(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"],
-		"possesive" :     ["mi|tu|[nv]uestr[oa]"]
+		"possesive" :     ["mi|tu|[nv]uestr[oa][s]?"],
+		"cardinal" :      ["un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"],
+		"ordinal" :       [
+                            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
+                            "((duo)?de|cente|mile|millone)cim[oa]",
+                            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
+                          ]
 	},
     "adjetive"    : [
 						"simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble",
