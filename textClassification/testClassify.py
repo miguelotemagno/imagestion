@@ -62,4 +62,21 @@ if sys.argv[1] == 'verb':
 			(n, word) = expr.group(1, 2)
 			print "%s: %d" % (word, c.gramarRules(word))
 
+if sys.argv[1] == 'grammar':
+	url = 'http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir'
+	if sys.argv[2] != '':
+		url = sys.argv[2]
+
+	c.loadFromWeb(url)    ## sudo apt-get install links
+	# c.loadFromFile('libro.txt')
+	print "=> process\n"
+	list = c.text.split("\n")
+	reg = re.compile('(\d+)\s+(\w+)')
+
+	for line in list:
+		expr = reg.search(line)
+		if expr:
+			(n, word) = expr.group(1, 2)
+			print "%s: %d" % (word, c.gramarRules(word))
+
 

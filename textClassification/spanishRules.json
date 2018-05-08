@@ -1,6 +1,11 @@
 {
     "verb"        : ["\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"],
-    "determiner"  : ["[d]?el|la[s]?|lo[s]?|un(a[s]?|os)?|al"],
+    "determiner"  : {
+		"defined" :       ["el|(la|lo)[s]?"],
+		"undefined" :     ["un(a[s]?|os)?"],
+		"demonstrative" : ["(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"],
+		"possesive" :     ["mi|tu|[nv]uestr[oa]"]
+	},
     "adjetive"    : [
 						"simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble",
 						"(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?",
@@ -24,22 +29,34 @@
 						"[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?",
 						"alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
 						"con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]",
-						"ningun[oa]?|os|otr[oa][s]?|nadie|que"
+						"ningun[oa]?|os|otr[oa][s]?|nadie"
 					],
 	"interjection" : ["a[y]+|au|a[h]+|bah|che|guau|wow|hey|huy|ouch|o[h]+|pu[f]+|puaj|zas|s[h]+[t]?|"],
+	"conjunction" : {
+		"copulative" :   ["y|e|ni"],
+		"disjuctive" :   ["o|u"],
+		"distributive" : ["ya|bien|tan|pronto"],
+		"adverse" :      ["pero|mas|aunque|sin embargo|no obstante|antes|por|demas|sino|excepto"],
+		"consecutive" :  ["pues luego|asi que|de modo que|conque"],
+		"causal" :       ["porque|puesto|ya que|pues"],
+		"conditional" :  ["si"],
+		"final" :        ["para que|a fin de que"],
+		"comparative" :  ["que|como"],
+		"conssesive" :   ["aunque|aun|cuando|si bien"]
+	},
 	
 	"_comment" : {
-  		"igp" : "infinitivo|gerundio|participio",
- 		"ip" : "indicativo presente" ,
-  		"ipi" : "indicativo preterito imperfecto" ,
-  		"if" : "indicativo futuro" ,
-  		"ic" : "indicativo condicional",
+  		"igp"  : "infinitivo|gerundio|participio",
+ 		"ip"   : "indicativo presente" ,
+  		"ipi"  : "indicativo preterito imperfecto" ,
+  		"if"   : "indicativo futuro" ,
+  		"ic"   : "indicativo condicional",
   		"ipps" : "indicativo preterito perfecto simple",
-  		"i" : "imperativo" ,
-  		"sp" : "subjuntivo presente" ,
-  		"spi" : "subjuntivo preterito imperfecto" ,
+  		"i"    : "imperativo" ,
+  		"sp"   : "subjuntivo presente" ,
+  		"spi"  : "subjuntivo preterito imperfecto" ,
   		"spi2" : "subjuntivo preterito imperfecto 2" ,
-  		"sf" : "subjuntivo futuro" 
+  		"sf"   : "subjuntivo futuro"
 	},
 
 	"a" : {

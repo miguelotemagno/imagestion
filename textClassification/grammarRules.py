@@ -24,10 +24,15 @@ class GrammarRules:
 
 	####################################################################
 	
-	def isDeterminer(self):
-		items = self.rules['determiner']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isDeterminer(self,text):
+		for type, list in self.rules['determiner'].iteritems():
+			expr = '^('+'|'.join(list)+')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
+
 
 	####################################################################
 	
@@ -70,6 +75,17 @@ class GrammarRules:
 		items = self.rules['interjection']
 		expr = '^(' + '|'.join(items) + ')$'
 		return re.compile(expr)
+
+	####################################################################
+
+	def isConjunction(self, text):
+		for type, list in self.rules['conjunction'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 
