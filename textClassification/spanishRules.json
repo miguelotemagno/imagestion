@@ -83,7 +83,7 @@
     "preposition" : {
         "proper" : [
             "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
-            "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin",
+            "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
         ],
         "improper" : [
             "debajo de|delante de|a fuerza de|en lugar de"
