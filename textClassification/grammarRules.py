@@ -57,7 +57,7 @@ class GrammarRules:
 
 	####################################################################
 	
-	def isDeterminer(self,text):
+	def isDeterminer(self, text):
 		for type, list in self.rules['determiner'].iteritems():
 			expr = '^('+'|'.join(list)+')$'
 			eval = re.compile(expr)
@@ -66,48 +66,71 @@ class GrammarRules:
 
 		return None
 
+	####################################################################
+	
+	def isAdjetive(self, text):
+		for type, list in self.rules['adjetive'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 	
-	def isAdjetive(self):
-		items = self.rules['adjetive']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isSustantive(self, text):
+		for type, list in self.rules['sustantive'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 	
-	def isSustantive(self):
-		items = self.rules['sustantive']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isPreposition(self, text):
+		for type, list in self.rules['preposition'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 	
-	def isPreposition(self):
-		items = self.rules['preposition']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isAdverb(self, text):
+		for type, list in self.rules['adverb'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 	
-	def isAdverb(self):
-		items = self.rules['adverb']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isPronom(self, text):
+		for type, list in self.rules['pronom'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
 
-	####################################################################
-	
-	def isPronom(self):
-		items = self.rules['pronom']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+		return None
 
 	####################################################################
 
-	def isInterjection(self):
-		items = self.rules['interjection']
-		expr = '^(' + '|'.join(items) + ')$'
-		return re.compile(expr)
+	def isInterjection(self, text):
+		for type, list in self.rules['interjection'].iteritems():
+			expr = '^(' + '|'.join(list) + ')$'
+			eval = re.compile(expr)
+			if eval.match(text):
+				return type
+
+		return None
 
 	####################################################################
 

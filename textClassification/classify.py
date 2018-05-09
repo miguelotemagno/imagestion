@@ -84,35 +84,35 @@ class Classify:
 	def gramarRules(self, text):
 		verb   = self.rules.isVerb()
 		#det    = self.rules.isDeterminer()
-		sustan = self.rules.isSustantive()
-		prep   = self.rules.isPreposition()
-		adverb = self.rules.isAdverb()
-		adjet  = self.rules.isAdjetive()
-		pronom = self.rules.isPronom()
-		interjection = self.rules.isInterjection()
+		#sustan = self.rules.isSustantive()
+		#prep   = self.rules.isPreposition()
+		#adverb = self.rules.isAdverb()
+		#adjet  = self.rules.isAdjetive()
+		#pronom = self.rules.isPronom()
+		#interjection = self.rules.isInterjection()
 
 
 		if verb.match(text):
 			if self.rules.getVerb(text) != None:
 				return 0x1
-		if prep.match(text):
+		if self.rules.isPreposition(text) != None:
 			return 0x2
-		if adverb.match(text):
+		if self.rules.isAdverb(text) != None:
 			return 0x3
-		if adjet.match(text):
+		if self.rules.isAdjetive(text) != None:
 			return 0x4
+		if self.rules.isPronom(text) != None:
+			return 0x5
 		if self.rules.isDeterminer(text) != None:
 			return 0x6
-		if pronom.match(text):
-			return 0x5
-		if interjection.match(text):
-			return 0
-		if self.rules.isConjunction(text) != None:
-			return 0x9
-		if sustan.match(text):
+		if self.rules.isSustantive(text) != None:
 			return 0x7
+		if self.rules.isConjunction(text) != None:
+			return 0x8
+		if self.rules.isInterjection(text) != None:
+			return 0x9
 
-		return 0x8
+		return 0
 
 	##########################################################################
 
