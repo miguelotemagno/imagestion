@@ -1,23 +1,46 @@
 {
     "verb"        : ["\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"],
     "determiner"  : {
-		"article" :       ["el|l[ao][s]?","un(a[s]?|os)?"],
-		"undefined" :     ["algun([oa][s]?)?|casi|demasiad[oa][s]?|muy"],
-		"demonstrative" : ["(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"],
-		"possesive" :     ["mi|tu|[nv]uestr[oa][s]?"],
-		"cardinal" :      ["un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"],
-		"ordinal" :       [
+		"article" :        ["el|l[ao][s]?|un(a[s]?|os)?"],
+		"predetermining" : ["tod[oa][s]?"],
+		"demostrative" :   ["(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"],
+		"possesive" :      ["mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"],
+		"cardinal" :       ["un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"],
+		"ordinal" :        [
                             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
                             "((duo)?de|cente|mile|millone)cim[oa]",
                             "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
-                          ]
+                           ],
+		"distributive" :   ["cada|ambos|demas|sendo[s]?"],
+		"multiplicative" : ["(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"],
+		"divider" :        ["enter[oa]|(dob|trip)le"],
+		"undefined" :      ["algun([oa][s]?)?|casi|(demasiad|much)[oa][s]?|muy"]
 	},
     "adjetive"    : {
-        "all" : [
-            "simple|mayor|\\w{3,}[^n]d[oa][s]?|\\w+ble",
-            "(generos|antigu|cuant|blanc|negr|baj|alt|medi)[ao][s]?",
-            "tan|mas|dulce|cada|\\w+isim[oa]|a(ca|hi|quel(l[oa][s]?)?)"
-        ]
+        "demostrative" :   ["es[t]?[aeo][s]?|aquel(l[ao][s]?)?"],
+        "possesive" :      ["mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"],
+        "undefined" :      [
+                            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc)[oa][s]?|muy",
+                            "otro|cualquier|mas|menos|tod[oa][s]?|mayor"
+                           ],
+		"ordinal" :        [
+                            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
+                            "((duo)?de|cente|mile|millone)cim[oa]",
+                            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
+                           ],
+		"distributive" :   ["cada|ambos|demas|sendo[s]?"],
+		"multiplicative" : ["(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"],
+		"divider" :        ["enter[oa]|(dob|trip)le"],
+		"qualified" :      [
+                            "(buen|mal|baj|alt|medi)[oa][s]?|genial(es)?",
+                            "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)oso",
+                            "violeta|verde[s]?|(azul|marron)(es)?"
+                           ],
+        "all" :            [
+                            "(generos|antigu|cuant)[ao][s]?",
+                            "\\w{3,}([^n]d[oa][s]?|ble|isim[oa])",
+                            "simple|tan|dulce|cada|a(ca|hi|ll[ai]|qui)"
+                           ]
     },
     "sustantive"  : {
         "all" : [
