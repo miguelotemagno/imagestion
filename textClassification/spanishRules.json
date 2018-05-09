@@ -1,48 +1,79 @@
 {
-    "verb"        : ["\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"],
-    "determiner"  : {
-		"article" :        ["el|l[ao][s]?|un(a[s]?|os)?"],
-		"predetermining" : ["tod[oa][s]?"],
-		"demostrative" :   ["(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"],
-		"possesive" :      ["mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"],
-		"cardinal" :       ["un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"],
-		"ordinal" :        [
-                            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
-                            "((duo)?de|cente|mile|millone)cim[oa]",
-                            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
-                           ],
-		"distributive" :   ["cada|ambos|demas|sendo[s]?"],
-		"multiplicative" : ["(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"],
-		"divider" :        ["enter[oa]|(dob|trip)le"],
-		"undefined" :      ["algun([oa][s]?)?|casi|(demasiad|much)[oa][s]?|muy"]
+    "verb" : [
+        "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
+    ],
+    "determiner" : {
+		"article" : [
+            "el|l[ao][s]?|un(a[s]?|os)?"
+		],
+		"predetermining" : [
+            "tod[oa][s]?"
+		],
+		"demostrative" : [
+            "(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"
+		],
+		"possesive" : [
+            "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
+		],
+		"cardinal" : [
+            "un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"
+		],
+		"ordinal" : [
+            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
+            "((duo)?de|cente|mile|millone)cim[oa]",
+            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
+        ],
+		"distributive" :   [
+            "cada|ambos|demas|sendo[s]?"
+		],
+		"multiplicative" : [
+            "(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"
+		],
+		"divider" : [
+            "enter[oa]|(dob|trip)le"
+		],
+		"undefined" : [
+            "algun([oa][s]?)?|casi|(demasiad|much)[oa][s]?|muy"
+		]
 	},
-    "adjetive"    : {
-        "demostrative" :   ["es[t]?[aeo][s]?|aquel(l[ao][s]?)?"],
-        "possesive" :      ["mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"],
-        "undefined" :      [
-                            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc)[oa][s]?|muy",
-                            "otro|cualquier|mas|menos|tod[oa][s]?|mayor"
-                           ],
-		"ordinal" :        [
-                            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
-                            "((duo)?de|cente|mile|millone)cim[oa]",
-                            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
-                           ],
-		"distributive" :   ["cada|ambos|demas|sendo[s]?"],
-		"multiplicative" : ["(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"],
-		"divider" :        ["enter[oa]|(dob|trip)le"],
-		"qualified" :      [
-                            "(buen|mal|baj|alt|medi)[oa][s]?|genial(es)?",
-                            "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)oso",
-                            "violeta|verde[s]?|(azul|marron)(es)?"
-                           ],
-        "all" :            [
-                            "(generos|antigu|cuant)[ao][s]?",
-                            "\\w{3,}([^n]d[oa][s]?|ble|isim[oa])",
-                            "simple|tan|dulce|cada|a(ca|hi|ll[ai]|qui)"
-                           ]
+    "adjetive" : {
+        "demostrative" : [
+            "es[t]?[aeo][s]?|aquel(l[ao][s]?)?"
+        ],
+        "possesive" : [
+            "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
+        ],
+        "undefined" : [
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc)[oa][s]?|muy",
+            "otro|cualquier|mas|menos|tod[oa][s]?|mayor"
+        ],
+		"ordinal" : [
+            "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
+            "((duo)?de|cente|mile|millone)cim[oa]",
+            "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
+        ],
+		"distributive" : [
+            "cada|ambos|demas|sendo[s]?"
+        ],
+		"multiplicative" : [
+            "(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"
+		
+		],
+		"divider" : [
+            "enter[oa]|(dob|trip)le"
+		],
+		"qualified" : [
+            "(buen|mal|baj|alt|medi)[oa][s]?|genial(es)?",
+            "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)oso",
+            "violeta|verde[s]?|(azul|marron)(es)?"
+        ],
+        "all" : [
+            "(generos|antigu|cuant)[ao][s]?",
+            "\\w{3,}([^n]d[oa][s]?|ble|isim[oa])",
+            "simple|tan|dulce|cada|a(ca|hi|ll[ai]|qui)"
+        ]
     },
-    "sustantive"  : {
+    "sustantive" : {
         "all" : [
             "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces))",
             "\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa]))",
@@ -50,18 +81,30 @@
         ]
     },
     "preposition" : {
-        "all" : [
-            "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?",
-            "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
+        "proper" : [
+            "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
+            "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin",
+        ],
+        "improper" : [
+            "debajo de|delante de|a fuerza de|en lugar de"
+        ],
+        "ubication" : [
+            "en(cima)|sobre|bajo|traves|de(bajo|lante|tras)|entre|por|medio|al lado"
+        ],
+        "displacement" : [
+            "desde|ha(cia|sta)|para"
+        ],
+        "temporal" : [
+            "a|con|durante|despues|antes de"
         ]
     },
-    "adverb"      : {
+    "adverb" : {
         "all" : [
             "\\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora",
             "despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre"
         ]
     },
-    "pronom"      : {
+    "pronom" : {
         "all" : [
             "donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
             "[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?",
