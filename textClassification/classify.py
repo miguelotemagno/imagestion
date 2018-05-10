@@ -54,7 +54,7 @@ class Classify:
 		self.path = os.getcwd()
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
-		self.largestWord = 'Electroencefalografistas'
+		self.largestWord = 'electroencefalografistas'
 		self.maxValue = self.setWordID(self.largestWord);
 		self.trainData = None
 		self.sess = None
@@ -131,7 +131,7 @@ class Classify:
 	##########################################################################
 	
 	def getHex2List(self, text):
-		l = list(hex(int(round(self.getCRC(text) * 10 ** 18))))
+		l = list(hex(int(round(self.getCRC(text) * (10**17)))))
 		return [int(x,16)/16.0 for x in l[2:]]
 
 	##########################################################################		           
