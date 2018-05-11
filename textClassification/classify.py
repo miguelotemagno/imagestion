@@ -131,8 +131,11 @@ class Classify:
 	##########################################################################
 	
 	def getHex2List(self, text):
-		l = list(hex(int(round(self.getCRC(text) * (10**17)))))
-		return [int(x,16)/16.0 for x in l[2:]]
+		split_string = lambda x, n: [x[i:i+n] for i in range(1, len(x), n)]
+		bigNum = round(self.getCRC(text) * (10**18))
+		bigHex = hex(int(bigNum))
+		l = split_string(re.sub('[^0-9A-Fa-f]','',bigHex),2)
+		return [int(x,16)/256.0 for x in l[:]]
 
 	##########################################################################		           
 	
