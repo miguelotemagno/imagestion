@@ -3,36 +3,36 @@
         "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
     ],
     "determiner" : {
-		"article" : [
+		"detArticle" : [
             "el|l[ao][s]?|un(a[s]?|os)?"
 		],
-		"predetermining" : [
+		"detPredetermining" : [
             "tod[oa][s]?"
 		],
-		"demostrative" : [
+		"detDemostrative" : [
             "(est|es)([ea]|[oa]s)([ea]|[ao]s)aquel(lo|la[s]?)?"
 		],
-		"possesive" : [
+		"detPossesive" : [
             "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
 		],
-		"cardinal" : [
+		"detCardinal" : [
             "un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"
 		],
-		"ordinal" : [
+		"detOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
             "((duo)?de|cente|mile|millone)cim[oa]",
             "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
         ],
-		"distributive" :   [
+		"detDistributive" :   [
             "cada|ambos|demas|sendo[s]?"
 		],
-		"multiplicative" : [
+		"detMultiplicative" : [
             "(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"
 		],
-		"divider" : [
+		"detDivider" : [
             "enter[oa]|(dob|trip)le"
 		],
-		"undefined" : [
+		"detUndefined" : [
             "algun([oa][s]?)?|casi|(demasiad|much)[oa][s]?|muy"
 		]
 	},
@@ -117,16 +117,16 @@
         "all" : ["[au][y]+|a[h]+|bah|che|guau|wow|hey|huy|[ao]uch|o[h]+|pu[f]+|puaj|zas|chan|s[h]+[t]?|"]
     },
 	"conjunction" : {
-		"copulative" :   ["y|e|ni"],
-		"disjuctive" :   ["o|u"],
-		"distributive" : ["ya|bien|tan|pronto"],
-		"adverse" :      ["pero|mas|aunque|sin embargo|no obstante|antes|por|demas|sino|excepto"],
-		"consecutive" :  ["pues luego|asi que|de modo que|conque"],
-		"causal" :       ["porque|puesto|ya que|pues"],
-		"conditional" :  ["si"],
-		"final" :        ["para que|a fin de que"],
-		"comparative" :  ["que|como"],
-		"conssesive" :   ["aunque|aun|cuando|si bien"]
+		"conjCopulative" :   ["y|e|ni"],
+		"conjDisjuctive" :   ["o|u"],
+		"conjDistributive" : ["ya|bien|tan|pronto"],
+		"conjAdverse" :      ["pero|mas|aunque|sin embargo|no obstante|antes|por|demas|sino|excepto"],
+		"conjConsecutive" :  ["pues luego|asi que|de modo que|conque"],
+		"conjCausal" :       ["porque|puesto|ya que|pues"],
+		"conjConditional" :  ["si"],
+		"conjFinal" :        ["para que|a fin de que"],
+		"conjComparative" :  ["que|como"],
+		"conjConssesive" :   ["aunque|aun|cuando|si bien"]
 	},
 	
 	"_comment" : {
@@ -141,6 +141,28 @@
   		"spi"  : "subjuntivo preterito imperfecto" ,
   		"spi2" : "subjuntivo preterito imperfecto 2" ,
   		"sf"   : "subjuntivo futuro"
+	},
+	
+	"NLTK" : {
+		"conjCopulative" :   "CC",
+		"conjDisjuctive" :   "CC",
+		"conjDistributive" : "CC",
+		"conjAdverse" :      "CC",
+		"conjConsecutive" :  "CC",
+		"conjCausal" :       "CC",
+		"conjConditional" :  "CC",
+		"conjFinal" :        "CC",
+		"conjComparative" :  "CC",
+		"conjConssesive" :   "CC",
+		"detCardinal" :      "CD",
+		"detArticle" :       "DT",
+		"detDemostrative" :  "DT",
+		"detDistributive" :  "DT",
+		"detDivider" :       "DT",
+		"detMultiplicative": "DT",
+		"detOrdinal" :       "DT",
+		"detPredetermining": "DT",
+		"detUndefined" :     "DT"
 	},
 
 	"a" : {
