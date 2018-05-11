@@ -83,14 +83,6 @@ class Classify:
 
 	def gramarRules(self, text):
 		verb   = self.rules.isVerb()
-		#det    = self.rules.isDeterminer()
-		#sustan = self.rules.isSustantive()
-		#prep   = self.rules.isPreposition()
-		#adverb = self.rules.isAdverb()
-		#adjet  = self.rules.isAdjetive()
-		#pronom = self.rules.isPronom()
-		#interjection = self.rules.isInterjection()
-
 
 		if verb.match(text):
 			if self.rules.getVerb(text) != None:
