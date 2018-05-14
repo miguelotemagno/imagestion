@@ -37,44 +37,47 @@
 		]
 	},
     "adjetive" : {
-        "demostrative" : [
+        "adjDemostrative" : [
             "es[t]?[aeo][s]?|aquel(l[ao][s]?)?"
         ],
-        "possesive" : [
+        "adjPossesive" : [
             "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
-        "undefined" : [
-            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc)[oa][s]?|muy",
-            "otro|cualquier|mas|menos|tod[oa][s]?|mayor"
+        "adjUndefined" : [
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?|muy",
+            "otro|cualquier|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s"
         ],
-		"ordinal" : [
+		"adjOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
             "((duo)?de|cente|mile|millone)cim[oa]",
             "(vi|tri|cuatri|quin(cua|ti)|sexta|septa|octa|nona)gesim[oa]"
         ],
-		"distributive" : [
+		"adjDistributive" : [
             "cada|ambos|demas|sendo[s]?"
         ],
-		"multiplicative" : [
+		"adjMultiplicative" : [
             "(dob|trip|cuad|(quint|sext|oct|noven)up)le[s]?"
 		
 		],
-		"divider" : [
+		"adjDivider" : [
             "enter[oa]|(dob|trip)le"
 		],
-		"qualified" : [
+		"adjQualified" : [
             "(buen|mal|baj|alt|medi)[oa][s]?|genial(es)?",
-            "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)oso",
-            "violeta|verde[s]?|(azul|marron)(es)?"
+            "dulce[s]?|amarg[oa][s]?|agri[oa][s]?",
+            "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)os[ao][s]?",
+            "violeta|verde[s]?|(azul|marron)(es)|ocre"
         ],
-        "all" : [
-            "(generos|antigu|cuant)[ao][s]?",
-            "\\w{3,}([^n]d[oa][s]?|ble|isim[oa])",
-            "simple|tan|dulce|cada|a(ca|hi|ll[ai]|qui)"
+        "adjComparative" : ["mas|tan|menos|como|tal"],
+        "adjInterrogtive" : ["que|cuan(t[oa][s]?)?|cual(es)?|"],
+        "adjAll" : [
+            "(antigu|cuant)[ao][s]?",
+            "\\w+(([^n]d[oa]|ble|[ea]nte|isim[oa]|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)",
+            "simple"
         ]
     },
     "sustantive" : {
-        "all" : [
+        "sustAll" : [
             "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces))",
             "\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa]))",
             "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
@@ -99,27 +102,39 @@
         ]
     },
     "adverb" : {
-        "all" : [
-            "\\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora",
-            "despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre"
+		"advPlace" : [
+			"a(ca|hi|ll[ai]|qui|rriba|tras)|cerca|lejos|(al|en)?frente|de(tras|bajo|lante)|encima|fuera"
+		],
+		"advTime" : [
+			"(ant|despu|entonc)es|luego|despacio|aprisa|aun",
+			"ahora|hoy|manana|ayer|todavia|siempre|nunca|jamas"
+		],
+		"advMode" : [
+			"bien|mal|apenas|reci[oa]|\\w+mente"
+		],
+		"advCantidad" : [
+			"mucho|poco|harto|bastante|(ade)?mas|demasiado|muy|menos|algo|nada"
+		],
+        "advAll" : [
+            "si|no|tam(bien|poco))|acaso|talvez|quiza[s]?"
         ]
     },
     "pronom" : {
-		"personal" : ["yo|tu|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?"],
-		"demostrativo" : ["es[t]?[eao][s]?|aquel(l[ao][s]?)?"],
-		"posesivo" : ["mi[oa][s]?|[ts]uy[oa][s]?|[nv]uestr[oa][s]?"],
-		"indefinido" : [
+		"pronPersonal" :      ["yo|tu|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?"],
+		"pronDemonstrative" : ["es[t]?[eao][s]?|aquel(l[ao][s]?)?"],
+		"pronPossesive" :     ["mi[oa][s]?|[ts]uy[oa][s]?|[nv]uestr[oa][s]?"],
+		"pronUndefined" :     [
 			"tan|vari[oa]s|demas|bastante[s]?|tal(es)?|(cual|quien)(es)?quier[a]?|alguien|nadie",
 			"(un|(al|nin)gun|poc|escas|much|demasiad|tod|otr|mism|tant)([ao][s]?)?"
 		],
-        "all" : [
+        "pronAll" : [
             "donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
             "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
             "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
     },
 	"interjection" : {
-        "all" : ["[au][y]+|a[h]+|bah|che|guau|wow|hey|huy|[ao]uch|o[h]+|pu[f]+|puaj|zas|chan|s[h]+[t]?|"]
+        "intjAll" : ["[au][y]+|a[h]+|bah|che|guau|wow|hey|huy|[ao]uch|o[h]+|pu[f]+|puaj|zas|chan|s[h]+[t]?|"]
     },
 	"conjunction" : {
 		"conjCopulative" :   ["y|e|ni"],
@@ -165,9 +180,27 @@
 		"detDistributive" :  "DT",
 		"detDivider" :       "DT",
 		"detMultiplicative": "DT",
-		"detOrdinal" :       "DT",
+		"detOrdinal" :       "LS",
 		"detPredetermining": "DT",
-		"detUndefined" :     "DT"
+		"detUndefined" :     "DT",
+		"adjComparative" :   "JJR",
+		"adjDemostrative" :  "JJ",
+		"adjPossesive" :     "JJ",
+		"adjUndefined" :     "JJ",
+		"adjOrdinal" :       "LS",
+		"adjAll" :           "JJ",
+		"adjQualified" :     "JJ",
+		"sustAll" :          "NN",
+		"pronPersonal" :     "PRP",
+		"pronPossesive" :    "PR$",
+		"advAll" :           "RB",
+		"intjAll" :          "UH",
+		"igp" :              "VB",
+		"ipps" :             "VBD",
+		"ip" :               "VBP",
+		"if" :               "VBF",
+		"sf" :               "VBF"
+		
 	},
 
 	"a" : {
