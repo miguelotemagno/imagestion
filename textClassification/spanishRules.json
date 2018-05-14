@@ -105,12 +105,17 @@
         ]
     },
     "pronom" : {
+		"personal" : ["yo|tu|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?"],
+		"demostrativo" : ["es[t]?[eao][s]?|aquel(l[ao][s]?)?"],
+		"posesivo" : ["mi[oa][s]?|[ts]uy[oa][s]?|[nv]uestr[oa][s]?"],
+		"indefinido" : [
+			"tan|vari[oa]s|demas|bastante[s]?|tal(es)?|(cual|quien)(es)?quier[a]?|alguien|nadie",
+			"(un|(al|nin)gun|poc|escas|much|demasiad|tod|otr|mism|tant)([ao][s]?)?"
+		],
         "all" : [
             "donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
-            "[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(quier[a]?|(es)?)?",
             "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
-            "con[mst]igo|bastante[s]?|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]",
-            "ningun[oa]?|os|otr[oa][s]?|nadie"
+            "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
     },
 	"interjection" : {
