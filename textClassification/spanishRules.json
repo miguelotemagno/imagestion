@@ -63,7 +63,7 @@
             "enter[oa]|(dob|trip)le"
 		],
 		"adjQualified" : [
-            "(buen|mal|baj|alt|medi)[oa][s]?|genial(es)?",
+            "(buen|mal|baj|alt|medi|magnific|estupend)[oa][s]?|genial(es)?",
             "dulce[s]?|amarg[oa][s]?|agri[oa][s]?",
             "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)os[ao][s]?",
             "violeta|verde[s]?|(azul|marron)(es)|ocre"
@@ -71,9 +71,8 @@
         "adjComparative" : ["mas|tan|menos|como|tal"],
         "adjInterrogtive" : ["que|cuan(t[oa][s]?)?|cual(es)?|"],
         "adjAll" : [
-            "(antigu|cuant)[ao][s]?",
-            "\\w+(([^n]d[oa]|ble|[ea]nte|isim[oa]|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)",
-            "simple"
+            "(antigu|cuant)[ao][s]?|simple",
+            "\\w+(([^n]d[oa]|ble|[ea]nte|isim[oa]|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)"
         ]
     },
     "sustantive" : {
@@ -92,13 +91,13 @@
             "debajo de|delante de|a fuerza de|en lugar de"
         ],
         "ubication" : [
-            "en(cima)|sobre|bajo|traves|de(bajo|lante|tras)|entre|por|medio|al lado"
+            "en(cima)|sobre|bajo|traves|de(bajo|lante|tras)|entre|por|medio|al|lado"
         ],
         "displacement" : [
             "desde|ha(cia|sta)|para"
         ],
         "temporal" : [
-            "a|con|durante|despues|antes de"
+            "a|con|durante|despues|antes"
         ]
     },
     "adverb" : {
@@ -106,7 +105,7 @@
 			"a(ca|hi|ll[ai]|qui|rriba|tras)|cerca|lejos|(al|en)?frente|de(tras|bajo|lante)|encima|fuera"
 		],
 		"advTime" : [
-			"(ant|despu|entonc)es|luego|despacio|aprisa|aun",
+			"(ant|despu|entonc)es|luego|despacio|(de|a)prisa|lento|rapido|aun",
 			"ahora|hoy|manana|ayer|todavia|siempre|nunca|jamas"
 		],
 		"advMode" : [
@@ -116,11 +115,11 @@
 			"mucho|poco|harto|bastante|(ade)?mas|demasiado|muy|menos|algo|nada"
 		],
         "advAll" : [
-            "si|no|tam(bien|poco))|acaso|talvez|quiza[s]?"
+            "[a]?si|no|tam(bien|poco)|acaso|talvez|quiza[s]?|ojala"
         ]
     },
     "pronom" : {
-		"pronPersonal" :      ["yo|tu|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?"],
+		"pronPersonal" :      ["yo|tu|[vn]os|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?|usted(es)?"],
 		"pronDemonstrative" : ["es[t]?[eao][s]?|aquel(l[ao][s]?)?"],
 		"pronPossesive" :     ["mi[oa][s]?|[ts]uy[oa][s]?|[nv]uestr[oa][s]?"],
 		"pronUndefined" :     [
