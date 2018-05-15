@@ -7,6 +7,7 @@ import numpy as np
 import sys
 import re
 
+
 def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
     hist, bins = np.histogram(arr, bins=b)
     center = (bins[:-1] + bins[1:]) / 2
@@ -17,6 +18,21 @@ def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
 c = Classify()
 x = []
 y = []
+
+rules = ["NA","VB","PREP","ADV","ADJ","PRN","DET","SUST","CJ","IJ"]
+"""rules = {
+	"0":"NA",
+	"1":"VB",
+	"2":"PREP",
+	"3":"ADV",
+	"4":"ADJ",
+	"5":"PRN",
+	"6":"DET",
+	"7":"NN",
+	"8":"CJ",
+	"9":"IJ"
+	}"""
+
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
@@ -77,6 +93,6 @@ if sys.argv[1] == 'grammar':
 		expr = reg.search(line)
 		if expr:
 			(n, word) = expr.group(1, 2)
-			print "%s: %d" % (word, c.gramarRules(word))
+			print "%s: %s" % (word, rules[c.gramarRules(word)])
 
 
