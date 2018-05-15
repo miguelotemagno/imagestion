@@ -63,7 +63,7 @@
             "enter[oa]|(dob|trip)le"
 		],
 		"adjQualified" : [
-            "(buen|mal|baj|alt|medi|magnific|estupend)[oa][s]?|genial(es)?",
+            "(buen|mal|baj|alt|medi|magnific|estupend)[oa][s]?|genial(es)?|(mej|pe)or(es)?",
             "dulce[s]?|amarg[oa][s]?|agri[oa][s]?",
             "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)os[ao][s]?",
             "violeta|verde[s]?|(azul|marron)(es)|ocre"
@@ -76,8 +76,17 @@
         ]
     },
     "sustantive" : {
+		"sustPropio" : ["miguel|alejandro|vargas|welch"],
+		"sustSimple" : ["ca\\wa[s]?|(almendra\\w+|sol|computa\\w+)(es)?|nube|alfombra|\\w+zon|\\w+iz"],
+		"sustCompuesto" : [
+			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
+			"\\w+(fuente|aficionado|vision|grafo|copio)"
+		],
+		"sustDerivadoo" : ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
+		"sustAbstracto" : ["paz|guerra|amor|\\w+eza|odio|\\w+ismo|\\w+tad|\\w+anza"],
+		"sustColectivo" : ["cardumen(es)?|piara|banda(da)?|ejercito|biblioteca|jauria"],
         "sustAll" : [
-            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces))",
+            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez)",
             "\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa]))",
             "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
         ]
@@ -91,7 +100,7 @@
             "debajo de|delante de|a fuerza de|en lugar de"
         ],
         "ubication" : [
-            "en(cima)|sobre|bajo|traves|de(bajo|lante|tras)|entre|por|medio|al|lado"
+            "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado"
         ],
         "displacement" : [
             "desde|ha(cia|sta)|para"
@@ -106,7 +115,7 @@
 		],
 		"advTime" : [
 			"(ant|despu|entonc)es|luego|despacio|(de|a)prisa|lento|rapido|aun",
-			"ahora|hoy|manana|ayer|todavia|siempre|nunca|jamas"
+			"ahora|hoy|manana|ayer|todavia|siempre|nunca|jamas|temprano|tarde"
 		],
 		"advMode" : [
 			"bien|mal|apenas|reci[oa]|\\w+mente"
@@ -126,8 +135,9 @@
 			"tan|vari[oa]s|demas|bastante[s]?|tal(es)?|(cual|quien)(es)?quier[a]?|alguien|nadie",
 			"(un|(al|nin)gun|poc|escas|much|demasiad|tod|otr|mism|tant)([ao][s]?)?"
 		],
+		"pronInterrogatives" : ["que|quien(es)?|como|cua(ndo|nto|l(es)?)|porque|donde"],
         "pronAll" : [
-            "donde|(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
+            "(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
             "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
             "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
@@ -163,6 +173,7 @@
 	},
 	
 	"NLTK" : {
+		"_more_info"     :   "nltk.help.upenn_tagset()",
 		"conjCopulative" :   "CC",
 		"conjDisjuctive" :   "CC",
 		"conjDistributive" : "CC",
