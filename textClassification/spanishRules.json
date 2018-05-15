@@ -62,9 +62,9 @@
 		"adjDivider" : [
             "enter[oa]|(dob|trip)le"
 		],
-		"adjQualified" : [
-            "(buen|mal|baj|alt|medi|magnific|estupend)[oa][s]?|genial(es)?|(mej|pe)or(es)?",
-            "dulce[s]?|amarg[oa][s]?|agri[oa][s]?",
+		"adjQualifying" : [
+            "(buen|mal|baj|alt|medi|magnific|estupend|chic)[oa][s]?|(genial|(mej|pe)or)(es)?",
+            "(dulce|grande|(in)?salubre)[s]?|(amarg|agri)[oa][s]?",
             "(blanc|negr|roj(iz)?|amarill(ent)?|violace)[oa][s]?|(verd|azul|cafes)os[ao][s]?",
             "violeta|verde[s]?|(azul|marron)(es)|ocre"
         ],
@@ -76,7 +76,7 @@
         ]
     },
     "sustantive" : {
-		"sustPropio" : ["miguel|alejandro|vargas|welch"],
+		"sustPropio" : ["(mi|[rdg]a)\\w+el|(os|[rl][io]|al)\\w+[rgdtsz]o|vargas|welch"],
 		"sustSimple" : ["ca\\wa[s]?|(almendra\\w+|sol|computa\\w+)(es)?|nube|alfombra|\\w+zon|\\w+iz"],
 		"sustCompuesto" : [
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
