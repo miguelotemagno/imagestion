@@ -76,14 +76,24 @@
         ]
     },
     "sustantive" : {
-		"sustPropio" : ["(mi|[rdg]a)\\w+el|(os|[rl][io]|al)\\w+[rgdtsz]o|vargas|welch"],
-		"sustSimple" : ["ca\\wa[s]?|(almendra\\w+|sol|computa\\w+)(es)?|nube|alfombra|\\w+zon|\\w+iz"],
+		"sustPropio" : [
+			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|or|d[oa])",
+			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en",
+			"vargas|welch"
+		],
+		"sustSimple" : [
+			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w+|sol)(es)?|nube|alfombra|\\w+zon|\\w+iz|president[ae][s]?|\\w+ista[s]?",
+			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
+			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut)[oa][s]?",
+			"((asi|diplom|inform)atic|(agor|tesor|compan)er|(funcion|parlament|secret)ari)[oa][s]?"
+		],
 		"sustCompuesto" : [
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
 			"\\w+(fuente|aficionado|vision|grafo|copio)"
 		],
+		"sustDisminutivo" : ["(it|ill)[oa][s]?"],
 		"sustDerivadoo" : ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
-		"sustAbstracto" : ["paz|guerra|amor|\\w+eza|odio|\\w+ismo|\\w+tad|\\w+anza"],
+		"sustAbstracto" : ["paz|guerra|amor|odio|hola|adios|\\w+eza|\\w+ismo|\\w+[td]ad|\\w+anza|\\w+[sft]o[fgr]ia"],
 		"sustColectivo" : ["cardumen(es)?|piara|banda(da)?|ejercito|biblioteca|jauria"],
         "sustAll" : [
             "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez)",
@@ -205,17 +215,26 @@
 		"pronPossesive" :    "PR$",
 		"advAll" :           "RB",
 		"intjAll" :          "UH",
-		"igp" :              "VB",
+		"inf" :              "VB",
+		"ger" :              "VBG",
+		"par" :              "VBN",
 		"ipps" :             "VBD",
 		"ip" :               "VBP",
+		"i" :                "VBC",
 		"if" :               "VBF",
+		"ic" :               "VBC",
+		"sp" :               "VBC",
+		"spi" :              "VBC",
+		"spi2" :             "VBF",
 		"sf" :               "VBF"
 		
 	},
 
 	"a" : {
 		"abrir" : {
-			"igp"  : "ab(ri(r|endo)|ierto)",
+			"inf"  : "abrir",
+			"ger"  : "abriendo",
+			"par"  : "abierto",
 			"ip"   : "abr(o|e[sn]?|imos|is)",
 			"ipi"  : "abria([sn]|mos|is)?",
 			"if"   : "abrir(e(is)?|a[sn]?|emos)",
@@ -234,7 +253,9 @@
 			"ellos": "abr([ea]n|ian|ir[i]?an|ie(r[oae]n|sen))"
 		},
 		"advertir" : {
-			"igp"  : "advert(ir|i(en)?do)",
+			"inf"  : "advertir",
+			"ger"  : "advertiendo",
+			"par"  : "advertido",
 			"ip"   : "adv(iert(o|e([sn])?)|erti(mos|s))",
 			"ipi"  : "advertia(mos|is|[sn])?",
 			"if"   : "advertir(e(mos|is)?|a[sn]?)",
@@ -253,7 +274,9 @@
 			"ellos": "[ ]"
 		},
 		"acudir" : {
-			"igp"  : "acud(ir|i(en)?do)",
+			"inf"  : "acudir",
+			"ger"  : "acudiendo",
+			"par"  : "acudido",
 			"ip"   : "acud(o|e([sn])?|imos)",
 			"ipi"  : "acudia(mos|is|[sn])?",
 			"if"   : "acudir(e(mos|is)?|a[sn]?)",
@@ -271,9 +294,74 @@
 			"uds"  : "[ ]",
 			"ellos": "[ ]"
 		},
+		"abandonar" : {
+			"inf"  : "abandonar",
+			"ger"  : "abandonando",
+			"par"  : "abandonado",
+			"ip"   : "abandon(o|a([sn]|mos)?)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : "",
+			"yo"   : "[ ]",
+			"tu"   : "[ ]",
+			"el_a" : "[ ]",
+			"nos"  : "[ ]",
+			"uds"  : "[ ]",
+			"ellos": "[ ]"		
+		},
 		"agredir" : {
-			"igp"  : "agred(ir|i(en)?do)",
+			"inf"  : "agredrir",
+			"ger"  : "agrediendo",
+			"par"  : "agredido",
 			"ip"   : "agred(o|e([sn])?|imos)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : "",
+			"yo"   : "[ ]",
+			"tu"   : "[ ]",
+			"el_a" : "[ ]",
+			"nos"  : "[ ]",
+			"uds"  : "[ ]",
+			"ellos": "[ ]"		
+		},
+		"acusar" : {
+			"inf"  : "acusar",
+			"ger"  : "acusando",
+			"par"  : "acusado",
+			"ip"   : "acus(o|a([sn]|mos)?)",
+			"ipi"  : "",
+			"if"   : "",
+			"ic"   : "",
+			"ipps" : "",
+			"i"    : "",
+			"sp"   : "",
+			"spi"  : "",
+			"spi2" : "",
+			"sf"   : "",
+			"yo"   : "[ ]",
+			"tu"   : "[ ]",
+			"el_a" : "[ ]",
+			"nos"  : "[ ]",
+			"uds"  : "[ ]",
+			"ellos": "[ ]"		
+		},
+		"albergar" : {
+			"inf"  : "albergar",
+			"ger"  : "albergando",
+			"par"  : "albergado",
+			"ip"   : "alberg(o|a([sn]|mos)?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
