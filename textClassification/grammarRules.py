@@ -158,5 +158,19 @@ class GrammarRules:
         
 	####################################################################
 		
+	def getVerbTense(self, text):
+		isIn = re.compile('^(ger|par|i([cpf]|nf|pi|pps?)|sp[i]?[2]?|sf)$')
+		pass
+        
+	####################################################################
+		
+	def getNltkType(self, type):
+		type = None
+		try:
+			type = self.rules["NLTK"][type]
+		except ValueError:
+			type = "NA"
+		
+		return type 
 
 	
