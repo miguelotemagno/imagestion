@@ -44,8 +44,8 @@
             "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
-            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?|muy",
-            "otro|cualquier|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s"
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?",
+            "otro|cualquier|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
@@ -69,10 +69,11 @@
             "violeta|verde[s]?|(azul|marron)(es)|ocre"
         ],
         "adjComparative" : ["mas|tan|menos|como|tal"],
-        "adjInterrogtive" : ["que|cuan(t[oa][s]?)?|cual(es)?|"],
+        "adjInterrogtive" : ["que|cuan(t[oa][s]?)?|cual(es)?"],
+        "adjSuperlative" : ["\\w+(isim|errim)[oa][s]?|(su|hi)per\\w+|mega\\w+|supremo"],
         "adjAll" : [
             "(antigu|cuant)[ao][s]?|simple",
-            "\\w+(([^n]d[oa]|ble|[ea]nte|isim[oa]|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)"
+            "\\w+(([^n]d[oa]|ble|[ea]nte|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)"
         ]
     },
     "sustantive" : {
@@ -102,20 +103,20 @@
         ]
     },
     "preposition" : {
-        "proper" : [
+        "prepProper" : [
             "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
             "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
         ],
-        "improper" : [
+        "prepImproper" : [
             "debajo de|delante de|a fuerza de|en lugar de"
         ],
-        "ubication" : [
+        "prepUbication" : [
             "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado"
         ],
-        "displacement" : [
+        "prepDisplacement" : [
             "desde|ha(cia|sta)|para"
         ],
-        "temporal" : [
+        "prepTemporal" : [
             "a|con|durante|despues|antes"
         ]
     },
@@ -130,12 +131,19 @@
 		"advMode" : [
 			"bien|mal|apenas|reci[oa]|\\w+mente"
 		],
-		"advCantidad" : [
+		"advQuantity" : [
 			"mucho|poco|harto|bastante|(ade)?mas|demasiado|muy|menos|algo|nada"
 		],
         "advAll" : [
             "[a]?si|no|tam(bien|poco)|acaso|talvez|quiza[s]?|ojala"
-        ]
+        ],
+		"advComparative" : [
+			"[ ]"
+		],
+		"advSuperlative" : [
+			"\\w+(isim|errim)[oa][s]?"
+		]
+
     },
     "pronom" : {
 		"pronPersonal" :      ["yo|tu|[vn]os|el(la)?|[vn]osotr[oa]s|ell[oa]s|l[oea][s]?|usted(es)?"],
@@ -201,7 +209,7 @@
 		"detDivider" :       "DT",
 		"detMultiplicative": "DT",
 		"detOrdinal" :       "LS",
-		"detPredetermining": "DT",
+		"detPredetermining": "PDT",
 		"detUndefined" :     "DT",
 		"adjComparative" :   "JJR",
 		"adjDemostrative" :  "JJ",
@@ -211,8 +219,14 @@
 		"adjAll" :           "JJ",
 		"adjQualified" :     "JJ",
 		"sustAll" :          "NN",
+		"sustPropio" :       "NNP",
 		"pronPersonal" :     "PRP",
 		"pronPossesive" :    "PR$",
+		"advPlace" :         "RB",
+		"advTime" :          "RB",
+		"advMode" :          "RB",
+		"advComparative" :   "RBR",
+		"advSuperlative" :   "RBS",
 		"advAll" :           "RB",
 		"intjAll" :          "UH",
 		"inf" :              "VB",
@@ -226,8 +240,13 @@
 		"sp" :               "VBC",
 		"spi" :              "VBC",
 		"spi2" :             "VBF",
-		"sf" :               "VBF"
-		
+		"sf" :               "VBF",
+		"prepProper" :       "IN",
+		"prepImproper" :     "IN",
+		"prepUbication" :    "IN",
+		"prepDisplacement" : "IN",
+		"prepTemporal" :     "IN",
+		"adjSuperlative" :   "JJS"
 	},
 
 	"a" : {

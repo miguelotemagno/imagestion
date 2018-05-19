@@ -155,7 +155,7 @@ class GrammarRules:
 					return verb
 
 		return None
-        
+
 	####################################################################
 		
 	def getVerbTense(self, verb, text):
@@ -171,7 +171,7 @@ class GrammarRules:
 						return tense
 		
 		return None
-        
+
 	####################################################################
 		
 	def getVerbPron(self, verb, text):
@@ -188,8 +188,8 @@ class GrammarRules:
 		
 		return None
 		
-    ####################################################################
-		
+	####################################################################
+
 	def getNltkType(self, type):
 		type = None
 		try:
@@ -199,4 +199,4 @@ class GrammarRules:
 		
 		return type 
 
-	
+
