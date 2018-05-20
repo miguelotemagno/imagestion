@@ -83,7 +83,7 @@
 			"vargas|welch"
 		],
 		"sustSimple" : [
-			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w+|sol)(es)?|nube|alfombra|\\w+zon|\\w+iz|president[ae][s]?|\\w+ista[s]?",
+			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w+|sol)(es)?|nube|alfombra|\\w+zon|\\w+iz|\\w*ent[ae][s]?|\\w+ista[s]?",
 			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
 			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut)[oa][s]?",
 			"((asi|diplom|inform)atic|(agor|tesor|compan)er|(funcion|parlament|secret)ari)[oa][s]?"

@@ -35,6 +35,8 @@
 
 import re
 import json
+import subprocess as sp
+import os
 
 class GrammarRules:
 	def jsonLoad(self, dbFile):
@@ -47,6 +49,11 @@ class GrammarRules:
 	
 	def __init__(self):
 		self.rules = self.jsonLoad("spanishRules.json")
+		self.fromFile = 'loadFromFile2.sh'
+		self.fromWeb = 'loadFromWeb3.sh'
+		self.path = os.getcwd()
+		self.text = ""
+
 
 	####################################################################
 	
@@ -146,13 +153,14 @@ class GrammarRules:
 	####################################################################
 
 	def getVerb(self, text):
-		char = text[0]
-		if char in self.rules:
-			for verb, hash in self.rules[char].iteritems():
-				expr = '^('+'|'.join(hash.values())+')$'
-				eval = re.compile(expr)
-				if eval.match(text):
-					return verb
+		if text != "":
+			char = text[0]
+			if char in self.rules:
+				for verb, hash in self.rules[char].iteritems():
+					expr = '^('+'|'.join(hash.values())+')$'
+					eval = re.compile(expr)
+					if eval.match(text):
+						return verb
 
 		return None
 
@@ -190,13 +198,82 @@ class GrammarRules:
 		
 	####################################################################
 
-	def getNltkType(self, type):
+	def getNltkType(self, idx):
 		type = None
 		try:
-			type = self.rules["NLTK"][type]
+			type = self.rules["NLTK"][idx] if idx in self.rules["NLTK"] else '??'
 		except ValueError:
-			type = "NA"
+			type = "??"
 		
 		return type 
 
+	##########################################################################
 
+	def loadFromFile(self,source):
+		print "=> loadFromFile (%s)\n" % (source)
+		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
+
+	##########################################################################
+
+	def loadFromWeb(self,source):
+		print "=> loadFromWeb (%s)\n" % (source)
+		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
+
+	##########################################################################
+
+	def word_tokenize(self, text):
+		tokens = re.split('\s+', text)
+		return tokens
+
+	##########################################################################
+
+	def pos_tag(self, tokens):
+		list = []
+
+		for token in tokens:
+			tags = []
+			type = "??"
+
+			if self.getVerb(token) != None:
+				type = self.getVerbTense(token)
+				if type != None and self.getNltkType(type) is not None:
+					tags.append(self.getNltkType(type))
+
+			pron = self.isPronom(token)
+			if pron != None:
+				tags.append(self.getNltkType(pron))
+
+			adj = self.isAdjetive(token)
+			if adj != None:
+				tags.append(self.getNltkType(adj))
+
+			adv = self.isAdverb(token)
+			if adv != None:
+				tags.append(self.getNltkType(adv))
+
+			prep = self.isPreposition(token)
+			if prep != None:
+				tags.append(self.getNltkType(prep))
+
+			sust = self.isSustantive(token)
+			if sust != None:
+				tags.append(self.getNltkType(sust))
+
+			conj = self.isConjunction(token)
+			if conj != None:
+				tags.append(self.getNltkType(conj))
+
+			det = self.isDeterminer(token)
+			if det != None:
+				tags.append(self.getNltkType(det))
+
+			intj = self.isInterjection(token)
+			if intj != None:
+				tags.append(self.getNltkType(intj))
+
+			if len(tags) > 0:
+				type = '|'.join(tags)
+
+			list.append((token, type))
+
+		return list
