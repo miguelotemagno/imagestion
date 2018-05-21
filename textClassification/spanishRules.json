@@ -216,6 +216,7 @@
 		"detPredetermining": "PDT",
 		"detUndefined" :     "DT",
 		"adjComparative" :   "JJR",
+		"adjInterrogtive" :  "JJ",
 		"adjDemostrative" :  "JJ",
 		"adjPossesive" :     "JJ",
 		"adjUndefined" :     "JJ",
@@ -231,8 +232,12 @@
 		"sustAbstract" :     "NN",
 		"sustAll" :          "NN",
 		"sustPropio" :       "NNP",
+		"pronUndefined":     "PR",
+		"pronInterrogatives":"PR",
+		"pronAll":           "PR",
+		"pronDemonstrative": "PR",
 		"pronPersonal" :     "PRP",
-		"pronPossesive" :    "PR$",
+		"pronPossesive" :    "PRP$",
 		"advPlace" :         "RB",
 		"advTime" :          "RB",
 		"advMode" :          "RB",
@@ -889,8 +894,8 @@
 			"yo"   : "fu(i|era|se|re)",
 			"tu"   : "fu(iste|eras|e[sr]es)",
 			"el_a" : "fue(ra|se|re)?",
-			"nos"  : "fu(i|er[ae]|ese))mos",
-			"uds"  : "fu(iste|er[ea]|ese))is",
+			"nos"  : "fu(i|er[ae]|ese)mos",
+			"uds"  : "fu(iste|er[ea]|ese)is",
 			"ellos": "fue(r[ao]n|[rs]en)"
 		},
 		"ser" : {
@@ -901,8 +906,8 @@
 			"yo"   : "fu(i|era|se|re)",
 			"tu"   : "fu(iste|eras|e[sr]es)",
 			"el_a" : "fue(ra|se|re)?",
-			"nos"  : "fu(i|er[ae]|ese))mos",
-			"uds"  : "fu(iste|er[ea]|ese))is",
+			"nos"  : "fu(i|er[ae]|ese)mos",
+			"uds"  : "fu(iste|er[ea]|ese)is",
 			"ellos": "fue(r[ao]n|[rs]en)"
 		}
 	},

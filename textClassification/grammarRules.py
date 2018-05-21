@@ -157,8 +157,12 @@ class GrammarRules:
 			char = text[0]
 			if char in self.rules:
 				for verb, hash in self.rules[char].iteritems():
-					expr = '^('+'|'.join(hash.values())+')$'
-					eval = re.compile(expr)
+					try:
+						expr = '^('+'|'.join(hash.values())+')$'
+						eval = re.compile(expr)
+					except ValueError:
+						print "%s {%s} %s" % (text, expr, ValueError)
+
 					if eval.match(text):
 						return verb
 
@@ -180,7 +184,7 @@ class GrammarRules:
 		
 		return None
 
-	####################################################################
+	##########################################################################
 		
 	def getVerbPron(self, verb, text):
 		char = text[0]
@@ -195,17 +199,12 @@ class GrammarRules:
 						return pron
 		
 		return None
-		
-	####################################################################
+
+	##########################################################################
 
 	def getNltkType(self, idx):
-		type = None
-		try:
-			type = self.rules["NLTK"][idx] if idx in self.rules["NLTK"] else '??'
-		except ValueError:
-			type = "??"
-		
-		return type 
+		type = self.rules["NLTK"][idx] if idx in self.rules["NLTK"] else idx
+		return type
 
 	##########################################################################
 
