@@ -71,6 +71,7 @@
         "adjComparative" : ["mas|tan|menos|como|tal"],
         "adjInterrogtive" : ["que|cuan(t[oa][s]?)?|cual(es)?"],
         "adjSuperlative" : ["\\w+(isim|errim)[oa][s]?|(su|hi)per\\w+|mega\\w+|supremo"],
+        "adjDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
         "adjAll" : [
             "(antigu|cuant)[ao][s]?|simple",
             "\\w+(([^n]d[oa]|ble|[ea]nte|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^z][ai]l(es)?)"
@@ -93,32 +94,35 @@
 			"\\w+(fuente|aficionado|vision|grafo|copio)"
 		],
 		"sustDisminutivo" : ["(it|ill)[oa][s]?"],
-		"sustDerivadoo" : ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
-		"sustAbstracto" : ["paz|guerra|amor|odio|hola|adios|\\w+eza|\\w+ismo|\\w+[td]ad|\\w+anza|\\w+[sft]o[fgr]ia"],
+		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
+		"sustAbstract" : [
+			"paz|guerra|amor|odio|hola|adios",
+			"\\w+(eza|ismo|[td]ad|anza|[sft]o[fgr]ia|miento|aje)"
+		],
 		"sustColectivo" : ["cardumen(es)?|piara|banda(da)?|ejercito|biblioteca|jauria"],
         "sustAll" : [
             "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez)",
-            "\\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa]))",
             "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
         ]
     },
     "preposition" : {
-        "prepProper" : [
-            "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
-            "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
-        ],
-        "prepImproper" : [
-            "debajo de|delante de|a fuerza de|en lugar de"
-        ],
-        "prepUbication" : [
-            "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado"
-        ],
-        "prepDisplacement" : [
-            "desde|ha(cia|sta)|para"
-        ],
-        "prepTemporal" : [
-            "a|con|durante|despues|antes"
-        ]
+		"prepPosesion" : ["de[l]?"],
+		"prepProper" : [
+		    "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
+		    "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
+		],
+		"prepImproper" : [
+		    "debajo de|delante de|a fuerza de|en lugar de"
+		],
+		"prepUbication" : [
+		    "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado"
+		],
+		"prepDisplacement" : [
+		    "desde|ha(cia|sta)|para"
+		],
+		"prepTemporal" : [
+		    "a|con|durante|despues|antes"
+		]
     },
     "adverb" : {
 		"advPlace" : [
@@ -161,7 +165,7 @@
         ]
     },
 	"interjection" : {
-        "intjAll" : ["[au][y]+|a[h]+|bah|che|guau|wow|hey|huy|[ao]uch|o[h]+|pu[f]+|puaj|zas|chan|s[h]+[t]?|"]
+        "intjAll" : ["[au][y]+|a[h]+|bah|che|guau|wow|hey|huy|[ao]uch|o[h]+|pu[f]+|puaj|zas|chan|s[h]+[t]?"]
     },
 	"conjunction" : {
 		"conjCopulative" :   ["y|e|ni"],
@@ -218,6 +222,13 @@
 		"adjOrdinal" :       "LS",
 		"adjAll" :           "JJ",
 		"adjQualified" :     "JJ",
+		"sustPropio" :       "NN",
+		"sustSimple" :       "NN",
+		"sustCompuesto" :    "NN",
+		"sustColectivo" :    "NN",
+		"sustDerivado" :     "NN",
+		"sustDisminutivo" :  "NN",
+		"sustAbstract" :     "NN",
 		"sustAll" :          "NN",
 		"sustPropio" :       "NNP",
 		"pronPersonal" :     "PRP",
@@ -241,6 +252,7 @@
 		"spi" :              "VBC",
 		"spi2" :             "VBF",
 		"sf" :               "VBF",
+		"prepPosesion" :     "IN",
 		"prepProper" :       "IN",
 		"prepImproper" :     "IN",
 		"prepUbication" :    "IN",
@@ -747,6 +759,12 @@
 		}		
 	},
 	"e" : {
+		"ser" : { 
+			"ip"   : "e(re)?s",
+			"ipi"  : "era([sn]|mos|is)",
+			"tu"   : "er[ea]s|se(ras|(ri)?as)?",
+			"el_a" : "es|era|se(r[i]?a|a)"
+		},
 		"escribir" : {
 			"igp"  : "escri(to|bi(r|endo))",
 			"ip"   : "escrib(o|e[sn]?|i(mo)?s)",
@@ -862,11 +880,38 @@
 			"ellos": "[ ]"
 		}		
 	},
-	"f" : {},
+	"f" : {
+		"ir" : {
+			"if"   : "fu(i(mos|ste(is)?)?|e(ron)?)",
+			"spi"  : "fuera(mos|is|[sn])?",
+			"spi2" : "fuese(mos|is|[sn])?",
+			"sf"   : "fuere(mos|is|[sn])?",
+			"yo"   : "fu(i|era|se|re)",
+			"tu"   : "fu(iste|eras|e[sr]es)",
+			"el_a" : "fue(ra|se|re)?",
+			"nos"  : "fu(i|er[ae]|ese))mos",
+			"uds"  : "fu(iste|er[ea]|ese))is",
+			"ellos": "fue(r[ao]n|[rs]en)"
+		},
+		"ser" : {
+			"ipps" : "fu([ie]|iste(is)?|imos|eron)",
+			"spi"  : "fuera([sn]|mos|is)?",
+			"spi2" : "fuese([sn]|mos|is)?",
+			"sf"   : "fuere([sn]|mos|is)?",
+			"yo"   : "fu(i|era|se|re)",
+			"tu"   : "fu(iste|eras|e[sr]es)",
+			"el_a" : "fue(ra|se|re)?",
+			"nos"  : "fu(i|er[ae]|ese))mos",
+			"uds"  : "fu(iste|er[ea]|ese))is",
+			"ellos": "fue(r[ao]n|[rs]en)"
+		}
+	},
 	"g" : {},
 	"h" : {
 		"haber" : {
-			"igp"  : "hab(er|i(en)?do)",
+			"inf"  : "haber",
+			"ger"  : "habiendo",
+			"par"  : "habido",
 			"ip"   : "h(e(mos)?|a(y|[sn]|be(mos|is)))",
 			"ipi"  : "habia([sn]|mos|is)?",
 			"if"   : "habr(e(mos|is)?|a[sn]?)",
@@ -963,7 +1008,9 @@
 	},
 	"i" : {
 		"ir" : {
-			"igp"  : "yendo|ir|ido",
+			"inf"  : "ir",
+			"ger"  : "yendo",
+			"par"  : "ido",
 			"ip"   : "v(oy|a(mos|[sn])?)",
 			"ipi"  : "ir(e(mos|is)?|a[sn]?|ia([sn]|is|mos)?)",
 			"if"   : "fu(i(mos|ste(is)?)?|e(ron)?)",
@@ -1383,7 +1430,9 @@
 	},
 	"s" : {
 		"ser" : {
-			"igp"  : "s(er|i[en]?do)",
+			"inf"  : "ser",
+			"ger"  : "siendo",
+			"par"  : "sido",
 			"ip"   : "so([yn]|mos|is)|e(re)?s",
 			"ipi"  : "era([sn]|mos|is)",
 			"if"   : "ser(e(mos|is)?|a[sn]?)",
@@ -1694,6 +1743,10 @@
 		}
 	},
 	"x" : {},
-	"y" : {},
+	"y" : {
+		"ir" : {
+			"ger"  : "yendo"
+		}
+	},
 	"z" : {}
 }
