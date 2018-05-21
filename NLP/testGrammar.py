@@ -5,7 +5,7 @@ from GrammarRules import *
 g = GrammarRules()
 
 if sys.argv[1] == 'web':
-	url = 'https://raw.githubusercontent.com/miguelotemagno/imagestion/imagestion_1.0/textClassification/grammarTest.txt'
+	url = 'https://raw.githubusercontent.com/miguelotemagno/imagestion/imagestion_1.0/NLP/grammarTest.txt'
 	if sys.argv[2] != '':
 		url = sys.argv[2]
 
