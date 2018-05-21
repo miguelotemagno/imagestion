@@ -33,15 +33,13 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-#import zlib
-import subprocess as sp
-import os
-import re
-from ANN import *
+import sys, os.path
 from random import randint
 from math import log
-import numpy as np
-from grammarRules import *
+nlp_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/NLP/' )
+sys.path.append(nlp_dir)
+#import NLP.GrammarRules
+from GrammarRules import *
 import tensorflow as tf
 
 class Classify:

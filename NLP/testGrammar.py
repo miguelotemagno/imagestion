@@ -1,6 +1,6 @@
 import sys
 import re
-from grammarRules import *
+from GrammarRules import *
 
 g = GrammarRules()
 
