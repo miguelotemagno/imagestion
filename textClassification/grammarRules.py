@@ -234,41 +234,42 @@ class GrammarRules:
 			tags = []
 			type = "??"
 
-			if self.getVerb(token) != None:
-				type = self.getVerbTense(token)
-				if type != None and self.getNltkType(type) is not None:
+			verb = self.getVerb(token)
+			if verb is not None:
+				type = self.getVerbTense(verb, token)
+				if type is not None and self.getNltkType(type) is not None:
 					tags.append(self.getNltkType(type))
 
 			pron = self.isPronom(token)
-			if pron != None:
+			if pron is not None:
 				tags.append(self.getNltkType(pron))
 
 			adj = self.isAdjetive(token)
-			if adj != None:
+			if adj is not None:
 				tags.append(self.getNltkType(adj))
 
 			adv = self.isAdverb(token)
-			if adv != None:
+			if adv is not None:
 				tags.append(self.getNltkType(adv))
 
 			prep = self.isPreposition(token)
-			if prep != None:
+			if prep is not None:
 				tags.append(self.getNltkType(prep))
 
 			sust = self.isSustantive(token)
-			if sust != None:
+			if sust is not None:
 				tags.append(self.getNltkType(sust))
 
 			conj = self.isConjunction(token)
-			if conj != None:
+			if conj is not None:
 				tags.append(self.getNltkType(conj))
 
 			det = self.isDeterminer(token)
-			if det != None:
+			if det is not None:
 				tags.append(self.getNltkType(det))
 
 			intj = self.isInterjection(token)
-			if intj != None:
+			if intj is not None:
 				tags.append(self.getNltkType(intj))
 
 			if len(tags) > 0:
