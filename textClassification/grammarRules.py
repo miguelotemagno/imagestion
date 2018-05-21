@@ -63,7 +63,18 @@ class GrammarRules:
 		return re.compile(expr)
 
 	####################################################################
-	
+
+	def isNumber(self, text):
+		items = self.rules['number']
+		expr = '^(' + '|'.join(items) + ')$'
+		eval = re.compile(expr)
+		if eval.match(text):
+			return 'number'
+
+		return None
+
+	####################################################################
+
 	def isDeterminer(self, text):
 		for type, list in self.rules['determiner'].iteritems():
 			expr = '^('+'|'.join(list)+')$'
@@ -242,6 +253,10 @@ class GrammarRules:
 			pron = self.isPronom(token)
 			if pron is not None:
 				tags.append(self.getNltkType(pron))
+
+			num = self.isNumber(token)
+			if num is not None:
+				tags.append(self.getNltkType(num))
 
 			adj = self.isAdjetive(token)
 			if adj is not None:
