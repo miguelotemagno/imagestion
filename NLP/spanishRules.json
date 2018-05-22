@@ -19,7 +19,11 @@
             "mi[oa]?|tu(y[oa])?|([nv]uestr[oa]|su(y[oa])?)[s]?"
 		],
 		"detCardinal" : [
-            "un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince"
+            "un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez",
+            "once|doce|trece|catorce|quince|dieci(seis|siete|ocho|nueve)",
+            "veinti(un[o]?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)",
+            "veinte|[tcson]\\w+nta|[dtcqson]?\\w*cien(to[s]?)?",
+            "([mb]|(cua)?tr|(quin|six|sep|oc)t|nov)i(l(lon)?)(es)?"
 		],
 		"detOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
