@@ -1505,7 +1505,9 @@
 			"ellos": "son|(se(r[i]?)?|(fu)?er)an|fue(ron|[rs]en)"
 		},
 		"saber" : {
-			"igp"  : "sab(er|i[en]?do)",
+			"inf"  : "saber",
+			"ger"  : "sabiendo",
+			"par"  : "sabido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1524,7 +1526,9 @@
 			"ellos": "[ ]"
 		},
 		"salir" : {
-			"igp"  : "sali(r|[en]?do)",
+			"inf"  : "salir",
+			"ger"  : "saliendo",
+			"par"  : "salido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1543,7 +1547,9 @@
 			"ellos": "[ ]"
 		},
 		"saltar" : {
-			"igp"  : "salta(r|[n]?do)",
+			"inf"  : "saltar",
+			"ger"  : "saltando",
+			"par"  : "saltado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1562,7 +1568,9 @@
 			"ellos": "[ ]"
 		},
 		"sentar" : {
-			"igp"  : "senta(r|[n]?do)",
+			"inf"  : "sentar",
+			"ger"  : "sentando",
+			"par"  : "sentado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1581,7 +1589,9 @@
 			"ellos": "[ ]"
 		},
 		"sentir" : {
-			"igp"  : "s(enti(r|do)|intiendo)",
+			"inf"  : "sentir",
+			"ger"  : "sintiendo",
+			"par"  : "sentido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1602,7 +1612,9 @@
 	},
 	"t" : {
 		"tomar" : {
-			"igp"  : "toma(r|[n]?do)",
+			"inf"  : "tomar",
+			"ger"  : "tomando",
+			"par"  : "tomado",
 			"ip"   : "tom(o|a([sn]|mos|is)?)",
 			"ipi"  : "tomaba(mos|is|[sn])?",
 			"if"   : "tomar(a[sn]?|e(mos|is)?)",
@@ -1621,7 +1633,9 @@
 			"ellos": "tom([ae]|aba|ar([aeo]|ia)|ase)n"
 		},
 		"tener" : {
-			"igp"  : "ten(er|i[en]?do)",
+			"inf"  : "tener",
+			"ger"  : "teniendo",
+			"par"  : "tenido",
 			"ip"   : "ten(go|e(mo|i)s)|tiene[sn]?",
 			"ipi"  : "tenia([sn]|mos|is)?",
 			"if"   : "tendr([ea]|a[sn]|e(mo|i)s)",
@@ -1640,7 +1654,9 @@
 			"ellos": "tienen|ten((dr|(dr)?i|g)an)|tuvie(r[aeo]n|sen)"
 		},
 		"trabajar" : {
-			"igp"  : "trabaja(r|[n]?do)",
+			"inf"  : "trabajar",
+			"ger"  : "trabajando",
+			"par"  : "trabajado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1659,7 +1675,9 @@
 			"ellos": "[ ]"
 		},
 		"traer" : {
-			"igp"  : "tra(er|(i|yen)do)",
+			"inf"  : "traer",
+			"ger"  : "trayendo",
+			"par"  : "traido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1678,7 +1696,9 @@
 			"ellos": "[ ]"
 		},
 		"tocar" : {
-			"igp"  : "toca(r|[n]?do)",
+			"inf"  : "tocar",
+			"ger"  : "tocando",
+			"par"  : "tocado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1699,7 +1719,9 @@
 	},
 	"v" : {
 		"volver" : {
-			"igp"  : "volv(er|iendo)|vuelto",
+			"inf"  : "volver",
+			"ger"  : "volviendo",
+			"par"  : "vuelto",
 			"ip"   : "v(olvemos|uelv(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
@@ -1718,7 +1740,9 @@
 			"ellos": "[ ]"
 		},
 		"venir" : {
-			"igp"  : "v(enir|iniendo|uelto)",
+			"inf"  : "venir",
+			"ger"  : "viniendo",
+			"par"  : "venido",
 			"ip"   : "v(en(go|imos|is)|iene[sn]?)",
 			"ipi"  : "",
 			"if"   : "",
@@ -1737,7 +1761,9 @@
 			"ellos": "[ ]"
 		},
 		"vivir" : {
-			"igp"  : "vivi(r|i[en]?do)",
+			"inf"  : "vivir",
+			"ger"  : "viviendo",
+			"par"  : "vivido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1756,7 +1782,9 @@
 			"ellos": "[ ]"
 		},
 		"ver" : {
-			"igp"  : "v(er|i(end|st)o)",
+			"igp"  : "ver",
+			"ger"  : "viendo",
+			"par"  : "visto",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1777,7 +1805,9 @@
 	},
 	"w" : {
 		"wevear" : {
-			"igp"  : "webea(r|[n]?do)",
+			"inf"  : "webear",
+			"ger"  : "webeando",
+			"par"  : "webeado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
