@@ -2,8 +2,11 @@
     "verb" : [
         "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
     ],
-     "number" : [
+    "number" : [
         "\\d+([.]\\d+)?"
+    ],
+    "punctuation" : [
+        "[.,:;()?!\"]"
     ],
     "determiner" : {
 		"detArticle" : [
@@ -276,8 +279,10 @@
 		"prepDisplacement" : "IN",
 		"prepTemporal" :     "IN",
 		"number" :           "NUM",
+		"punctuation" :      "PNT",
 		
 		"NUM"  : "NUM",
+		"PNT"  : "PNT",
 		"CC"   : "CONJ",
 		"CD"   : "DET",
 		"DT"   : "DET",

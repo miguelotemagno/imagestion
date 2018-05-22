@@ -75,6 +75,17 @@ class GrammarRules:
 
 	####################################################################
 
+	def isPunctuation(self, text):
+		items = self.rules['punctuation']
+		expr = '^(' + '|'.join(items) + ')$'
+		eval = re.compile(expr)
+		if eval.match(text):
+			return 'punctuation'
+
+		return None
+
+	####################################################################
+
 	def isDeterminer(self, text):
 		for type, list in self.rules['determiner'].iteritems():
 			expr = '^('+'|'.join(list)+')$'
@@ -232,6 +243,8 @@ class GrammarRules:
 	##########################################################################
 
 	def word_tokenize(self, text):
+		punct = '('+self.rules['punctuation'][0]+')'
+		text = re.sub(punct, r' \1 ', text)
 		tokens = re.split('\s+', text)
 		return tokens
 
@@ -260,6 +273,11 @@ class GrammarRules:
 			if num is not None:
 				num = self.getNltkType(num) if simple is not None else num
 				tags.append(self.getNltkType(num))
+
+			punct = self.isPunctuation(token)
+			if punct is not None:
+				punct = self.getNltkType(punct) if simple is not None else punct
+				tags.append(self.getNltkType(punct))
 
 			adj = self.isAdjetive(token)
 			if adj is not None:
@@ -302,3 +320,6 @@ class GrammarRules:
 			list.append((token, type))
 
 		return list
+
+	##########################################################################
+
