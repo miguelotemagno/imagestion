@@ -82,7 +82,7 @@
         "adjSuperlative" : ["\\w+(isim|errim)[oa][s]?|(su|hi)per\\w+|mega\\w+|supremo"],
         "adjAll" : [
             "(antigu|cuant)[ao][s]?|simple",
-            "\\w+(([^na]d[oa]|ble|[ea]nte|os[oa]|[ae]v[eao]|iv[ao])[s]?|[^zu][ai]l(es)?)"
+            "\\w+(([^na]d[oa]|ble|[ea]nte|[ae]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
         ]
     },
     "sustantive" : {
@@ -279,10 +279,10 @@
 		"prepDisplacement" : "IN",
 		"prepTemporal" :     "IN",
 		"number" :           "NUM",
-		"punctuation" :      "PNT",
+		"punctuation" :      "PUNC",
 		
 		"NUM"  : "NUM",
-		"PNT"  : "PNT",
+		"PUNC" : "PUNC",
 		"CC"   : "CONJ",
 		"CD"   : "DET",
 		"DT"   : "DET",
