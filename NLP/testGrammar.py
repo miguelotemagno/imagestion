@@ -14,7 +14,7 @@ if sys.argv[1] == 'web':
 
 	tokens = g.word_tokenize(g.text)
 	#print tokens
-	list = g.pos_tag(tokens)
+	list = g.pos_tag(tokens, False)
 	print list
 
 if sys.argv[1] == 'file':

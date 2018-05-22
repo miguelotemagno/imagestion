@@ -237,7 +237,7 @@ class GrammarRules:
 
 	##########################################################################
 
-	def pos_tag(self, tokens):
+	def pos_tag(self, tokens, simple=None):
 		list = []
 
 		for token in tokens:
@@ -248,42 +248,52 @@ class GrammarRules:
 			if verb is not None:
 				type = self.getVerbTense(verb, token)
 				if type is not None and self.getNltkType(type) is not None:
+					type = self.getNltkType(type) if simple is not None else type
 					tags.append(self.getNltkType(type))
 
 			pron = self.isPronom(token)
 			if pron is not None:
+				pron = self.getNltkType(pron) if simple is not None else pron
 				tags.append(self.getNltkType(pron))
 
 			num = self.isNumber(token)
 			if num is not None:
+				num = self.getNltkType(num) if simple is not None else num
 				tags.append(self.getNltkType(num))
 
 			adj = self.isAdjetive(token)
 			if adj is not None:
+				adj = self.getNltkType(adj) if simple is not None else adj
 				tags.append(self.getNltkType(adj))
 
 			adv = self.isAdverb(token)
 			if adv is not None:
+				adv = self.getNltkType(adv) if simple is not None else adv
 				tags.append(self.getNltkType(adv))
 
 			prep = self.isPreposition(token)
 			if prep is not None:
+				prep = self.getNltkType(prep) if simple is not None else prep
 				tags.append(self.getNltkType(prep))
 
 			sust = self.isSustantive(token)
 			if sust is not None:
+				sust = self.getNltkType(sust) if simple is not None else sust
 				tags.append(self.getNltkType(sust))
 
 			conj = self.isConjunction(token)
 			if conj is not None:
+				conj = self.getNltkType(conj) if simple is not None else conj
 				tags.append(self.getNltkType(conj))
 
 			det = self.isDeterminer(token)
 			if det is not None:
+				det = self.getNltkType(det) if simple is not None else det
 				tags.append(self.getNltkType(det))
 
 			intj = self.isInterjection(token)
 			if intj is not None:
+				intj = self.getNltkType(intj) if simple is not None else intj
 				tags.append(self.getNltkType(intj))
 
 			if len(tags) > 0:

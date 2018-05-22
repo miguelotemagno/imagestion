@@ -275,7 +275,35 @@
 		"prepUbication" :    "IN",
 		"prepDisplacement" : "IN",
 		"prepTemporal" :     "IN",
-		"number" :           "NUM"
+		"number" :           "NUM",
+		
+		"NUM"  : "NUM",
+		"CC"   : "CONJ",
+		"CD"   : "DET",
+		"DT"   : "DET",
+		"LS"   : "DET",
+		"PDT"  : "DET",
+		"IN"   : "PREP",
+		"JJ"   : "ADJ",
+		"JJR"  : "ADJ",
+		"JJS"  : "ADJ",
+		"NN"   : "NOUN",
+		"NNP"  : "NOUN",
+		"NNS"  : "NOUN",
+		"NNPS" : "NOUN",
+		"PR"   : "PRON",
+		"PRP"  : "PRON",
+		"PRP$" : "PRON",
+		"RB"   : "ADVB",
+		"RBS"  : "ADVB",
+		"RBR"  : "ADVB",
+		"UH"   : "INTJ",
+		"VB"   : "VERB",
+		"VBD"  : "VERB",
+		"VBG"  : "VERB",
+		"VBP"  : "VERB",
+		"VBZ"  : "VERB",
+		"VBF"  : "VERB"
 	},
 
 	"a" : {
@@ -1169,7 +1197,9 @@
 			"ellos": "[ ]"
 		},
 		"llegar" : {
-			"igp"  : "llega(r|[n]?do)",
+			"inf"  : "llegar",
+			"ger"  : "llegando",
+			"par"  : "llegado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
