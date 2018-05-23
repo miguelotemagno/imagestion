@@ -397,7 +397,7 @@
 			"ellos": "[ ]"		
 		},
 		"agredir" : {
-			"inf"  : "agredrir",
+			"inf"  : "agredir",
 			"ger"  : "agrediendo",
 			"par"  : "agredido",
 			"ip"   : "agred(o|e([sn])?|imos)",
@@ -538,12 +538,12 @@
 			"spi"  : "bucara([sn]|mos|is)?",
 			"spi2" : "buscase([sn]|mos|is)?",
 			"sf"   : "buscare([sn]|mos|is)?",
-			"yo"   : "[ ]",
-			"tu"   : "[ ]",
-			"el_a" : "[ ]",
-			"nos"  : "[ ]",
-			"uds"  : "[ ]",
-			"ellos": "[ ]"
+			"yo"   : "bus(co|que|ca(se|r([ae]|ia)|ba))",
+			"tu"   : "bus(ques|ca([br]as|[sr]es|ste|rias|s)?)",
+			"el_a" : "bus(ca([br]a|ria|[sr]e)?|co|que)",
+			"nos"  : "bus(ca([br]a|ria|[sr]e)|que)mos",
+			"uds"  : "bus((ca|ca([br]a|ria|ste|[sr]e)|que)is|cad)",
+			"ellos": "bus(ca(n|[br]a|ria|ro|[sr]e)|que)n"
 		}		
 	},
 	"c" : {
@@ -624,12 +624,12 @@
 			"spi"  : "conociera(mos|is|[sn])?",
 			"spi2" : "conociese(mos|is|[sn])?",
 			"sf"   : "conociere(mos|is|[sn])?",
-			"yo"   : "[ ]",
-			"tu"   : "[ ]",
-			"el_a" : "[ ]",
-			"nos"  : "[ ]",
-			"uds"  : "[ ]",
-			"ellos": "[ ]"
+			"yo"   : "conozco|conocia|conocere|conoceria|conoci|conozca|conociera|conociese|conociere",
+			"tu"   : "conoces|conocias|conoceras|conocerias|conociste|conoce|conozcas|conocieras|conocieses|conocieres",
+			"el_a" : "conoce|conocia|conocera|conoceria|conocio|conozca|conociera|conociese|conociere",
+			"nos"  : "conocemos|conociamos|conoceremos|conoceriamos|conocimos|conozcamos|conocieramos|conociesemos|conocieremos",
+			"uds"  : "conoceis|conociais|conocereis|conoceriais|conocisteis|conoced|conozcais|conocierais|conocieseis|conociereis|",
+			"ellos": "conocen|conocian|conoceran|conocerian|conocieron|conozcan|conocieran|conociesen|conocieren"
 		},
 		"caminar" : {
 			"inf"  : "caminar",
