@@ -460,7 +460,9 @@
 			"ellos": "[ ]"		
 		},
 		"agarrar" : {
-			"igp"  : "agarra(r|[an]?do)",
+			"inf"  : "agarrar",
+			"ger"  : "agarrando",
+			"par"  : "agarrado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -479,7 +481,9 @@
 			"ellos": "[ ]"
 		},
 		"andar" : {
-			"igp"  : "anda(r|[n]?do)",
+			"inf"  : "andar",
+			"ger"  : "andando",
+			"par"  : "andado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -500,7 +504,9 @@
 	},
 	"b" : {
 		"beber" : {
-			"igp"  : "beb(er|i[end]?o)",
+			"inf"  : "beber",
+			"ger"  : "bebiendo",
+			"par"  : "bebido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -540,7 +546,9 @@
 	},
 	"c" : {
 		"comer" : {
-			"igp"  : "com(er|i(en)?do)",
+			"inf"  : "comer",
+			"ger"  : "comiendo",
+			"par"  : "comido",
 			"ip"   : "com(o|e([sn]|is)?|mos)",
 			"ipi"  : "",
 			"if"   : "",
@@ -559,7 +567,9 @@
 			"ellos": "[ ]"
 		},
 		"controlar" : {
-			"igp"  : "controla(r|[n]?do)",
+			"inf"  : "controlar",
+			"ger"  : "controlando",
+			"par"  : "controlado",
 			"ip"   : "control(o|e([sn]|is)?|a(mos)?)",
 			"ipi"  : "",
 			"if"   : "",
@@ -578,7 +588,9 @@
 			"ellos": "[ ]"
 		},
 		"conseguir" : {
-			"igp"  : "cons(egui(r|do)|iguiendo)",
+			"inf"  : "conseguir",
+			"ger"  : "consiguiendo",
+			"par"  : "conseguido",
 			"ip"   : "cons(ig(o|ue[sn]?)|eguimos)",
 			"ipi"  : "",
 			"if"   : "",
@@ -597,7 +609,9 @@
 			"ellos": "[ ]"
 		},
 		"conocer" : {
-			"igp"  : "conoc(er|i(en)?do)",
+			"inf"  : "conocer",
+			"ger"  : "conociendo",
+			"par"  : "conocido",
 			"ip"   : "cono(zco|ce([sn]|is|mos)?)",
 			"ipi"  : "conocia(mos|is|[sn])?",
 			"if"   : "conocer(e(mos|is)?|a[sn]?)",
@@ -616,7 +630,9 @@
 			"ellos": "[ ]"
 		},
 		"caminar" : {
-			"igp"  : "camina(r|[n]?do)",
+			"inf"  : "caminar",
+			"ger"  : "caminando",
+			"par"  : "caminado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -635,7 +651,9 @@
 			"ellos": "[ ]"
 		},
 		"caer" : {
-			"igp"  : "ca(er|(i|yen)do)",
+			"inf"  : "caer",
+			"ger"  : "cayendo",
+			"par"  : "caido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -675,7 +693,9 @@
 			"ellos": "[ ]"
 		},
 		"comenzar" : {
-			"igp"  : "comenza(r|[n]?do)",
+			"inf"  : "comenzar",
+			"ger"  : "comenzando",
+			"par"  : "comenzado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -694,7 +714,9 @@
 			"ellos": "[ ]"
 		},
 		"comprar" : {
-			"igp"  : "compra(r|[n]?do)",
+			"inf"  : "comprar",
+			"ger"  : "comprando",
+			"par"  : "comprado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -713,7 +735,9 @@
 			"ellos": "[ ]"
 		},
 		"conducir" : {
-			"igp"  : "conduci(r|[en]?do)",
+			"inf"  : "conducir",
+			"ger"  : "conduciendo",
+			"par"  : "conducido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -732,7 +756,9 @@
 			"ellos": "[ ]"
 		},
 		"comprender" : {
-			"igp"  : "comprend(er|i[en]?do)",
+			"inf"  : "comprender",
+			"ger"  : "comprendiendo",
+			"par"  : "comprendido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -753,7 +779,9 @@
 	},
 	"d" : {
 		"dar" : {
-			"igp"  : "da(r|[n]?do)",
+			"inf"  : "dar",
+			"ger"  : "dando",
+			"par"  : "dado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -772,7 +800,9 @@
 			"ellos": "[ ]"
 		},
 		"decir" : {
-			"igp"  : "decir|dic(iendo|ho)",
+			"inf"  : "decir",
+			"ger"  : "diciendo",
+			"par"  : "dicho",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -791,7 +821,9 @@
 			"ellos": "[ ]"
 		},
 		"dormir" : {
-			"igp"  : "dormi(r|do)|durmiendo",
+			"inf"  : "dormir",
+			"ger"  : "durmiendo",
+			"par"  : "dormido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -818,7 +850,9 @@
 			"el_a" : "es|era|se(r[i]?a|a)"
 		},
 		"escribir" : {
-			"igp"  : "escri(to|bi(r|endo))",
+			"inf"  : "escrito",
+			"ger"  : "escribiendo",
+			"par"  : "escrito",
 			"ip"   : "escrib(o|e[sn]?|i(mo)?s)",
 			"ipi"  : "escribia(mos|is|[sn])?",
 			"if"   : "escribir(e(mos|is)?|a[sn]?)",
@@ -837,8 +871,10 @@
 			"ellos": "[ ]"
 		},
 	    "estudiar" : { 
-			"igp" : "estudia(r|a[n]?do)",
-			"ip" : "estudi(o|a(mos|[sn])?)",
+			"inf"  : "estudiar",
+			"ger"  : "estudiando",
+			"par"  : "estudiado",
+			"ip"   : "estudi(o|a(mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -856,7 +892,9 @@
 			"ellos": "[ ]"
     	},
 		"estar" : {
-			"igp"  : "esta(r|[n]?do)",
+			"inf"  : "estar",
+			"ger"  : "estando",
+			"par"  : "estado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -875,7 +913,9 @@
 			"ellos": "[ ]"
 		},
 		"encontrar" : {
-			"igp"  : "encontra(r|[n]?do)",
+			"inf"  : "encontrar",
+			"ger"  : "encontrando",
+			"par"  : "encontrado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -894,7 +934,9 @@
 			"ellos": "[ ]"
 		},
 		"entender" : {
-			"igp"  : "entend(er|i[en]?do)",
+			"inf"  : "entender",
+			"ger"  : "entendiendo",
+			"par"  : "entendido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -913,7 +955,9 @@
 			"ellos": "[ ]"
 		},
 		"escuchar" : {
-			"igp"  : "escucha(r|[n]?do)",
+			"inf"  : "escuchar",
+			"ger"  : "escuchando",
+			"par"  : "escuchado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -982,7 +1026,9 @@
 			"ellos": "ha(b([ir]|ri)a|ya)?n|hubie(r[oae]n|sen)"
 		},
 		"hervir"  : {
-			"igp"  : "h(ervir|(irvien|ervi)do)",
+			"inf"  : "hervir",
+			"ger"  : "hirviendo",
+			"par"  : "hervido",
 			"ip"   : "h(ierv(o|e[sn]?)|ervi(s|mos))",
 			"ipi"  : "",
 			"if"   : "",
@@ -1001,7 +1047,9 @@
 			"ellos": "[ ]"
 		},
 		"hablar" : {
-			"igp"  : "habla(r|[n]?do)",
+			"inf"  : "hablar",
+			"ger"  : "hablando",
+			"par"  : "hablado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1020,7 +1068,9 @@
 			"ellos": "[ ]"
 		},
 		"hacer" : {
-			"igp"  : "hac(er|iendo)|hecho",
+			"inf"  : "hacer",
+			"ger"  : "haciendo",
+			"par"  : "hecho",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1039,7 +1089,9 @@
 			"ellos": "[ ]"
 		}	,
 		"huevear" : {
-			"igp"  : "huevea(r|[n]?do)",
+			"inf"  : "huevear",
+			"ger"  : "hueveando",
+			"par"  : "hueveado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
