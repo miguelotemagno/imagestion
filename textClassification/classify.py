@@ -33,26 +33,26 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-#import zlib
-import subprocess as sp
-import os
-import re
-from ANN import *
+import sys, os.path
 from random import randint
 from math import log
-import numpy as np
+nlp_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/NLP/' )
+sys.path.append(nlp_dir)
+#import NLP.GrammarRules
+from GrammarRules import *
 import tensorflow as tf
 
 class Classify:
 	def __init__(self):
 		#self.net = ANN(2, 3, 1)
+		self.rules = GrammarRules()
 		self.filter = None
 		self.fromFile = 'loadFromFile.sh'
 		self.fromWeb = 'loadFromWeb.sh'
 		self.path = os.getcwd()
 		#self.command = "links -dump %s | tr -sc 'A-Za-z' '\n' | tr 'A-Z' 'a-z' | sort | uniq -c"
 		self.text = ""
-		self.largestWord = 'Electroencefalografistas'
+		self.largestWord = 'electroencefalografistas'
 		self.maxValue = self.setWordID(self.largestWord);
 		self.trainData = None
 		self.sess = None
@@ -80,27 +80,29 @@ class Classify:
 	##########################################################################
 
 	def gramarRules(self, text):
-		verb = re.compile('\w*(ar|er|ir)$')
-		preposition = re.compile('^(segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin)$')
-		adverb = re.compile('^(\w+mente|si|no|mu(y|cho)|ade(mas|lante)|poco|hoy|ayer|manana|ahora|despues|aqui|encima|delante|debajo|tam(bien|poco)|jamaz|nunca|siempre)$')
-		sustan = re.compile('^(blanc[ao]|negr[ao]|alt[ao][s]?|(cuant|est)[oa][s]?|doble|medi[ao]|tan|mas|aquel(l[oa])?|dulce|cada)$')
-		pronom = re.compile('^((aqu)?el((lo|la)[s]?)?|la[s]?|lo[s]?|yo|[ts]u(y[oa][s]?)?|[vn]os(otr[oa]s)?|[vn]uestr[oa][s]?|(cual|quien)(es)?|alg(o|uien|un[oa]?)|cualquier[a]?)$')
-		adjet = re.compile('^(\w+(ac[oa]|ach([oa]|uelo)|ot[ea]|(ich|ecez|ez)uelo|or(ri[ao]|r[oa]|i[oa])|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]))$')
+		verb   = self.rules.isVerb()
 
-		if(adjet.match(text)):
-			return 0
-		if(verb.match(text)):
-			return 0x1
-		if(preposition.match(text)):
+		if verb.match(text):
+			if self.rules.getVerb(text) != None:
+				return 0x1
+		if self.rules.isPreposition(text) != None:
 			return 0x2
-		if(adverb.match(text)):
+		if self.rules.isAdverb(text) != None:
 			return 0x3
-		if(sustan.match(text)):
+		if self.rules.isAdjetive(text) != None:
 			return 0x4
-		if(pronom.match(text)):
+		if self.rules.isPronom(text) != None:
 			return 0x5
+		if self.rules.isDeterminer(text) != None:
+			return 0x6
+		if self.rules.isSustantive(text) != None:
+			return 0x7
+		if self.rules.isConjunction(text) != None:
+			return 0x8
+		if self.rules.isInterjection(text) != None:
+			return 0x9
 
-		return 0x7
+		return 0
 
 	##########################################################################
 
@@ -119,18 +121,21 @@ class Classify:
 	##########################################################################
 	
 	def getHex2List(self, text):
-		l = list(hex(int(round(self.getCRC(text) * 10 ** 18))))
-		return [int(x,16)/16.0 for x in l[2:]]
+		split_string = lambda x, n: [x[i:i+n] for i in range(1, len(x), n)]
+		bigNum = round(self.getCRC(text) * (10**18))
+		bigHex = hex(int(bigNum))
+		l = split_string(re.sub('[^0-9A-Fa-f]','',bigHex),2)
+		return [int(x,16)/256.0 for x in l[:]]
 
 	##########################################################################		           
 	
 	def saveFilter(self,file):
 		saver = tf.train.Saver()
 		saver.save(self.sess, self.path+'/'+file+'.tfdb',
-	           global_step=None,
-	           latest_filename=None,
-	           meta_graph_suffix='meta',
-	           write_meta_graph=True)
+                   global_step=None,
+                   latest_filename=None,
+                   meta_graph_suffix='meta',
+                   write_meta_graph=True)
 		           
 	##########################################################################		           
 	
@@ -230,7 +235,7 @@ class Classify:
 	##########################################################################
 	
 	def prepareTrainData(self, details):
-		maxLen = float(len(self.largestWord))		
+		maxLen = float(len(self.largestWord))
 		data = []
 		words = []
 		outputs = []
@@ -245,7 +250,7 @@ class Classify:
 				if expr:
 					(n, word) = expr.group(1,2)
 					crc = self.getCRC(word)
-					words.append([n, word])
+					words.append([n, word, self.gramarRules(word)])
 					data.append([crc, len(word)/maxLen])
 					outputs.append(expect)
 		
@@ -310,6 +315,7 @@ class Classify:
 				expr = reg.search(line)
 				if expr:
 					(n, word) = expr.group(1,2)
+					rule = self.gramarRules(word)
 					val = int(n) / maxVal
 					#val = log(int(n)) / maxVal
 					crc = self.getHex2List(word)
@@ -319,10 +325,10 @@ class Classify:
 					eval = self.filter.run(self.y, feed_dict={self.x: data})
 					
 					if abs(eval[0][0]) > 0.2:
-						print "--------------------------> %s: %s => [%f]" % (word,str(data), eval[0][0])
+						print "--------------------------> %d %s: %s => [%f]" % (rule,word,str(data), eval[0][0])
 						continue
 					else:
-						print "%s: %s => [%f]" % (word,str(data), eval[0][0])
+						print "%d %s: %s => [%f]" % (rule,word,str(data), eval[0][0])
 								
 					counts.append(val)
 					words.append(data)

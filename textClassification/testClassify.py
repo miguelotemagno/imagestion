@@ -5,6 +5,8 @@ import numpy as np
 #import matplotlib.mlab as mlab    ## sudo apt-get install python-matplotlib
 #import matplotlib.pyplot as plt   ##
 import sys
+import re
+
 
 def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
     hist, bins = np.histogram(arr, bins=b)
@@ -16,6 +18,21 @@ def plotHistogram(arr, b, file): # b = bins => max value of arr[i]
 c = Classify()
 x = []
 y = []
+
+rules = ["NA","VB","PREP","ADV","ADJ","PRN","DET","SUST","CJ","IJ"]
+"""rules = {
+	"0":"NA",
+	"1":"VB",
+	"2":"PREP",
+	"3":"ADV",
+	"4":"ADJ",
+	"5":"PRN",
+	"6":"DET",
+	"7":"NN",
+	"8":"CJ",
+	"9":"IJ"
+	}"""
+
 
 if sys.argv[1] == 'train' or sys.argv[1] == 'all':
 	print "train\n"
@@ -39,6 +56,43 @@ if sys.argv[1] == 'test' or sys.argv[1] == 'all':
 	c.loadFilter('preposiciones.txt.tfdb')
 	
 	print "filter\n"
-	c.loadFromWeb('www.emol.com')    ## sudo apt-get install links
+	c.loadFromWeb('http://www.emol.cl')    ## sudo apt-get install links
+	#c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir')    ## sudo apt-get install links
 	#c.loadFromFile('libro.txt')
 	c.process()
+
+if sys.argv[1] == 'verb':
+	verbo = 'abrir'
+	if sys.argv[2] != '':
+		verbo = sys.argv[2]
+
+	c.loadFromWeb('http://conjugador.reverso.net/conjugacion-espanol.html?verb='+verbo)    ## sudo apt-get install links
+	# c.loadFromFile('libro.txt')
+	print "=> process\n"
+	list = c.text.split("\n")
+	reg = re.compile('(\d+)\s+(\w+)')
+
+	for line in list:
+		expr = reg.search(line)
+		if expr:
+			(n, word) = expr.group(1, 2)
+			print "%s: %d" % (word, c.gramarRules(word))
+
+if sys.argv[1] == 'grammar':
+	url = 'http://conjugador.reverso.net/conjugacion-espanol.html?verb=abrir'
+	if sys.argv[2] != '':
+		url = sys.argv[2]
+
+	c.loadFromWeb(url)    ## sudo apt-get install links
+	# c.loadFromFile('libro.txt')
+	print "=> process\n"
+	list = c.text.split("\n")
+	reg = re.compile('(\d+)\s+(\w+)')
+
+	for line in list:
+		expr = reg.search(line)
+		if expr:
+			(n, word) = expr.group(1, 2)
+			print "%s: %s" % (word, rules[c.gramarRules(word)])
+
+
