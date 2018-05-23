@@ -525,7 +525,9 @@
 			"ellos": "[ ]"
 		},
 		"buscar" : {
-			"igp"  : "busca(r|[n]do)",
+			"inf"  : "buscar",
+			"ger"  : "buscando",
+			"par"  : "buscado",
 			"ip"   : "busc(o|a[sn]?|mos|is)",
 			"ipi"  : "buscaba([sn]|mos|is)?",
 			"if"   : "buscar(e(mos|is)|a[sn]?)",
@@ -1133,8 +1135,10 @@
 			"ellos": "[ ]"
 		},
 		"impedir" : {
-			"igp" : "imp(edir|(idien|edi)do)",
-			"ip" : "imp(edimos|id(o|e[sn]?))",
+			"inf"  : "impedir",
+			"ger"  : "impidiendo",
+			"par"  : "impedido",
+			"ip"   : "imp(edimos|id(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -1152,7 +1156,9 @@
 			"ellos": "[ ]"
 		},
 		"influir"  : {
-			"igp"  : "influ(ir|(yen|i)do)",
+			"inf"  : "influir",
+			"ger"  : "influyendo",
+			"par"  : "influido",
 			"ip"   : "influ(i(mos|s)|y(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
@@ -1171,7 +1177,9 @@
 			"ellos": "[ ]"
 		},
 		"intervenir"  : {
-			"igp"  : "interv(enir|(eni|inien)do)",
+			"inf"  : "intervenir",
+			"ger"  : "interviniendo",
+			"par"  : "intervenido",
 			"ip"   : "influ(i(mos|s)|y(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
@@ -1192,7 +1200,9 @@
 	},
 	"j" : {
 		"jugar" : {
-			"igp" : "juga(r|a[n]?do)",
+			"inf" : "jugar",
+			"ger" : "jugando",
+			"par" : "jugado",
 			"ip" : "ju(ga(is|mos)|eg[oa][sn]?)",
 			"ipi"  : "",
 			"if"   : "",
@@ -1216,7 +1226,9 @@
 	},
 	"l" : {
 		"leer" : {
-			"igp"  : "le(er|yendo|ido)",
+			"inf"  : "leer",
+			"ger"  : "leyendo",
+			"par"  : "leido",
 			"ip"   : "le(o|e(mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
@@ -1235,7 +1247,9 @@
 			"ellos": "[ ]"
 		},
 		"lucir" : {
-			"igp"  : "luci(r|endo|do)",
+			"inf"  : "lucir",
+			"ger"  : "luciendo)",
+			"par"  : "lucido",
 			"ip"   : "lu(zco|ce([sn]|is)?|ci(mos|s)?)",
 			"ipi"  : "lucia(mos|[sn]|is)?",
 			"if"   : "lucir(e(mos|is)?|a[sn]?)",
