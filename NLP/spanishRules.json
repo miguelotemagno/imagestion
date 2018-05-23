@@ -1291,8 +1291,10 @@
 	},
 	"m" : {
 		"manejar" : {
-			"igp" : "maneja(r|[n]?do)",
-			"ip" : "manej(o|a(mos|[sn])?)",
+			"inf" : "manejar",
+			"ger" : "manejando",
+			"par" : "manejado",
+			"ip"  : "manej(o|a(mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -1310,7 +1312,9 @@
 			"ellos": "[ ]"
 		},
 		"morir" : {
-			"igp" : "m(orir|u(iendo|erto))",
+			"inf" : "morir",
+			"ger" : "muriendo",
+			"par" : "muerto",
 			"ip" : "manej(o|a(mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
@@ -1329,7 +1333,9 @@
 			"ellos": "[ ]"
 		},
 		"mirar" : {
-			"igp"  : "mira(r|[n]?do)",
+			"inf"  : "mirar",
+			"ger"  : "mirando",
+			"par"  : "mirado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1350,7 +1356,9 @@
 	},
 	"n" : {
 		"necesitar" : {
-			"igp"  : "necesita(r|[n]?do)",
+			"inf"  : "necesitar",
+			"ger"  : "necesitando",
+			"par"  : "necesitado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1371,7 +1379,9 @@
 	},
 	"o" : {
 		"oir" : {
-			"igp"  : "o(i(r|do)|yendo)",
+			"inf"  : "oir",
+			"ger"  : "oendo",
+			"par"  : "oido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1392,8 +1402,10 @@
 	},
 	"p" : {
 		"pedir" : {
-			"igp" : "p(edi(r|do)|idiendo)",
-			"ip" : "p(edimos|id(o|e[sn]?))",
+			"inf"  : "pedir",
+			"ger"  : "pidiendo",
+			"par"  : "pedido",
+			"ip"   : "p(edimos|id(o|e[sn]?))",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -1411,7 +1423,9 @@
 			"ellos": "[ ]"
 		},
 		"poner" : {
-			"igp"  : "p(on(er|iendo)|uesto)",
+			"inf"  : "poner",
+			"ger"  : "poniendo",
+			"par"  : "puesto",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1430,7 +1444,9 @@
 			"ellos": "[ ]"
 		},
 		"poder" : {
-			"igp"  : "poder|pu(diendo|esto)",
+			"inf"  : "poder",
+			"ger"  : "pudiendo",
+			"par"  : "puesto",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1449,7 +1465,9 @@
 			"ellos": "[ ]"
 		},
 		"pensar" : {
-			"igp"  : "pensa(r|[n]?do)",
+			"inf"  : "pensar",
+			"ger"  : "pensando",
+			"par"  : "pensado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1468,7 +1486,9 @@
 			"ellos": "[ ]"
 		},
 		"perder" : {
-			"igp"  : "perd(er|i[en]?do)",
+			"inf"  : "perder",
+			"ger"  : "perdiendo",
+			"par"  : "perdido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1487,7 +1507,9 @@
 			"ellos": "[ ]"
 		},
 		"pegar" : {
-			"igp"  : "pega(r|[n]?do)",
+			"inf"  : "pegar",
+			"ger"  : "pegando",
+			"par"  : "pegado",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1508,7 +1530,9 @@
 	},
 	"q" : {
 		"querer" : {
-			"igp"  : "quer(er|i[en]?do)",
+			"inf"  : "querer",
+			"ger"  : "queriendo",
+			"par"  : "querido",
 			"ip"   : "",
 			"ipi"  : "",
 			"if"   : "",
@@ -1529,8 +1553,10 @@
 	},
 	"r" : {
 		"recorrer" : {
-			"igp" : "recorr(er|i(en)?do)",
-			"ip" : "recorr(o|[ae](mos|[sn])?)",
+			"inf"  : "recorrer",
+			"ger"  : "recorriendo",
+			"par"  : "recorrido",
+			"ip"   : "recorr(o|[ae](mos|[sn])?)",
 			"ipi"  : "",
 			"if"   : "",
 			"ic"   : "",
@@ -1848,7 +1874,7 @@
 			"ellos": "[ ]"
 		},
 		"ver" : {
-			"igp"  : "ver",
+			"inf"  : "ver",
 			"ger"  : "viendo",
 			"par"  : "visto",
 			"ip"   : "",
