@@ -39,21 +39,47 @@ sub Main {
 	my @uds = extract('vosotros',$txt);
 	my @ellos = extract('elloas_uds',$txt);
 	
-	my @ip = ($yo[0],$tu[0],$el_la[0],$nos[0],$uds[0],@ellos[0]);
-	my @ipi = ($yo[1],$tu[1],$el_la[1],$nos[1],$uds[1],@ellos[1]);
-	my @if = ($yo[2],$tu[2],$el_la[2],$nos[2],$uds[2],@ellos[2]);
+	my $YO = join("|",@yo);
+	my $TU = join("|",@tu);
+	my $EL_LA = join("|",@el_la);
+	my $NOS = join("|",@nos);
+	my $UDS = join("|",@uds);
+	my $ELLOS = join("|",@ellos);
+	
+	my @ip = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
+	my @ipi = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
+	my @if = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
+	my @ic = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
+	my @ipps = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
+	
+	my @sf = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
+	my @spi2 = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
+	my @spi = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
+	my @sp = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
+	
+	my @i = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
 	
 	#TODO /(infinitivo|gerundio|participio pasado)\s+(\w+)\s+/g	
 	
-	print "\"ip\" : \"".join("|",@ip)."\",\n";
-	print "\"ipi\" : \"".join("|",@ipi)."\",\n";
-	print "\"if\" : \"".join("|",@if)."\",\n";
-	print "\"yo\" : \"".join("|",@yo)."\",\n";
-	print "\"tu\" : \"".join("|",@tu)."\",\n";
-	print "\"el_la\" : \"".join("|",@el_la)."\",\n";
-	print "\"nos\" : \"".join("|",@nos)."\",\n";
-	print "\"uds\" : \"".join("|",@uds)."\",\n";
-	print "\"ellos\" : \"".join("|",@ellos)."\"\n";
+	print "\"ip\"    : \"".join("|",@ip)."\",\n";
+	print "\"ipi\"   : \"".join("|",@ipi)."\",\n";
+	print "\"if\"    : \"".join("|",@if)."\",\n";
+	print "\"ic\"    : \"".join("|",@ic)."\",\n";
+	print "\"ipps\"  : \"".join("|",@ipps)."\",\n";
+
+	print "\"i\"     : \"".join("|",@i)."\",\n";
+
+	print "\"sp\"    : \"".join("|",@sp)."\",\n";
+	print "\"spi\"   : \"".join("|",@spi)."\",\n";
+	print "\"spi2\"  : \"".join("|",@ipps)."\",\n";
+	print "\"sf\"    : \"".join("|",@sf)."\",\n";
+	
+	print qq{"yo"    : "$YO",\n};
+	print qq{"tu"    : "$TU",\n};
+	print qq{"el_la" : "$EL_LA",\n};
+	print qq{"nos"   : "$NOS",\n};
+	print qq{"uds"   : "$UDS",\n};
+	print qq{"ellos" : "$ELLOS"\n};
 }
 
 my ($verb) = @ARGV;
