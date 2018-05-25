@@ -21,6 +21,20 @@ sub extract {
 	return @verb;
 }
 
+sub extract2 {
+	my ($txt) = @_;
+	my @verb;
+	# mas pruebas, hacer en: https://regexr.com/
+	for ($txt =~ /(infinitivo|gerundio|participio pasado)\s+(\w+)\s+/g) {
+		s/((infinitivo|gerundio|participio pasado))//;
+		s/\W//;
+		s/compuesto//;
+		push(@verb,$_) if($_ =~ /\w+/);
+	}
+	
+	return @verb;
+}
+
 sub Main {
 	my ($verb) = @_;
 	my $url = "http://conjugador.reverso.net/conjugacion-espanol.html?verb=$verb";
@@ -59,20 +73,36 @@ sub Main {
 	
 	my @i = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
 	
-	#TODO /(infinitivo|gerundio|participio pasado)\s+(\w+)\s+/g	
+	my $IP = join("|",@ip);
+	my $IPI = join("|",@ipi);
+	my $IF = join("|",@if);
+	my $IC = join("|",@ic);
+	my $I = join("|",@i);
+	my $IPPS = join("|",@ipps);
+	my $SF = join("|",@sf);
+	my $SPI2 = join("|",@spi2);
+	my $SPI = join("|",@spi);
+	my $SP = join("|",@sp);
 	
-	print "\"ip\"    : \"".join("|",@ip)."\",\n";
-	print "\"ipi\"   : \"".join("|",@ipi)."\",\n";
-	print "\"if\"    : \"".join("|",@if)."\",\n";
-	print "\"ic\"    : \"".join("|",@ic)."\",\n";
-	print "\"ipps\"  : \"".join("|",@ipps)."\",\n";
+	#TODO /(infinitivo|gerundio|participio pasado)\s+(\w+)\s+/g	
+	my @igp = extract2($txt);
+	my ($ger,$par,$inf) = @igp;
+	
+	print qq{"inf"   : "$inf",\n};
+	print qq{"ger"   : "$ger",\n};
+	print qq{"par"   : "$par",\n};
 
-	print "\"i\"     : \"".join("|",@i)."\",\n";
+	print qq{"ipi"   : "$IPI",\n};
+	print qq{"if"    : "$IF",\n};
+	print qq{"ic"    : "$IC",\n};
+	print qq{"ipps"  : "$IPPS",\n};
 
-	print "\"sp\"    : \"".join("|",@sp)."\",\n";
-	print "\"spi\"   : \"".join("|",@spi)."\",\n";
-	print "\"spi2\"  : \"".join("|",@ipps)."\",\n";
-	print "\"sf\"    : \"".join("|",@sf)."\",\n";
+	print qq{"i"     : "$I",\n};
+
+	print qq{"sp"    : "$SP",\n};
+	print qq{"spi"   : "$SPI",\n};
+	print qq{"spi2"  : "$SPI2",\n};
+	print qq{"sf"    : "$SF",\n};
 	
 	print qq{"yo"    : "$YO",\n};
 	print qq{"tu"    : "$TU",\n};
