@@ -21,6 +21,23 @@ sub extract {
 	return @verb;
 }
 
+sub reduce {
+	my ($txt) = @_;
+	my @parts = split('|', $txt);
+	my @out;
+	my $i = 0;
+	my %groups;
+	
+	for (@parts) {
+		my @chars;
+		if (/\w+/) {
+			@chars = /./g;
+			#substr($string, n-1, 1);
+		}
+		#print join("\n", @chars)."\n";
+	}
+}
+
 sub extract2 {
 	my ($txt) = @_;
 	my @verb;
@@ -110,6 +127,8 @@ sub Main {
 	print qq{"nos"   : "$NOS",\n};
 	print qq{"uds"   : "$UDS",\n};
 	print qq{"ellos" : "$ELLOS"\n};
+	
+	reduce($I);
 }
 
 my ($verb) = @ARGV;
