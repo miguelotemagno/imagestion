@@ -23,18 +23,26 @@ sub extract {
 
 sub reduce {
 	my ($txt) = @_;
-	my @parts = split('|', $txt);
+	my @parts = split(/\W/, $txt);
 	my @out;
 	my $i = 0;
 	my %groups;
 	
-	for (@parts) {
+	for my $word (@parts) {
+		chomp $word;
 		my @chars;
-		if (/\w+/) {
-			@chars = /./g;
+		if ($word =~ /\w+/) {
+			@chars = ($word =~ /./g);
 			#substr($string, n-1, 1);
+			$groups{"$word"} = @chars;
 		}
-		#print join("\n", @chars)."\n";
+		#print "\n".join("\n", @chars)."\n";
+	}
+	
+	#print "\n".join("\n", keys(%groups))."\n";
+	
+	for my $word (keys %groups) {
+		
 	}
 }
 
