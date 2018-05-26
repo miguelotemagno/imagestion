@@ -1,9 +1,10 @@
 #!/usr/bin/perl
+use Data::Dumper;
 
 sub getText {
 	my ($url) = @_;
 	chomp $url;
-	my @text = qx{sh loadFromWeb2.sh $url};
+	my @text = qx{sh loadFromWeb3.sh $url};
 	return @text
 }
 
@@ -24,27 +25,75 @@ sub extract {
 sub reduce {
 	my ($txt) = @_;
 	my @parts = split(/\W/, $txt);
-	my @out;
-	my $i = 0;
+	my @out1;
+	my @out2;
+	my $n = 0;
 	my %groups;
-	
+	my %counts;
+
 	for my $word (@parts) {
 		chomp $word;
-		my @chars;
 		if ($word =~ /\w+/) {
-			@chars = ($word =~ /./g);
-			#substr($string, n-1, 1);
-			$groups{"$word"} = @chars;
+			$groups{"$word"} = '';
 		}
-		#print "\n".join("\n", @chars)."\n";
+		$n = $n < length $word ? length $word : $n;
 	}
-	
-	#print "\n".join("\n", keys(%groups))."\n";
-	
-	for my $word (keys %groups) {
-		
+
+	for (my $i=0; $i<$n; $i++) {
+		my $expr = '';
+		for my $word (keys %groups) {
+			my $c = substr($word, $i-1, 1);
+			grep {
+				$expr = $_ if ($word =~ /^$_/);
+			} values %groups;
+			$expr = $expr eq '' ? $c : "$expr$c";
+			#print "[$expr]\n";
+			if ($word =~ /^$expr/) {
+				$groups{$word} = $expr;
+			}
+		}
+
+		map {
+			$counts{$_}++;
+		} values %groups;
 	}
+
+	my $key = '';
+	my $val = 1;
+	while (my ($k, $v) = each %counts) {
+			if (length($k) > length($key)) {
+		if ($v >= $val) {
+				$key = $k;
+				$val = $v;
+			}
+		}
+	}
+
+	#print "\n$txt\n$n: $key - $val\n".Dumper(\%counts)."\n";
+
+	my $flag = '';
+	map {
+		my $k = $_;
+		if($k =~ /^$key/) {
+			$k =~ s/$key//;
+			if($k =~ /\w+/) {
+				push @out2, $k;
+			}
+			else {
+				$flag = '?';
+			}
+		}
+		else {
+			push @out1, $k;
+		}
+	} keys %groups;
+
+	push @out1, "$key(".join("|", @out2).")$flag";
+
+	return join("|", @out1);
 }
+
+######################################################3
 
 sub extract2 {
 	my ($txt) = @_;
@@ -78,12 +127,12 @@ sub Main {
 	my @uds = extract('vosotros',$txt);
 	my @ellos = extract('elloas_uds',$txt);
 	
-	my $YO = join("|",@yo);
-	my $TU = join("|",@tu);
-	my $EL_LA = join("|",@el_la);
-	my $NOS = join("|",@nos);
-	my $UDS = join("|",@uds);
-	my $ELLOS = join("|",@ellos);
+	my $YO = reduce(join("|",@yo));
+	my $TU = reduce(join("|",@tu));
+	my $EL_LA = reduce(join("|",@el_la));
+	my $NOS = reduce(join("|",@nos));
+	my $UDS = reduce(join("|",@uds));
+	my $ELLOS = reduce(join("|",@ellos));
 	
 	my @ip = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
 	my @ipi = (shift(@yo), shift(@tu), shift(@el_la), shift(@nos), shift(@uds), shift(@ellos));
@@ -98,18 +147,17 @@ sub Main {
 	
 	my @i = (pop(@yo), pop(@tu), pop(@el_la), pop(@nos), pop(@uds), pop(@ellos));
 	
-	my $IP = join("|",@ip);
-	my $IPI = join("|",@ipi);
-	my $IF = join("|",@if);
-	my $IC = join("|",@ic);
-	my $I = join("|",@i);
-	my $IPPS = join("|",@ipps);
-	my $SF = join("|",@sf);
-	my $SPI2 = join("|",@spi2);
-	my $SPI = join("|",@spi);
-	my $SP = join("|",@sp);
+	my $IP = reduce(join("|",@ip));
+	my $IPI = reduce(join("|",@ipi));
+	my $IF = reduce(join("|",@if));
+	my $IC = reduce(join("|",@ic));
+	my $I = reduce(join("|",@i));
+	my $IPPS = reduce(join("|",@ipps));
+	my $SF = reduce(join("|",@sf));
+	my $SPI2 = reduce(join("|",@spi2));
+	my $SPI = reduce(join("|",@spi));
+	my $SP = reduce(join("|",@sp));
 	
-	#TODO /(infinitivo|gerundio|participio pasado)\s+(\w+)\s+/g	
 	my @igp = extract2($txt);
 	my ($ger,$par,$inf) = @igp;
 	
@@ -117,6 +165,7 @@ sub Main {
 	print qq{"ger"   : "$ger",\n};
 	print qq{"par"   : "$par",\n};
 
+	print qq{"ip"    : "$IP",\n};
 	print qq{"ipi"   : "$IPI",\n};
 	print qq{"if"    : "$IF",\n};
 	print qq{"ic"    : "$IC",\n};
