@@ -85,7 +85,7 @@ sub reduce {
 		else {
 			push @out1, $k;
 		}
-	} keys %groups;
+	} sort(keys %groups);
 
 	push @out1, "$key(".join("|", @out2).")$flag";
 
