@@ -33,7 +33,23 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
+import json
+
 
 class Function:
-    def __init__(self):
+    def __init__(self, name='', order=0, id=0):
+        self.id = id
+        self.name = name
+        self.order = order
         pass
+    def __str__(self):
+        json = self.getJson()
+        return json.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+
+    def getJson(self):
+        json = {
+            'id' : self.id,
+            'name' : self.name,
+            'order' : self.order
+        }
+        return json

@@ -38,12 +38,14 @@ from Node import *
 
 class Graph:
     # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
-    def __init__(self, name='', nodes=0, id='', nodeNames=[]):
+    def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
+        n = len(nodeNames) if len(nodeNames) > 0 else nodes
         self.name = name
         self.id = id
-        self.nodeNames = ["Node%d" % (x) for x in range(nodes)] if nodes > 0 else []
-        self.nodeNames = [nodeNames[x] % (x) for x in range(len(nodeNames))] if len(nodeNames) > 0 else self.nodeNames
+        self.nodeNames = ["Node%d" % (x) for x in range(n)] if n > 0 else []
+        self.nodeNames = [x for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else self.nodeNames
         self.nodes = [Node(id=x, name="%s" % (self.nodeNames[x])) for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+        self.firstNode = firstNode
 
     ####################################################################
 
@@ -58,7 +60,7 @@ class Graph:
 
     def save(self, dbFile):
         with open(dbFile, "w") as text_file:
-            text_file.write(json.dumps(self.exportJSON(), sort_keys=True, indent=4, separators=(',', ': ')))
+            text_file.write(json.dumps(self.__str__(), sort_keys=True, indent=4, separators=(',', ': ')))
         pass
 
     ####################################################################
@@ -69,14 +71,21 @@ class Graph:
 
     ####################################################################
 
-    def exportJSON(self):
-        json = { }
-        #    'id': self.nodos_ent,
-        #    'name': self.nodos_sal,
-        #    'nodes': [
-        #        self.nodes[x] for x in range(self.nodes)
-        #    ]
-        #}
-        return json
+    def __str__(self):
+        json = self.getJson()
+        return json.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
 
     ####################################################################
+
+    def getJson(self):
+        json = {
+            'graph' : {
+                'id': self.id,
+                'name': self.name,
+                'first': self.firstNode,
+                'nodes' : [node.id for node in self.nodes]
+            },
+            'nodes' : [self.nodes],
+            'functions' : []
+        }
+        return json

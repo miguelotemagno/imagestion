@@ -34,7 +34,25 @@
 # +-----------------------------------------------------------------------+
 
 from Function import *
+import json
 
 class Node:
-    def __init__(self, name='', functions=0, id=''):
+    def __init__(self, name='', id='', function=0):
+        self.id = id
+        self.name = name
+        self.function = function
+        self.connects = []
         pass
+
+    def __str__(self):
+        json = self.getJson()
+        return json.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+
+    def getJson(self):
+        json = {
+            'id' : self.id,
+            'name' : self.name,
+            'function' : self.function,
+            'connects' : []
+        }
+        return json
