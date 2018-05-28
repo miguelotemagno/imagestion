@@ -28,8 +28,8 @@ sub reduce {
 	my @out1;
 	my @out2;
 	my $n = 0;
-	my %groups;
-	my %counts;
+	my %groups = ();
+	my %counts = ();
 
 	for my $word (@parts) {
 		chomp $word;
@@ -60,12 +60,11 @@ sub reduce {
 
 	my $key = '';
 	my $val = 1;
-	while (my ($k, $v) = each %counts) {
-			if (length($k) > length($key)) {
-		if ($v >= $val) {
-				$key = $k;
-				$val = $v;
-			}
+	for my $k (sort(keys %counts)) {
+		my $v = $counts{$k};
+		if (length($k) >= length($key) && $v >= $val) {
+			$key = $k;
+			$val = $v;
 		}
 	}
 
