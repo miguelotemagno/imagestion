@@ -33,7 +33,7 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import json
+from json import dumps, loads
 from Node import *
 
 class Graph:
@@ -60,32 +60,32 @@ class Graph:
 
     def save(self, dbFile):
         with open(dbFile, "w") as text_file:
-            text_file.write(json.dumps(self.__str__(), sort_keys=True, indent=4, separators=(',', ': ')))
+            text_file.write(dumps(self.__str__(), sort_keys=True, indent=4, separators=(',', ': ')))
         pass
 
     ####################################################################
 
     def importJSON(self, js):
-        data = json.loads(js)
+        data = loads(js)
         self.name = data['name']
 
     ####################################################################
 
     def __str__(self):
-        json = self.getJson()
-        return json.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+        js = self.getJson()
+        return dumps(js, sort_keys=True,indent=4, separators=(',', ': '))
 
     ####################################################################
 
     def getJson(self):
-        json = {
+        js = {
             'graph' : {
                 'id': self.id,
                 'name': self.name,
                 'first': self.firstNode,
                 'nodes' : [node.id for node in self.nodes]
             },
-            'nodes' : [self.nodes],
+            'nodes' : [node.getJson() for node in self.nodes],
             'functions' : []
         }
-        return json
+        return js
