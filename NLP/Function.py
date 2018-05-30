@@ -50,7 +50,22 @@ class Function:
             'isAdj'  : self.isAdjetive(),
             'isIntj' : self.isInterjection(),
             'isNum'  : self.isNumber(),
-            'isPunc' : self.isPunctuation()
+            'isPunc' : self.isPunctuation(),
+            'setNuc' : self.setNucleous()
+        }
+
+        self.dictionary = {
+            'DET' : 'isDet',
+            'NOUN' : 'isNoun',
+            'ADJ' : 'isAdj',
+            'PREP' : 'isPrep',
+            'VERB' : 'isVerb',
+            'ADV' : 'isAdv',
+            'PRON' : 'isPron',
+            'INTJ' : 'isIntj',
+            'CONJ' : 'isConj',
+            'NUM' : 'isNum',
+            'PUNC' : 'isPunc'
         }
 
     def __str__(self):
@@ -91,4 +106,7 @@ class Function:
         pass
 
     def isPunctuation(self):
+        pass
+
+    def setNucleous(self):
         pass

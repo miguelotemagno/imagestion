@@ -34,7 +34,7 @@
 # +-----------------------------------------------------------------------+
 
 import numpy as np
-from json import dumps, loads
+import json as js
 from Node import *
 from Function import *
 
@@ -42,48 +42,55 @@ class Graph:
     # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
     def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
         n = len(nodeNames) if len(nodeNames) > 0 else nodes
+        self.functions = Function()
         self.name = name
         self.id = id
         self.nodeNames = ["Node%d" % (x) for x in range(n)] if n > 0 else []
-        self.nodeNames = [x for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else self.nodeNames
-        self.nodes = [Node(id=x, name="%s" % (self.nodeNames[x])) for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+        self.nodeNames = nodeNames if len(nodeNames) > 0 else self.nodeNames
+
+        self.nodes = [Node(id=x,
+                           name="%s" % (self.nodeNames[x]),
+                           function="%s" % (self.functions.dictionary[self.nodeNames[x]]))
+                      for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+
         self.firstNode = firstNode
-        self.connects = np.zeros(n,n)
-        self.markovPrc = np.zeros(n,n)
-        self.functions = Function()
+        self.connects = np.zeros((n,n), dtype=int)
+        self.markovPrc = np.zeros((n,n), dtype=float)
 
     ####################################################################
 
     def load(self, dbFile):
         f = open(dbFile, 'r')
-        jsNet = f.read();
+        json = f.read();
         f.close()
-        self.importJSON(jsNet)
+        self.importJSON(json)
         pass
 
     ####################################################################
 
     def save(self, dbFile):
         with open(dbFile, "w") as text_file:
-            text_file.write(dumps(self.__str__(), sort_keys=True, indent=4, separators=(',', ': ')))
+            text_file.write(self.__str__())
         pass
 
     ####################################################################
 
-    def importJSON(self, js):
-        data = loads(js)
-        self.name = data['name']
+    def importJSON(self, json):
+        data = js.loads(json)
+        self.id = data['graph']['id']
+        self.name = data['graph']['name']
+        self.firstNode = data['graph']['first']
 
     ####################################################################
 
     def __str__(self):
-        js = self.getJson()
-        return dumps(js, sort_keys=True,indent=4, separators=(',', ': '))
+        json = self.getJson()
+        return js.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
 
     ####################################################################
 
     def getJson(self):
-        js = {
+        json = {
             'graph' : {
                 'id': self.id,
                 'name': self.name,
@@ -95,4 +102,4 @@ class Graph:
             'connects' : [self.connects.tolist()],
             'markovPrc' : [self.markovPrc.tolist()]
         }
-        return js
+        return json
