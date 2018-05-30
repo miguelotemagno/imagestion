@@ -33,15 +33,13 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-from Function import *
 from  json import dumps
 
 class Node:
-    def __init__(self, name='', id='', function=0):
+    def __init__(self, name='', id='', function=''):
         self.id = id
         self.name = name
         self.function = function
-        self.connects = []
         pass
 
     def __str__(self):
@@ -52,7 +50,6 @@ class Node:
         js = {
             'id' : self.id,
             'name' : self.name,
-            'function' : self.function,
-            'connects' : []
+            'function' : self.function
         }
         return js

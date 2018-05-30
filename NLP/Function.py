@@ -33,23 +33,62 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import json
+import json as js
 
 
 class Function:
-    def __init__(self, name='', order=0, id=0):
-        self.id = id
-        self.name = name
-        self.order = order
-        pass
+    def __init__(self):
+        # ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.index = {
+            'isVerb' : self.isVerb(),
+            'isAdv'  : self.isAdverb(),
+            'isNoun' : self.isNoun(),
+            'isPrep' : self.isPreposition(),
+            'isDet'  : self.isDeterminant(),
+            'isConj' : self.isConjunction(),
+            'isPron' : self.isPronoun(),
+            'isAdj'  : self.isAdjetive(),
+            'isIntj' : self.isInterjection(),
+            'isNum'  : self.isNumber(),
+            'isPunc' : self.isPunctuation()
+        }
+
     def __str__(self):
         json = self.getJson()
-        return json.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+        return js.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
 
     def getJson(self):
-        json = {
-            'id' : self.id,
-            'name' : self.name,
-            'order' : self.order
-        }
-        return json
+        return self.index.keys()
+
+    def isVerb(self):
+        pass
+
+    def isAdverb(self):
+        pass
+
+    def isNoun(self):
+        pass
+
+    def isPreposition(self):
+        pass
+
+    def isDeterminant(self):
+        pass
+
+    def isConjunction(self):
+        pass
+
+    def isPronoun(self):
+        pass
+
+    def isAdjetive(self):
+        pass
+
+    def isInterjection(self):
+        pass
+
+    def isNumber(self):
+        pass
+
+    def isPunctuation(self):
+        pass

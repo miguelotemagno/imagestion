@@ -33,8 +33,10 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
+import numpy as np
 from json import dumps, loads
 from Node import *
+from Function import *
 
 class Graph:
     # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
@@ -46,6 +48,9 @@ class Graph:
         self.nodeNames = [x for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else self.nodeNames
         self.nodes = [Node(id=x, name="%s" % (self.nodeNames[x])) for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
         self.firstNode = firstNode
+        self.connects = np.zeros(n,n)
+        self.markovPrc = np.zeros(n,n)
+        self.functions = Function()
 
     ####################################################################
 
@@ -86,6 +91,8 @@ class Graph:
                 'nodes' : [node.id for node in self.nodes]
             },
             'nodes' : [node.getJson() for node in self.nodes],
-            'functions' : []
+            'functions' : [self.functions.getJson()],
+            'connects' : [self.connects.tolist()],
+            'markovPrc' : [self.markovPrc.tolist()]
         }
         return js
