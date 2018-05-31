@@ -38,19 +38,20 @@ import json as js
 from Node import *
 from Function import *
 
+
 class Graph:
     # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
     def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
         n = len(nodeNames) if len(nodeNames) > 0 else nodes
-        self.functions = Function()
+        self.functions = Function(self)
         self.name = name
         self.id = id
         self.nodeNames = ["Node%d" % (x) for x in range(n)] if n > 0 else []
         self.nodeNames = nodeNames if len(nodeNames) > 0 else self.nodeNames
 
-        self.nodes = [Node(id=x,
+        self.nodes = [Node(self, id=x,
                            name="%s" % (self.nodeNames[x]),
-                           function="%s" % (self.functions.dictionary[self.nodeNames[x]]))
+                           function=self.getFunctionName(self.nodeNames[x]))
                       for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
 
         self.firstNode = firstNode
@@ -61,15 +62,24 @@ class Graph:
 
     ####################################################################
 
-    def start(self, type):
-        return self.nodes[self.firstNode] if self.nodes[self.firstNode].name == type else None
+    def getFunctionName(self, x):
+        try:
+            idx = self.nodeNames.index(x)
+        except ValueError:
+            idx = -1
+
+        return self.functions.dictionary[self.nodeNames[idx]] if idx >= 0 else 'null'
 
     ####################################################################
 
-    def nextStep(self, type):
-        #TODO  pensar como avanzar en el grafo
-        ixd = self.nodeNames.index(type)
-        pass
+    def start(self, type):
+        try:
+            idx = self.functions.dictionary.keys().index(type)
+        except ValueError:
+            idx = -1
+        # TODO aqui ocurre un error logico, donde deberia retornar el nodo.self pero retorna None
+        node = self.nodes[self.firstNode] if idx >= 0 else None
+        return node.function({'type': type}) if node is not None else None
 
     ####################################################################
 
@@ -99,7 +109,7 @@ class Graph:
 
     def __str__(self):
         json = self.getJson()
-        return js.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+        return js.dumps(json, sort_keys=True, indent=4, separators=(',', ': '))
 
     ####################################################################
 
@@ -111,11 +121,11 @@ class Graph:
                 'first': self.firstNode,
                 'steps': self.steps,
                 'iterations': self.iterations,
-                'functions': [self.functions.getJson()],
                 'connects': [self.connects.tolist()],
                 'markovPrc': [self.markovPrc.tolist()],
                 'nodes': [node.id for node in self.nodes]
             },
+            'functions': [self.functions.getJson()],
             'nodes': [node.getJson() for node in self.nodes]
         }
         return json

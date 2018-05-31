@@ -37,76 +37,156 @@ import json as js
 
 
 class Function:
-    def __init__(self):
+    def __init__(self, parent):
         # ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
-        self.index = {
-            'isVerb' : self.isVerb(),
-            'isAdv'  : self.isAdverb(),
-            'isNoun' : self.isNoun(),
-            'isPrep' : self.isPreposition(),
-            'isDet'  : self.isDeterminant(),
-            'isConj' : self.isConjunction(),
-            'isPron' : self.isPronoun(),
-            'isAdj'  : self.isAdjetive(),
-            'isIntj' : self.isInterjection(),
-            'isNum'  : self.isNumber(),
-            'isPunc' : self.isPunctuation(),
-            'setNuc' : self.setNucleous()
+        self.names = {
+            'null':   self.null,
+            'isVerb': self.isVerb,
+            'isAdv':  self.isAdverb,
+            'isNoun': self.isNoun,
+            'isPrep': self.isPreposition,
+            'isDet':  self.isDeterminant,
+            'isConj': self.isConjunction,
+            'isPron': self.isPronoun,
+            'isAdj':  self.isAdjetive,
+            'isIntj': self.isInterjection,
+            'isNum':  self.isNumber,
+            'isPunc': self.isPunctuation,
+            'setNuc': self.setNucleous
         }
 
         self.dictionary = {
-            'DET' : 'isDet',
-            'NOUN' : 'isNoun',
-            'ADJ' : 'isAdj',
-            'PREP' : 'isPrep',
-            'VERB' : 'isVerb',
-            'ADV' : 'isAdv',
-            'PRON' : 'isPron',
-            'INTJ' : 'isIntj',
-            'CONJ' : 'isConj',
-            'NUM' : 'isNum',
-            'PUNC' : 'isPunc'
+            'DET':  'isDet',
+            'NOUN': 'isNoun',
+            'ADJ':  'isAdj',
+            'PREP': 'isPrep',
+            'VERB': 'isVerb',
+            'ADV':  'isAdv',
+            'PRON': 'isPron',
+            'INTJ': 'isIntj',
+            'CONJ': 'isConj',
+            'NUM':  'isNum',
+            'PUNC': 'isPunc'
         }
+
+        self.parent = parent
+
+    ####################################################################
 
     def __str__(self):
         json = self.getJson()
-        return js.dumps(json, sort_keys=True,indent=4, separators=(',', ': '))
+        return js.dumps(json, sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
 
     def getJson(self):
-        return self.index.keys()
+        return self.names.keys()
 
-    def isVerb(self):
-        pass
+    ####################################################################
 
-    def isAdverb(self):
-        pass
+    def isVerb(self, args=None):
+        try:
+            if args['type'] == 'VERB':
+                return args['node']
+        except ValueError:
+            return None
 
-    def isNoun(self):
-        pass
+    ####################################################################
 
-    def isPreposition(self):
-        pass
+    def isAdverb(self, args=None):
+        try:
+            if args['type'] == 'ADV':
+                return args['node']
+        except ValueError:
+            return None
 
-    def isDeterminant(self):
-        pass
+    ####################################################################
 
-    def isConjunction(self):
-        pass
+    def isNoun(self, args=None):
+        try:
+            if args['type'] == 'NOUN':
+                return args['node']
+        except ValueError:
+            return None
 
-    def isPronoun(self):
-        pass
+    ####################################################################
 
-    def isAdjetive(self):
-        pass
+    def isPreposition(self, args=None):
+        try:
+            if args['type'] == 'PREP':
+                return args['node']
+        except ValueError:
+            return None
 
-    def isInterjection(self):
-        pass
+    ####################################################################
 
-    def isNumber(self):
-        pass
+    def isDeterminant(self, args=None):
+        try:
+            if args['type'] == 'DET':
+                return args['node']
+        except ValueError:
+            return None
 
-    def isPunctuation(self):
-        pass
+    ####################################################################
 
-    def setNucleous(self):
-        pass
+    def isConjunction(self, args=None):
+        try:
+            if args['type'] == 'CONJ':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isPronoun(self, args=None):
+        try:
+            if args['type'] == 'PRON':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isAdjetive(self, args=None):
+        try:
+            if args['type'] == 'ADJ':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isInterjection(self, args=None):
+        try:
+            if args['type'] == 'INTJ':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isNumber(self, args=None):
+        try:
+            if args['type'] == 'NUM':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isPunctuation(self, args=None):
+        try:
+            if args['type'] == 'PUNC':
+                return args['node']
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def setNucleous(self, args=None):
+        return None
+
+    ####################################################################
+
+    def null(self, args=None):
+        return None

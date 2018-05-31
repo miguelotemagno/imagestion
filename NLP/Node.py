@@ -36,20 +36,37 @@
 from  json import dumps
 
 class Node:
-    def __init__(self, name='', id='', function=''):
+    def __init__(self, parent, name='', id='', function=None):
         self.id = id
         self.name = name
-        self.function = function
+        self.parent = parent
+        self.functionName = function
+        self.function = self.parent.functions.names[function] if function is not None else self.null
         pass
+
+    ####################################################################
 
     def __str__(self):
         js = self.getJson()
         return dumps(js, sort_keys=True,indent=4, separators=(',', ': '))
 
+    ####################################################################
+
     def getJson(self):
         js = {
             'id' : self.id,
             'name' : self.name,
-            'function' : self.function
+            'function' : self.functionName
         }
         return js
+
+    ####################################################################
+
+    def nextStep(self, type):
+        # TODO  pensar como avanzar en el grafo
+        return self.function({'type': type, 'node': self})
+
+    ####################################################################
+
+    def null(self):
+        return None
