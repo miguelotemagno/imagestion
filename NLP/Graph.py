@@ -54,14 +54,28 @@ class Graph:
                       for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
 
         self.firstNode = firstNode
-        self.connects = np.zeros((n,n), dtype=int)
-        self.markovPrc = np.zeros((n,n), dtype=float)
+        self.iterations = 0
+        self.steps = 0
+        self.connects = np.zeros((n, n), dtype=int)
+        self.markovPrc = np.zeros((n, n), dtype=float)
+
+    ####################################################################
+
+    def start(self, type):
+        return self.nodes[self.firstNode] if self.nodes[self.firstNode].name == type else None
+
+    ####################################################################
+
+    def nextStep(self, type):
+        #TODO  pensar como avanzar en el grafo
+        ixd = self.nodeNames.index(type)
+        pass
 
     ####################################################################
 
     def load(self, dbFile):
         f = open(dbFile, 'r')
-        json = f.read();
+        json = f.read()
         f.close()
         self.importJSON(json)
         pass
@@ -91,15 +105,17 @@ class Graph:
 
     def getJson(self):
         json = {
-            'graph' : {
+            'graph': {
                 'id': self.id,
                 'name': self.name,
                 'first': self.firstNode,
-                'nodes' : [node.id for node in self.nodes]
+                'steps': self.steps,
+                'iterations': self.iterations,
+                'functions': [self.functions.getJson()],
+                'connects': [self.connects.tolist()],
+                'markovPrc': [self.markovPrc.tolist()],
+                'nodes': [node.id for node in self.nodes]
             },
-            'nodes' : [node.getJson() for node in self.nodes],
-            'functions' : [self.functions.getJson()],
-            'connects' : [self.connects.tolist()],
-            'markovPrc' : [self.markovPrc.tolist()]
+            'nodes': [node.getJson() for node in self.nodes]
         }
         return json
