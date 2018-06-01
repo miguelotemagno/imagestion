@@ -18,12 +18,12 @@ if sys.argv[1] == 'web':
 	print list
 
 if sys.argv[1] == 'file':
-	file = "libro.txt"
+	file = "grammarTest.txt"
 	if sys.argv[2] != '':
 		file = sys.argv[2]
 
 	g.loadFromFile(file)
 	tokens = g.word_tokenize(g.text)
-	list = g.pos_tag(tokens)
+	list = g.pos_tag(tokens, False)
 	print list
 

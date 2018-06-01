@@ -88,8 +88,9 @@ sub reduce {
 	} sort(keys %groups);
 
 	push @out1, "$key(".join("|", @out2).")$flag";
+	my $out = join("|", @out1);
 
-	return join("|", @out1);
+	return ($out !~ /\w+/ ?$txt :$out);
 }
 
 ######################################################3
