@@ -77,7 +77,7 @@ class Node:
         # TODO hacer ciclo for para inferir nodo candidato a retornar
         for idx in self.parent.nodes:
             if self.parent.markovPrc.item((myPlace, idx.id)) > max:
-                max = self.parent.markovPrc((myPlace, idx.id))
+                max = self.parent.markovPrc.item((myPlace, idx.id))
                 pos = idx.id
 
         if pos is not None and self.parent.connects.item((myPlace, pos)) != 0:

@@ -119,6 +119,26 @@ class Graph:
 
     ####################################################################
 
+    def getConnection(self, y, x):
+        return self.connects.item((y, x))
+
+    ####################################################################
+
+    def setConnection(self, y, x, val):
+        self.connects.itemset((y, x), val)
+
+    ####################################################################
+
+    def getMarkovprc(self, y, x):
+        return self.markovPrc.item((y, x))
+
+    ####################################################################
+
+    def setMarkovprc(self, y, x, val):
+        self.markovPrc.itemset((y, x), val)
+
+    ####################################################################
+
     def getJson(self):
         json = {
             'graph': {
