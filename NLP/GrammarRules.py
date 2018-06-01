@@ -231,6 +231,11 @@ class GrammarRules:
 
 	##########################################################################
 
+	def setText(self, text):
+		self.text = text
+
+	##########################################################################
+
 	def loadFromFile(self,source):
 		print "=> loadFromFile (%s)\n" % (source)
 		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
