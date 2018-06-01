@@ -87,7 +87,7 @@ class Function:
     def isVerb(self, args=None):
         try:
             if args['type'] == 'VERB':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -96,7 +96,7 @@ class Function:
     def isAdverb(self, args=None):
         try:
             if args['type'] == 'ADV':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -105,7 +105,7 @@ class Function:
     def isNoun(self, args=None):
         try:
             if args['type'] == 'NOUN':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -114,7 +114,7 @@ class Function:
     def isPreposition(self, args=None):
         try:
             if args['type'] == 'PREP':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -123,7 +123,7 @@ class Function:
     def isDeterminant(self, args=None):
         try:
             if args['type'] == 'DET':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -132,7 +132,7 @@ class Function:
     def isConjunction(self, args=None):
         try:
             if args['type'] == 'CONJ':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -141,7 +141,7 @@ class Function:
     def isPronoun(self, args=None):
         try:
             if args['type'] == 'PRON':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -150,7 +150,7 @@ class Function:
     def isAdjetive(self, args=None):
         try:
             if args['type'] == 'ADJ':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -159,7 +159,7 @@ class Function:
     def isInterjection(self, args=None):
         try:
             if args['type'] == 'INTJ':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -168,7 +168,7 @@ class Function:
     def isNumber(self, args=None):
         try:
             if args['type'] == 'NUM':
-                return args['node']
+                return True
         except ValueError:
             return None
 
@@ -177,7 +177,7 @@ class Function:
     def isPunctuation(self, args=None):
         try:
             if args['type'] == 'PUNC':
-                return args['node']
+                return True
         except ValueError:
             return None
 

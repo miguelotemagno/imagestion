@@ -34,6 +34,7 @@
 # +-----------------------------------------------------------------------+
 
 from  json import dumps
+import numpy as np
 
 class Node:
     def __init__(self, parent, name='', id='', function=None):
@@ -62,11 +63,29 @@ class Node:
 
     ####################################################################
 
-    def nextStep(self, type):
-        # TODO  pensar como avanzar en el grafo
-        return self.function({'type': type, 'node': self})
+    def isMyself(self, type):
+        return self if self.function({'type': type}) else None
 
     ####################################################################
 
-    def null(self):
+    def nextStep(self, type):
+        node = None
+        myPlace = self.parent.getIndexof(self.name)
+        max = 0.0
+        pos = None
+
+        # TODO hacer ciclo for para inferir nodo candidato a retornar
+        for idx in self.parent.nodes:
+            if self.parent.markovPrc.item((myPlace, idx.id)) > max:
+                max = self.parent.markovPrc((myPlace, idx.id))
+                pos = idx.id
+
+        if pos is not None and self.parent.connects.item((myPlace, pos)) != 0:
+            node = self.parent.nodes[pos]
+
+        return node
+
+    ####################################################################
+
+def null(self):
         return None

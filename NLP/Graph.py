@@ -68,18 +68,24 @@ class Graph:
         except ValueError:
             idx = -1
 
-        return self.functions.dictionary[self.nodeNames[idx]] if idx >= 0 else 'null'
+        return self.functions.dictionary[self.nodeNames[idx]] if idx is not None else 'null'
+
+    ####################################################################
+
+    def getIndexof(self, type):
+        try:
+            idx = self.functions.dictionary.keys().index(type)
+        except ValueError:
+            idx = None
+
+        return idx
 
     ####################################################################
 
     def start(self, type):
-        try:
-            idx = self.functions.dictionary.keys().index(type)
-        except ValueError:
-            idx = -1
-        # TODO aqui ocurre un error logico, donde deberia retornar el nodo.self pero retorna None
-        node = self.nodes[self.firstNode] if idx >= 0 else None
-        return node.function({'type': type}) if node is not None else None
+        idx = self.getIndexof(type)
+        node = self.nodes[self.firstNode] if idx is not None else None
+        return node.isMyself(type) if node is not None else None
 
     ####################################################################
 
