@@ -42,12 +42,14 @@ class SemanticNetwork:
 
     def __init__(self):
         self.rules = GrammarRules()
-        self.workflow = Graph()
+        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
+        self.connects = None
         pass
 
     ####################################################################
 
     def train(self, text, nucleous):
-        self.rules.setText(text)
-
+        self.connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        tokens = self.rules.word_tokenize(text)
         pass
