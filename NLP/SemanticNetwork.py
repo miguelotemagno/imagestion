@@ -33,59 +33,23 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-from  json import dumps
 import numpy as np
+import json as js
+from GrammarRules import *
+from Graph import *
 
-class Node:
-    def __init__(self, parent, name='', id='', function=None):
-        self.id = id
-        self.name = name
-        self.parent = parent
-        self.functionName = function
-        self.function = self.parent.functions.names[function] if function is not None else self.null
+class SemanticNetwork:
+
+    def __init__(self):
+        self.rules = GrammarRules()
+        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
+        self.connects = None
         pass
 
     ####################################################################
 
-    def __str__(self):
-        js = self.getJson()
-        return dumps(js, sort_keys=True,indent=4, separators=(',', ': '))
-
-    ####################################################################
-
-    def getJson(self):
-        js = {
-            'id' : self.id,
-            'name' : self.name,
-            'function' : self.functionName
-        }
-        return js
-
-    ####################################################################
-
-    def isMyself(self, type):
-        return self if self.function({'type': type}) else None
-
-    ####################################################################
-
-    def nextStep(self, type):
-        node = None
-        myPlace = self.parent.getIndexof(self.name)
-        max = 0.0
-        pos = None
-
-        # TODO hacer ciclo for para inferir nodo candidato a retornar
-        for idx in self.parent.nodes:
-            if self.parent.markovPrc.item((myPlace, idx.id)) > max and self.parent.connects.item((myPlace, pos)) != 0:
-                max = self.parent.markovPrc.item((myPlace, idx.id))
-                pos = idx.id
-
-        if pos is not None:
-            node = self.parent.nodes[pos]
-
-        return node
-
-    ####################################################################
-
-def null(self):
-        return None
+    def train(self, text, nucleous):
+        self.connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        tokens = self.rules.word_tokenize(text)
+        pass

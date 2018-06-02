@@ -23,7 +23,7 @@
 # | A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  |
 # | OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, |
 # | SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT      |
-# | LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, |
+# | LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, |	
 # | DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY |
 # | THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT   |
 # | (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE |
@@ -181,6 +181,7 @@ class GrammarRules:
 				for verb, hash in self.rules[char].iteritems():
 					try:
 						expr = '^('+'|'.join(hash.values())+')$'
+						#print "%s {%s}" % (text, expr)
 						eval = re.compile(expr)
 					except ValueError:
 						print "%s {%s} %s" % (text, expr, ValueError)
@@ -227,6 +228,11 @@ class GrammarRules:
 	def getNltkType(self, idx):
 		type = self.rules["NLTK"][idx] if idx in self.rules["NLTK"] else idx
 		return type
+
+	##########################################################################
+
+	def setText(self, text):
+		self.text = text
 
 	##########################################################################
 

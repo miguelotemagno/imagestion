@@ -33,50 +33,125 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import json
+import numpy as np
+import json as js
 from Node import *
+from Function import *
+
 
 class Graph:
     # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
-    def __init__(self, name='', nodes=0, id='', nodeNames=[]):
+    def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
+        n = len(nodeNames) if len(nodeNames) > 0 else nodes
+        self.functions = Function(self)
         self.name = name
         self.id = id
-        self.nodeNames = ["Node%d" % (x) for x in range(nodes)] if nodes > 0 else []
-        self.nodeNames = [nodeNames[x] % (x) for x in range(len(nodeNames))] if len(nodeNames) > 0 else self.nodeNames
-        self.nodes = [Node(id=x, name="%s" % (self.nodeNames[x])) for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+        self.nodeNames = ["Node%d" % (x) for x in range(n)] if n > 0 else []
+        self.nodeNames = nodeNames if len(nodeNames) > 0 else self.nodeNames
+
+        self.nodes = [Node(self, id=x,
+                           name="%s" % (self.nodeNames[x]),
+                           function=self.getFunctionName(self.nodeNames[x]))
+                      for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+
+        self.firstNode = firstNode
+        self.iterations = 0
+        self.steps = 0
+        self.connects = np.zeros((n, n), dtype=int)
+        self.markovPrc = np.zeros((n, n), dtype=float)
+
+    ####################################################################
+
+    def getFunctionName(self, x):
+        try:
+            idx = self.nodeNames.index(x)
+        except ValueError:
+            idx = -1
+
+        return self.functions.dictionary[self.nodeNames[idx]] if idx is not None else 'null'
+
+    ####################################################################
+
+    def getIndexof(self, type):
+        try:
+            idx = self.functions.dictionary.keys().index(type)
+        except ValueError:
+            idx = None
+
+        return idx
+
+    ####################################################################
+
+    def start(self, type):
+        idx = self.getIndexof(type)
+        node = self.nodes[self.firstNode] if idx is not None else None
+        return node.isMyself(type) if node is not None else None
 
     ####################################################################
 
     def load(self, dbFile):
         f = open(dbFile, 'r')
-        jsNet = f.read();
+        json = f.read()
         f.close()
-        self.importJSON(jsNet)
+        self.importJSON(json)
         pass
 
     ####################################################################
 
     def save(self, dbFile):
         with open(dbFile, "w") as text_file:
-            text_file.write(json.dumps(self.exportJSON(), sort_keys=True, indent=4, separators=(',', ': ')))
+            text_file.write(self.__str__())
         pass
 
     ####################################################################
 
-    def importJSON(self, js):
-        data = json.loads(js)
-        self.name = data['name']
+    def importJSON(self, json):
+        data = js.loads(json)
+        self.id = data['graph']['id']
+        self.name = data['graph']['name']
+        self.firstNode = data['graph']['first']
 
     ####################################################################
 
-    def exportJSON(self):
-        json = { }
-        #    'id': self.nodos_ent,
-        #    'name': self.nodos_sal,
-        #    'nodes': [
-        #        self.nodes[x] for x in range(self.nodes)
-        #    ]
-        #}
+    def __str__(self):
+        json = self.getJson()
+        return js.dumps(json, sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
+
+    def getConnection(self, y, x):
+        return self.connects.item((y, x))
+
+    ####################################################################
+
+    def setConnection(self, y, x, val):
+        self.connects.itemset((y, x), val)
+
+    ####################################################################
+
+    def getMarkovprc(self, y, x):
+        return self.markovPrc.item((y, x))
+
+    ####################################################################
+
+    def setMarkovprc(self, y, x, val):
+        self.markovPrc.itemset((y, x), val)
+
+    ####################################################################
+
+    def getJson(self):
+        json = {
+            'graph': {
+                'id': self.id,
+                'name': self.name,
+                'first': self.firstNode,
+                'steps': self.steps,
+                'iterations': self.iterations,
+                'connects': [self.connects.tolist()],
+                'markovPrc': [self.markovPrc.tolist()],
+                'nodes': [node.id for node in self.nodes]
+            },
+            'functions': [self.functions.getJson()],
+            'nodes': [node.getJson() for node in self.nodes]
+        }
         return json
-
-    ####################################################################

@@ -33,7 +33,160 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
+import json as js
+
 
 class Function:
-    def __init__(self):
-        pass
+    def __init__(self, parent):
+        # ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.names = {
+            'null':   self.null,
+            'isVerb': self.isVerb,
+            'isAdv':  self.isAdverb,
+            'isNoun': self.isNoun,
+            'isPrep': self.isPreposition,
+            'isDet':  self.isDeterminant,
+            'isConj': self.isConjunction,
+            'isPron': self.isPronoun,
+            'isAdj':  self.isAdjetive,
+            'isIntj': self.isInterjection,
+            'isNum':  self.isNumber,
+            'isPunc': self.isPunctuation,
+            'setNuc': self.setNucleous
+        }
+
+        self.dictionary = {
+            'DET':  'isDet',
+            'NOUN': 'isNoun',
+            'ADJ':  'isAdj',
+            'PREP': 'isPrep',
+            'VERB': 'isVerb',
+            'ADV':  'isAdv',
+            'PRON': 'isPron',
+            'INTJ': 'isIntj',
+            'CONJ': 'isConj',
+            'NUM':  'isNum',
+            'PUNC': 'isPunc'
+        }
+
+        self.parent = parent
+
+    ####################################################################
+
+    def __str__(self):
+        json = self.getJson()
+        return js.dumps(json, sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
+
+    def getJson(self):
+        return self.names.keys()
+
+    ####################################################################
+
+    def isVerb(self, args=None):
+        try:
+            if args['type'] == 'VERB':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isAdverb(self, args=None):
+        try:
+            if args['type'] == 'ADV':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isNoun(self, args=None):
+        try:
+            if args['type'] == 'NOUN':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isPreposition(self, args=None):
+        try:
+            if args['type'] == 'PREP':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isDeterminant(self, args=None):
+        try:
+            if args['type'] == 'DET':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isConjunction(self, args=None):
+        try:
+            if args['type'] == 'CONJ':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isPronoun(self, args=None):
+        try:
+            if args['type'] == 'PRON':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isAdjetive(self, args=None):
+        try:
+            if args['type'] == 'ADJ':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isInterjection(self, args=None):
+        try:
+            if args['type'] == 'INTJ':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isNumber(self, args=None):
+        try:
+            if args['type'] == 'NUM':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isPunctuation(self, args=None):
+        try:
+            if args['type'] == 'PUNC':
+                return True
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def setNucleous(self, args=None):
+        return None
+
+    ####################################################################
+
+    def null(self, args=None):
+        return None
