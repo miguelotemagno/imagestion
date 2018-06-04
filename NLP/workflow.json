@@ -166,6 +166,8 @@
         ],
         "factor": 14.0,
         "first": 0,
+        "width": 11,
+        "height": 11,
         "id": "",
         "iterations": 0,
         "name": "workflow",

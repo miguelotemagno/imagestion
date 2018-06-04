@@ -56,7 +56,9 @@ class Graph:
 
         self.firstNode = firstNode
         self.iterations = 0
-        self.factor = 0
+        self.width = 0
+        self.height = len(self.nodeNames)
+        self.factor = len(self.nodeNames)
         self.connects = np.zeros((n, n), dtype=float)
         self.nucleous = np.zeros((n, n), dtype=float)
 
@@ -180,11 +182,12 @@ class Graph:
             'graph': {
                 'id': self.id,
                 'name': self.name,
+                'nodeNames': [self.nodeNames.tolist()],
                 'first': self.firstNode,
                 'factor': self.factor,
                 'iterations': self.iterations,
-                'width': len(self.nodeNames),
-                'height': len(self.nodeNames),
+                'width': self.width,
+                'height': self.height,
                 'connects': [self.connects.tolist()],
                 'nucleous': [self.nucleous.tolist()],
                 'nodes': [node.id for node in self.nodes]
@@ -203,11 +206,15 @@ class Graph:
         self.firstNode = data['graph']['first']
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
-        width = data['graph']['width']
-        height = data['graph']['height']
+        self.width = data['graph']['width']
+        self.height = data['graph']['height']
+        self.connects = np.array(data['graph']['connects'], dtype=float)
+        self.nucleous = np.array(data['graph']['nucleous'], dtype=float)
+        self.nodeNames = data['graph']['nodeNames']
+        self.nodes = [Node(self, id=x,
+                           name="%s" % (self.nodeNames[x]),
+                           function=self.getFunctionName(self.nodeNames[x]))
+                      for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
 
-        for y in xrange(height):
-            for x in xrange(width):
-                self.connects[y][x] = data['graph']['connects'][y][x]
-                self.nucleous[y][x] = data['graph']['nucleous'][y][x]
+        pass
 
