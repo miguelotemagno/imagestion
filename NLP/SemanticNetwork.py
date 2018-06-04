@@ -52,18 +52,43 @@ class SemanticNetwork:
 
     def train(self, text, nucleous):
         self.connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
-        tokens = self.rules.word_tokenize(text)
+        self.rules.setText(text)
+        tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
         length = len(tokens)
         i = 0
 
         for token in tokens:
             i += 1
             type = token[1]
-            if '|' in type:
-                re.compile('(\w+)|.+')
-                nextType = tokens[i][1] if i < length else None
-                if nextType == 'NOUN' and 'DET' in type:
-                    type = 'DET'
+            nextType = tokens[i][1] if i < length else None
+            nextType = self.validType(nextType, tokens[i+1][1] if i+1 < length else None)
+            type = self.validType(type, nextType)
 
+            if nextType is not None and type is not None:
+                # TODO corregir valor escalar asignado a x,y
+                y = self.workflow.getIndexof(type)
+                x = self.workflow.getIndexof(nextType)
+                self.connects[y, x] += 1
+                print "m[%s:%d,%s:%d] = %f" % (type,y,nextType,x,self.connects[y, x])
 
-        pass
+        return self.connects
+
+    ####################################################################
+
+    def validType(self, type, nextType=None):
+        if type is None:
+            return None
+
+        if '|' in type:
+            if nextType == 'NOUN' and 'DET' in type:
+                type = 'DET'
+            elif nextType == 'NOUN' and 'PREP' in type:
+                type = 'PREP'
+            elif nextType == 'NOUN' and 'PREP' in type:
+                type = 'PREP'
+            else:
+                type = re.sub('([|]\w+)+', '', type)
+        elif '??' in type:
+            type = 'NOUN'
+
+        return type
