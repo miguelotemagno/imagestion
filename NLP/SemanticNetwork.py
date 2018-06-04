@@ -66,8 +66,8 @@ class SemanticNetwork:
 
             if nextType is not None and type is not None:
                 # TODO corregir valor escalar asignado a x,y
-                y = self.workflow.getIndexof(type)
-                x = self.workflow.getIndexof(nextType)
+                y = self.grammarTypes.index(type)
+                x = self.grammarTypes.index(nextType)
                 self.connects[y, x] += 1
                 print "m[%s:%d,%s:%d] = %f" % (type,y,nextType,x,self.connects[y, x])
 
