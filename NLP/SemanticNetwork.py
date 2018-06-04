@@ -45,13 +45,12 @@ class SemanticNetwork:
         self.rules = GrammarRules()
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
-        self.connects = None
         pass
 
     ####################################################################
 
     def train(self, text, nucleous):
-        self.connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.rules.setText(text)
         tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
         length = len(tokens)
@@ -68,10 +67,11 @@ class SemanticNetwork:
                 # TODO corregir valor escalar asignado a x,y
                 y = self.grammarTypes.index(type)
                 x = self.grammarTypes.index(nextType)
-                self.connects[y, x] += 1
-                print "m[%s:%d,%s:%d] = %f" % (type,y,nextType,x,self.connects[y, x])
+                connects[y, x] += 1
+                #print "m[%s:%d,%s:%d] = %f" % (type,y,nextType,x,self.connects[y, x])
 
-        return self.connects
+        max = np.array(connects.sum(axis=1), connects.sum(axis=0))
+        return connects
 
     ####################################################################
 
