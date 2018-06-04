@@ -50,6 +50,7 @@ class SemanticNetwork:
     ####################################################################
 
     def train(self, text, nucleous):
+        self.workflow.load('workflow.json')
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.rules.setText(text)
         tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
@@ -85,6 +86,7 @@ class SemanticNetwork:
             newMatrix = (prevMatrix * prevFactor) + connects
             newMatrix = newMatrix/newFactor if newFactor > 0 else newMatrix
 
+        self.workflow.iterations += 1
         self.workflow.connects = newMatrix
         self.workflow.factor = newFactor
         self.workflow.save('workflow.json')

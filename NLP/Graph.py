@@ -182,7 +182,7 @@ class Graph:
             'graph': {
                 'id': self.id,
                 'name': self.name,
-                'nodeNames': [self.nodeNames.tolist()],
+                'nodeNames': self.nodeNames,
                 'first': self.firstNode,
                 'factor': self.factor,
                 'iterations': self.iterations,
@@ -211,10 +211,10 @@ class Graph:
         self.connects = np.array(data['graph']['connects'], dtype=float)
         self.nucleous = np.array(data['graph']['nucleous'], dtype=float)
         self.nodeNames = data['graph']['nodeNames']
-        self.nodes = [Node(self, id=x,
-                           name="%s" % (self.nodeNames[x]),
-                           function=self.getFunctionName(self.nodeNames[x]))
-                      for x in range(len(self.nodeNames))] if len(self.nodeNames) > 0 else []
+        self.nodes = [Node(self, id=node['id'], name=node['name'], 
+                           function=self.getFunctionName(node['name']))
+                           for node in data['nodes']
+                     ] if len(self.nodeNames) > 0 else []
 
         pass
 
