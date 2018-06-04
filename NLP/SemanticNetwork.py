@@ -64,13 +64,31 @@ class SemanticNetwork:
             type = self.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                # TODO corregir valor escalar asignado a x,y
+                #print "m[%s,%s]" % (type, nextType)
                 y = self.grammarTypes.index(type)
                 x = self.grammarTypes.index(nextType)
                 connects[y, x] += 1
                 #print "m[%s:%d,%s:%d] = %f" % (type,y,nextType,x,self.connects[y, x])
 
-        max = np.array(connects.sum(axis=1), connects.sum(axis=0))
+        list = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
+        max = list.max()
+        print max
+        newMatrix = connects/max if max > 0 else connects
+
+        prevMatrix = self.workflow.connects
+        prevFactor = self.workflow.factor
+
+        if prevMatrix.max() == 0:
+            newFactor = max
+        else:
+            newFactor = max + prevFactor
+            newMatrix = (prevMatrix * prevFactor) + connects
+            newMatrix = newMatrix/newFactor if newFactor > 0 else newMatrix
+
+        self.workflow.connects = newMatrix
+        self.workflow.factor = newFactor
+        self.workflow.save('workflow.json')
+
         return connects
 
     ####################################################################
