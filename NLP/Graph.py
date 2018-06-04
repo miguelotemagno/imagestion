@@ -56,7 +56,7 @@ class Graph:
 
         self.firstNode = firstNode
         self.iterations = 0
-        self.steps = 0
+        self.factor = 0
         self.connects = np.zeros((n, n), dtype=float)
         self.nucleous = np.zeros((n, n), dtype=float)
 
@@ -102,14 +102,6 @@ class Graph:
         with open(dbFile, "w") as text_file:
             text_file.write(self.__str__())
         pass
-
-    ####################################################################
-
-    def importJSON(self, json):
-        data = js.loads(json)
-        self.id = data['graph']['id']
-        self.name = data['graph']['name']
-        self.firstNode = data['graph']['first']
 
     ####################################################################
 
@@ -189,8 +181,10 @@ class Graph:
                 'id': self.id,
                 'name': self.name,
                 'first': self.firstNode,
-                'steps': self.steps,
+                'factor': self.factor,
                 'iterations': self.iterations,
+                'width': len(self.nodeNames),
+                'height': len(self.nodeNames),
                 'connects': [self.connects.tolist()],
                 'nucleous': [self.nucleous.tolist()],
                 'nodes': [node.id for node in self.nodes]
@@ -199,3 +193,21 @@ class Graph:
             'nodes': [node.getJson() for node in self.nodes]
         }
         return json
+
+    ####################################################################
+
+    def importJSON(self, json):
+        data = js.loads(json)
+        self.id = data['graph']['id']
+        self.name = data['graph']['name']
+        self.firstNode = data['graph']['first']
+        self.iterations = data['graph']['iterations']
+        self.factor = data['graph']['factor']
+        width = data['graph']['width']
+        height = data['graph']['height']
+
+        for y in xrange(height):
+            for x in xrange(width):
+                self.connects[y][x] = data['graph']['connects'][y][x]
+                self.nucleous[y][x] = data['graph']['nucleous'][y][x]
+
