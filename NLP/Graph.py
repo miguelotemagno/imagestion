@@ -57,8 +57,8 @@ class Graph:
         self.firstNode = firstNode
         self.iterations = 0
         self.steps = 0
-        self.connects = np.zeros((n, n), dtype=int)
-        self.markovPrc = np.zeros((n, n), dtype=float)
+        self.connects = np.zeros((n, n), dtype=float)
+        self.nucleous = np.zeros((n, n), dtype=float)
 
     ####################################################################
 
@@ -129,13 +129,57 @@ class Graph:
 
     ####################################################################
 
-    def getMarkovprc(self, y, x):
-        return self.markovPrc.item((y, x))
+    def getConnectRow(self, y):
+        return self.connects[y, :]
 
     ####################################################################
 
-    def setMarkovprc(self, y, x, val):
-        self.markovPrc.itemset((y, x), val)
+    def getConnectColumn(self, x):
+        return self.connects[:, x]
+
+    ####################################################################
+
+    def getNuleous(self, y, x):
+        return self.nucleous.item((y, x))
+
+    ####################################################################
+
+    def getNucleousRow(self, y):
+        return self.nucleous[y, :]
+
+    ####################################################################
+
+    def getNucleousColumn(self, x):
+        return self.nucleous[:, x]
+
+    ####################################################################
+
+    def setNucleous(self, y, x, val):
+        self.nucleous.itemset((y, x), val)
+
+    ####################################################################
+
+    def getConnectionsNode(self, node):
+        col = self.getConnectColumn(node.id)
+        nodes = []
+
+        for i in xrange(col):
+            if col[i] > 0:
+                nodes.append(self.nodes[i])
+
+        return nodes
+
+    ####################################################################
+
+    def getEntriesNode(self, node):
+        row = self.getConnectRow(node.id)
+        nodes = []
+
+        for i in xrange(row):
+            if row[i] > 0:
+                nodes.append(self.nodes[i])
+
+        return nodes
 
     ####################################################################
 
@@ -148,7 +192,7 @@ class Graph:
                 'steps': self.steps,
                 'iterations': self.iterations,
                 'connects': [self.connects.tolist()],
-                'markovPrc': [self.markovPrc.tolist()],
+                'nucleous': [self.nucleous.tolist()],
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],

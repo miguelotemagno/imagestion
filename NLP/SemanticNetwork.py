@@ -37,6 +37,7 @@ import numpy as np
 import json as js
 from GrammarRules import *
 from Graph import *
+import re
 
 class SemanticNetwork:
 
@@ -52,4 +53,17 @@ class SemanticNetwork:
     def train(self, text, nucleous):
         self.connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         tokens = self.rules.word_tokenize(text)
+        length = len(tokens)
+        i = 0
+
+        for token in tokens:
+            i += 1
+            type = token[1]
+            if '|' in type:
+                re.compile('(\w+)|.+')
+                nextType = tokens[i][1] if i < length else None
+                if nextType == 'NOUN' and 'DET' in type:
+                    type = 'DET'
+
+
         pass
