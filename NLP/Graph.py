@@ -56,9 +56,10 @@ class Graph:
 
         self.firstNode = firstNode
         self.iterations = 0
-        self.width = 0
+        self.width = len(self.nodeNames)
         self.height = len(self.nodeNames)
-        self.factor = len(self.nodeNames)
+        self.factor = 0
+        self.factVb = 0
         self.connects = np.zeros((n, n), dtype=float)
         self.nucleous = np.zeros((n, n), dtype=float)
 
@@ -185,6 +186,7 @@ class Graph:
                 'nodeNames': self.nodeNames,
                 'first': self.firstNode,
                 'factor': self.factor,
+                'factVb': self.factVb,
                 'iterations': self.iterations,
                 'width': self.width,
                 'height': self.height,
@@ -206,6 +208,7 @@ class Graph:
         self.firstNode = data['graph']['first']
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
+        self.factVb = data['graph']['factVb']
         self.width = data['graph']['width']
         self.height = data['graph']['height']
         self.connects = np.array(data['graph']['connects'], dtype=float)
