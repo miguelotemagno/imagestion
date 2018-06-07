@@ -58,16 +58,20 @@ class SemanticNetwork:
     def __init__(self):
         self.rules = GrammarRules()
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
-        self.verbClasses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if'] ## TODO completar
+        self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
+        self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)), dtype=float)
+        self.postVerb = np.zeros((len(self.verbTenses), len(self.grammarTypes)), dtype=float)
+        self.factVb = 0
+        self.fileDb = None
+        #self.load('semanticNet.json')
         pass
 
     ####################################################################
 
     def train(self, text, root):
-        self.workflow.load('workflow.json')
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
-        nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.rules.setText(text)
         tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
         length = len(tokens)
@@ -89,44 +93,62 @@ class SemanticNetwork:
                 connects[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s] -> %s" % (type, nextType, root)
-                    nucleous[y, x] += 1
+                    verb = self.rules.getVerb(word)
+                    tense = self.rules.getVerbTense(verb, word)
+                    print "[%s,%s] -> %s {%s,%s}" % (type, nextType, root, self.rules.rules['_comment'][tense], verb)
+                    z = self.verbTenses.index(tense)
+                    self.nucleous[y, x] += 1
+                    self.prevVerb[y, z] += 1
                 elif nextWord == root:
-                    print "[%s,%s] -> %s" % (type, nextType, root)
-                    nucleous[y, x] += 1
+                    verb = self.rules.getVerb(nextWord)
+                    tense = self.rules.getVerbTense(verb, nextWord)
+                    print "[%s,%s] -> %s {%s,%s}" % (type, nextType, root, self.rules.rules['_comment'][tense], verb)
+                    z = self.verbTenses.index(tense)
+                    self.nucleous[y, x] += 1
+                    self.postVerb[z, x] += 1
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
-        listNuc = np.concatenate((nucleous.sum(axis=1), nucleous.sum(axis=0)), axis=0)
+        listNuc = np.concatenate((self.nucleous.sum(axis=1), self.nucleous.sum(axis=0)), axis=0)
         maxCnt = listCnt.max()
         maxNuc = listNuc.max()
         #print max
         newMatrixCnt = connects/maxCnt if maxCnt > 0 else connects
-        newMatrixNuc = nucleous/maxNuc if maxNuc > 0 else nucleous
+        newMatrixNuc = self.nucleous/maxNuc if maxNuc > 0 else self.nucleous
 
-        prevMatrixCnt = self.workflow.connects
-        prevMatrixNuc = self.workflow.nucleous
-        prevFactorCnt = self.workflow.factor
-        prevFactorNuc = self.workflow.factVb
+        oldMatrixCnt = self.workflow.connects
+        oldMatrixNuc = self.nucleous
+        oldPrevVerb  = self.prevVerb
+        oldPostVerb  = self.postVerb
+        oldFactorCnt = self.workflow.factor
+        oldFactorNuc = self.factVb
 
-        if prevMatrixCnt.max() == 0:
+        if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
             newFactorNuc = maxNuc
         else:
-            newFactorCnt = maxCnt + prevFactorCnt
-            newFactorNuc = maxNuc + prevFactorNuc
-            newMatrixCnt = (prevMatrixCnt * prevFactorCnt) + connects
-            newMatrixNuc = (prevMatrixNuc * prevFactorNuc) + nucleous
+            newFactorCnt = maxCnt + oldFactorCnt
+            newFactorNuc = maxNuc + oldFactorNuc
+            newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
+            newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + self.nucleous
+            newPrevVerb  = (oldPrevVerb * oldFactorNuc) + self.prevVerb
+            newPostVerb  = (oldPostVerb * oldFactorNuc) + self.postVerb
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0 else newMatrixCnt
             newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0 else newMatrixNuc
+            newPrevVerb  = newPrevVerb/newFactorNuc if newFactorNuc > 0 else newPrevVerb
+            newPostVerb  = newPostVerb/newFactorNuc if newFactorNuc > 0 else newPostVerb
 
         self.workflow.iterations += 1
         self.workflow.connects = newMatrixCnt
-        self.workflow.nucleous = newMatrixNuc
+        self.nucleous = newMatrixNuc
+        self.prevVerb = newPrevVerb
+        self.postVerb = newPostVerb
         self.workflow.factor = newFactorCnt
-        self.workflow.factVb = newFactorNuc
-        self.workflow.save('workflow.json')
+        self.factVb = newFactorNuc
 
-        return nucleous
+        if self.fileDb is not None:
+            self.save(self.fileDb)
+
+        return connects
 
     ####################################################################
 
@@ -150,5 +172,43 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def save(self, file):
-        pass
+    def getJson(self):
+        json = {
+            'workflow': self.workflow.getJson(),
+            'nucleous': self.nucleous.tolist(),
+            'prevVerb': self.prevVerb.tolist(),
+            'postVerb': self.postVerb.tolist(),
+            'factVb': self.factVb
+        }
+
+        return json
+
+    ####################################################################
+
+    def __str__(self):
+        return js.dumps(self.getJson(), sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
+
+    def save(self, dbFile):
+        with open(dbFile, "w") as text_file:
+            text_file.write(self.__str__())
+
+    ####################################################################
+
+    def importJSON(self, json):
+        data = js.loads(json)
+        self.workflow.importData(data['workflow'])
+        self.factVb = data['factVb']
+        self.nucleous = np.array(data['nucleous'], dtype=float)
+        self.prevVerb = np.array(data['prevVerb'], dtype=float)
+        self.postVerb = np.array(data['postVerb'], dtype=float)
+
+    ####################################################################
+
+    def load(self, dbFile):
+        self.fileDb = dbFile
+        f = open(self.fileDb, 'r')
+        json = f.read()
+        f.close()
+        self.importJSON(json)

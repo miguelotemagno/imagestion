@@ -186,12 +186,10 @@ class Graph:
                 'nodeNames': self.nodeNames,
                 'first': self.firstNode,
                 'factor': self.factor,
-                'factVb': self.factVb,
                 'iterations': self.iterations,
                 'width': self.width,
                 'height': self.height,
-                'connects': [self.connects.tolist()],
-                'nucleous': [self.nucleous.tolist()],
+                'connects': self.connects.tolist(),
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],
@@ -203,21 +201,21 @@ class Graph:
 
     def importJSON(self, json):
         data = js.loads(json)
+        self.importData(data)
+
+    ####################################################################
+
+    def importData(self, data):
         self.id = data['graph']['id']
         self.name = data['graph']['name']
         self.firstNode = data['graph']['first']
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
-        self.factVb = data['graph']['factVb']
         self.width = data['graph']['width']
         self.height = data['graph']['height']
         self.connects = np.array(data['graph']['connects'], dtype=float)
-        self.nucleous = np.array(data['graph']['nucleous'], dtype=float)
         self.nodeNames = data['graph']['nodeNames']
         self.nodes = [Node(self, id=node['id'], name=node['name'], 
                            function=self.getFunctionName(node['name']))
                            for node in data['nodes']
                      ] if len(self.nodeNames) > 0 else []
-
-        pass
-
