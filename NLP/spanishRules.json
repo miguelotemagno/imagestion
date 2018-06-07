@@ -192,7 +192,9 @@
 	},
 	
 	"_comment" : {
-  		"igp"  : "infinitivo|gerundio|participio",
+  		"inf"  : "infinitivo",
+  		"ger"  : "gerundio",
+  		"par"  : "participio",
  		"ip"   : "indicativo presente" ,
   		"ipi"  : "indicativo preterito imperfecto" ,
   		"if"   : "indicativo futuro" ,
