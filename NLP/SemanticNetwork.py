@@ -40,10 +40,25 @@ from Graph import *
 import re
 
 class SemanticNetwork:
-
+    """
+            "inf"  : "infinitivo",
+            "ger"  : "gerundio",
+            "par"  : "participio",
+            "ip"   : "indicativo presente" ,
+            "ipi"  : "indicativo preterito imperfecto" ,
+            "if"   : "indicativo futuro" ,
+            "ic"   : "indicativo condicional",
+            "ipps" : "indicativo preterito perfecto simple",
+            "i"    : "imperativo" ,
+            "sp"   : "subjuntivo presente" ,
+            "spi"  : "subjuntivo preterito imperfecto" ,
+            "spi2" : "subjuntivo preterito imperfecto 2" ,
+            "sf"   : "subjuntivo futuro"
+    """
     def __init__(self):
         self.rules = GrammarRules()
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.verbClasses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if'] ## TODO completar
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         pass
 
@@ -132,3 +147,8 @@ class SemanticNetwork:
             type = 'NOUN'
 
         return type
+
+    ####################################################################
+
+    def save(self, file):
+        pass
