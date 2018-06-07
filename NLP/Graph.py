@@ -56,9 +56,12 @@ class Graph:
 
         self.firstNode = firstNode
         self.iterations = 0
-        self.steps = 0
-        self.connects = np.zeros((n, n), dtype=int)
-        self.markovPrc = np.zeros((n, n), dtype=float)
+        self.width = len(self.nodeNames)
+        self.height = len(self.nodeNames)
+        self.factor = 0
+        self.factVb = 0
+        self.connects = np.zeros((n, n), dtype=float)
+        self.nucleous = np.zeros((n, n), dtype=float)
 
     ####################################################################
 
@@ -105,14 +108,6 @@ class Graph:
 
     ####################################################################
 
-    def importJSON(self, json):
-        data = js.loads(json)
-        self.id = data['graph']['id']
-        self.name = data['graph']['name']
-        self.firstNode = data['graph']['first']
-
-    ####################################################################
-
     def __str__(self):
         json = self.getJson()
         return js.dumps(json, sort_keys=True, indent=4, separators=(',', ': '))
@@ -129,13 +124,57 @@ class Graph:
 
     ####################################################################
 
-    def getMarkovprc(self, y, x):
-        return self.markovPrc.item((y, x))
+    def getConnectRow(self, y):
+        return self.connects[y, :]
 
     ####################################################################
 
-    def setMarkovprc(self, y, x, val):
-        self.markovPrc.itemset((y, x), val)
+    def getConnectColumn(self, x):
+        return self.connects[:, x]
+
+    ####################################################################
+
+    def getNuleous(self, y, x):
+        return self.nucleous.item((y, x))
+
+    ####################################################################
+
+    def getNucleousRow(self, y):
+        return self.nucleous[y, :]
+
+    ####################################################################
+
+    def getNucleousColumn(self, x):
+        return self.nucleous[:, x]
+
+    ####################################################################
+
+    def setNucleous(self, y, x, val):
+        self.nucleous.itemset((y, x), val)
+
+    ####################################################################
+
+    def getConnectionsNode(self, node):
+        col = self.getConnectColumn(node.id)
+        nodes = []
+
+        for i in xrange(col):
+            if col[i] > 0:
+                nodes.append(self.nodes[i])
+
+        return nodes
+
+    ####################################################################
+
+    def getEntriesNode(self, node):
+        row = self.getConnectRow(node.id)
+        nodes = []
+
+        for i in xrange(row):
+            if row[i] > 0:
+                nodes.append(self.nodes[i])
+
+        return nodes
 
     ####################################################################
 
@@ -144,14 +183,41 @@ class Graph:
             'graph': {
                 'id': self.id,
                 'name': self.name,
+                'nodeNames': self.nodeNames,
                 'first': self.firstNode,
-                'steps': self.steps,
+                'factor': self.factor,
+                'factVb': self.factVb,
                 'iterations': self.iterations,
+                'width': self.width,
+                'height': self.height,
                 'connects': [self.connects.tolist()],
-                'markovPrc': [self.markovPrc.tolist()],
+                'nucleous': [self.nucleous.tolist()],
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],
             'nodes': [node.getJson() for node in self.nodes]
         }
         return json
+
+    ####################################################################
+
+    def importJSON(self, json):
+        data = js.loads(json)
+        self.id = data['graph']['id']
+        self.name = data['graph']['name']
+        self.firstNode = data['graph']['first']
+        self.iterations = data['graph']['iterations']
+        self.factor = data['graph']['factor']
+        self.factVb = data['graph']['factVb']
+        self.width = data['graph']['width']
+        self.height = data['graph']['height']
+        self.connects = np.array(data['graph']['connects'], dtype=float)
+        self.nucleous = np.array(data['graph']['nucleous'], dtype=float)
+        self.nodeNames = data['graph']['nodeNames']
+        self.nodes = [Node(self, id=node['id'], name=node['name'], 
+                           function=self.getFunctionName(node['name']))
+                           for node in data['nodes']
+                     ] if len(self.nodeNames) > 0 else []
+
+        pass
+

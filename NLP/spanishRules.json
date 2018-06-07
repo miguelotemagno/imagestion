@@ -264,6 +264,7 @@
 		"par" :              "VBN",
 		"ipps" :             "VBD",
 		"ip" :               "VBP",
+		"ipi" :              "VBD",
 		"i" :                "VBC",
 		"if" :               "VBF",
 		"ic" :               "VBC",
