@@ -23,6 +23,9 @@ if sys.argv[1] == 'train':
             (frase, verb) = expr.group(1, 3)
             print "\n%s : [%s]" % (frase, verb)
             try:
+                tokens = s.rules.word_tokenize(frase)
+                syntax = s.rules.pos_tag(tokens, False)
+                print(syntax)
                 s.train(frase, verb)
             except ValueError:
                 print(ValueError)
