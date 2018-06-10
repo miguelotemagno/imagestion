@@ -103,11 +103,11 @@ class SemanticNetwork:
                 connects[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s] -> %s {%s %s: %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     prevVerb[y, z] += 1
                 elif nextWord == root:
-                    print "[%s,%s] -> %s {%s %s: %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[z, x] += 1
 
@@ -147,8 +147,8 @@ class SemanticNetwork:
             newFactorPsV = maxPsV + oldFactorPsV
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + nucleous
-            newPrevVerb  = (oldPrevVerb * oldFactorPrV) + self.prevVerb
-            newPostVerb  = (oldPostVerb * oldFactorPsV) + self.postVerb
+            newPrevVerb  = (oldPrevVerb * oldFactorPrV) + prevVerb
+            newPostVerb  = (oldPostVerb * oldFactorPsV) + postVerb
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0 else newMatrixCnt
             newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0 else newMatrixNuc
             newPrevVerb  = newPrevVerb/newFactorPrV if newFactorPrV > 0 else newPrevVerb
