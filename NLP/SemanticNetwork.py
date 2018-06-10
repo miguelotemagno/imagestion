@@ -83,6 +83,10 @@ class SemanticNetwork:
         length = len(tokens)
         i = 0
 
+        verb = self.rules.getVerb(root)
+        tense = self.rules.getVerbTense(verb, root)
+        z = self.verbTenses.index(tense)
+
         for token in tokens:
             i += 1
             word = token[0]
@@ -99,17 +103,11 @@ class SemanticNetwork:
                 connects[y, x] += 1
 
                 if word == root:
-                    verb = self.rules.getVerb(word)
-                    tense = self.rules.getVerbTense(verb, word)
-                    print "[%s,%s] -> %s {%s: %s}" % (type, nextType, root, verb, self.rules.rules['_comment'][tense])
-                    z = self.verbTenses.index(tense)
+                    print "[%s,%s] -> %s {%s %s: %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     prevVerb[y, z] += 1
                 elif nextWord == root:
-                    verb = self.rules.getVerb(nextWord)
-                    tense = self.rules.getVerbTense(verb, nextWord)
-                    print "[%s,%s] -> %s {%s: %s}" % (type, nextType, root, verb, self.rules.rules['_comment'][tense])
-                    z = self.verbTenses.index(tense)
+                    print "[%s,%s] -> %s {%s %s: %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[z, x] += 1
 
@@ -134,8 +132,8 @@ class SemanticNetwork:
         oldPostVerb  = self.postVerb
         oldFactorCnt = self.workflow.factor
         oldFactorNuc = self.factVerb
-        oldFactorPrv = self.factPreVerb
-        oldFactorPsv = self.factPosVerb
+        oldFactorPrV = self.factPreVerb
+        oldFactorPsV = self.factPosVerb
 
         if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
@@ -145,16 +143,16 @@ class SemanticNetwork:
         else:
             newFactorCnt = maxCnt + oldFactorCnt
             newFactorNuc = maxNuc + oldFactorNuc
-            newFactorPrV = maxPrV + oldFactorPrv
-            newFactorPsV = maxPsV + oldFactorPsv
+            newFactorPrV = maxPrV + oldFactorPrV
+            newFactorPsV = maxPsV + oldFactorPsV
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + nucleous
-            newPrevVerb  = (oldPrevVerb * oldFactorNuc) + self.prevVerb
-            newPostVerb  = (oldPostVerb * oldFactorNuc) + self.postVerb
+            newPrevVerb  = (oldPrevVerb * oldFactorPrV) + self.prevVerb
+            newPostVerb  = (oldPostVerb * oldFactorPsV) + self.postVerb
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0 else newMatrixCnt
             newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0 else newMatrixNuc
-            newPrevVerb  = newPrevVerb/newFactorNuc if newFactorNuc > 0 else newPrevVerb
-            newPostVerb  = newPostVerb/newFactorNuc if newFactorNuc > 0 else newPostVerb
+            newPrevVerb  = newPrevVerb/newFactorPrV if newFactorPrV > 0 else newPrevVerb
+            newPostVerb  = newPostVerb/newFactorPsV if newFactorPsV > 0 else newPostVerb
 
         self.workflow.iterations += 1
         self.workflow.connects = newMatrixCnt
