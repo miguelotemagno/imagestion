@@ -60,15 +60,20 @@ class SemanticNetwork:
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
+        self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
+        			  'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
-        self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)), dtype=float)
-        self.postVerb = np.zeros((len(self.verbTenses), len(self.grammarTypes)), dtype=float)
-        self.pronVerb = np.zeros((len(self.verbTenses), len(self.pronouns)), dtype=float)
+        self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
+        self.postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
+        self.pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
+        self.nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        
         self.factVerb = 0
         self.factPreVerb = 0
         self.factPosVerb = 0
         self.factPronVrb = 0
+        self.factNounVrb = 0        
         self.fileDb = None
         #self.load('semanticNet.json')
         pass
@@ -80,7 +85,8 @@ class SemanticNetwork:
         nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
         postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
-        pronVerb = np.zeros((len(self.verbTenses), len(self.pronouns)),       dtype=float)
+        pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
+        nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
 
         self.rules.setText(text)
         tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
@@ -106,18 +112,24 @@ class SemanticNetwork:
                 print "m[%s,%s]" % (type, nextType)
                 y = self.grammarTypes.index(type)
                 x = self.grammarTypes.index(nextType)
+                
                 connects[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
-                    nucleous[y, x] += 1
-                    prevVerb[y, z] += 1
-                    pronVerb[z, w] += 1
+					print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+					nucleous[y, x] += 1
+					prevVerb[y, z] += 1
+					pronVerb[z, w] += 1                    
                 elif nextWord == root:
                     print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[z, x] += 1
-
+                elif type == 'NOUN':
+					noun = self.rules.isSustantive(word)
+					noun = 'undefined' if noun is None else noun
+					v = self.nouns.index(noun)
+					nounVerb[z, v] += 1
+                    
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listNuc = np.concatenate((nucleous.sum(axis=1), nucleous.sum(axis=0)), axis=0)
         listPsV = np.concatenate((postVerb.sum(axis=1), postVerb.sum(axis=0)), axis=0)
@@ -155,22 +167,22 @@ class SemanticNetwork:
             newFactorPsV = maxPsV
             newFactPrnVrb = maxPrn
         else:
-            newFactorCnt = maxCnt + oldFactorCnt
-            newFactorNuc = maxNuc + oldFactorNuc
-            newFactorPrV = maxPrV + oldFactorPrV
-            newFactorPsV = maxPsV + oldFactorPsV
+            newFactorCnt  = maxCnt + oldFactorCnt
+            newFactorNuc  = maxNuc + oldFactorNuc
+            newFactorPrV  = maxPrV + oldFactorPrV
+            newFactorPsV  = maxPsV + oldFactorPsV
             newFactPrnVrb = maxPrn + oldFactPrnVrb
 
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + nucleous
-            newPrevVerb  = (oldPrevVerb * oldFactorPrV) + prevVerb
-            newPostVerb  = (oldPostVerb * oldFactorPsV) + postVerb
+            newPrevVerb  = (oldPrevVerb * oldFactorPrV)  + prevVerb
+            newPostVerb  = (oldPostVerb * oldFactorPsV)  + postVerb
             newPronVerb  = (oldPronVerb * oldFactPrnVrb) + pronVerb
 
-            newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0 else newMatrixCnt
-            newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0 else newMatrixNuc
-            newPrevVerb  = newPrevVerb/newFactorPrV if newFactorPrV > 0 else newPrevVerb
-            newPostVerb  = newPostVerb/newFactorPsV if newFactorPsV > 0 else newPostVerb
+            newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0  else newMatrixCnt
+            newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0  else newMatrixNuc
+            newPrevVerb  = newPrevVerb/newFactorPrV  if newFactorPrV > 0  else newPrevVerb
+            newPostVerb  = newPostVerb/newFactorPsV  if newFactorPsV > 0  else newPostVerb
             newPronVerb  = newPronVerb/newFactPrnVrb if newFactPrnVrb > 0 else newPronVerb
 
         self.workflow.iterations += 1
@@ -188,7 +200,7 @@ class SemanticNetwork:
         if self.fileDb is not None:
             self.save(self.fileDb)
 
-        return connects
+        return nounVerb
 
     ####################################################################
 
@@ -214,15 +226,17 @@ class SemanticNetwork:
 
     def getJson(self):
         json = {
-            'workflow': self.workflow.getJson(),
-            'nucleous': self.nucleous.tolist(),
-            'prevVerb': self.prevVerb.tolist(),
-            'postVerb': self.postVerb.tolist(),
-            'pronVerb': self.pronVerb.tolist(),
-            'factVerb': self.factVerb,
-            'factPreVerb': self.factPreVerb,
-            'factPosVerb': self.factPosVerb,
-            'factPronVrb': self.factPronVrb
+			'workflow': self.workflow.getJson(),
+			'nucleous': self.nucleous.tolist(),
+			'prevVerb': self.prevVerb.tolist(),
+			'postVerb': self.postVerb.tolist(),
+			'pronVerb': self.pronVerb.tolist(),
+			'nounVerb': self.nounVerb.tolist(),            
+			'factVerb': self.factVerb,
+			'factPreVerb': self.factPreVerb,
+			'factPosVerb': self.factPosVerb,
+			'factPronVrb': self.factPronVrb,
+			'factNounVrb': self.factNounVrb            
         }
 
         return json
@@ -241,16 +255,18 @@ class SemanticNetwork:
     ####################################################################
 
     def importJSON(self, json):
-        data = js.loads(json)
-        self.workflow.importData(data['workflow'])
-        self.factVerb = data['factVerb']
-        self.factPreVerb = data['factPreVerb']
-        self.factPosVerb = data['factPosVerb']
-        self.factPronVrb = data['factPronVrb']
-        self.nucleous = np.array(data['nucleous'], dtype=float)
-        self.prevVerb = np.array(data['prevVerb'], dtype=float)
-        self.postVerb = np.array(data['postVerb'], dtype=float)
-        self.pronVerb = np.array(data['pronVerb'], dtype=float)
+		data = js.loads(json)
+		self.workflow.importData(data['workflow'])
+		self.factVerb = data['factVerb']
+		self.factPreVerb = data['factPreVerb']
+		self.factPosVerb = data['factPosVerb']
+		self.factPronVrb = data['factPronVrb']
+		self.factNounVrb = data['factNounVrb']        
+		self.nucleous = np.array(data['nucleous'], dtype=float)
+		self.prevVerb = np.array(data['prevVerb'], dtype=float)
+		self.postVerb = np.array(data['postVerb'], dtype=float)
+		self.pronVerb = np.array(data['pronVerb'], dtype=float)
+		self.nounVerb = np.array(data['nounVerb'], dtype=float)        
 
     ####################################################################
 
