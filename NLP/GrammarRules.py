@@ -329,5 +329,12 @@ class GrammarRules:
 
 	##########################################################################
 
+	def getSyntax(self, text):
+		tokens = self.word_tokenize(text)
+		syntax = self.pos_tag(tokens, False)
+		return syntax
+
+	##########################################################################
+
 	def getCorpus(self, text):
 		pass

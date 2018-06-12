@@ -106,11 +106,11 @@
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
 			"paz|guerra|amor|odio|hola|adios",
-			"\\w+(eza|ismo|[td]ad|anza|[sftln]o[fgrm]ia|miento|aje)"
+			"\\w+(eza|ismo|[td]ad|anza|[sftln]o[fgrm]ia|miento|aje|tica|rrota)"
 		],
-		"sustColectivo" : ["cardumen(es)?|piara|banda(da)?|ejercito|biblioteca|jauria"],
+		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria)[s]?"],
         "sustAll" : [
-            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez|rrota)",
+            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez|ado[s]?)",
             "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
         ]
     },
@@ -1655,7 +1655,7 @@
 			"inf"  : "haber",
 			"ger"  : "habiendo",
 			"par"  : "habido",
-			"ip"   : "h(e(mos)?|a(y|[sn]|be(mos|is)))",
+			"ip"   : "h(e(mos)?|a(y|[sn]|be(mos|is))?)",
 			"ipi"  : "habia([sn]|mos|is)?",
 			"if"   : "habr(e(mos|is)?|a[sn]?)",
 			"ic"   : "habria([sn]|mos|is)?",
@@ -1690,7 +1690,7 @@
 			"tu"    : "h(ervias|erviras|ervirias|erviste|iervas|ierve|ierves|irvieras|irvieres|irvieses)",
 			"el_la" : "h(ervia|ervira|erviria|ierva|ierve|irviera|irviere|irviese|irvio)",
 			"nos"   : "h(erviamos|ervimos|erviremos|erviriamos|irvamos|irvieramos|irvieremos|irviesemos)",
-			"uds"   : "h(erviais|ervid|ervireis|erviriais|ervis|ervisteis|irvais|irvierais|irviereis|irvieseis)",
+			"uds"   : "h(erviais|ervid|(ervire|erviria|erv|erviste|irva|irviera|irviere|irviese)is)",
 			"ellos" : "h(ervian|erviran|ervirian|iervan|ierven|irvieran|irvieren|irvieron|irviesen)"
 		},
 		"hablar" : {
@@ -2121,6 +2121,27 @@
 			"nos"   : "malogr(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "malogr(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "malogr(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"mejorar" : {
+			"inf"   : "mejorar",
+			"ger"   : "mejorando",
+			"par"   : "mejorado",
+			"ip"    : "mejoro|mejora(is|mos|n|s)?",
+			"ipi"   : "mejoraba(is|mos|n|s)?",
+			"if"    : "mejorare|mejorareis|mejoraremos|mejorara(n|s)?",
+			"ic"    : "mejoraria(is|mos|n|s)?",
+			"ipps"  : "mejor(amos|aron|aste|asteis|e|o)",
+			"i"     : "mejora|mejorad|mejore(mos|n)?",
+			"sp"    : "mejore(is|mos|n|s)?",
+			"spi"   : "mejorara(is|mos|n|s)?",
+			"spi2"  : "mejorase(is|mos|n|s)?",
+			"sf"    : "mejorare(is|mos|n|s)?",
+			"yo"    : "mejor(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "mejores|mejora(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "mejore|mejoro|mejora(ba|ra|re|ria|se)?",
+			"nos"   : "mejor(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "mejor(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "mejor(aban|an|aran|aren|arian|aron|asen|en)"
 		}
 	},
 	"n" : {
@@ -2635,6 +2656,27 @@
 			"nos"   : "redact(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "redact(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "redact(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"resultar" : {
+			"inf"   : "resultar",
+			"ger"   : "resultando",
+			"par"   : "resultado",
+			"ip"    : "result(a)",
+			"ipi"   : "resultab(a)",
+			"if"    : "resultar(a)",
+			"ic"    : "resultari(a)",
+			"ipps"  : "result(o)",
+			"i"     : "",
+			"sp"    : "result(e)",
+			"spi"   : "resultar(a)",
+			"spi2"  : "resultas(e)",
+			"sf"    : "resultar(e)",
+			"yo"    : "",
+			"tu"    : "",
+			"el_la" : "resulte|resulto|resulta(ba|ra|re|ria|se)?",
+			"nos"   : "",
+			"uds"   : "",
+			"ellos" : ""
 		}
 	},
 	"s" : {
