@@ -59,9 +59,9 @@ class Graph:
         self.width = len(self.nodeNames)
         self.height = len(self.nodeNames)
         self.factor = 0
-        self.factVb = 0
+        self.factFinnish = 0
         self.connects = np.zeros((n, n), dtype=float)
-        self.nucleous = np.zeros((n, n), dtype=float)
+        self.finnish = np.zeros((n, n), dtype=float)
 
     ####################################################################
 
@@ -134,23 +134,23 @@ class Graph:
 
     ####################################################################
 
-    def getNuleous(self, y, x):
-        return self.nucleous.item((y, x))
+    def getFinnish(self, y, x):
+        return self.finnish.item((y, x))
 
     ####################################################################
 
-    def getNucleousRow(self, y):
-        return self.nucleous[y, :]
+    def getFinnishRow(self, y):
+        return self.finnish[y, :]
 
     ####################################################################
 
-    def getNucleousColumn(self, x):
-        return self.nucleous[:, x]
+    def getFinnishColumn(self, x):
+        return self.finnish[:, x]
 
     ####################################################################
 
-    def setNucleous(self, y, x, val):
-        self.nucleous.itemset((y, x), val)
+    def setFinnish(self, y, x, val):
+        self.finnish.itemset((y, x), val)
 
     ####################################################################
 
@@ -186,10 +186,12 @@ class Graph:
                 'nodeNames': self.nodeNames,
                 'first': self.firstNode,
                 'factor': self.factor,
+                'factorFinnish': self.factFinnish,
                 'iterations': self.iterations,
                 'width': self.width,
                 'height': self.height,
                 'connects': self.connects.tolist(),
+                'finnish': self.finnish.tolist(),
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],
@@ -211,9 +213,11 @@ class Graph:
         self.firstNode = data['graph']['first']
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
+        self.factFinnish = data['graph']['factorFinnish']
         self.width = data['graph']['width']
         self.height = data['graph']['height']
         self.connects = np.array(data['graph']['connects'], dtype=float)
+        self.finnish = np.array(data['graph']['finnish'], dtype=float)
         self.nodeNames = data['graph']['nodeNames']
         self.nodes = [Node(self, id=node['id'], name=node['name'], 
                            function=self.getFunctionName(node['name']))
