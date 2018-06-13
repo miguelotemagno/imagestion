@@ -14,14 +14,14 @@ if sys.argv[1] == 'train':
 
     s.load(dbFile)
     text = sp.check_output(['sh', "%s/%s" % (s.rules.path, s.rules.fromFile), train])
-    patterns = re.compile('((\w+|[ ,.:?()])+)\s+\((\w+)\)')
+    patterns = re.compile('((\w+|[ ,.;?()])+\S)\s+\((\w+)\)')
     list = text.split("\n")
 
     for line in list:
         expr = patterns.search(line)
         if expr:
             (frase, verb) = expr.group(1, 3)
-            print "\n%s : [%s]" % (frase, verb)
+            print "\n%s => [%s]" % (frase, verb)
             try:
                 tokens = s.rules.word_tokenize(frase)
                 syntax = s.rules.pos_tag(tokens, False)

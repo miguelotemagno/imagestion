@@ -99,6 +99,8 @@ class SemanticNetwork:
         pron = self.rules.getVerbPron(verb, root)
         z = self.verbTenses.index(tense)
         w = self.pronouns.index(pron)
+        prevType = None
+        lastType = None
 
         for token in tokens:
             i += 1
@@ -113,7 +115,9 @@ class SemanticNetwork:
                 print "m[%s,%s]" % (type, nextType)
                 y = self.grammarTypes.index(type)
                 x = self.grammarTypes.index(nextType)
-                
+                prevType = type
+                lastType = nextType
+
                 connects[y, x] += 1
 
                 if word == root:
@@ -129,9 +133,15 @@ class SemanticNetwork:
                     noun = self.rules.isSustantive(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.nouns.index(noun)
-                    print "[%s,%s][%d,%d] -> %s {%s: %s %s}" % (tense, type, z, v, root, verb, self.rules.rules['_comment'][tense], noun)
+                    print "[%s,%s][%d,%d] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
                     nounVerb[z, v] += 1
-                    
+
+        #print "[%s,%s]" % (prevType,lastType)
+        if prevType is not None and lastType is not None:
+            y = self.grammarTypes.index(prevType)
+            x = self.grammarTypes.index(lastType)
+            finnish[y, x] += 1
+
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
         listNuc = np.concatenate((nucleous.sum(axis=1), nucleous.sum(axis=0)), axis=0)
@@ -223,7 +233,7 @@ class SemanticNetwork:
         if self.fileDb is not None:
             self.save(self.fileDb)
 
-        return nounVerb
+        return finnish
 
     ####################################################################
 

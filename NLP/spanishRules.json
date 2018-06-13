@@ -95,7 +95,7 @@
 			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz|mbra|ista[s]?)",
 			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
 			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?",
-			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret)ari)[oa][s]?"
+			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret|expedicion|di)ari)[oa][s]?"
 		],
 		"sustCompuesto" : [
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
@@ -1903,6 +1903,27 @@
 			"nos"   : "inform(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "inform(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "inform(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"iniciar"  : {
+			"inf"   : "iniciar",
+			"ger"   : "iniciando",
+			"par"   : "iniciado",
+			"ip"    : "inicio|inicia(is|mos|n|s)?",
+			"ipi"   : "iniciaba(is|mos|n|s)?",
+			"if"    : "iniciar(a|an|as|e|eis|emos)",
+			"ic"    : "iniciaria(is|mos|n|s)?",
+			"ipps"  : "inici(amos|aron|aste|asteis|e|o)",
+			"i"     : "inicia|iniciad|inicie(mos|n)?",
+			"sp"    : "inicie(is|mos|n|s)?",
+			"spi"   : "iniciara(is|mos|n|s)?",
+			"spi2"  : "iniciase(is|mos|n|s)?",
+			"sf"    : "iniciare(is|mos|n|s)?",
+			"yo"    : "inici(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "inicies|inicia(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "inicie|inicio|inicia(ba|ra|re|ria|se)?",
+			"nos"   : "inici(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "inici(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "inici(aban|an|aran|aren|arian|aron|asen|en)"
 		}
 	},
 	"j" : {
@@ -2463,6 +2484,27 @@
 			"nos"   : "pref(eriamos|erimos|eriremos|eririamos|iramos|irieramos|irieremos|iriesemos)",
 			"uds"   : "pref(eriais|erid|erireis|eririais|eris|eristeis|irais|irierais|iriereis|irieseis)",
 			"ellos" : "pref(erian|eriran|eririan|ieran|ieren|irieran|irieren|irieron|iriesen)"
+		},
+		"publicar" : {
+			"inf"   : "publicar",
+			"ger"   : "publicando",
+			"par"   : "publicado",
+			"ip"    : "publico|publica(is|mos|n|s)?",
+			"ipi"   : "publicaba(is|mos|n|s)?",
+			"if"    : "publicare|publicareis|publicaremos|publicara(n|s)?",
+			"ic"    : "publicaria(is|mos|n|s)?",
+			"ipps"  : "publi(camos|caron|caste|casteis|co|que)",
+			"i"     : "publica|publicad|publique(mos|n)?",
+			"sp"    : "publique(is|mos|n|s)?",
+			"spi"   : "publicara(is|mos|n|s)?",
+			"spi2"  : "publicase(is|mos|n|s)?",
+			"sf"    : "publicare(is|mos|n|s)?",
+			"yo"    : "publi(caba|cara|care|caria|case|co|que)",
+			"tu"    : "publiques|publica(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "publico|publique|publica(ba|ra|re|ria|se)?",
+			"nos"   : "publi(cabamos|camos|caramos|caremos|cariamos|casemos|quemos)",
+			"uds"   : "publi(cabais|cad|cais|carais|careis|cariais|caseis|casteis|queis)",
+			"ellos" : "publi(caban|can|caran|caren|carian|caron|casen|quen)"
 		}
 	},
 	"q" : {

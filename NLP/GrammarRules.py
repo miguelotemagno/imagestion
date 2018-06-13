@@ -323,7 +323,8 @@ class GrammarRules:
 			if len(tags) > 0:
 				type = '|'.join(tags)
 
-			list.append((token, type))
+			if token is not None and token != '':
+				list.append((token, type))
 
 		return list
 
