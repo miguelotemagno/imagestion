@@ -338,10 +338,30 @@ class SemanticNetwork:
             'predicate': []
         }
 
+        lenght = len(tokens)
+        instances = []
+        limit = 10
+        prev = None
+        post = None
+        i = 0
+
         for token in tokens:
             # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
             #      y abrir mas de una instancia de proceso en caso de que un patron de inicio se detecte y descartar el
             #      resto cuando una instancia respete un flujo completo. Construir estructura y retornarla.
-            pass
+            post = token[1]
+            word = token[0]
+
+            if i > 0:
+                prev = self.validType(prev, post)
+                post = self.validType(post, tokens[i+1][1] if i+1 < lenght else None)
+                y = self.grammarTypes.index(post)
+                x = self.grammarTypes.index(prev)
+
+                if self.workflow.getConnection(y,x) > 0:
+                    pass
+
+            i += 1
+            prev = post
 
         return struct
