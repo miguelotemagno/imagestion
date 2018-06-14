@@ -309,3 +309,39 @@ class SemanticNetwork:
         json = f.read()
         f.close()
         self.importJSON(json)
+
+    ####################################################################
+
+    def analize(self, text):
+        expr = re.compile(r'(.+[.])')
+        list = expr.findall(text)
+        out = []
+
+        if len(list) > 0:
+            for txt in list:
+                tokens = self.rules.getSyntax(txt)
+                struct = self.getSyntaxStruct(tokens)
+                out.append(struct)
+        else:
+            tokens = self.rules.getSyntax(text)
+            struct = self.getSyntaxStruct(tokens)
+            out.append(struct)
+
+        return out
+
+    ####################################################################
+
+    def getSyntaxStruct(self, tokens):
+        struct = {
+            'root': '',
+            'subject': [],
+            'predicate': []
+        }
+
+        for token in tokens:
+            # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
+            #      y abrir mas de una instancia de proceso en caso de que un patron de inicio se detecte y descartar el
+            #      resto cuando una instancia respete un flujo completo. Construir estructura y retornarla.
+            pass
+
+        return struct

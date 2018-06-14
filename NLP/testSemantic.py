@@ -31,5 +31,23 @@ if sys.argv[1] == 'train':
                 print(ValueError)
                 continue
 
+if sys.argv[1] == 'web':
+    url = 'https://raw.githubusercontent.com/miguelotemagno/imagestion/imagestion_1.0/NLP/grammarTest.txt'
+    if sys.argv[2] != '':
+        url = sys.argv[2]
+
+    s.rules.loadFromWeb(url)
+    print s.rules.text
+    list = s.analize(s.rules.text)
+    print list
+
+if sys.argv[1] == 'file':
+    file = "grammarTest.txt"
+    if sys.argv[2] != '':
+        file = sys.argv[2]
+
+    s.rules.loadFromFile(file)
+    list = s.analize(s.rules.text)
+    print list
 
 
