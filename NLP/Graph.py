@@ -58,10 +58,12 @@ class Graph:
         self.iterations = 0
         self.width = len(self.nodeNames)
         self.height = len(self.nodeNames)
-        self.factor = 0
-        self.factFinnish = 0
         self.connects = np.zeros((n, n), dtype=float)
+        self.factor = 0
         self.finnish = np.zeros((n, n), dtype=float)
+        self.factFinnish = 0
+        self.start = np.zeros((n, n), dtype=float)
+        self.factStart = 0
 
     ####################################################################
 
@@ -85,7 +87,7 @@ class Graph:
 
     ####################################################################
 
-    def start(self, type):
+    def isStart(self, type):
         idx = self.getIndexof(type)
         node = self.nodes[self.firstNode] if idx is not None else None
         return node.isMyself(type) if node is not None else None
@@ -131,6 +133,26 @@ class Graph:
 
     def getConnectColumn(self, x):
         return self.connects[:, x]
+
+    ####################################################################
+
+    def getStart(self, y, x):
+        return self.start.item((y, x))
+
+    ####################################################################
+
+    def setStart(self, y, x, val):
+        self.start.itemset((y, x), val)
+
+    ####################################################################
+
+    def getStartRow(self, y):
+        return self.start[y, :]
+
+    ####################################################################
+
+    def getStartColumn(self, x):
+        return self.start[:, x]
 
     ####################################################################
 
@@ -187,11 +209,13 @@ class Graph:
                 'first': self.firstNode,
                 'factor': self.factor,
                 'factorFinnish': self.factFinnish,
+                'factorStart': self.factStart,
                 'iterations': self.iterations,
                 'width': self.width,
                 'height': self.height,
                 'connects': self.connects.tolist(),
                 'finnish': self.finnish.tolist(),
+                'start': self.start.tolist(),
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],
@@ -214,10 +238,12 @@ class Graph:
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
         self.factFinnish = data['graph']['factorFinnish']
+        self.factStart = data['graph']['factorStart']
         self.width = data['graph']['width']
         self.height = data['graph']['height']
         self.connects = np.array(data['graph']['connects'], dtype=float)
         self.finnish = np.array(data['graph']['finnish'], dtype=float)
+        self.start = np.array(data['graph']['start'], dtype=float)
         self.nodeNames = data['graph']['nodeNames']
         self.nodes = [Node(self, id=node['id'], name=node['name'], 
                            function=self.getFunctionName(node['name']))

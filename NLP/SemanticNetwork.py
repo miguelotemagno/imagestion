@@ -83,6 +83,7 @@ class SemanticNetwork:
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         finnish  = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        start    = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
         postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
@@ -120,6 +121,9 @@ class SemanticNetwork:
 
                 connects[y, x] += 1
 
+                if i == 2:
+                    start[y, x] += 1
+
                 if word == root:
                     print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
@@ -144,6 +148,7 @@ class SemanticNetwork:
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
+        listStr = np.concatenate((start.sum(axis=1),    start.sum(axis=0)),    axis=0)
         listNuc = np.concatenate((nucleous.sum(axis=1), nucleous.sum(axis=0)), axis=0)
         listPsV = np.concatenate((postVerb.sum(axis=1), postVerb.sum(axis=0)), axis=0)
         listPrV = np.concatenate((prevVerb.sum(axis=1), prevVerb.sum(axis=0)), axis=0)
@@ -152,6 +157,7 @@ class SemanticNetwork:
 
         maxCnt = listCnt.max()
         maxFin = listFin.max()
+        maxStr = listStr.max()
         maxNuc = listNuc.max()
         maxPsV = listPsV.max()
         maxPrV = listPrV.max()
@@ -159,7 +165,8 @@ class SemanticNetwork:
         maxNnV = listNnV.max()
 
         newMatrixCnt = connects/maxCnt if maxCnt > 0 else connects
-        newMatrixFin = finnish/maxFin if maxFin > 0 else finnish
+        newMatrixFin = finnish/maxFin  if maxFin > 0 else finnish
+        newMatrixStr = start/maxStr    if maxStr > 0 else start
         newMatrixNuc = nucleous/maxNuc if maxNuc > 0 else nucleous
         newPrevVerb  = prevVerb/maxPrV if maxPrV > 0 else prevVerb
         newPostVerb  = postVerb/maxPsV if maxPsV > 0 else postVerb
@@ -168,13 +175,16 @@ class SemanticNetwork:
 
         oldMatrixCnt = self.workflow.connects
         oldMatrixFin = self.workflow.finnish
+        oldMatrixStr = self.workflow.start
         oldMatrixNuc = self.nucleous
         oldPrevVerb  = self.prevVerb
         oldPostVerb  = self.postVerb
         oldPronVerb  = self.pronVerb
+
         oldNounVerb  = self.nounVerb
         oldFactorCnt = self.workflow.factor
         oldFactorFin = self.workflow.factFinnish
+        oldFactorStr = self.workflow.factStart
         oldFactorNuc = self.factVerb
         oldFactorPrV = self.factPreVerb
         oldFactorPsV = self.factPosVerb
@@ -184,6 +194,7 @@ class SemanticNetwork:
         if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
             newFactorFin = maxFin
+            newFactorStr = maxStr
             newFactorNuc = maxNuc
             newFactorPrV = maxPrV
             newFactorPsV = maxPsV
@@ -192,6 +203,7 @@ class SemanticNetwork:
         else:
             newFactorCnt  = maxCnt + oldFactorCnt
             newFactorFin  = maxFin + oldFactorFin
+            newFactorStr  = maxFin + oldFactorStr
             newFactorNuc  = maxNuc + oldFactorNuc
             newFactorPrV  = maxPrV + oldFactorPrV
             newFactorPsV  = maxPsV + oldFactorPsV
@@ -200,6 +212,7 @@ class SemanticNetwork:
 
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixFin = (oldMatrixFin * oldFactorFin) + finnish
+            newMatrixStr = (oldMatrixStr * oldFactorStr) + start
             newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + nucleous
             newPrevVerb  = (oldPrevVerb * oldFactorPrV)  + prevVerb
             newPostVerb  = (oldPostVerb * oldFactorPsV)  + postVerb
@@ -208,6 +221,7 @@ class SemanticNetwork:
 
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0  else newMatrixCnt
             newMatrixFin = newMatrixFin/newFactorFin if newFactorFin > 0  else newMatrixFin
+            newMatrixStr = newMatrixStr/newFactorStr if newFactorStr > 0  else newMatrixStr
             newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0  else newMatrixNuc
             newPrevVerb  = newPrevVerb/newFactorPrV  if newFactorPrV > 0  else newPrevVerb
             newPostVerb  = newPostVerb/newFactorPsV  if newFactorPsV > 0  else newPostVerb
@@ -217,6 +231,7 @@ class SemanticNetwork:
         self.workflow.iterations += 1
         self.workflow.connects = newMatrixCnt
         self.workflow.finnish = newMatrixFin
+        self.workflow.start = newMatrixStr
         self.nucleous = newMatrixNuc
         self.prevVerb = newPrevVerb
         self.postVerb = newPostVerb
@@ -224,6 +239,7 @@ class SemanticNetwork:
         self.nounVerb = newNounVerb
         self.workflow.factor = newFactorCnt
         self.workflow.factFinnish = newFactorFin
+        self.workflow.factStart = newFactorStr
         self.factVerb = newFactorNuc
         self.factPreVerb = newFactorPrV
         self.factPosVerb = newFactorPsV
@@ -358,7 +374,10 @@ class SemanticNetwork:
                 y = self.grammarTypes.index(post)
                 x = self.grammarTypes.index(prev)
 
-                if self.workflow.getConnection(y,x) > 0:
+                if self.workflow.getStart(y,x) > 0:
+                    newGraph = Graph()
+                    newGraph.importJSON(self.workflow.getJson())
+                    instances.append(newGraph)
                     pass
 
             i += 1
