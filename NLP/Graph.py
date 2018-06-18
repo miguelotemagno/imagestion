@@ -64,6 +64,8 @@ class Graph:
         self.factFinnish = 0
         self.start = np.zeros((n, n), dtype=float)
         self.factStart = 0
+        self.flow = []
+        self.data = None
 
     ####################################################################
 
@@ -87,10 +89,61 @@ class Graph:
 
     ####################################################################
 
-    def isStart(self, type):
-        idx = self.getIndexof(type)
-        node = self.nodes[self.firstNode] if idx is not None else None
-        return node.isMyself(type) if node is not None else None
+    def goStart(self):
+        node = self.nodes[self.firstNode]
+        return node
+
+    ####################################################################
+
+    def isStart(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.start[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isNext(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.connects[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isFinnish(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.finnish[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def reset(self):
+        self.flow = []
+        self.data = None
+
+    ####################################################################
+
+    def setInit(self, type):
+        self.flow = [type]
+
+    ####################################################################
+
+    def setNext(self, type):
+        self.flow.append(type)
 
     ####################################################################
 

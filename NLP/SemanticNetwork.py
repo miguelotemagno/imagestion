@@ -359,6 +359,7 @@ class SemanticNetwork:
         limit = 10
         prev = None
         post = None
+        prevToken = None
         i = 0
 
         for token in tokens:
@@ -371,16 +372,40 @@ class SemanticNetwork:
             if i > 0:
                 prev = self.validType(prev, post)
                 post = self.validType(post, tokens[i+1][1] if i+1 < lenght else None)
-                y = self.grammarTypes.index(post)
-                x = self.grammarTypes.index(prev)
 
-                if self.workflow.getStart(y,x) > 0:
+                if self.workflow.isStart(prev, post) and limit > 0:
                     newGraph = Graph()
                     newGraph.importJSON(self.workflow.getJson())
+                    newGraph.setInit(prev)
+                    newGraph.data = {
+                        'root': '',
+                        'subject': [prevToken],
+                        'predicate': []
+                    }
                     instances.append(newGraph)
-                    pass
+                    limit -= 1
+
+                for flow in instances:
+                    if flow.isNext(prev, post):
+                        flow.setNext(post)
+                        flow.data['subject'].append(token)
+                        if flow.isFinnish(prev, post):
+                            # TODO completar esta parte cuando se cumpla final de ciclo
+                            pass
+                    else:
+                        flow.reset()
+                        if flow.isStart(prev, post):
+                            flow.setInit(prev)
+                            flow.setNext(post)
+                            flow.data = {
+                                'root': '',
+                                'subject': [prevToken, token],
+                                'predicate': []
+                            }
+
 
             i += 1
             prev = post
+            prevToken = token
 
         return struct
