@@ -85,7 +85,7 @@
             "\\w+(([^na]d[oa]|ble|[ea]nte|[aei]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
         ]
     },
-    "sustantive" : {
+    "noun" : {
 		"sustPropio" : [
 			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|or|d[oa])",
 			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a",

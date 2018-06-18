@@ -108,8 +108,8 @@ class GrammarRules:
 
 	####################################################################
 	
-	def isSustantive(self, text):
-		for type, list in self.rules['sustantive'].iteritems():
+	def isNoun(self, text):
+		for type, list in self.rules['noun'].iteritems():
 			expr = '^(' + '|'.join(list) + ')$'
 			eval = re.compile(expr)
 			if eval.match(text):
@@ -300,7 +300,7 @@ class GrammarRules:
 				prep = self.getNltkType(prep) if simple is not None else prep
 				tags.append(self.getNltkType(prep))
 
-			sust = self.isSustantive(token)
+			sust = self.isNoun(token)
 			if sust is not None:
 				sust = self.getNltkType(sust) if simple is not None else sust
 				tags.append(self.getNltkType(sust))

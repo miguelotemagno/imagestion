@@ -134,7 +134,7 @@ class SemanticNetwork:
                     nucleous[y, x] += 1
                     postVerb[z, x] += 1
                 elif type == 'NOUN':
-                    noun = self.rules.isSustantive(word)
+                    noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.nouns.index(noun)
                     print "[%s,%s][%d,%d] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
@@ -262,8 +262,8 @@ class SemanticNetwork:
                 type = 'DET'
             elif nextType == 'NOUN' and 'PREP' in type:
                 type = 'PREP'
-            elif nextType == 'NOUN' and 'PREP' in type:
-                type = 'PREP'
+            # elif nextType == 'NOUN' and 'PREP' in type:
+            #     type = 'PREP'
             else:
                 type = re.sub('([|]\w+)+', '', type)
         elif '??' in type:
@@ -347,6 +347,18 @@ class SemanticNetwork:
 
     ####################################################################
 
+    def isNucleous(self, typePrev, typeNext):
+        y = self.workflow.getIndexof(typePrev)
+        x = self.workflow.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.nucleous[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
     def getSyntaxStruct(self, tokens):
         struct = {
             'root': '',
@@ -370,8 +382,9 @@ class SemanticNetwork:
             word = token[0]
 
             if i > 0:
+                beyond = tokens[i+1][1] if i+1 < lenght else None
                 prev = self.validType(prev, post)
-                post = self.validType(post, tokens[i+1][1] if i+1 < lenght else None)
+                post = self.validType(post, beyond)
 
                 if self.workflow.isStart(prev, post) and limit > 0:
                     newGraph = Graph()
@@ -389,7 +402,16 @@ class SemanticNetwork:
                     if flow.isNext(prev, post):
                         flow.setNext(post)
                         flow.data['subject'].append(token)
-                        if flow.isFinnish(prev, post):
+                        if self.isNucleous(prev, post):
+                            verb = self.rules.getVerb(word)
+                            if verb is not None:
+                                tense = self.rules.getVerbTense(verb, word)
+                                pron = self.rules.getVerbPron(verb, word)
+                                z = self.verbTenses.index(tense)
+                                w = self.pronouns.index(pron)
+                                # TODO completar esta parte cuando se encuentre el verbo nucleo
+
+                        elif flow.isFinnish(prev, post):
                             # TODO completar esta parte cuando se cumpla final de ciclo
                             pass
                     else:
