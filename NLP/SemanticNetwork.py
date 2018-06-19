@@ -359,13 +359,42 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def getSyntaxStruct(self, tokens):
-        struct = {
-            'root': '',
-            'subject': [],
-            'predicate': []
-        }
+    def isPreVerb(self, typePrev, typeNext):
+        y = self.workflow.getIndexof(typePrev)
+        x = self.getIndexof(typeNext, self.verbTenses)
 
+        if x is not None and y is not None:
+            if self.prevVerb[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isPostVerb(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev, self.verbTenses)
+        x = self.workflow.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.postVerb[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def getIndexof(self, type, arr):
+        try:
+            idx = arr.index(type)
+        except ValueError:
+            idx = None
+
+        return idx
+
+    ####################################################################
+
+    def getSyntaxStruct(self, tokens):
+        structs = []
         lenght = len(tokens)
         instances = []
         limit = 10
@@ -402,18 +431,20 @@ class SemanticNetwork:
                     if flow.isNext(prev, post):
                         flow.setNext(post)
                         flow.data['subject'].append(token)
-                        if self.isNucleous(prev, post):
+                        if self.isNucleous(prev, post) and self.isNucleous(post, beyond):
                             verb = self.rules.getVerb(word)
                             if verb is not None:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
-                                z = self.verbTenses.index(tense)
-                                w = self.pronouns.index(pron)
-                                # TODO completar esta parte cuando se encuentre el verbo nucleo
-
+                                # TODO agregar condiciones de noun x verb para identificar el nucleo
+                                if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                    flow.data['root'] = word
+                            pass
                         elif flow.isFinnish(prev, post):
                             # TODO completar esta parte cuando se cumpla final de ciclo
-                            pass
+                            if flow.data['root'] != '':
+                                structs.append(flow.data)
+                        pass
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
@@ -424,10 +455,9 @@ class SemanticNetwork:
                                 'subject': [prevToken, token],
                                 'predicate': []
                             }
-
-
+                pass
             i += 1
             prev = post
             prevToken = token
 
-        return struct
+        return structs
