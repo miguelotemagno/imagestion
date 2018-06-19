@@ -417,7 +417,7 @@ class SemanticNetwork:
 
                 if self.workflow.isStart(prev, post) and limit > 0:
                     newGraph = Graph()
-                    newGraph.importJSON(self.workflow.getJson())
+                    newGraph.importData(self.workflow.getJson())
                     newGraph.setInit(prev)
                     newGraph.data = {
                         'root': '',
@@ -430,21 +430,26 @@ class SemanticNetwork:
                 for flow in instances:
                     if flow.isNext(prev, post):
                         flow.setNext(post)
-                        flow.data['subject'].append(token)
+                        if flow.data is not None:
+                            if flow.data['root'] == '':
+                                flow.data['subject'].append(token)
+                            else:
+                                flow.data['predicate'].append(token)
+
                         if self.isNucleous(prev, post) and self.isNucleous(post, beyond):
                             verb = self.rules.getVerb(word)
                             if verb is not None:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
+
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
-                                    flow.data['root'] = word
+                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                flow.data['root'] = word
                             pass
                         elif flow.isFinnish(prev, post):
-                            # TODO completar esta parte cuando se cumpla final de ciclo
-                            if flow.data['root'] != '':
+                            if flow.data is not None and flow.data['root'] != '':
                                 structs.append(flow.data)
-                        pass
+                            flow.reset()
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
@@ -455,6 +460,7 @@ class SemanticNetwork:
                                 'subject': [prevToken, token],
                                 'predicate': []
                             }
+                    pass
                 pass
             i += 1
             prev = post

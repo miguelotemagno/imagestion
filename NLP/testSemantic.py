@@ -4,10 +4,6 @@ from SemanticNetwork import *
 
 s = SemanticNetwork()
 
-if sys.argv[1] == 'web':
-    pass
-
-
 if sys.argv[1] == 'train':
     train = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticTrainer.txt'
     dbFile = sys.argv[3] if sys.argv[3] is not None and sys.argv[3] != '' else 'semanticNet.json'
@@ -36,6 +32,9 @@ if sys.argv[1] == 'web':
     if sys.argv[2] != '':
         url = sys.argv[2]
 
+    dbFile = sys.argv[3] if sys.argv[3] is not None and sys.argv[3] != '' else 'semanticNet.json'
+    s.load(dbFile)
+
     s.rules.loadFromWeb(url)
     print s.rules.text
     list = s.analize(s.rules.text)
@@ -45,6 +44,9 @@ if sys.argv[1] == 'file':
     file = "grammarTest.txt"
     if sys.argv[2] != '':
         file = sys.argv[2]
+
+    dbFile = sys.argv[3] if sys.argv[3] is not None and sys.argv[3] != '' else 'semanticNet.json'
+    s.load(dbFile)
 
     s.rules.loadFromFile(file)
     list = s.analize(s.rules.text)
