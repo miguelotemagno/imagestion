@@ -99,7 +99,7 @@ class SemanticNetwork:
         tense = self.rules.getVerbTense(verb, root)
         pron = self.rules.getVerbPron(verb, root)
         z = self.verbTenses.index(tense)
-        w = self.pronouns.index(pron)
+        w = self.getIndexof(pron, self.pronouns)
         prevType = None
         lastType = None
 
@@ -125,19 +125,19 @@ class SemanticNetwork:
                     start[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     prevVerb[y, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[z, x] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.nouns.index(noun)
-                    print "[%s,%s][%d,%d] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%s,%s] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
                     nounVerb[z, v] += 1
 
         #print "[%s,%s]" % (prevType,lastType)
