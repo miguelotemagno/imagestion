@@ -450,7 +450,7 @@ class SemanticNetwork:
                         elif flow.isFinnish(prev, post):
                             if flow.data is not None and flow.data['root'] != '':
                                 structs.append(flow.data)
-                            flow.reset()
+                                flow.reset()
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
