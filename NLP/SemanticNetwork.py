@@ -414,8 +414,9 @@ class SemanticNetwork:
                 beyond = tokens[i+1][1] if i+1 < lenght else None
                 prev = self.validType(prev, post)
                 post = self.validType(post, beyond)
+                isStart = self.workflow.isStart(prev, post)
 
-                if self.workflow.isStart(prev, post) and limit > 0:
+                if isStart and limit > 0:
                     newGraph = Graph()
                     newGraph.importData(self.workflow.getJson())
                     newGraph.setInit(prev)
@@ -443,8 +444,8 @@ class SemanticNetwork:
                                 pron = self.rules.getVerbPron(verb, word)
 
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
-                                flow.data['root'] = word
+                                if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                    flow.data['root'] = word
                             pass
                         elif flow.isFinnish(prev, post):
                             if flow.data is not None and flow.data['root'] != '':

@@ -10,7 +10,7 @@ if sys.argv[1] == 'train':
 
     s.load(dbFile)
     text = sp.check_output(['sh', "%s/%s" % (s.rules.path, s.rules.fromFile), train])
-    patterns = re.compile('((\w+|[ ,.;?()])+\S)\s+\((\w+)\)')
+    patterns = re.compile('((\w+|[ ,.;?()"])+\S)\s+\((\w+)\)')
     list = text.split("\n")
 
     for line in list:

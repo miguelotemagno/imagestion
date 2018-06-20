@@ -81,7 +81,7 @@ class Graph:
 
     def getIndexof(self, type):
         try:
-            idx = self.functions.dictionary.keys().index(type)
+            idx = self.nodeNames.index(type)
         except ValueError:
             idx = None
 
