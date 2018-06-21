@@ -109,8 +109,8 @@ class SemanticNetwork:
             type = token[1]
             nextWord = tokens[i][0] if i < length else None
             nextType = tokens[i][1] if i < length else None
-            nextType = self.validType(nextType, tokens[i+1][1] if i+1 < length else None)
-            type = self.validType(type, nextType)
+            nextType = self.rules.validType(nextType, tokens[i+1][1] if i+1 < length else None)
+            type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
                 print "m[%s,%s]" % (type, nextType)
@@ -253,30 +253,6 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def validType(self, type, nextType=None):
-        if type is None:
-            return None
-
-        if '|' in type:
-            if nextType == 'NOUN' and 'DET' in type:
-                type = 'DET'
-            elif nextType == 'NOUN' and 'PREP' in type:
-                type = 'PREP'
-            elif nextType == 'ADJ' and 'ADV' in type:
-                type = 'ADV'
-            elif nextType == 'ADV' and 'ADV' in type:
-                type = 'ADV'
-            elif nextType == 'ADV' and 'VERB' in type:
-                type = 'VERB'
-            else:
-                type = re.sub('([|]\w+)+', '', type)
-        elif '??' in type:
-            type = 'NOUN'
-
-        return type
-
-    ####################################################################
-
     def getJson(self):
         json = {
             'workflow': self.workflow.getJson(),
@@ -416,8 +392,8 @@ class SemanticNetwork:
 
             if i > 0:
                 beyond = tokens[i+1][1] if i+1 < lenght else None
-                prev = self.validType(prev, post)
-                post = self.validType(post, beyond)
+                prev = self.rules.validType(prev, post)
+                post = self.rules.validType(post, beyond)
                 isStart = self.workflow.isStart(prev, post)
 
                 if isStart and limit > 0:

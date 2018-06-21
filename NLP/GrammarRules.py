@@ -328,7 +328,42 @@ class GrammarRules:
 
 		return list
 
-	##########################################################################
+	####################################################################
+
+	def validType(self, type, nextType=None):
+		if type is None:
+			return None
+
+		if '|' in type:
+			if nextType == 'NOUN' and 'DET' in type:
+				type = 'DET'
+			elif nextType == 'NOUN' and 'PREP' in type:
+				type = 'PREP'
+			elif nextType == 'ADJ' and 'ADV' in type:
+				type = 'ADV'
+			elif nextType == 'ADV' and 'ADV' in type:
+				type = 'ADV'
+			elif nextType == 'ADV' and 'VERB' in type:
+				type = 'VERB'
+			else:
+				type = re.sub('([|]\w+)+', '', type)
+		elif '??' in type:
+			type = 'NOUN'
+
+		return type
+
+	####################################################################
+
+	def normalize(self, tokens, pos=None):
+		if pos is None:
+			return self.normalize(tokens,0)
+		elif pos < len(tokens) - 1:
+			list = []
+			list.append(self.normalize(tokens, pos+1))
+			# TODO, pensar una menera de normalizar en forma recursiva los tipos gramaticos correctos de la lista
+		pass
+
+	####################################################################
 
 	def getSyntax(self, text):
 		tokens = self.word_tokenize(text)
