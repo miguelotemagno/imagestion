@@ -262,8 +262,12 @@ class SemanticNetwork:
                 type = 'DET'
             elif nextType == 'NOUN' and 'PREP' in type:
                 type = 'PREP'
-            # elif nextType == 'NOUN' and 'PREP' in type:
-            #     type = 'PREP'
+            elif nextType == 'ADJ' and 'ADV' in type:
+                type = 'ADV'
+            elif nextType == 'ADV' and 'ADV' in type:
+                type = 'ADV'
+            elif nextType == 'ADV' and 'VERB' in type:
+                type = 'VERB'
             else:
                 type = re.sub('([|]\w+)+', '', type)
         elif '??' in type:
