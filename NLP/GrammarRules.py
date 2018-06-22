@@ -358,9 +358,20 @@ class GrammarRules:
 		if pos is None:
 			return self.normalize(tokens,0)
 		elif pos < len(tokens) - 1:
-			list = []
-			list.append(self.normalize(tokens, pos+1))
-			# TODO, pensar una menera de normalizar en forma recursiva los tipos gramaticos correctos de la lista
+			nexToken = self.normalize(tokens, pos+1)
+			token = tokens[pos, 0]
+			word = token[0]
+			type = token[1]
+			normType = self.validType(type, nexToken[1])
+			newToken = [(word, normType)]
+			return newToken[0]
+		else:
+			token = tokens[pos, 0]
+			word = token[0]
+			type = token[1]
+			normType = self.validType(type)
+			newToken = [(word, normType)]
+			return newToken[0]
 		pass
 
 	####################################################################
