@@ -359,14 +359,14 @@ class GrammarRules:
 			return self.normalize(tokens,0)
 		elif pos < len(tokens) - 1:
 			nexToken = self.normalize(tokens, pos+1)
-			token = tokens[pos, 0]
+			token = tokens[pos]
 			word = token[0]
 			type = token[1]
 			normType = self.validType(type, nexToken[1])
 			newToken = [(word, normType)]
 			return newToken[0]
 		else:
-			token = tokens[pos, 0]
+			token = tokens[pos]
 			word = token[0]
 			type = token[1]
 			normType = self.validType(type)
