@@ -91,7 +91,7 @@ class SemanticNetwork:
         nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
 
         self.rules.setText(text)
-        tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
+        tokens = self.rules.normalize(self.rules.getSyntax(text))
         length = len(tokens)
         i = 0
 
@@ -315,11 +315,11 @@ class SemanticNetwork:
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.getSyntax(txt)
+                tokens = self.rules.normalize(self.rules.getSyntax(txt))
                 struct = self.getSyntaxStruct(tokens)
                 out.append(struct)
         else:
-            tokens = self.rules.getSyntax(text)
+            tokens = self.rules.normalize(self.rules.getSyntax(text))
             struct = self.getSyntaxStruct(tokens)
             out.append(struct)
 
@@ -417,7 +417,10 @@ class SemanticNetwork:
                             else:
                                 flow.data['predicate'].append(token)
 
-                        if self.isNucleous(prev, post) and self.isNucleous(post, beyond):
+                        precondition = self.isNucleous(prev, post)
+                        postcondition = self.isNucleous(post, beyond)
+
+                        if precondition and postcondition:  # isNucleous
                             verb = self.rules.getVerb(word)
                             if verb is not None:
                                 tense = self.rules.getVerbTense(verb, word)

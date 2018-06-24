@@ -354,25 +354,21 @@ class GrammarRules:
 
 	####################################################################
 
-	def normalize(self, tokens, pos=None):
-		if pos is None:
-			return self.normalize(tokens,0)
-		elif pos < len(tokens) - 1:
-			nexToken = self.normalize(tokens, pos+1)
+	def normalize(self, tokens):
+		list = []
+		nexType = None
+
+		for pos in xrange(len(tokens)-1, -1, -1):
 			token = tokens[pos]
 			word = token[0]
 			type = token[1]
-			normType = self.validType(type, nexToken[1])
-			newToken = [(word, normType)]
-			return newToken[0]
-		else:
-			token = tokens[pos]
-			word = token[0]
-			type = token[1]
-			normType = self.validType(type)
-			newToken = [(word, normType)]
-			return newToken[0]
-		pass
+			#print "%d (%s, %s)" % (pos, word, type)
+			normType = self.validType(type, nexType)
+			newToken = (word, normType)
+			list.insert(0, newToken)
+			nexType = type
+
+		return list
 
 	####################################################################
 
