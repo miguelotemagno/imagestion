@@ -98,7 +98,7 @@ class SemanticNetwork:
         verb = self.rules.getVerb(root)
         tense = self.rules.getVerbTense(verb, root)
         pron = self.rules.getVerbPron(verb, root)
-        z = self.verbTenses.index(tense)
+        z = self.getIndexof(tense, self.verbTenses)
         w = self.getIndexof(pron, self.pronouns)
         prevType = None
         lastType = None
@@ -114,8 +114,8 @@ class SemanticNetwork:
 
             if nextType is not None and type is not None:
                 print "m[%s,%s]" % (type, nextType)
-                y = self.grammarTypes.index(type)
-                x = self.grammarTypes.index(nextType)
+                y = self.getIndexof(type, self.grammarTypes)
+                x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
                 lastType = nextType
 
@@ -136,14 +136,14 @@ class SemanticNetwork:
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
-                    v = self.nouns.index(noun)
+                    v = self.getIndexof(noun, self.nouns)
                     print "[%s,%s][%s,%s] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
                     nounVerb[z, v] += 1
 
         #print "[%s,%s]" % (prevType,lastType)
         if prevType is not None and lastType is not None:
-            y = self.grammarTypes.index(prevType)
-            x = self.grammarTypes.index(lastType)
+            y = self.getIndexof(prevType, self.grammarTypes)
+            x = self.getIndexof(lastType, self.grammarTypes)
             finnish[y, x] += 1
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
@@ -276,6 +276,10 @@ class SemanticNetwork:
         return js.dumps(self.getJson(), sort_keys=True, indent=4, separators=(',', ': '))
 
     ####################################################################
+    def printJson(self, var):
+        return js.dumps(var, sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
 
     def save(self, dbFile):
         with open(dbFile, "w") as text_file:
@@ -317,10 +321,12 @@ class SemanticNetwork:
             for txt in list:
                 tokens = self.rules.normalize(self.rules.getSyntax(txt))
                 struct = self.getSyntaxStruct(tokens)
+                #print self.printJson(struct)
                 out.append(struct)
         else:
             tokens = self.rules.normalize(self.rules.getSyntax(text))
             struct = self.getSyntaxStruct(tokens)
+            #print self.printJson(struct)
             out.append(struct)
 
         return out
@@ -399,6 +405,7 @@ class SemanticNetwork:
                 if isStart and limit > 0:
                     newGraph = Graph()
                     newGraph.importData(self.workflow.getJson())
+                    newGraph.id = limit
                     newGraph.setInit(prev)
                     newGraph.data = {
                         'root': '',
@@ -409,7 +416,10 @@ class SemanticNetwork:
                     limit -= 1
 
                 for flow in instances:
-                    if flow.isNext(prev, post):
+                    isNext = flow.isNext(prev, post)
+                    isFinnish = flow.isFinnish(prev, post)
+
+                    if isNext:
                         flow.setNext(post)
                         if flow.data is not None:
                             if flow.data['root'] == '':
@@ -422,15 +432,16 @@ class SemanticNetwork:
 
                         if precondition and postcondition:  # isNucleous
                             verb = self.rules.getVerb(word)
-                            if verb is not None:
+                            if verb is not None and flow.data is not None:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
 
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
-                                    flow.data['root'] = word
+                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                flow.data['root'] = word
                             pass
-                        elif flow.isFinnish(prev, post):
+
+                        elif isFinnish:
                             if flow.data is not None and flow.data['root'] != '':
                                 structs.append(flow.data)
                                 flow.reset()

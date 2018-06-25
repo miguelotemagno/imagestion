@@ -102,7 +102,7 @@
 			"\\w+(fuente|aficionado|vision|grafo|copio)"
 		],
         "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
-		"sustDisminutivo" : ["(it|ill)[oa][s]?"],
+		"sustDisminutivo" : ["\\w+(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
 			"paz|guerra|amor|odio|hola|adios",
@@ -1230,10 +1230,15 @@
 	},
 	"e" : {
 		"ser" : { 
-			"ip"    : "e(re)?s",
-			"ipi"   : "era([sn]|mos|is)",
+			"ip"   : "so([yn]|mos|is)|e(re)?s",
+			"ipi"  : "era([sn]|mos|is)?",
 			"tu"    : "er[ea]s|se(ras|(ri)?as)?",
-			"el_la" : "es|era|se(r[i]?a|a)"
+			"yo"   : "soy|era|se(re|(ri)?a)|fu(i|era|se|re)",
+			"tu"   : "er[ea]s|se(ras|(ri)?as)?|fu(iste|eras|e[sr]es)",
+			"el_la" : "es|era|se(r[i]?a|a)|fue(ra|se|re)?",
+			"nos"  : "(so|era|se(a|re|ria)|fu(i|er[ae]|ese))mos",
+			"uds"  : "sed|(so|era|se(re|ria|a)|fu(iste|er[ea]|ese))is",
+			"ellos": "son|(se(r[i]?)?|(fu)?er)an|fue(ron|[rs]en)"
 		},
 		"escribir" : {
 			"inf"  : "escrito",
@@ -2727,7 +2732,7 @@
 			"ger"  : "siendo",
 			"par"  : "sido",
 			"ip"   : "so([yn]|mos|is)|e(re)?s",
-			"ipi"  : "era([sn]|mos|is)",
+			"ipi"  : "era([sn]|mos|is)?",
 			"if"   : "ser(e(mos|is)?|a[sn]?)",
 			"ic"   : "ser(ia([sn]?|mos|is)?)",
 			"ipps" : "fu([ie]|iste(is)?|imos|eron)",
