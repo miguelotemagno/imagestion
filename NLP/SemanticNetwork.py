@@ -109,8 +109,8 @@ class SemanticNetwork:
             type = token[1]
             nextWord = tokens[i][0] if i < length else None
             nextType = tokens[i][1] if i < length else None
-            nextType = self.rules.validType(nextType, tokens[i+1][1] if i+1 < length else None)
-            type = self.rules.validType(type, nextType)
+            #nextType = self.rules.validType(nextType, tokens[i+1][1] if i+1 < length else None)
+            #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
                 print "m[%s,%s]" % (type, nextType)
@@ -345,9 +345,9 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def isPreVerb(self, typePrev, typeNext):
-        y = self.workflow.getIndexof(typePrev)
-        x = self.getIndexof(typeNext, self.verbTenses)
+    def isPreVerb(self, type, tense):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
 
         if x is not None and y is not None:
             if self.prevVerb[y, x] > 0.0:
@@ -357,9 +357,9 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def isPostVerb(self, typePrev, typeNext):
-        y = self.getIndexof(typePrev, self.verbTenses)
-        x = self.workflow.getIndexof(typeNext)
+    def isPostVerb(self, tense, type):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
 
         if x is not None and y is not None:
             if self.postVerb[y, x] > 0.0:
@@ -444,7 +444,8 @@ class SemanticNetwork:
                         elif isFinnish:
                             if flow.data is not None and flow.data['root'] != '':
                                 structs.append(flow.data)
-                                flow.reset()
+                                for f in instances:
+                                    f.reset()
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
