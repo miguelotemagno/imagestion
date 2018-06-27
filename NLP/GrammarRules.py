@@ -337,15 +337,15 @@ class GrammarRules:
 		if '|' in type:
 			if 'DET' in type and nextType == 'NOUN':
 				type = 'DET'
+			elif 'PRON' in type and nextType == 'NOUN':
+					type = 'PRON'
 			elif 'PREP' in type and nextType in ['NOUN', 'ADJ', 'PRON', 'DET']:
 				type = 'PREP'
-			elif 'ADV' in type and nextType == 'ADJ':
+			elif 'ADV' in type and nextType in ['ADJ', 'ADV']:
 				type = 'ADV'
-			elif 'ADV' in type and nextType == 'ADV':
-				type = 'ADV'
-			elif 'VERB' in type and nextType == 'ADV':
-				type = 'VERB'
-			else:
+			#elif 'VERB' in type and nextType == 'ADV':
+			#	type = 'VERB'
+			if '|' in type:
 				type = re.sub('(\w+[|])+', '', type)
 		elif '??' in type:
 			type = 'NOUN'
