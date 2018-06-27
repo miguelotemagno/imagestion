@@ -335,18 +335,18 @@ class GrammarRules:
 			return None
 
 		if '|' in type:
-			if nextType == 'NOUN' and 'DET' in type:
+			if 'DET' in type and nextType == 'NOUN':
 				type = 'DET'
-			elif nextType == 'NOUN' and 'PREP' in type:
+			elif 'PREP' in type and nextType in ['NOUN', 'ADJ', 'PRON', 'DET']:
 				type = 'PREP'
-			elif nextType == 'ADJ' and 'ADV' in type:
+			elif 'ADV' in type and nextType == 'ADJ':
 				type = 'ADV'
-			elif nextType == 'ADV' and 'ADV' in type:
+			elif 'ADV' in type and nextType == 'ADV':
 				type = 'ADV'
-			elif nextType == 'ADV' and 'VERB' in type:
+			elif 'VERB' in type and nextType == 'ADV':
 				type = 'VERB'
 			else:
-				type = re.sub('([|]\w+)+', '', type)
+				type = re.sub('(\w+[|])+', '', type)
 		elif '??' in type:
 			type = 'NOUN'
 

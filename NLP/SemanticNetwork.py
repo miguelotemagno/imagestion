@@ -121,18 +121,18 @@ class SemanticNetwork:
 
                 connects[y, x] += 1
 
-                if i == 2:
+                if i == 1:
                     start[y, x] += 1
 
                 if word == root:
                     print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
-                    prevVerb[y, z] += 1
+                    postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
                     print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
-                    postVerb[z, x] += 1
+                    prevVerb[z, y] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
@@ -354,6 +354,25 @@ class SemanticNetwork:
                 return True
 
         return False
+        #value = self.getPreVerb(type, tense)
+        #return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def setPreVerb(self, type, tense, n):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        if x is not None and y is not None:
+            self.prevVerb[y, x] = n
+
+    ####################################################################
+
+    def getPreVerb(self, type, tense):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        return self.prevVerb[y, x] if x is not None and y is not None else None
 
     ####################################################################
 
@@ -366,6 +385,25 @@ class SemanticNetwork:
                 return True
 
         return False
+        #value = self.getPostVerb(type, tense)
+        #return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def setPostVerb(self, type, tense, n):
+        y = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+
+        if x is not None and y is not None:
+            self.postVerb[y, x] = n
+
+    ####################################################################
+
+    def getPostVerb(self, type, tense):
+        y = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+
+        return self.postVerb[y, x] if x is not None and y is not None else None
 
     ####################################################################
 

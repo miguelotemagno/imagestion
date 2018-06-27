@@ -36,9 +36,11 @@ if sys.argv[1] == 'web':
     s.load(dbFile)
 
     s.rules.loadFromWeb(url)
-    print s.rules.text
+    #print s.rules.getSyntax(s.rules.text)
     list = s.analize(s.rules.text)
-    print list
+    for y in xrange(0, len(list)-1):
+        if len(list[y]) > 0:
+            print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (list[y][0]['root'], str(list[y][0]['subject']), str(list[y][0]['predicate']))
 
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"
@@ -50,6 +52,7 @@ if sys.argv[1] == 'file':
 
     s.rules.loadFromFile(file)
     list = s.analize(s.rules.text)
-    print list
+    for x in list:
+        print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (x[0]['root'], str(x[0]['subject']), str(x[0]['predicate']))
 
 
