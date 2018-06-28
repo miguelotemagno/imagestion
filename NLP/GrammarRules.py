@@ -108,8 +108,8 @@ class GrammarRules:
 
 	####################################################################
 	
-	def isSustantive(self, text):
-		for type, list in self.rules['sustantive'].iteritems():
+	def isNoun(self, text):
+		for type, list in self.rules['noun'].iteritems():
 			expr = '^(' + '|'.join(list) + ')$'
 			eval = re.compile(expr)
 			if eval.match(text):
@@ -300,7 +300,7 @@ class GrammarRules:
 				prep = self.getNltkType(prep) if simple is not None else prep
 				tags.append(self.getNltkType(prep))
 
-			sust = self.isSustantive(token)
+			sust = self.isNoun(token)
 			if sust is not None:
 				sust = self.getNltkType(sust) if simple is not None else sust
 				tags.append(self.getNltkType(sust))
@@ -323,9 +323,59 @@ class GrammarRules:
 			if len(tags) > 0:
 				type = '|'.join(tags)
 
-			list.append((token, type))
+			if token is not None and token != '':
+				list.append((token, type))
 
 		return list
+
+	####################################################################
+
+	def validType(self, type, nextType=None):
+		if type is None:
+			return None
+
+		if '|' in type:
+			if 'DET' in type and nextType == 'NOUN':
+				type = 'DET'
+			elif 'PRON' in type and nextType == 'NOUN':
+					type = 'PRON'
+			elif 'PREP' in type and nextType in ['NOUN', 'ADJ', 'PRON', 'DET']:
+				type = 'PREP'
+			elif 'ADV' in type and nextType in ['ADJ', 'ADV']:
+				type = 'ADV'
+			#elif 'VERB' in type and nextType == 'ADV':
+			#	type = 'VERB'
+			if '|' in type:
+				type = re.sub('(\w+[|])+', '', type)
+		elif '??' in type:
+			type = 'NOUN'
+
+		return type
+
+	####################################################################
+
+	def normalize(self, tokens):
+		list = []
+		nexType = None
+
+		for pos in xrange(len(tokens)-1, -1, -1):
+			token = tokens[pos]
+			word = token[0]
+			type = token[1]
+			#print "%d (%s, %s)" % (pos, word, type)
+			normType = self.validType(type, nexType)
+			newToken = (word, normType)
+			list.insert(0, newToken)
+			nexType = type
+
+		return list
+
+	####################################################################
+
+	def getSyntax(self, text):
+		tokens = self.word_tokenize(text)
+		syntax = self.pos_tag(tokens, False)
+		return syntax
 
 	##########################################################################
 

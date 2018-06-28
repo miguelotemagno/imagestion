@@ -95,7 +95,7 @@ class Classify:
 			return 0x5
 		if self.rules.isDeterminer(text) != None:
 			return 0x6
-		if self.rules.isSustantive(text) != None:
+		if self.rules.isNoun(text) != None:
 			return 0x7
 		if self.rules.isConjunction(text) != None:
 			return 0x8

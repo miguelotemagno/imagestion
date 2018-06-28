@@ -58,10 +58,14 @@ class Graph:
         self.iterations = 0
         self.width = len(self.nodeNames)
         self.height = len(self.nodeNames)
-        self.factor = 0
-        self.factVb = 0
         self.connects = np.zeros((n, n), dtype=float)
-        self.nucleous = np.zeros((n, n), dtype=float)
+        self.factor = 0
+        self.finnish = np.zeros((n, n), dtype=float)
+        self.factFinnish = 0
+        self.start = np.zeros((n, n), dtype=float)
+        self.factStart = 0
+        self.flow = []
+        self.data = None
 
     ####################################################################
 
@@ -77,7 +81,7 @@ class Graph:
 
     def getIndexof(self, type):
         try:
-            idx = self.functions.dictionary.keys().index(type)
+            idx = self.nodeNames.index(type)
         except ValueError:
             idx = None
 
@@ -85,10 +89,61 @@ class Graph:
 
     ####################################################################
 
-    def start(self, type):
-        idx = self.getIndexof(type)
-        node = self.nodes[self.firstNode] if idx is not None else None
-        return node.isMyself(type) if node is not None else None
+    def goStart(self):
+        node = self.nodes[self.firstNode]
+        return node
+
+    ####################################################################
+
+    def isStart(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.start[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isNext(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.connects[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isFinnish(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.finnish[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def reset(self):
+        self.flow = []
+        self.data = None
+
+    ####################################################################
+
+    def setInit(self, type):
+        self.flow = [type]
+
+    ####################################################################
+
+    def setNext(self, type):
+        self.flow.append(type)
 
     ####################################################################
 
@@ -134,23 +189,43 @@ class Graph:
 
     ####################################################################
 
-    def getNuleous(self, y, x):
-        return self.nucleous.item((y, x))
+    def getStart(self, y, x):
+        return self.start.item((y, x))
 
     ####################################################################
 
-    def getNucleousRow(self, y):
-        return self.nucleous[y, :]
+    def setStart(self, y, x, val):
+        self.start.itemset((y, x), val)
 
     ####################################################################
 
-    def getNucleousColumn(self, x):
-        return self.nucleous[:, x]
+    def getStartRow(self, y):
+        return self.start[y, :]
 
     ####################################################################
 
-    def setNucleous(self, y, x, val):
-        self.nucleous.itemset((y, x), val)
+    def getStartColumn(self, x):
+        return self.start[:, x]
+
+    ####################################################################
+
+    def getFinnish(self, y, x):
+        return self.finnish.item((y, x))
+
+    ####################################################################
+
+    def getFinnishRow(self, y):
+        return self.finnish[y, :]
+
+    ####################################################################
+
+    def getFinnishColumn(self, x):
+        return self.finnish[:, x]
+
+    ####################################################################
+
+    def setFinnish(self, y, x, val):
+        self.finnish.itemset((y, x), val)
 
     ####################################################################
 
@@ -186,10 +261,14 @@ class Graph:
                 'nodeNames': self.nodeNames,
                 'first': self.firstNode,
                 'factor': self.factor,
+                'factorFinnish': self.factFinnish,
+                'factorStart': self.factStart,
                 'iterations': self.iterations,
                 'width': self.width,
                 'height': self.height,
                 'connects': self.connects.tolist(),
+                'finnish': self.finnish.tolist(),
+                'start': self.start.tolist(),
                 'nodes': [node.id for node in self.nodes]
             },
             'functions': [self.functions.getJson()],
@@ -211,9 +290,13 @@ class Graph:
         self.firstNode = data['graph']['first']
         self.iterations = data['graph']['iterations']
         self.factor = data['graph']['factor']
+        self.factFinnish = data['graph']['factorFinnish']
+        self.factStart = data['graph']['factorStart']
         self.width = data['graph']['width']
         self.height = data['graph']['height']
         self.connects = np.array(data['graph']['connects'], dtype=float)
+        self.finnish = np.array(data['graph']['finnish'], dtype=float)
+        self.start = np.array(data['graph']['start'], dtype=float)
         self.nodeNames = data['graph']['nodeNames']
         self.nodes = [Node(self, id=node['id'], name=node['name'], 
                            function=self.getFunctionName(node['name']))

@@ -60,15 +60,20 @@ class SemanticNetwork:
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
+        self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
+                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
-        self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)), dtype=float)
-        self.postVerb = np.zeros((len(self.verbTenses), len(self.grammarTypes)), dtype=float)
-        self.pronVerb = np.zeros((len(self.verbTenses), len(self.pronouns)), dtype=float)
+        self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
+        self.postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
+        self.pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
+        self.nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        
         self.factVerb = 0
         self.factPreVerb = 0
         self.factPosVerb = 0
         self.factPronVrb = 0
+        self.factNounVrb = 0        
         self.fileDb = None
         #self.load('semanticNet.json')
         pass
@@ -77,21 +82,26 @@ class SemanticNetwork:
 
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        finnish  = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
+        start    = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
         postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
-        pronVerb = np.zeros((len(self.verbTenses), len(self.pronouns)),       dtype=float)
+        pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
+        nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
 
         self.rules.setText(text)
-        tokens = self.rules.pos_tag(self.rules.word_tokenize(text), False)
+        tokens = self.rules.normalize(self.rules.getSyntax(text))
         length = len(tokens)
         i = 0
 
         verb = self.rules.getVerb(root)
         tense = self.rules.getVerbTense(verb, root)
         pron = self.rules.getVerbPron(verb, root)
-        z = self.verbTenses.index(tense)
-        w = self.pronouns.index(pron)
+        z = self.getIndexof(tense, self.verbTenses)
+        w = self.getIndexof(pron, self.pronouns)
+        prevType = None
+        lastType = None
 
         for token in tokens:
             i += 1
@@ -99,116 +109,147 @@ class SemanticNetwork:
             type = token[1]
             nextWord = tokens[i][0] if i < length else None
             nextType = tokens[i][1] if i < length else None
-            nextType = self.validType(nextType, tokens[i+1][1] if i+1 < length else None)
-            type = self.validType(type, nextType)
+            #nextType = self.rules.validType(nextType, tokens[i+1][1] if i+1 < length else None)
+            #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
                 print "m[%s,%s]" % (type, nextType)
-                y = self.grammarTypes.index(type)
-                x = self.grammarTypes.index(nextType)
+                y = self.getIndexof(type, self.grammarTypes)
+                x = self.getIndexof(nextType, self.grammarTypes)
+                prevType = type
+                lastType = nextType
+
                 connects[y, x] += 1
 
+                if i == 1:
+                    start[y, x] += 1
+
                 if word == root:
-                    print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
-                    prevVerb[y, z] += 1
+                    postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "[%s,%s][%d,%d,%d,%d] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
-                    postVerb[z, x] += 1
+                    prevVerb[z, y] += 1
+                elif type == 'NOUN':
+                    noun = self.rules.isNoun(word)
+                    noun = 'undefined' if noun is None else noun
+                    v = self.getIndexof(noun, self.nouns)
+                    print "[%s,%s][%s,%s] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
+                    nounVerb[z, v] += 1
+
+        #print "[%s,%s]" % (prevType,lastType)
+        if prevType is not None and lastType is not None:
+            y = self.getIndexof(prevType, self.grammarTypes)
+            x = self.getIndexof(lastType, self.grammarTypes)
+            finnish[y, x] += 1
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
+        listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
+        listStr = np.concatenate((start.sum(axis=1),    start.sum(axis=0)),    axis=0)
         listNuc = np.concatenate((nucleous.sum(axis=1), nucleous.sum(axis=0)), axis=0)
         listPsV = np.concatenate((postVerb.sum(axis=1), postVerb.sum(axis=0)), axis=0)
         listPrV = np.concatenate((prevVerb.sum(axis=1), prevVerb.sum(axis=0)), axis=0)
         listPrn = np.concatenate((pronVerb.sum(axis=1), pronVerb.sum(axis=0)), axis=0)
+        listNnV = np.concatenate((nounVerb.sum(axis=1), nounVerb.sum(axis=0)), axis=0)
 
         maxCnt = listCnt.max()
+        maxFin = listFin.max()
+        maxStr = listStr.max()
         maxNuc = listNuc.max()
         maxPsV = listPsV.max()
         maxPrV = listPrV.max()
         maxPrn = listPrn.max()
+        maxNnV = listNnV.max()
 
-        #print max
         newMatrixCnt = connects/maxCnt if maxCnt > 0 else connects
+        newMatrixFin = finnish/maxFin  if maxFin > 0 else finnish
+        newMatrixStr = start/maxStr    if maxStr > 0 else start
         newMatrixNuc = nucleous/maxNuc if maxNuc > 0 else nucleous
         newPrevVerb  = prevVerb/maxPrV if maxPrV > 0 else prevVerb
         newPostVerb  = postVerb/maxPsV if maxPsV > 0 else postVerb
         newPronVerb  = pronVerb/maxPrn if maxPrn > 0 else pronVerb
+        newNounVerb  = nounVerb/maxPrn if maxNnV > 0 else nounVerb
 
         oldMatrixCnt = self.workflow.connects
+        oldMatrixFin = self.workflow.finnish
+        oldMatrixStr = self.workflow.start
         oldMatrixNuc = self.nucleous
         oldPrevVerb  = self.prevVerb
         oldPostVerb  = self.postVerb
         oldPronVerb  = self.pronVerb
+
+        oldNounVerb  = self.nounVerb
         oldFactorCnt = self.workflow.factor
+        oldFactorFin = self.workflow.factFinnish
+        oldFactorStr = self.workflow.factStart
         oldFactorNuc = self.factVerb
         oldFactorPrV = self.factPreVerb
         oldFactorPsV = self.factPosVerb
         oldFactPrnVrb = self.factPronVrb
+        oldFactNnVrb = self.factNounVrb
 
         if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
+            newFactorFin = maxFin
+            newFactorStr = maxStr
             newFactorNuc = maxNuc
             newFactorPrV = maxPrV
             newFactorPsV = maxPsV
             newFactPrnVrb = maxPrn
+            newFactNnVrb = maxNnV
         else:
-            newFactorCnt = maxCnt + oldFactorCnt
-            newFactorNuc = maxNuc + oldFactorNuc
-            newFactorPrV = maxPrV + oldFactorPrV
-            newFactorPsV = maxPsV + oldFactorPsV
+            newFactorCnt  = maxCnt + oldFactorCnt
+            newFactorFin  = maxFin + oldFactorFin
+            newFactorStr  = maxFin + oldFactorStr
+            newFactorNuc  = maxNuc + oldFactorNuc
+            newFactorPrV  = maxPrV + oldFactorPrV
+            newFactorPsV  = maxPsV + oldFactorPsV
             newFactPrnVrb = maxPrn + oldFactPrnVrb
+            newFactNnVrb  = maxNnV + oldFactNnVrb
 
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
+            newMatrixFin = (oldMatrixFin * oldFactorFin) + finnish
+            newMatrixStr = (oldMatrixStr * oldFactorStr) + start
             newMatrixNuc = (oldMatrixNuc * oldFactorNuc) + nucleous
-            newPrevVerb  = (oldPrevVerb * oldFactorPrV) + prevVerb
-            newPostVerb  = (oldPostVerb * oldFactorPsV) + postVerb
+            newPrevVerb  = (oldPrevVerb * oldFactorPrV)  + prevVerb
+            newPostVerb  = (oldPostVerb * oldFactorPsV)  + postVerb
             newPronVerb  = (oldPronVerb * oldFactPrnVrb) + pronVerb
+            newNounVerb  = (oldNounVerb * oldFactNnVrb)  + nounVerb
 
-            newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0 else newMatrixCnt
-            newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0 else newMatrixNuc
-            newPrevVerb  = newPrevVerb/newFactorPrV if newFactorPrV > 0 else newPrevVerb
-            newPostVerb  = newPostVerb/newFactorPsV if newFactorPsV > 0 else newPostVerb
+            newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0  else newMatrixCnt
+            newMatrixFin = newMatrixFin/newFactorFin if newFactorFin > 0  else newMatrixFin
+            newMatrixStr = newMatrixStr/newFactorStr if newFactorStr > 0  else newMatrixStr
+            newMatrixNuc = newMatrixNuc/newFactorNuc if newFactorNuc > 0  else newMatrixNuc
+            newPrevVerb  = newPrevVerb/newFactorPrV  if newFactorPrV > 0  else newPrevVerb
+            newPostVerb  = newPostVerb/newFactorPsV  if newFactorPsV > 0  else newPostVerb
             newPronVerb  = newPronVerb/newFactPrnVrb if newFactPrnVrb > 0 else newPronVerb
+            newNounVerb  = newNounVerb/newFactNnVrb  if newFactNnVrb > 0  else newNounVerb
 
         self.workflow.iterations += 1
         self.workflow.connects = newMatrixCnt
+        self.workflow.finnish = newMatrixFin
+        self.workflow.start = newMatrixStr
         self.nucleous = newMatrixNuc
         self.prevVerb = newPrevVerb
         self.postVerb = newPostVerb
         self.pronVerb = newPronVerb
+        self.nounVerb = newNounVerb
         self.workflow.factor = newFactorCnt
+        self.workflow.factFinnish = newFactorFin
+        self.workflow.factStart = newFactorStr
         self.factVerb = newFactorNuc
         self.factPreVerb = newFactorPrV
         self.factPosVerb = newFactorPsV
         self.factPronVrb = newFactPrnVrb
+        self.factNounVrb = newFactNnVrb
 
         if self.fileDb is not None:
             self.save(self.fileDb)
 
-        return connects
-
-    ####################################################################
-
-    def validType(self, type, nextType=None):
-        if type is None:
-            return None
-
-        if '|' in type:
-            if nextType == 'NOUN' and 'DET' in type:
-                type = 'DET'
-            elif nextType == 'NOUN' and 'PREP' in type:
-                type = 'PREP'
-            elif nextType == 'NOUN' and 'PREP' in type:
-                type = 'PREP'
-            else:
-                type = re.sub('([|]\w+)+', '', type)
-        elif '??' in type:
-            type = 'NOUN'
-
-        return type
+        return finnish
 
     ####################################################################
 
@@ -219,10 +260,12 @@ class SemanticNetwork:
             'prevVerb': self.prevVerb.tolist(),
             'postVerb': self.postVerb.tolist(),
             'pronVerb': self.pronVerb.tolist(),
+            'nounVerb': self.nounVerb.tolist(),
             'factVerb': self.factVerb,
             'factPreVerb': self.factPreVerb,
             'factPosVerb': self.factPosVerb,
-            'factPronVrb': self.factPronVrb
+            'factPronVrb': self.factPronVrb,
+            'factNounVrb': self.factNounVrb
         }
 
         return json
@@ -231,6 +274,10 @@ class SemanticNetwork:
 
     def __str__(self):
         return js.dumps(self.getJson(), sort_keys=True, indent=4, separators=(',', ': '))
+
+    ####################################################################
+    def printJson(self, var):
+        return js.dumps(var, sort_keys=True, indent=4, separators=(',', ': '))
 
     ####################################################################
 
@@ -247,10 +294,12 @@ class SemanticNetwork:
         self.factPreVerb = data['factPreVerb']
         self.factPosVerb = data['factPosVerb']
         self.factPronVrb = data['factPronVrb']
+        self.factNounVrb = data['factNounVrb']
         self.nucleous = np.array(data['nucleous'], dtype=float)
         self.prevVerb = np.array(data['prevVerb'], dtype=float)
         self.postVerb = np.array(data['postVerb'], dtype=float)
         self.pronVerb = np.array(data['pronVerb'], dtype=float)
+        self.nounVerb = np.array(data['nounVerb'], dtype=float)
 
     ####################################################################
 
@@ -260,3 +309,195 @@ class SemanticNetwork:
         json = f.read()
         f.close()
         self.importJSON(json)
+
+    ####################################################################
+
+    def analize(self, text):
+        expr = re.compile(r'(.+[.])')
+        list = expr.findall(text)
+        out = []
+
+        if len(list) > 0:
+            for txt in list:
+                tokens = self.rules.normalize(self.rules.getSyntax(txt))
+                struct = self.getSyntaxStruct(tokens)
+                #print self.printJson(struct)
+                out.append(struct)
+        else:
+            tokens = self.rules.normalize(self.rules.getSyntax(text))
+            struct = self.getSyntaxStruct(tokens)
+            #print self.printJson(struct)
+            out.append(struct)
+
+        return out
+
+    ####################################################################
+
+    def isNucleous(self, typePrev, typeNext):
+        y = self.workflow.getIndexof(typePrev)
+        x = self.workflow.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            if self.nucleous[y, x] > 0.0:
+                return True
+
+        return False
+
+    ####################################################################
+
+    def isPreVerb(self, type, tense):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        if x is not None and y is not None:
+            if self.prevVerb[y, x] > 0.0:
+                return True
+
+        return False
+        #value = self.getPreVerb(type, tense)
+        #return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def setPreVerb(self, type, tense, n):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        if x is not None and y is not None:
+            self.prevVerb[y, x] = n
+
+    ####################################################################
+
+    def getPreVerb(self, type, tense):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        return self.prevVerb[y, x] if x is not None and y is not None else None
+
+    ####################################################################
+
+    def isPostVerb(self, tense, type):
+        y = self.getIndexof(type, self.grammarTypes)
+        x = self.getIndexof(tense, self.verbTenses)
+
+        if x is not None and y is not None:
+            if self.postVerb[y, x] > 0.0:
+                return True
+
+        return False
+        #value = self.getPostVerb(type, tense)
+        #return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def setPostVerb(self, type, tense, n):
+        y = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+
+        if x is not None and y is not None:
+            self.postVerb[y, x] = n
+
+    ####################################################################
+
+    def getPostVerb(self, type, tense):
+        y = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+
+        return self.postVerb[y, x] if x is not None and y is not None else None
+
+    ####################################################################
+
+    def getIndexof(self, type, arr):
+        try:
+            idx = arr.index(type)
+        except ValueError:
+            idx = None
+
+        return idx
+
+    ####################################################################
+
+    def getSyntaxStruct(self, tokens):
+        structs = []
+        lenght = len(tokens)
+        instances = []
+        limit = 10
+        prev = None
+        post = None
+        prevToken = None
+        i = 0
+
+        for token in tokens:
+            # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
+            #      y abrir mas de una instancia de proceso en caso de que un patron de inicio se detecte y descartar el
+            #      resto cuando una instancia respete un flujo completo. Construir estructura y retornarla.
+            post = token[1]
+            word = token[0]
+
+            if i > 0:
+                beyond = tokens[i+1][1] if i+1 < lenght else None
+                prev = self.rules.validType(prev, post)
+                post = self.rules.validType(post, beyond)
+                isStart = self.workflow.isStart(prev, post)
+
+                if isStart and limit > 0:
+                    newGraph = Graph()
+                    newGraph.importData(self.workflow.getJson())
+                    newGraph.id = limit
+                    newGraph.setInit(prev)
+                    newGraph.data = {
+                        'root': '',
+                        'subject': [prevToken],
+                        'predicate': []
+                    }
+                    instances.append(newGraph)
+                    limit -= 1
+
+                for flow in instances:
+                    isNext = flow.isNext(prev, post)
+                    isFinnish = flow.isFinnish(prev, post)
+
+                    if isNext:
+                        flow.setNext(post)
+                        if flow.data is not None:
+                            if flow.data['root'] == '':
+                                flow.data['subject'].append(token)
+                            else:
+                                flow.data['predicate'].append(token)
+
+                        precondition = self.isNucleous(prev, post)
+                        postcondition = self.isNucleous(post, beyond)
+
+                        if precondition and postcondition:  # isNucleous
+                            verb = self.rules.getVerb(word)
+                            if verb is not None and flow.data is not None:
+                                tense = self.rules.getVerbTense(verb, word)
+                                pron = self.rules.getVerbPron(verb, word)
+
+                                # TODO agregar condiciones de noun x verb para identificar el nucleo
+                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                flow.data['root'] = word
+                            pass
+
+                        elif isFinnish:
+                            if flow.data is not None and flow.data['root'] != '':
+                                structs.append(flow.data)
+                                for f in instances:
+                                    f.reset()
+                    else:
+                        flow.reset()
+                        if flow.isStart(prev, post):
+                            flow.setInit(prev)
+                            flow.setNext(post)
+                            flow.data = {
+                                'root': '',
+                                'subject': [prevToken, token],
+                                'predicate': []
+                            }
+                    pass
+                pass
+            i += 1
+            prev = post
+            prevToken = token
+
+        return structs
