@@ -19,7 +19,10 @@ if sys.argv[1] == 'train':
             (frase, verb) = expr.group(1, 3)
             print "\n%s => [%s]" % (frase, verb)
             try:
-                syntax = s.rules.normalize(s.rules.getSyntax(frase))
+                tokens = s.rules.getSyntax(frase)
+                syntax = s.rules.normalize(tokens)
+                print(tokens)
+                print "-->"
                 print(syntax)
                 s.train(frase, verb)
             except ValueError:
@@ -39,7 +42,9 @@ if sys.argv[1] == 'web':
     list = s.analize(s.rules.text)
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
-            print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (list[y][0]['root'], str(list[y][0]['subject']), str(list[y][0]['predicate']))
+            for x in xrange(0, len(list[y]) - 1):
+                if len(list[y][0]) > 0:
+                    print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (list[y][x]['root'], str(list[y][x]['subject']), str(list[y][x]['predicate']))
 
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"

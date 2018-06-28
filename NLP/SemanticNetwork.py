@@ -426,6 +426,7 @@ class SemanticNetwork:
         post = None
         prevToken = None
         i = 0
+        idx = 0
 
         for token in tokens:
             # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
@@ -440,10 +441,10 @@ class SemanticNetwork:
                 post = self.rules.validType(post, beyond)
                 isStart = self.workflow.isStart(prev, post)
 
-                if isStart and limit > 0:
+                if isStart and idx < limit:
                     newGraph = Graph()
                     newGraph.importData(self.workflow.getJson())
-                    newGraph.id = limit
+                    newGraph.id = i
                     newGraph.setInit(prev)
                     newGraph.data = {
                         'root': '',
@@ -451,7 +452,7 @@ class SemanticNetwork:
                         'predicate': []
                     }
                     instances.append(newGraph)
-                    limit -= 1
+                    idx = lenght
 
                 for flow in instances:
                     isNext = flow.isNext(prev, post)
@@ -496,6 +497,9 @@ class SemanticNetwork:
                             }
                     pass
                 pass
+
+            instances = [flow for flow in instances if flow.data is not None]
+
             i += 1
             prev = post
             prevToken = token

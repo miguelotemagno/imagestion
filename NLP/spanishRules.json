@@ -51,11 +51,11 @@
             "es[t]?[aeo][s]?|aquel(l[ao][s]?)?"
         ],
         "adjPossesive" : [
-            "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
+            "mi[oa]?[s]?|tu(y[oa][s]?)?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
             "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?",
-            "otro|cualquier|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
+            "otr[oa][s]?|cualquier[a]?|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
@@ -82,17 +82,17 @@
         "adjSuperlative" : ["\\w+(isim|errim)[oa][s]?|(su|hi)per\\w+|mega\\w+|supremo"],
         "adjAll" : [
             "(antigu|cuant)[ao][s]?|simple",
-            "\\w+(([^na]d[oa]|ble|[ea]nte|[aei]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
+            "\\w+(([^na]d[oa]|ble|[tsr][ea]nte|[^l][^aeiou][l]?[aei]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
         ]
     },
     "noun" : {
 		"sustPropio" : [
-			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|or|d[oa])",
+			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|[ntbd]or|d[oa])",
 			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a",
 			"vargas|welch"
 		],
 		"sustSimple" : [
-			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz|mbra|ista[s]?)",
+			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
 			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
 			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?",
 			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret|expedicion|di)ari)[oa][s]?"
@@ -101,7 +101,7 @@
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
 			"\\w+(fuente|aficionado|vision|grafo|copio)"
 		],
-        "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
+        "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|[^j]or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
 		"sustDisminutivo" : ["\\w+(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
@@ -110,8 +110,8 @@
 		],
 		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria)[s]?"],
         "sustAll" : [
-            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez|ado[s]?)",
-            "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
+            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|[^j]or(es)?|tri(z|ces)|ez|ado[s]?)",
+            "\\w{3,}([^i]es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
         ]
     },
     "preposition" : {
@@ -171,7 +171,7 @@
 		],
         "pronAll" : [
             "(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
-            "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
+            "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)",
             "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
     },

@@ -335,16 +335,26 @@ class GrammarRules:
 			return None
 
 		if '|' in type:
-			if 'DET' in type and nextType == 'NOUN':
+			if 'DET' in type and nextType in ['NOUN', 'CONJ', 'ADJ', 'VERB', 'PREP', 'NUM']:
 				type = 'DET'
-			elif 'PRON' in type and nextType == 'NOUN':
-					type = 'PRON'
-			elif 'PREP' in type and nextType in ['NOUN', 'ADJ', 'PRON', 'DET']:
+			elif 'NOUN' in type and nextType in ['VERB']:
+				type = 'NOUN'
+			elif 'PRON' in type and nextType in ['NOUN', 'ADJ']:
+				type = 'PRON'
+			elif 'PREP' in type and nextType in ['NOUN', 'ADJ', 'PRON', 'DET', 'ADV', 'PRON']:
 				type = 'PREP'
 			elif 'ADV' in type and nextType in ['ADJ', 'ADV']:
 				type = 'ADV'
-			#elif 'VERB' in type and nextType == 'ADV':
-			#	type = 'VERB'
+			elif 'ADJ' in type and nextType in ['PREP', 'NOUN', 'VERB', 'CONJ', 'DET', 'PRON', 'PUNCT']:
+				type = 'ADJ'
+			elif 'CONJ' in type and nextType in ['VERB', 'DET', 'ADV', 'PRON']:
+				type = 'CONJ'
+			elif 'ADJ' in type and ('ADV' in type or 'NOUN' in type):
+				type = 'ADJ'
+			elif 'ADV' in type and ('CONJ' in type or 'NOUN' in type):
+				type = 'ADV'
+			elif 'VERB' in type:
+				type = 'VERB'
 			if '|' in type:
 				type = re.sub('(\w+[|])+', '', type)
 		elif '??' in type:
@@ -366,7 +376,7 @@ class GrammarRules:
 			normType = self.validType(type, nexType)
 			newToken = (word, normType)
 			list.insert(0, newToken)
-			nexType = type
+			nexType = normType
 
 		return list
 
