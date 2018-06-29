@@ -407,6 +407,32 @@ class SemanticNetwork:
 
     ####################################################################
 
+    def isFinnish(self, typePrev, typeNext):
+        value = self.getFinnish(typePrev, typeNext)
+        return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def getFinnish(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev, self.grammarTypes)
+        x = self.getIndexof(typeNext, self.grammarTypes)
+
+        if x is not None and y is not None:
+            return self.workflow.getFinnish(y, x)
+
+        return None
+
+    ####################################################################
+
+    def setFinnish(self, typePrev, typeNext, n):
+        y = self.getIndexof(typePrev, self.grammarTypes)
+        x = self.getIndexof(typeNext, self.grammarTypes)
+
+        if x is not None and y is not None:
+            self.workflow.setFinnish(y, x, n)
+
+    ####################################################################
+
     def getIndexof(self, type, arr):
         try:
             idx = arr.index(type)
@@ -481,7 +507,11 @@ class SemanticNetwork:
                             pass
 
                         elif isFinnish:
-                            if flow.data is not None and flow.data['root'] != '':
+                            axisX = self.workflow.finnish.sum(axis=1)
+                            xMax = axisX.max()
+                            value = flow.isFinnish(prev, post)
+
+                            if flow.data is not None and flow.data['root'] != '' and value >= xMax:
                                 structs.append(flow.data)
                                 for f in instances:
                                     f.reset()
