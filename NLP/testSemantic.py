@@ -42,9 +42,8 @@ if sys.argv[1] == 'web':
     list = s.analize(s.rules.text)
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
-            for x in xrange(0, len(list[y]) - 1):
-                if len(list[y][0]) > 0:
-                    print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (list[y][x]['root'], str(list[y][x]['subject']), str(list[y][x]['predicate']))
+            for item in list[y]:
+                print "%03d) nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['root'], str(item['subject']), str(item['predicate']))
 
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"
@@ -56,7 +55,9 @@ if sys.argv[1] == 'file':
 
     s.rules.loadFromFile(file)
     list = s.analize(s.rules.text)
-    for x in list:
-        print "nucleo:%s\nsujeto:{%s}\npredicado:{%s}\n" % (x[0]['root'], str(x[0]['subject']), str(x[0]['predicate']))
 
+    for y in xrange(0, len(list)-1):
+        if len(list[y]) > 0:
+            for item in list[y]:
+                print "%03d) nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['root'], str(item['subject']), str(item['predicate']))
 

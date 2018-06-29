@@ -171,7 +171,7 @@ class SemanticNetwork:
         newPrevVerb  = prevVerb/maxPrV if maxPrV > 0 else prevVerb
         newPostVerb  = postVerb/maxPsV if maxPsV > 0 else postVerb
         newPronVerb  = pronVerb/maxPrn if maxPrn > 0 else pronVerb
-        newNounVerb  = nounVerb/maxPrn if maxNnV > 0 else nounVerb
+        newNounVerb  = nounVerb/maxNnV if maxNnV > 0 else nounVerb
 
         oldMatrixCnt = self.workflow.connects
         oldMatrixFin = self.workflow.finnish
