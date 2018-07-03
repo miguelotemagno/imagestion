@@ -319,7 +319,7 @@ class SemanticNetwork:
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.normalize(self.rules.getSyntax(txt))
+                tokens = self.rules.normalize(self.rules.getSyntax(txt+'.'))
                 struct = self.getSyntaxStruct(tokens)
                 #print self.printJson(struct)
                 out.append(struct)
@@ -500,9 +500,11 @@ class SemanticNetwork:
                             if verb is not None and flow.data is not None:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
+                                preVerb = self.getPreVerb(prev, tense)
+                                postVerb = self.getPostVerb(tense, beyond);
 
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
+                                #if preVerb > 0 and postVerb > 0:
                                 flow.data['root'] = word
                             pass
 
