@@ -369,8 +369,8 @@ class SemanticNetwork:
     ####################################################################
 
     def getPreVerb(self, type, tense):
-        y = self.getIndexof(type, self.grammarTypes)
-        x = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+        y = self.getIndexof(tense, self.verbTenses)
 
         return self.prevVerb[y, x] if x is not None and y is not None else None
 
@@ -501,11 +501,11 @@ class SemanticNetwork:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
                                 preVerb = self.getPreVerb(prev, tense)
-                                postVerb = self.getPostVerb(tense, beyond);
+                                postVerb = self.getPostVerb(beyond, tense)
 
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                #if preVerb > 0 and postVerb > 0:
-                                flow.data['root'] = word
+                                if preVerb > 0 and postVerb > 0:
+                                    flow.data['root'] = word
                             pass
 
                         elif isFinnish:
