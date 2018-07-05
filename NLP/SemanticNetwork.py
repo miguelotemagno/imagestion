@@ -89,6 +89,7 @@ class SemanticNetwork:
         postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
         pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
         nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        endCondition = {}
 
         self.rules.setText(text)
         tokens = self.rules.normalize(self.rules.getSyntax(text))
@@ -102,6 +103,8 @@ class SemanticNetwork:
         w = self.getIndexof(pron, self.pronouns)
         prevType = None
         lastType = None
+        prevWord = None
+        lastWord = None
 
         for token in tokens:
             i += 1
@@ -118,6 +121,8 @@ class SemanticNetwork:
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
                 lastType = nextType
+                prevWord = word
+                lastWord = nextWord
 
                 connects[y, x] += 1
 
@@ -145,6 +150,11 @@ class SemanticNetwork:
             y = self.getIndexof(prevType, self.grammarTypes)
             x = self.getIndexof(lastType, self.grammarTypes)
             finnish[y, x] += 1
+
+            idY = self.getIndexFromType(prevType, prevWord)
+            idX = self.getIndexFromType(lastType, lastWord)
+            key = "%s_%s" % (idY, idX)
+            endCondition[key] = endCondition[key] + 1 if key in endCondition else 1
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
@@ -250,6 +260,30 @@ class SemanticNetwork:
             self.save(self.fileDb)
 
         return finnish
+
+    ####################################################################
+
+    def getIndexFromType(self, type, word):
+        types = {
+            'DET':  self.rules.isDeterminer,  #(word),
+            'NOUN': self.rules.isNoun,        #(word),
+            'ADJ':  self.rules.isAdjetive,    #(word),
+            'PREP': self.rules.isPreposition, #(word),
+            'VERB': self.rules.getVerbTense,  #(verb, word),
+            'ADV':  self.rules.isAdverb,      #(word),
+            'PRON': self.rules.isPronom,      #(word),
+            'INTJ': self.rules.isInterjection,#(word),
+            'CONJ': self.rules.isConjunction, #(word),
+            'NUM':  self.rules.isNumber,      #(word),
+            'PUNC': self.rules.isPunctuation  #(word),
+        }
+
+        if type == 'VERB':
+            verb = self.rules.getVerb(word)
+            return types[type](verb, word) if verb is not None else None
+        else:
+            return types[type](word)
+
 
     ####################################################################
 
