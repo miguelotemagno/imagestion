@@ -68,12 +68,14 @@ class SemanticNetwork:
         self.postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
         self.pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
         self.nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        self.endCondition = {}
         
         self.factVerb = 0
         self.factPreVerb = 0
         self.factPosVerb = 0
         self.factPronVrb = 0
-        self.factNounVrb = 0        
+        self.factNounVrb = 0
+        self.factCondition = 0
         self.fileDb = None
         #self.load('semanticNet.json')
         pass
@@ -154,7 +156,7 @@ class SemanticNetwork:
             idY = self.getIndexFromType(prevType, prevWord)
             idX = self.getIndexFromType(lastType, lastWord)
             key = "%s_%s" % (idY, idX)
-            endCondition[key] = endCondition[key] + 1 if key in endCondition else 1
+            endCondition[key] = endCondition[key] + 1.0 if key in endCondition else 1.0
 
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
@@ -164,6 +166,7 @@ class SemanticNetwork:
         listPrV = np.concatenate((prevVerb.sum(axis=1), prevVerb.sum(axis=0)), axis=0)
         listPrn = np.concatenate((pronVerb.sum(axis=1), pronVerb.sum(axis=0)), axis=0)
         listNnV = np.concatenate((nounVerb.sum(axis=1), nounVerb.sum(axis=0)), axis=0)
+        listEnd = np.array(endCondition.values())
 
         maxCnt = listCnt.max()
         maxFin = listFin.max()
@@ -173,6 +176,7 @@ class SemanticNetwork:
         maxPrV = listPrV.max()
         maxPrn = listPrn.max()
         maxNnV = listNnV.max()
+        maxEnd = listEnd.max()
 
         newMatrixCnt = connects/maxCnt if maxCnt > 0 else connects
         newMatrixFin = finnish/maxFin  if maxFin > 0 else finnish
@@ -182,6 +186,11 @@ class SemanticNetwork:
         newPostVerb  = postVerb/maxPsV if maxPsV > 0 else postVerb
         newPronVerb  = pronVerb/maxPrn if maxPrn > 0 else pronVerb
         newNounVerb  = nounVerb/maxNnV if maxNnV > 0 else nounVerb
+        newCondition = endCondition
+
+        if maxEnd > 0:
+            for idx in endCondition.keys():
+                newCondition[idx] = endCondition[idx]/maxEnd
 
         oldMatrixCnt = self.workflow.connects
         oldMatrixFin = self.workflow.finnish
@@ -190,6 +199,7 @@ class SemanticNetwork:
         oldPrevVerb  = self.prevVerb
         oldPostVerb  = self.postVerb
         oldPronVerb  = self.pronVerb
+        oldCondition = self.endCondition
 
         oldNounVerb  = self.nounVerb
         oldFactorCnt = self.workflow.factor
@@ -200,6 +210,7 @@ class SemanticNetwork:
         oldFactorPsV = self.factPosVerb
         oldFactPrnVrb = self.factPronVrb
         oldFactNnVrb = self.factNounVrb
+        oldFactCondition = self.factCondition
 
         if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
@@ -210,6 +221,7 @@ class SemanticNetwork:
             newFactorPsV = maxPsV
             newFactPrnVrb = maxPrn
             newFactNnVrb = maxNnV
+            newFactCondition = maxEnd
         else:
             newFactorCnt  = maxCnt + oldFactorCnt
             newFactorFin  = maxFin + oldFactorFin
@@ -219,6 +231,7 @@ class SemanticNetwork:
             newFactorPsV  = maxPsV + oldFactorPsV
             newFactPrnVrb = maxPrn + oldFactPrnVrb
             newFactNnVrb  = maxNnV + oldFactNnVrb
+            newFactCondition = maxEnd + oldFactCondition
 
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixFin = (oldMatrixFin * oldFactorFin) + finnish
@@ -228,6 +241,12 @@ class SemanticNetwork:
             newPostVerb  = (oldPostVerb * oldFactorPsV)  + postVerb
             newPronVerb  = (oldPronVerb * oldFactPrnVrb) + pronVerb
             newNounVerb  = (oldNounVerb * oldFactNnVrb)  + nounVerb
+
+            for idx in oldCondition.keys():
+                oldValue = oldCondition[idx] if idx in oldCondition.keys() else 0.0
+                newValue = endCondition[idx] if idx in endCondition.keys() else 0.0
+                newCondition[idx] = oldValue * oldFactCondition + newValue
+                newCondition[idx] = newCondition[idx]/newFactCondition if newFactCondition > 0 else newCondition[idx]
 
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0  else newMatrixCnt
             newMatrixFin = newMatrixFin/newFactorFin if newFactorFin > 0  else newMatrixFin
@@ -247,6 +266,7 @@ class SemanticNetwork:
         self.postVerb = newPostVerb
         self.pronVerb = newPronVerb
         self.nounVerb = newNounVerb
+        self.endCondition = newCondition
         self.workflow.factor = newFactorCnt
         self.workflow.factFinnish = newFactorFin
         self.workflow.factStart = newFactorStr
@@ -255,6 +275,7 @@ class SemanticNetwork:
         self.factPosVerb = newFactorPsV
         self.factPronVrb = newFactPrnVrb
         self.factNounVrb = newFactNnVrb
+        self.factCondition = newFactCondition
 
         if self.fileDb is not None:
             self.save(self.fileDb)
@@ -295,11 +316,13 @@ class SemanticNetwork:
             'postVerb': self.postVerb.tolist(),
             'pronVerb': self.pronVerb.tolist(),
             'nounVerb': self.nounVerb.tolist(),
+            'endCondition': self.endCondition,
             'factVerb': self.factVerb,
             'factPreVerb': self.factPreVerb,
             'factPosVerb': self.factPosVerb,
             'factPronVrb': self.factPronVrb,
-            'factNounVrb': self.factNounVrb
+            'factNounVrb': self.factNounVrb,
+            'factCondition': self.factCondition
         }
 
         return json
@@ -329,11 +352,13 @@ class SemanticNetwork:
         self.factPosVerb = data['factPosVerb']
         self.factPronVrb = data['factPronVrb']
         self.factNounVrb = data['factNounVrb']
+        self.factCondition = data['factCondition']
         self.nucleous = np.array(data['nucleous'], dtype=float)
         self.prevVerb = np.array(data['prevVerb'], dtype=float)
         self.postVerb = np.array(data['postVerb'], dtype=float)
         self.pronVerb = np.array(data['pronVerb'], dtype=float)
         self.nounVerb = np.array(data['nounVerb'], dtype=float)
+        self.endCondition = data['endCondition']
 
     ####################################################################
 
@@ -485,6 +510,7 @@ class SemanticNetwork:
         prev = None
         post = None
         prevToken = None
+        postToken = None
         i = 0
         idx = 0
 
@@ -500,6 +526,7 @@ class SemanticNetwork:
                 prev = self.rules.validType(prev, post)
                 post = self.rules.validType(post, beyond)
                 isStart = self.workflow.isStart(prev, post)
+                postToken = token
 
                 if isStart and idx < limit:
                     newGraph = Graph()
@@ -546,8 +573,14 @@ class SemanticNetwork:
                             axisX = self.workflow.finnish.sum(axis=1)
                             xMax = axisX.max()
                             value = flow.isFinnish(prev, post)
+                            prevWord = prevToken[0]
+                            postWord = postToken[0]
+                            idY = self.getIndexFromType(prev, prevWord)
+                            idX = self.getIndexFromType(post, postWord)
+                            key = "%s_%s" % (idY, idX)
+                            isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
 
-                            if flow.data is not None and flow.data['root'] != '' and value >= xMax:
+                            if flow.data is not None and flow.data['root'] != '' and value >= xMax and isCondition > 0:
                                 structs.append(flow.data)
                                 for f in instances:
                                     f.reset()
