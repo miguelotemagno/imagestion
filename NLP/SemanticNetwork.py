@@ -68,12 +68,14 @@ class SemanticNetwork:
         self.postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
         self.pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
         self.nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        self.endCondition = {}
         
         self.factVerb = 0
         self.factPreVerb = 0
         self.factPosVerb = 0
         self.factPronVrb = 0
-        self.factNounVrb = 0        
+        self.factNounVrb = 0
+        self.factCondition = 0
         self.fileDb = None
         #self.load('semanticNet.json')
         pass
@@ -89,6 +91,7 @@ class SemanticNetwork:
         postVerb = np.zeros((len(self.verbTenses),   len(self.grammarTypes)), dtype=float)
         pronVerb = np.zeros((len(self.verbTenses),   len(self.pronouns)),     dtype=float)
         nounVerb = np.zeros((len(self.verbTenses),   len(self.nouns)),        dtype=float)
+        endCondition = {}
 
         self.rules.setText(text)
         tokens = self.rules.normalize(self.rules.getSyntax(text))
@@ -102,6 +105,8 @@ class SemanticNetwork:
         w = self.getIndexof(pron, self.pronouns)
         prevType = None
         lastType = None
+        prevWord = None
+        lastWord = None
 
         for token in tokens:
             i += 1
@@ -118,6 +123,8 @@ class SemanticNetwork:
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
                 lastType = nextType
+                prevWord = word
+                lastWord = nextWord
 
                 connects[y, x] += 1
 
@@ -146,6 +153,11 @@ class SemanticNetwork:
             x = self.getIndexof(lastType, self.grammarTypes)
             finnish[y, x] += 1
 
+            idY = self.getIndexFromType(prevType, prevWord)
+            idX = self.getIndexFromType(lastType, lastWord)
+            key = "%s_%s" % (idY, idX)
+            endCondition[key] = endCondition[key] + 1.0 if key in endCondition else 1.0
+
         listCnt = np.concatenate((connects.sum(axis=1), connects.sum(axis=0)), axis=0)
         listFin = np.concatenate((finnish.sum(axis=1),  finnish.sum(axis=0)),  axis=0)
         listStr = np.concatenate((start.sum(axis=1),    start.sum(axis=0)),    axis=0)
@@ -154,6 +166,7 @@ class SemanticNetwork:
         listPrV = np.concatenate((prevVerb.sum(axis=1), prevVerb.sum(axis=0)), axis=0)
         listPrn = np.concatenate((pronVerb.sum(axis=1), pronVerb.sum(axis=0)), axis=0)
         listNnV = np.concatenate((nounVerb.sum(axis=1), nounVerb.sum(axis=0)), axis=0)
+        listEnd = np.array(endCondition.values())
 
         maxCnt = listCnt.max()
         maxFin = listFin.max()
@@ -163,6 +176,7 @@ class SemanticNetwork:
         maxPrV = listPrV.max()
         maxPrn = listPrn.max()
         maxNnV = listNnV.max()
+        maxEnd = listEnd.max()
 
         newMatrixCnt = connects/maxCnt if maxCnt > 0 else connects
         newMatrixFin = finnish/maxFin  if maxFin > 0 else finnish
@@ -171,7 +185,12 @@ class SemanticNetwork:
         newPrevVerb  = prevVerb/maxPrV if maxPrV > 0 else prevVerb
         newPostVerb  = postVerb/maxPsV if maxPsV > 0 else postVerb
         newPronVerb  = pronVerb/maxPrn if maxPrn > 0 else pronVerb
-        newNounVerb  = nounVerb/maxPrn if maxNnV > 0 else nounVerb
+        newNounVerb  = nounVerb/maxNnV if maxNnV > 0 else nounVerb
+        newCondition = endCondition
+
+        if maxEnd > 0:
+            for idx in endCondition.keys():
+                newCondition[idx] = endCondition[idx]/maxEnd
 
         oldMatrixCnt = self.workflow.connects
         oldMatrixFin = self.workflow.finnish
@@ -180,6 +199,7 @@ class SemanticNetwork:
         oldPrevVerb  = self.prevVerb
         oldPostVerb  = self.postVerb
         oldPronVerb  = self.pronVerb
+        oldCondition = self.endCondition
 
         oldNounVerb  = self.nounVerb
         oldFactorCnt = self.workflow.factor
@@ -190,6 +210,7 @@ class SemanticNetwork:
         oldFactorPsV = self.factPosVerb
         oldFactPrnVrb = self.factPronVrb
         oldFactNnVrb = self.factNounVrb
+        oldFactCondition = self.factCondition
 
         if oldMatrixCnt.max() == 0:
             newFactorCnt = maxCnt
@@ -200,6 +221,7 @@ class SemanticNetwork:
             newFactorPsV = maxPsV
             newFactPrnVrb = maxPrn
             newFactNnVrb = maxNnV
+            newFactCondition = maxEnd
         else:
             newFactorCnt  = maxCnt + oldFactorCnt
             newFactorFin  = maxFin + oldFactorFin
@@ -209,6 +231,7 @@ class SemanticNetwork:
             newFactorPsV  = maxPsV + oldFactorPsV
             newFactPrnVrb = maxPrn + oldFactPrnVrb
             newFactNnVrb  = maxNnV + oldFactNnVrb
+            newFactCondition = maxEnd + oldFactCondition
 
             newMatrixCnt = (oldMatrixCnt * oldFactorCnt) + connects
             newMatrixFin = (oldMatrixFin * oldFactorFin) + finnish
@@ -218,6 +241,12 @@ class SemanticNetwork:
             newPostVerb  = (oldPostVerb * oldFactorPsV)  + postVerb
             newPronVerb  = (oldPronVerb * oldFactPrnVrb) + pronVerb
             newNounVerb  = (oldNounVerb * oldFactNnVrb)  + nounVerb
+
+            for idx in oldCondition.keys():
+                oldValue = oldCondition[idx] if idx in oldCondition.keys() else 0.0
+                newValue = endCondition[idx] if idx in endCondition.keys() else 0.0
+                newCondition[idx] = oldValue * oldFactCondition + newValue
+                newCondition[idx] = newCondition[idx]/newFactCondition if newFactCondition > 0 else newCondition[idx]
 
             newMatrixCnt = newMatrixCnt/newFactorCnt if newFactorCnt > 0  else newMatrixCnt
             newMatrixFin = newMatrixFin/newFactorFin if newFactorFin > 0  else newMatrixFin
@@ -237,6 +266,7 @@ class SemanticNetwork:
         self.postVerb = newPostVerb
         self.pronVerb = newPronVerb
         self.nounVerb = newNounVerb
+        self.endCondition = newCondition
         self.workflow.factor = newFactorCnt
         self.workflow.factFinnish = newFactorFin
         self.workflow.factStart = newFactorStr
@@ -245,11 +275,36 @@ class SemanticNetwork:
         self.factPosVerb = newFactorPsV
         self.factPronVrb = newFactPrnVrb
         self.factNounVrb = newFactNnVrb
+        self.factCondition = newFactCondition
 
         if self.fileDb is not None:
             self.save(self.fileDb)
 
         return finnish
+
+    ####################################################################
+
+    def getIndexFromType(self, type, word):
+        types = {
+            'DET':  self.rules.isDeterminer,  #(word),
+            'NOUN': self.rules.isNoun,        #(word),
+            'ADJ':  self.rules.isAdjetive,    #(word),
+            'PREP': self.rules.isPreposition, #(word),
+            'VERB': self.rules.getVerbTense,  #(verb, word),
+            'ADV':  self.rules.isAdverb,      #(word),
+            'PRON': self.rules.isPronom,      #(word),
+            'INTJ': self.rules.isInterjection,#(word),
+            'CONJ': self.rules.isConjunction, #(word),
+            'NUM':  self.rules.isNumber,      #(word),
+            'PUNC': self.rules.isPunctuation  #(word),
+        }
+
+        if type == 'VERB':
+            verb = self.rules.getVerb(word)
+            return types[type](verb, word) if verb is not None else None
+        else:
+            return types[type](word)
+
 
     ####################################################################
 
@@ -261,11 +316,13 @@ class SemanticNetwork:
             'postVerb': self.postVerb.tolist(),
             'pronVerb': self.pronVerb.tolist(),
             'nounVerb': self.nounVerb.tolist(),
+            'endCondition': self.endCondition,
             'factVerb': self.factVerb,
             'factPreVerb': self.factPreVerb,
             'factPosVerb': self.factPosVerb,
             'factPronVrb': self.factPronVrb,
-            'factNounVrb': self.factNounVrb
+            'factNounVrb': self.factNounVrb,
+            'factCondition': self.factCondition
         }
 
         return json
@@ -295,11 +352,13 @@ class SemanticNetwork:
         self.factPosVerb = data['factPosVerb']
         self.factPronVrb = data['factPronVrb']
         self.factNounVrb = data['factNounVrb']
+        self.factCondition = data['factCondition']
         self.nucleous = np.array(data['nucleous'], dtype=float)
         self.prevVerb = np.array(data['prevVerb'], dtype=float)
         self.postVerb = np.array(data['postVerb'], dtype=float)
         self.pronVerb = np.array(data['pronVerb'], dtype=float)
         self.nounVerb = np.array(data['nounVerb'], dtype=float)
+        self.endCondition = data['endCondition']
 
     ####################################################################
 
@@ -319,7 +378,7 @@ class SemanticNetwork:
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.normalize(self.rules.getSyntax(txt))
+                tokens = self.rules.normalize(self.rules.getSyntax(txt+'.'))
                 struct = self.getSyntaxStruct(tokens)
                 #print self.printJson(struct)
                 out.append(struct)
@@ -369,8 +428,8 @@ class SemanticNetwork:
     ####################################################################
 
     def getPreVerb(self, type, tense):
-        y = self.getIndexof(type, self.grammarTypes)
-        x = self.getIndexof(tense, self.verbTenses)
+        x = self.getIndexof(type, self.grammarTypes)
+        y = self.getIndexof(tense, self.verbTenses)
 
         return self.prevVerb[y, x] if x is not None and y is not None else None
 
@@ -407,6 +466,32 @@ class SemanticNetwork:
 
     ####################################################################
 
+    def isFinnish(self, typePrev, typeNext):
+        value = self.getFinnish(typePrev, typeNext)
+        return True if value is not None and value > 0.0 else False
+
+    ####################################################################
+
+    def getFinnish(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev, self.grammarTypes)
+        x = self.getIndexof(typeNext, self.grammarTypes)
+
+        if x is not None and y is not None:
+            return self.workflow.getFinnish(y, x)
+
+        return None
+
+    ####################################################################
+
+    def setFinnish(self, typePrev, typeNext, n):
+        y = self.getIndexof(typePrev, self.grammarTypes)
+        x = self.getIndexof(typeNext, self.grammarTypes)
+
+        if x is not None and y is not None:
+            self.workflow.setFinnish(y, x, n)
+
+    ####################################################################
+
     def getIndexof(self, type, arr):
         try:
             idx = arr.index(type)
@@ -425,7 +510,9 @@ class SemanticNetwork:
         prev = None
         post = None
         prevToken = None
+        postToken = None
         i = 0
+        idx = 0
 
         for token in tokens:
             # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
@@ -439,11 +526,12 @@ class SemanticNetwork:
                 prev = self.rules.validType(prev, post)
                 post = self.rules.validType(post, beyond)
                 isStart = self.workflow.isStart(prev, post)
+                postToken = token
 
-                if isStart and limit > 0:
+                if isStart and idx < limit:
                     newGraph = Graph()
                     newGraph.importData(self.workflow.getJson())
-                    newGraph.id = limit
+                    newGraph.id = i
                     newGraph.setInit(prev)
                     newGraph.data = {
                         'root': '',
@@ -451,7 +539,7 @@ class SemanticNetwork:
                         'predicate': []
                     }
                     instances.append(newGraph)
-                    limit -= 1
+                    idx = lenght
 
                 for flow in instances:
                     isNext = flow.isNext(prev, post)
@@ -473,14 +561,26 @@ class SemanticNetwork:
                             if verb is not None and flow.data is not None:
                                 tense = self.rules.getVerbTense(verb, word)
                                 pron = self.rules.getVerbPron(verb, word)
+                                preVerb = self.getPreVerb(prev, tense)
+                                postVerb = self.getPostVerb(beyond, tense)
 
                                 # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                #if self.isPreVerb(prev, tense) and self.isPostVerb(tense, beyond):
-                                flow.data['root'] = word
+                                if preVerb > 0 and postVerb > 0:
+                                    flow.data['root'] = word
                             pass
 
                         elif isFinnish:
-                            if flow.data is not None and flow.data['root'] != '':
+                            axisX = self.workflow.finnish.sum(axis=1)
+                            xMax = axisX.max()
+                            value = flow.isFinnish(prev, post)
+                            prevWord = prevToken[0]
+                            postWord = postToken[0]
+                            idY = self.getIndexFromType(prev, prevWord)
+                            idX = self.getIndexFromType(post, postWord)
+                            key = "%s_%s" % (idY, idX)
+                            isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
+
+                            if flow.data is not None and flow.data['root'] != '' and value >= xMax and isCondition > 0:
                                 structs.append(flow.data)
                                 for f in instances:
                                     f.reset()
@@ -496,6 +596,9 @@ class SemanticNetwork:
                             }
                     pass
                 pass
+
+            instances = [flow for flow in instances if flow.data is not None]
+
             i += 1
             prev = post
             prevToken = token

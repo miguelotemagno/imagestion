@@ -51,11 +51,11 @@
             "es[t]?[aeo][s]?|aquel(l[ao][s]?)?"
         ],
         "adjPossesive" : [
-            "mi[oa]?|tu(y[oa])?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
+            "mi[oa]?[s]?|tu(y[oa][s]?)?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
             "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?",
-            "otro|cualquier|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
+            "otr[oa][s]?|cualquier[a]?|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
             "primer[oa]?|segund[oa]|tercer[oa]?|(cuar|quin|sex)t[oa]|septim[oa]|octav[oa]|noven[oa]",
@@ -82,17 +82,17 @@
         "adjSuperlative" : ["\\w+(isim|errim)[oa][s]?|(su|hi)per\\w+|mega\\w+|supremo"],
         "adjAll" : [
             "(antigu|cuant)[ao][s]?|simple",
-            "\\w+(([^na]d[oa]|ble|[ea]nte|[aei]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
+            "\\w+(([^na]d[oa]|ble|[tsr][ea]nte|[^l][^aeiou]?[lr]?[aei]v[eao]|(os|[ai]v)[ao])[s]?|[^zu][ai]l(es)?)"
         ]
     },
     "noun" : {
 		"sustPropio" : [
-			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|or|d[oa])",
+			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|[ntbd]or|d[oa])",
 			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a",
 			"vargas|welch"
 		],
 		"sustSimple" : [
-			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz|mbra|ista[s]?)",
+			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
 			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
 			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?",
 			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret|expedicion|di)ari)[oa][s]?"
@@ -101,7 +101,7 @@
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
 			"\\w+(fuente|aficionado|vision|grafo|copio)"
 		],
-        "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
+        "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|[^j]or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
 		"sustDisminutivo" : ["\\w+(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
@@ -110,8 +110,8 @@
 		],
 		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria)[s]?"],
         "sustAll" : [
-            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|or(es)?|tri(z|ces)|ez|ado[s]?)",
-            "\\w{3,}(es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
+            "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|[^j]or(es)?|tri(z|ces)|ez|ado[s]?)",
+            "\\w{3,}([^i]es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
         ]
     },
     "preposition" : {
@@ -171,7 +171,7 @@
 		],
         "pronAll" : [
             "(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
-            "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)?",
+            "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)",
             "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
     },
@@ -609,6 +609,27 @@
 			"nos"   : "actu(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "actu(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "actu(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"anadir" : {
+			"inf"   : "anadir",
+			"ger"   : "anadiendo",
+			"par"   : "anadido",
+			"ip"    : "anadimos|anadis|anado|anade(n|s)?",
+			"ipi"   : "anadia(is|mos|n|s)?",
+			"if"    : "anadire|anadireis|anadiremos|anadira(n|s)?",
+			"ic"    : "anadiria(is|mos|n|s)?",
+			"ipps"  : "anadi(eron|mos|o|ste|steis)?",
+			"i"     : "a(nada|nadamos|nadan|nade|nadid)",
+			"sp"    : "anada(is|mos|n|s)?",
+			"spi"   : "anadiera(is|mos|n|s)?",
+			"spi2"  : "anadiese(is|mos|n|s)?",
+			"sf"    : "anadiere(is|mos|n|s)?",
+			"yo"    : "a(nada|nadi|nadia|nadiera|nadiere|nadiese|nadire|nadiria|nado)",
+			"tu"    : "anad(as|e|es|ias|ieras|ieres|ieses|iras|irias|iste)",
+			"el_la" : "a(nada|nade|nadia|nadiera|nadiere|nadiese|nadio|nadira|nadiria)",
+			"nos"   : "anad(amos|iamos|ieramos|ieremos|iesemos|imos|iremos|iriamos)",
+			"uds"   : "anad(ais|iais|id|ierais|iereis|ieseis|ireis|iriais|is|isteis)",
+			"ellos" : "anad(an|en|ian|ieran|ieren|ieron|iesen|iran|irian)"
 		}
 	},
 	"b" : {
@@ -1059,6 +1080,27 @@
 		}
 	},
 	"d" : {
+		"deber" : {
+			"inf"   : "deber",
+			"ger"   : "debiendo",
+			"par"   : "debido",
+			"ip"    : "debo|debe(is|mos|n|s)?",
+			"ipi"   : "debia(is|mos|n|s)?",
+			"if"    : "deb(ere|ereis|eremos|era(n|s)?)",
+			"ic"    : "deberia(is|mos|n|s)?",
+			"ipps"  : "debi(eron|mos|o|ste|steis)?",
+			"i"     : "debe|debed|deba(mos|n)?",
+			"sp"    : "deba(is|mos|n|s)?",
+			"spi"   : "debiera(is|mos|n|s)?",
+			"spi2"  : "debiese(is|mos|n|s)?",
+			"sf"    : "debiere(is|mos|n|s)?",
+			"yo"    : "deb(a|ere|eria|i|ia|iera|iere|iese|o)",
+			"tu"    : "deb(as|e|eras|erias|es|ias|ieras|ieres|ieses|iste)",
+			"el_la" : "deb(a|e|era|eria|ia|iera|iere|iese|io)",
+			"nos"   : "deb(amos|emos|eremos|eriamos|iamos|ieramos|ieremos|iesemos|imos)",
+			"uds"   : "deb(ais|ed|eis|ereis|eriais|iais|ierais|iereis|ieseis|isteis)",
+			"ellos" : "deb(an|en|eran|erian|ian|ieran|ieren|ieron|iesen)"
+		},
 		"dar" : {
 			"inf"  : "dar",
 			"ger"  : "dando",
@@ -2191,7 +2233,91 @@
 			"nos"   : "necesit(aramos|amos|aremos|ariamos|abamos|emos|asemos)",
 			"uds"   : "necesit(eis|asteis|areis|ariais|ad|ais|arais|abais|aseis)",
 			"ellos" : "nece(sitarian|sitaren|sitaran|sitasen|sitaban|siten|sitan|sitaron)"
-		}		
+		},
+		"nacer" : {
+			"inf"   : "nacer",
+			"ger"   : "naciendo",
+			"par"   : "nacido",
+			"ip"    : "nazco|nace(is|mos|n|s)?",
+			"ipi"   : "nacia(is|mos|n|s)?",
+			"if"    : "(nacera|naceran|naceras|nacere|nacereis|naceremos)",
+			"ic"    : "naceria(is|mos|n|s)?",
+			"ipps"  : "naci(eron|mos|o|ste|steis)?",
+			"i"     : "nace|naced|nazca(mos|n)?",
+			"sp"    : "nazca(is|mos|n|s)?",
+			"spi"   : "naciera(is|mos|n|s)?",
+			"spi2"  : "naciese(is|mos|n|s)?",
+			"sf"    : "naciere(is|mos|n|s)?",
+			"yo"    : "na(cere|ceria|ci|cia|ciera|ciere|ciese|zca|zco)",
+			"tu"    : "na(ce|ceras|cerias|ces|cias|cieras|cieres|cieses|ciste|zcas)",
+			"el_la" : "na(ce|cera|ceria|cia|ciera|ciere|ciese|cio|zca)",
+			"nos"   : "na(cemos|ceremos|ceriamos|ciamos|cieramos|cieremos|ciesemos|cimos|zcamos)",
+			"uds"   : "na(ced|ceis|cereis|ceriais|ciais|cierais|ciereis|cieseis|cisteis|zcais)",
+			"ellos" : "n(acen|aceran|acerian|acian|acieran|acieren|acieron|aciesen|azcan)"
+		},
+		"nadar" : {
+			"inf"   : "nadar",
+			"ger"   : "nadando",
+			"par"   : "nadado",
+			"ip"    : "nado|nada(is|mos|n|s)?",
+			"ipi"   : "nadaba(is|mos|n|s)?",
+			"if"    : "nad(ara|aran|aras|are|areis|aremos)",
+			"ic"    : "nadaria(is|mos|n|s)?",
+			"ipps"  : "nad(amos|aron|aste|asteis|e|o)",
+			"i"     : "nada|nadad|nade(mos|n)?",
+			"sp"    : "nade(is|mos|n|s)?",
+			"spi"   : "nadara(is|mos|n|s)?",
+			"spi2"  : "nadase(is|mos|n|s)?",
+			"sf"    : "nadare(is|mos|n|s)?",
+			"yo"    : "nad(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "nades|nada(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "nade|nado|nada(ba|ra|re|ria|se)?",
+			"nos"   : "nad(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "nad(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "nad(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"normar" : {
+			"inf"   : "normar",
+			"ger"   : "normando",
+			"par"   : "normado",
+			"ip"    : "normo|norma(is|mos|n|s)?",
+			"ipi"   : "normaba(is|mos|n|s)?",
+			"if"    : "norm(ara|aran|aras|are|areis|aremos)",
+			"ic"    : "normaria(is|mos|n|s)?",
+			"ipps"  : "norm(amos|aron|aste|asteis|e|o)",
+			"i"     : "norm(a|ad|e|emos|en)",
+			"sp"    : "norme(is|mos|n|s)?",
+			"spi"   : "normara(is|mos|n|s)?",
+			"spi2"  : "normase(is|mos|n|s)?",
+			"sf"    : "normare(is|mos|n|s)?",
+			"yo"    : "norm(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "normes|norma(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "norme|normo|norma(ba|ra|re|ria|se)?",
+			"nos"   : "norm(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "norm(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "norm(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"normalizar" : {
+			"inf"   : "normalizar",
+			"ger"   : "normalizando",
+			"par"   : "normalizado",
+			"ip"    : "normalizo|normaliza(is|mos|n|s)?",
+			"ipi"   : "normalizaba(is|mos|n|s)?",
+			"if"    : "norma(lizara|lizaran|lizaras|lizare|lizareis|lizaremos)",
+			"ic"    : "normalizaria(is|mos|n|s)?",
+			"ipps"  : "norma(lice|lizamos|lizaron|lizaste|lizasteis|lizo)",
+			"i"     : "norma(liza|lizad|lice(mos|n)?)",
+			"sp"    : "normalice(is|mos|n|s)?",
+			"spi"   : "normalizara(is|mos|n|s)?",
+			"spi2"  : "normalizase(is|mos|n|s)?",
+			"sf"    : "normalizare(is|mos|n|s)?",
+			"yo"    : "normali(ce|zaba|zara|zare|zaria|zase|zo)",
+			"tu"    : "normalices|normaliza(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "normalice|normalizo|normaliza(ba|ra|re|ria|se)?",
+			"nos"   : "normali(cemos|zabamos|zamos|zaramos|zaremos|zariamos|zasemos)",
+			"uds"   : "normali(ceis|zabais|zad|zais|zarais|zareis|zariais|zaseis|zasteis)",
+			"ellos" : "norma(licen|lizaban|lizan|lizaran|lizaren|lizarian|lizaron|lizasen)"
+		}
 	},
 	"o" : {
 		"oir" : {
@@ -2280,6 +2406,27 @@
 		}
 	},
 	"p" : {
+		"predecir" : {
+			"inf"   : "predecir",
+			"ger"   : "prediciendo",
+			"par"   : "predicho",
+			"ip"    : "predecimos|predecis|predigo|predice(n|s)?",
+			"ipi"   : "predecia(is|mos|n|s)?",
+			"if"    : "predecire|predecireis|predeciremos|predecira(n|s)?",
+			"ic"    : "predeciria(is|mos|n|s)?",
+			"ipps"  : "predij(imos|iste|isteis|o|e(ron)?)",
+			"i"     : "predecid|predice|prediga(mos|n)?",
+			"sp"    : "prediga(is|mos|n|s)?",
+			"spi"   : "predijera(is|mos|n|s)?",
+			"spi2"  : "predijese(is|mos|n|s)?",
+			"sf"    : "predijere(is|mos|n|s)?",
+			"yo"    : "pred(ecia|ecire|eciria|iga|igo|ije|ijera|ijere|ijese)",
+			"tu"    : "pred(ecias|eciras|ecirias|ice|ices|igas|ijeras|ijeres|ijeses|ijiste)",
+			"el_la" : "pred(ecia|ecira|eciria|ice|iga|ijera|ijere|ijese|ijo)",
+			"nos"   : "pred(eciamos|ecimos|eciremos|eciriamos|igamos|ijeramos|ijeremos|ijesemos|ijimos)",
+			"uds"   : "pred(eciais|ecid|ecireis|eciriais|ecis|igais|ijerais|ijereis|ijeseis|ijisteis)",
+			"ellos" : "pred(ecian|eciran|ecirian|icen|igan|ijeran|ijeren|ijeron|ijesen)"
+		},
 		"pedir" : {
 			"inf"  : "pedir",
 			"ger"  : "pidiendo",
@@ -2510,6 +2657,27 @@
 			"nos"   : "publi(cabamos|camos|caramos|caremos|cariamos|casemos|quemos)",
 			"uds"   : "publi(cabais|cad|cais|carais|careis|cariais|caseis|casteis|queis)",
 			"ellos" : "publi(caban|can|caran|caren|carian|caron|casen|quen)"
+		},
+		"proponer" : {
+			"inf"   : "proponer",
+			"ger"   : "proponiendo",
+			"par"   : "propuesto",
+			"ip"    : "propongo|propone(is|mos|n|s)?",
+			"ipi"   : "proponia(is|mos|n|s)?",
+			"if"    : "propondre|propondreis|propondremos|propondra(n|s)?",
+			"ic"    : "propondria(is|mos|n|s)?",
+			"ipps"  : "propus(e|ieron|imos|iste|isteis|o)",
+			"i"     : "propon(ed|ga|gamos|gan)?",
+			"sp"    : "proponga(is|mos|n|s)?",
+			"spi"   : "propusiera(is|mos|n|s)?",
+			"spi2"  : "propusiese(is|mos|n|s)?",
+			"sf"    : "propusiere(is|mos|n|s)?",
+			"yo"    : "prop(ondre|ondria|onga|ongo|onia|use|usiera|usiere|usiese)",
+			"tu"    : "propusieras|propusieres|propusieses|propusiste|propon(dras|drias|es|gas|ias)?",
+			"el_la" : "prop(ondra|ondria|one|onga|onia|usiera|usiere|usiese|uso)",
+			"nos"   : "prop(ondremos|ondriamos|onemos|ongamos|oniamos|usieramos|usieremos|usiesemos|usimos)",
+			"uds"   : "prop(ondreis|ondriais|oned|oneis|ongais|oniais|usierais|usiereis|usieseis|usisteis)",
+			"ellos" : "prop(ondran|ondrian|onen|ongan|onian|usieran|usieren|usieron|usiesen)"
 		}
 	},
 	"q" : {
@@ -2724,6 +2892,27 @@
 			"nos"   : "",
 			"uds"   : "",
 			"ellos" : ""
+		},
+		"reemplazar" : {
+			"inf"   : "reemplazar",
+			"ger"   : "reemplazando",
+			"par"   : "reemplazado",
+			"ip"    : "reemplazo|reemplaza(is|mos|n|s)?",
+			"ipi"   : "reemplazaba(is|mos|n|s)?",
+			"if"    : "reemplazare|reemplazareis|reemplazaremos|reemplazara(n|s)?",
+			"ic"    : "reemplazaria(is|mos|n|s)?",
+			"ipps"  : "reempla(ce|zamos|zaron|zaste|zasteis|zo)",
+			"i"     : "reemplaza|reemplazad|reemplace(mos|n)?",
+			"sp"    : "reemplace(is|mos|n|s)?",
+			"spi"   : "reemplazara(is|mos|n|s)?",
+			"spi2"  : "reemplazase(is|mos|n|s)?",
+			"sf"    : "reemplazare(is|mos|n|s)?",
+			"yo"    : "reempla(ce|zaba|zara|zare|zaria|zase|zo)",
+			"tu"    : "reemplaces|reemplaza(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "reemplace|reemplazo|reemplaza(ba|ra|re|ria|se)?",
+			"nos"   : "reempla(cemos|zabamos|zamos|zaramos|zaremos|zariamos|zasemos)",
+			"uds"   : "reempla(ceis|zabais|zad|zais|zarais|zareis|zariais|zaseis|zasteis)",
+			"ellos" : "reempla(cen|zaban|zan|zaran|zaren|zarian|zaron|zasen)"
 		}
 	},
 	"s" : {
@@ -2747,6 +2936,27 @@
 			"nos"  : "(so|era|se(a|re|ria)|fu(i|er[ae]|ese))mos",
 			"uds"  : "sed|(so|era|se(re|ria|a)|fu(iste|er[ea]|ese))is",
 			"ellos": "son|(se(r[i]?)?|(fu)?er)an|fue(ron|[rs]en)"
+		},
+		"suceder" : {
+			"inf"   : "suceder",
+			"ger"   : "sucediendo",
+			"par"   : "sucedido",
+			"ip"    : "suced(e|eis|emos|en|es|o)",
+			"ipi"   : "sucedia(is|mos|n|s)?",
+			"if"    : "sucedere|sucedereis|sucederemos|sucedera(n|s)?",
+			"ic"    : "sucederia(is|mos|n|s)?",
+			"ipps"  : "sucedi(eron|mos|o|ste|steis)?",
+			"i"     : "s(uceda|ucedamos|ucedan|ucede|uceded)",
+			"sp"    : "suceda(is|mos|n|s)?",
+			"spi"   : "sucediera(is|mos|n|s)?",
+			"spi2"  : "sucediese(is|mos|n|s)?",
+			"sf"    : "sucediere(is|mos|n|s)?",
+			"yo"    : "suced(a|ere|eria|i|ia|iera|iere|iese|o)",
+			"tu"    : "suced(as|e|eras|erias|es|ias|ieras|ieres|ieses|iste)",
+			"el_la" : "suced(a|e|era|eria|ia|iera|iere|iese|io)",
+			"nos"   : "suced(amos|emos|eremos|eriamos|iamos|ieramos|ieremos|iesemos|imos)",
+			"uds"   : "suced(ais|ed|eis|ereis|eriais|iais|ierais|iereis|ieseis|isteis)",
+			"ellos" : "suced(an|en|eran|erian|ian|ieran|ieren|ieron|iesen)"
 		},
 		"saber" : {
 			"inf"  : "saber",
@@ -3046,6 +3256,27 @@
 		}
 	},
 	"v" : {
+		"verificar" : {
+			"inf"   : "verificar",
+			"ger"   : "verificando",
+			"par"   : "verificado",
+			"ip"    : "verifico|verifica(is|mos|n|s)?",
+			"ipi"   : "verificaba(is|mos|n|s)?",
+			"if"    : "verificare|verificareis|verificaremos|verificara(n|s)?",
+			"ic"    : "verificaria(is|mos|n|s)?",
+			"ipps"  : "verifi(camos|caron|caste|casteis|co|que)",
+			"i"     : "verifique|verifiquemos|verifiquen|verifica(d)?",
+			"sp"    : "verifique(is|mos|n|s)?",
+			"spi"   : "verificara(is|mos|n|s)?",
+			"spi2"  : "verificase(is|mos|n|s)?",
+			"sf"    : "verificare(is|mos|n|s)?",
+			"yo"    : "verifi(caba|cara|care|caria|case|co|que)",
+			"tu"    : "verifiques|verifica(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "verifico|verifique|verifica(ba|ra|re|ria|se)?",
+			"nos"   : "verifi(cabamos|camos|caramos|caremos|cariamos|casemos|quemos)",
+			"uds"   : "verifi(cabais|cad|cais|carais|careis|cariais|caseis|casteis|queis)",
+			"ellos" : "verifi(caban|can|caran|caren|carian|caron|casen|quen)"
+		},
 		"volver" : {
 			"inf"  : "volver",
 			"ger"  : "volviendo",
