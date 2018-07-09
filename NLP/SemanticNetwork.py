@@ -533,6 +533,8 @@ class SemanticNetwork:
                 postToken = token
 
                 if isStart and idx < limit:
+                    list = [x for x in instances if x.data is not None]
+                    instances = list
                     newGraph = Graph()
                     newGraph.importData(self.workflow.getJson())
                     newGraph.id = i
