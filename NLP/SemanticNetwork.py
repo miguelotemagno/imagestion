@@ -81,6 +81,10 @@ class SemanticNetwork:
         pass
 
     ####################################################################
+    # TODO se pretende implementar mismas funcionalidades aplicando librerias NLP de Google
+    # TODO actualizar pip para python a la version 10.0.1 (pip install --upgrade pip)
+    #      luego:   pip install --upgrade google-cloud-language
+
 
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
