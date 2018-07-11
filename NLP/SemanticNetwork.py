@@ -382,13 +382,13 @@ class SemanticNetwork:
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.normalize(self.rules.getSyntax(txt+'.'))
-                struct = self.getSyntaxStruct(tokens)
+                tokens = self.rules.normalize(self.rules.getSyntax(txt))
+                struct = self.getSyntaxStruct(txt, tokens)
                 #print self.printJson(struct)
                 out.append(struct)
         else:
             tokens = self.rules.normalize(self.rules.getSyntax(text))
-            struct = self.getSyntaxStruct(tokens)
+            struct = self.getSyntaxStruct(text, tokens)
             #print self.printJson(struct)
             out.append(struct)
 
@@ -506,7 +506,7 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def getSyntaxStruct(self, tokens):
+    def getSyntaxStruct(self, text, tokens):
         structs = []
         lenght = len(tokens)
         instances = []
@@ -538,6 +538,7 @@ class SemanticNetwork:
                     newGraph.id = i
                     newGraph.setInit(prev)
                     newGraph.data = {
+                        'text': text,
                         'root': '',
                         'subject': [prevToken],
                         'predicate': []
@@ -594,6 +595,7 @@ class SemanticNetwork:
                             flow.setInit(prev)
                             flow.setNext(post)
                             flow.data = {
+                                'text': text,
                                 'root': '',
                                 'subject': [prevToken, token],
                                 'predicate': []

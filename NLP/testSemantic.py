@@ -21,10 +21,16 @@ if sys.argv[1] == 'train':
             try:
                 tokens = s.rules.getSyntax(frase)
                 syntax = s.rules.normalize(tokens)
-                print(tokens)
-                print "-->"
-                print(syntax)
+                print "1) tokens: %s" % str(tokens)
+                print "2) syntax: %s" % str(syntax)
+                print "3) train:"
                 s.train(frase, verb)
+                list = s.analize(frase)
+                print "4) test: %s\n" % str(list)
+                for item in list[0]:
+                    print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (
+                    0, item['text'], item['root'], str(item['subject']), str(item['predicate']))
+
             except ValueError:
                 print(ValueError)
                 continue
@@ -43,7 +49,7 @@ if sys.argv[1] == 'web':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['root'], str(item['subject']), str(item['predicate']))
+                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"
@@ -59,5 +65,5 @@ if sys.argv[1] == 'file':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['root'], str(item['subject']), str(item['predicate']))
+                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
