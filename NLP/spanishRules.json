@@ -358,6 +358,27 @@
 			"uds"   : "adv((ertia|irtiere|ertiria|irta|ertiste|ertire|irtiera|ert|irtiese)is|ertid)",
 			"ellos" : "adv(ertiran|ertian|irtieran|irtieron|iertan|irtieren|ierten|irtiesen|ertirian)"
 		},
+		"acampar" : {
+			"inf"   : "acampar",
+			"ger"   : "acampando",
+			"par"   : "acampado",
+			"ip"    : "acampo|acampa(is|mos|n|s)?",
+			"ipi"   : "acampaba(is|mos|n|s)?",
+			"if"    : "a(campara|camparan|camparas|campare|campareis|camparemos)",
+			"ic"    : "acamparia(is|mos|n|s)?",
+			"ipps"  : "acamp(amos|aron|aste|asteis|e|o)",
+			"i"     : "a(campa|campad|campe|campemos|campen)",
+			"sp"    : "acampe(is|mos|n|s)?",
+			"spi"   : "acampara(is|mos|n|s)?",
+			"spi2"  : "acampase(is|mos|n|s)?",
+			"sf"    : "acampare(is|mos|n|s)?",
+			"yo"    : "acamp(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "acampes|acampa(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "a(campa|campaba|campara|campare|camparia|campase|campe|campo)",
+			"nos"   : "acamp(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "acamp(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "acamp(aban|an|aran|aren|arian|aron|asen|en)"
+		},
 		"acudir" : {
 			"inf"  : "acudir",
 			"ger"  : "acudiendo",
