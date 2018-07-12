@@ -122,7 +122,7 @@ class SemanticNetwork:
             #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                print "m[%s,%s]" % (type, nextType)
+                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.getIndexFromType(type, word), nextWord, self.getIndexFromType(nextType, nextWord))
                 y = self.getIndexof(type, self.grammarTypes)
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
@@ -136,19 +136,19 @@ class SemanticNetwork:
                     start[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "postVerb[%s,%s] -> %s {%s, %s(%s: %s)}" % (type, nextType, root, type, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "prevVerb[%s,%s] -> %s {%s(%s: %s), %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], nextType)
                     nucleous[y, x] += 1
                     prevVerb[z, y] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.getIndexof(noun, self.nouns)
-                    print "[%s,%s][%s,%s] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
+                    print "noun[%s,%s] -> %s {%s: %s}" % (tense, noun, root, verb, self.rules.rules['_comment'][tense])
                     nounVerb[z, v] += 1
 
         #print "[%s,%s]" % (prevType,lastType)
