@@ -574,10 +574,11 @@ class SemanticNetwork:
                                     flow.data['root'] = word
                             pass
 
-                        elif isFinnish:
+                        elif isFinnish and flow.data is not None:
                             axisX = self.workflow.finnish.sum(axis=1)
                             xMax = axisX.max()
-                            value = flow.isFinnish(prev, post)
+                            value = flow.getFinnishByTags(prev, post)
+                            isValidValue = True if value is not None and value >= xMax else False
                             prevWord = prevToken[0]
                             postWord = postToken[0]
                             idY = self.getIndexFromType(prev, prevWord)
@@ -585,7 +586,7 @@ class SemanticNetwork:
                             key = "%s_%s" % (idY, idX)
                             isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
 
-                            if flow.data is not None and flow.data['root'] != '' and value >= xMax and isCondition > 0:
+                            if flow.data['root'] != '' and isValidValue and isCondition > 0:
                                 structs.append(flow.data)
                                 for f in instances:
                                     f.reset()

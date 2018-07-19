@@ -131,6 +131,17 @@ class Graph:
 
     ####################################################################
 
+    def getFinnishByTags(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            return self.finnish[y, x]
+
+        return None
+
+    ####################################################################
+
     def reset(self):
         self.flow = []
         self.data = None

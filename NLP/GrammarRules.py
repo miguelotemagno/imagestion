@@ -195,7 +195,7 @@ class GrammarRules:
 		
 	def getVerbTense(self, verb, text):
 		char = text[0]
-		isIn = re.compile('^(ger|par|i([cpf]|nf|pi|pps?)|sp[i]?[2]?|sf)$')
+		isIn = re.compile('^(ger|par|i([cpf]|nf|pi|pps)?|sp[i]?[2]?|sf)$')
 		
 		if char in self.rules:
 			for tense, hash in self.rules[char][verb].iteritems():
