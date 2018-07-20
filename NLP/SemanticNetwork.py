@@ -561,24 +561,27 @@ class SemanticNetwork:
                         precondition = self.isNucleous(prev, post)
                         postcondition = self.isNucleous(post, beyond)
 
-                        if precondition and postcondition:  # isNucleous
+                        if precondition and postcondition and post == 'VERB':  # isNucleous
                             verb = self.rules.getVerb(word)
-                            if verb is not None and flow.data is not None:
-                                tense = self.rules.getVerbTense(verb, word)
-                                pron = self.rules.getVerbPron(verb, word)
-                                preVerb = self.getPreVerb(prev, tense)
-                                postVerb = self.getPostVerb(beyond, tense)
-
-                                # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                if preVerb > 0 and postVerb > 0:
-                                    flow.data['root'] = word
-                            pass
+                            flow.data['root'] = word
+                            # TODO: resolver problemas para identificar nucleo y diferenciar conjuncion de verbo para algunas palabras
+                            # if verb is not None and flow.data is not None:
+                            #     tense = self.rules.getVerbTense(verb, word)
+                            #     pron = self.rules.getVerbPron(verb, word)
+                            #     preVerb = self.getPreVerb(prev, tense)
+                            #     postVerb = self.getPostVerb(beyond, tense)
+                            #
+                            #     # TODO: agregar condiciones de noun x verb para identificar el nucleo
+                            #     if preVerb > 0 and postVerb > 0:
+                            #         flow.data['root'] = word
+                            # pass
 
                         elif isFinnish and flow.data is not None:
                             axisX = self.workflow.finnish.sum(axis=1)
                             xMax = axisX.max()
                             value = flow.getFinnishByTags(prev, post)
-                            isValidValue = True if value is not None and value >= xMax else False
+                            # TODO: limitar retorno de None, no es capaz de identificar fin de oracion, tal vez falta de vocabulario para diferenciar NOUNs de otros tipos
+                            isValidValue = True #if value is not None and value >= xMax else False
                             prevWord = prevToken[0]
                             postWord = postToken[0]
                             idY = self.getIndexFromType(prev, prevWord)
