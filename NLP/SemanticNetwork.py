@@ -544,11 +544,11 @@ class SemanticNetwork:
                         'predicate': []
                     }
                     instances.append(newGraph)
-                    idx = lenght
+                    idx = len(instances)
 
                 for flow in instances:
                     isNext = flow.isNext(prev, post)
-                    isFinnish = flow.isFinnish(prev, post)
+                    isFinnish = flow.isFinnish(prev, post) and flow.data is not None
 
                     if isNext:
                         flow.setNext(post)
@@ -560,8 +560,9 @@ class SemanticNetwork:
 
                         precondition = self.isNucleous(prev, post)
                         postcondition = self.isNucleous(post, beyond)
+                        isNucleous = precondition and postcondition and post == 'VERB' and flow.data is not None
 
-                        if precondition and postcondition and post == 'VERB':  # isNucleous
+                        if isNucleous:
                             verb = self.rules.getVerb(word)
                             flow.data['root'] = word
                             # TODO: resolver problemas para identificar nucleo y diferenciar conjuncion de verbo para algunas palabras
@@ -574,25 +575,31 @@ class SemanticNetwork:
                             #     # TODO: agregar condiciones de noun x verb para identificar el nucleo
                             #     if preVerb > 0 and postVerb > 0:
                             #         flow.data['root'] = word
+                            #         for f in instances:
+                            #             if f.data['root'] is not None:
+                            #                 f.reset()
+                            #                 idx -= 1
                             # pass
 
-                        elif isFinnish and flow.data is not None:
+                        elif isFinnish:
                             axisX = self.workflow.finnish.sum(axis=1)
                             xMax = axisX.max()
                             value = flow.getFinnishByTags(prev, post)
-                            # TODO: limitar retorno de None, no es capaz de identificar fin de oracion, tal vez falta de vocabulario para diferenciar NOUNs de otros tipos
                             isValidValue = True #if value is not None and value >= xMax else False
-                            prevWord = prevToken[0]
-                            postWord = postToken[0]
-                            idY = self.getIndexFromType(prev, prevWord)
-                            idX = self.getIndexFromType(post, postWord)
-                            key = "%s_%s" % (idY, idX)
-                            isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
 
-                            if flow.data['root'] != '' and isValidValue and isCondition > 0:
-                                structs.append(flow.data)
-                                for f in instances:
-                                    f.reset()
+                            if isValidValue:
+                                # TODO: limitar retorno de None, no es capaz de identificar fin de oracion, tal vez falta de vocabulario para diferenciar NOUNs de otros tipos
+                                prevWord = prevToken[0]
+                                postWord = postToken[0]
+                                idY = self.getIndexFromType(prev, prevWord)
+                                idX = self.getIndexFromType(post, postWord)
+                                key = "%s_%s" % (idY, idX)
+                                isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
+
+                                if flow.data['root'] != '' and isCondition > 0:
+                                    structs.append(flow.data)
+                                    for f in instances:
+                                        f.reset()
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
