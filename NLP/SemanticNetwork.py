@@ -42,6 +42,10 @@ from time import sleep
 import re
 import thread
 
+# http://chriskiehl.com/article/parallelism-in-one-line/
+from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
+
 class SemanticNetwork:
     """
             "inf"  : "infinitivo",
