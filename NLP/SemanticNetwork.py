@@ -32,12 +32,15 @@
 # +-----------------------------------------------------------------------+
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
+import sys
 
 import numpy as np
 import json as js
 from GrammarRules import *
 from Graph import *
+from time import sleep
 import re
+import thread
 
 class SemanticNetwork:
     """
@@ -77,6 +80,7 @@ class SemanticNetwork:
         self.factNounVrb = 0
         self.factCondition = 0
         self.fileDb = None
+        self.busy = None
         #self.load('semanticNet.json')
         pass
 
@@ -376,20 +380,30 @@ class SemanticNetwork:
     ####################################################################
 
     def analize(self, text):
-        expr = re.compile(r'(.+[.])')
+        expr = re.compile(r'(.+)\.?')
         list = expr.findall(text)
         out = []
+        self.busy = 0
+        addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.normalize(self.rules.getSyntax(txt))
-                struct = self.getSyntaxStruct(txt, tokens)
-                #print self.printJson(struct)
-                out.append(struct)
+                #tokens = self.rules.normalize(self.rules.getSyntax(txt))
+                try:
+                    thread.start_new_thread(addSrtuct, (out, self.busy, txt))
+                    print "%d %s " % (self.busy, txt)
+                    self.busy += 1
+                except Exception, e:
+                    #self.busy = 0
+                    print "[%d] %s" % (self.busy, e)
+
+            while self.busy > 0:
+                sleep(1)
+                #print ("%d " % self.busy)
+
         else:
             tokens = self.rules.normalize(self.rules.getSyntax(text))
             struct = self.getSyntaxStruct(text, tokens)
-            #print self.printJson(struct)
             out.append(struct)
 
         return out
@@ -517,6 +531,7 @@ class SemanticNetwork:
         postToken = None
         i = 0
         idx = 0
+        #self.busy += 1
 
         for token in tokens:
             # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
@@ -619,5 +634,7 @@ class SemanticNetwork:
             i += 1
             prev = post
             prevToken = token
+
+        self.busy -= 1
 
         return structs
