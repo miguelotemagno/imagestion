@@ -4,6 +4,7 @@ from SemanticNetwork import *
 
 s = SemanticNetwork()
 
+# ejemplo: python testSemantic.py train '' ''
 if sys.argv[1] == 'train':
     train = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticTrainer.txt'
     dbFile = sys.argv[3] if sys.argv[3] is not None and sys.argv[3] != '' else 'semanticNet.json'
@@ -35,6 +36,7 @@ if sys.argv[1] == 'train':
                 print(ValueError)
                 continue
 
+# ejemplo: python testSemantic.py web https://definicion.de/taoismo ''
 if sys.argv[1] == 'web':
     url = 'https://raw.githubusercontent.com/miguelotemagno/imagestion/imagestion_1.0/NLP/grammarTest.txt'
     if sys.argv[2] != '':
@@ -51,6 +53,7 @@ if sys.argv[1] == 'web':
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
+# ejemplo: python testSemantic.py file serotoninaTrainTest.txt ''
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"
     if sys.argv[2] != '':
