@@ -395,7 +395,7 @@ class SemanticNetwork:
     ####################################################################
 
     def analize(self, text):
-        expr = re.compile(r'(.+)\.?')
+        expr = re.compile(r'[^.]+')
         list = expr.findall(text)
         out = mp.Queue()
         lsOut = []
