@@ -1,6 +1,8 @@
 import sys
 import re
+import multiprocessing
 import time
+
 from SemanticNetwork import *
 
 start_time = time.time()
@@ -74,4 +76,4 @@ if sys.argv[1] == 'file':
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
 
-print 'Done! Time taken: {} sec'.format(time.time() - start_time)
+print 'Done! Time taken: %f sec for %d CPUs' % (time.time() - start_time, multiprocessing.cpu_count())
