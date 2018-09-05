@@ -43,8 +43,11 @@ import re
 import thread
 
 # http://chriskiehl.com/article/parallelism-in-one-line/
-from multiprocessing import Pool
-from multiprocessing.dummy import Pool as ThreadPool
+#from multiprocessing import Pool
+#from multiprocessing.dummy import Pool as ThreadPool
+
+# https://sebastianraschka.com/Articles/2014_multiprocessing.html
+import multiprocessing as mp
 
 class SemanticNetwork:
     """
@@ -383,34 +386,51 @@ class SemanticNetwork:
 
     ####################################################################
 
+    def addProcess(self, i, out, txt):
+        #out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
+        tokens = self.rules.normalize(self.rules.getSyntax(txt))
+        struct = self.getSyntaxStruct(txt, tokens)
+        out[str(i)] = struct
+        print "(%d) %s " % (i, str(struct))
+
+    ####################################################################
+
     def analize(self, text):
         expr = re.compile(r'(.+)\.?')
         list = expr.findall(text)
-        out = []
+        out = {}
+        lsOut = []
+        processes = []
         self.busy = 0
-        addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
+        #addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
 
         if len(list) > 0:
             for txt in list:
                 #tokens = self.rules.normalize(self.rules.getSyntax(txt))
                 try:
-                    thread.start_new_thread(addSrtuct, (out, self.busy, txt))
+                    #thread.start_new_thread(addSrtuct, (out, self.busy, txt))
+                    processes.append(mp.Process(target=self.addProcess, args=(self.busy, out, txt)))
                     print "%d %s " % (self.busy, txt)
                     self.busy += 1
                 except Exception, e:
                     #self.busy = 0
                     print "[%d] %s" % (self.busy, e)
 
-            while self.busy > 0:
-                sleep(1)
-                #print ("%d " % self.busy)
+            # Run processes
+            for p in processes:
+                p.start()
 
+            # Exit the completed processes
+            for p in processes:
+                p.join()
+
+            lsOut = [out[str(i)] for i in range(0, len(out))]
         else:
             tokens = self.rules.normalize(self.rules.getSyntax(text))
             struct = self.getSyntaxStruct(text, tokens)
-            out.append(struct)
+            lsOut.append(struct)
 
-        return out
+        return lsOut
 
     ####################################################################
 
