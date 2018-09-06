@@ -33,9 +33,15 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import Image
+#import Image
+from PIL import Image
 import thread
 from datetime import datetime
+import multiprocessing as mp
+import ctypes as c
+
+# pip install image
+# pip install Pillow
 
 ## Referencias apoyo:
 ## http://www.pythonware.com/library/pil/handbook/introduction.htm
@@ -49,6 +55,7 @@ class Imagen(object):
         self.path = ruta
         self.busy = 0
         self.reload()
+        self.manager = mp.Manager()
         pass
         
     def reload(self):
@@ -64,15 +71,30 @@ class Imagen(object):
             R = [self.R, self.R.copy()]
             G = [self.G, self.G.copy()]
             B = [self.B, self.B.copy()]
-            thread.start_new_thread( self._dilate, (R, 0, 0, self.alto, self.ancho) )
-            thread.start_new_thread( self._dilate, (G, 0, 0, self.alto, self.ancho) )
-            thread.start_new_thread( self._dilate, (B, 0, 0, self.alto, self.ancho) )
+
+            lsArgs = [
+                (R, 0, 0, self.alto, self.ancho),
+                (G, 0, 0, self.alto, self.ancho),
+                (B, 0, 0, self.alto, self.ancho)
+            ]
+            processes = [mp.Process(target=self._dilate, args=lsArgs[x]) for x in range(0, 2)]
+
+            for p in processes:
+                p.start()
+
+            # Exit the completed processes
+            for p in processes:
+                p.join()
+
+            # thread.start_new_thread( self._dilate, (R, 0, 0, self.alto, self.ancho) )
+            # thread.start_new_thread( self._dilate, (G, 0, 0, self.alto, self.ancho) )
+            # thread.start_new_thread( self._dilate, (B, 0, 0, self.alto, self.ancho) )
         except:
             print "Error: unable to start thread dilate"
             self.busy = 0
 
-        while self.busy > 0:
-            pass
+        # while self.busy > 0:
+        #     pass
 
         self.R = R[1]
         self.G = G[1]
@@ -99,19 +121,34 @@ class Imagen(object):
 
             #print [id, '-', alto, ancho, '-', y1,x1, y2,x2]
 
-            try:
-                thread.start_new_thread( self._dilate, (lst, y1, x1, y2-height, x2-width) )
-                thread.start_new_thread( self._dilate, (lst, y1, x1+width, y2-height, x2) )
-                thread.start_new_thread( self._dilate, (lst, y1+height, x1, y2, x2-width) )
-                thread.start_new_thread( self._dilate, (lst, y1+height, x1+width, y2, x2) )
-            except:
-                print "Error: unable to start thread _dilate"
-                print [id, alto, ancho]
-                print [y1, x1, y2-height, x2-width]
-                print [y1, x1+width, y2-height, x2]
-                print [y1+height, x1, y2, x2-width]
-                print [y1+height, x1+width, y2, x2]
-                print self.busy
+            lsArgs = [
+                (lst, y1, x1, y2 - height, x2 - width),
+                (lst, y1, x1 + width, y2 - height, x2),
+                (lst, y1 + height, x1, y2, x2 - width),
+                (lst, y1 + height, x1 + width, y2, x2)
+            ]
+            processes = [mp.Process(target=self._dilate, args=lsArgs[x]) for x in range(0, 3)]
+
+            for p in processes:
+                p.start()
+
+            # Exit the completed processes
+            for p in processes:
+                p.join()
+
+            # try:
+            #     thread.start_new_thread( self._dilate, (lst, y1, x1, y2-height, x2-width) )
+            #     thread.start_new_thread( self._dilate, (lst, y1, x1+width, y2-height, x2) )
+            #     thread.start_new_thread( self._dilate, (lst, y1+height, x1, y2, x2-width) )
+            #     thread.start_new_thread( self._dilate, (lst, y1+height, x1+width, y2, x2) )
+            # except:
+            #     print "Error: unable to start thread _dilate"
+            #     print [id, alto, ancho]
+            #     print [y1, x1, y2-height, x2-width]
+            #     print [y1, x1+width, y2-height, x2]
+            #     print [y1+height, x1, y2, x2-width]
+            #     print [y1+height, x1+width, y2, x2]
+            #     print self.busy
         else:
             img, copia = lst
             self.busy  = self.busy + 1
@@ -164,19 +201,37 @@ class Imagen(object):
     def erode(self):
         self.busy = 1
 
-        try:
-            R = [self.R, self.R.copy()]
-            G = [self.G, self.G.copy()]
-            B = [self.B, self.B.copy()]
-            thread.start_new_thread( self._erode, (R, 0, 0, self.alto, self.ancho) )
-            thread.start_new_thread( self._erode, (G, 0, 0, self.alto, self.ancho) )
-            thread.start_new_thread( self._erode, (B, 0, 0, self.alto, self.ancho) )
-        except:
-            print "Error: unable to start thread erode"
-            self.busy = 0
+        R = mp.Array(c.c_uint, [self.R, self.R.copy()])
+        G = mp.Array(c.c_uint, [self.G, self.G.copy()])
+        B = mp.Array(c.c_uint, [self.B, self.B.copy()])
 
-        while self.busy > 0:
-            pass
+        lsArgs = [
+            (R, 0, 0, self.alto, self.ancho),
+            (G, 0, 0, self.alto, self.ancho),
+            (B, 0, 0, self.alto, self.ancho)
+        ]
+        processes = [mp.Process(target=self._erode, args=lsArgs[x]) for x in range(0, 2)]
+
+        for p in processes:
+            p.start()
+
+        # Exit the completed processes
+        for p in processes:
+            p.join()
+
+        # try:
+        #     R = [self.R, self.R.copy()]
+        #     G = [self.G, self.G.copy()]
+        #     B = [self.B, self.B.copy()]
+        #     thread.start_new_thread( self._erode, (R, 0, 0, self.alto, self.ancho) )
+        #     thread.start_new_thread( self._erode, (G, 0, 0, self.alto, self.ancho) )
+        #     thread.start_new_thread( self._erode, (B, 0, 0, self.alto, self.ancho) )
+        # except:
+        #     print "Error: unable to start thread erode"
+        #     self.busy = 0
+        #
+        # while self.busy > 0:
+        #     pass
 
         self.R = R[1]
         self.G = G[1]
@@ -203,19 +258,34 @@ class Imagen(object):
 
             #print [id, '-', alto, ancho, '-', y1,x1, y2,x2]
 
-            try:
-                thread.start_new_thread( self._erode, (lst, y1, x1, y2-height, x2-width) )
-                thread.start_new_thread( self._erode, (lst, y1, x1+width, y2-height, x2) )
-                thread.start_new_thread( self._erode, (lst, y1+height, x1, y2, x2-width) )
-                thread.start_new_thread( self._erode, (lst, y1+height, x1+width, y2, x2) )
-            except:
-                print "Error: unable to start thread _erode"
-                print [id, alto, ancho]
-                print [y1, x1, y2-height, x2-width]
-                print [y1, x1+width, y2-height, x2]
-                print [y1+height, x1, y2, x2-width]
-                print [y1+height, x1+width, y2, x2]
-                print self.busy
+            lsArgs = [
+                (lst, y1, x1, y2 - height, x2 - width),
+                (lst, y1, x1 + width, y2 - height, x2),
+                (lst, y1 + height, x1, y2, x2 - width),
+                (lst, y1 + height, x1 + width, y2, x2)
+            ]
+            processes = [mp.Process(target=self._erode, args=lsArgs[x]) for x in range(0, 3)]
+
+            for p in processes:
+                p.start()
+
+            # Exit the completed processes
+            for p in processes:
+                p.join()
+
+            # try:
+            #     thread.start_new_thread( self._erode, (lst, y1, x1, y2-height, x2-width) )
+            #     thread.start_new_thread( self._erode, (lst, y1, x1+width, y2-height, x2) )
+            #     thread.start_new_thread( self._erode, (lst, y1+height, x1, y2, x2-width) )
+            #     thread.start_new_thread( self._erode, (lst, y1+height, x1+width, y2, x2) )
+            # except:
+            #     print "Error: unable to start thread _erode"
+            #     print [id, alto, ancho]
+            #     print [y1, x1, y2-height, x2-width]
+            #     print [y1, x1+width, y2-height, x2]
+            #     print [y1+height, x1, y2, x2-width]
+            #     print [y1+height, x1+width, y2, x2]
+            #     print self.busy
         else:
             img, copia = lst
             self.busy  = self.busy + 1
