@@ -39,6 +39,7 @@ import thread
 from datetime import datetime
 import multiprocessing as mp
 import ctypes as c
+import numpy as np
 
 # pip install image
 # pip install Pillow
@@ -201,9 +202,17 @@ class Imagen(object):
     def erode(self):
         self.busy = 1
 
-        R = mp.Array(c.c_uint, [self.R, self.R.copy()])
-        G = mp.Array(c.c_uint, [self.G, self.G.copy()])
-        B = mp.Array(c.c_uint, [self.B, self.B.copy()])
+        shareR = mp.Array('i', 2 * self.ancho * self.alto)
+        shareG = mp.Array('i', 2 * self.ancho * self.alto)
+        shareB = mp.Array('i', 2 * self.ancho * self.alto)
+
+        R = np.frombuffer(shareR.get_obj())
+        G = np.frombuffer(shareG.get_obj())
+        B = np.frombuffer(shareB.get_obj())
+
+        R[0], R[1] = (self.R, self.R.copy())
+        G[0], G[1] = (self.G, self.G.copy())
+        B[0], B[1] = (self.B, self.B.copy())
 
         lsArgs = [
             (R, 0, 0, self.alto, self.ancho),
