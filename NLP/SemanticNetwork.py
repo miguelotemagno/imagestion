@@ -104,7 +104,8 @@ class SemanticNetwork:
     # las distintas funciones semanticas que vienen antes del verbo raiz y
     # despues del verbo raiz, generando una matriz de probabilidades donde
     # una funcion predice un verbo raiz.
-    # Retorna un arreglo asociativo con el sujeto, nucleo y predicado de la oracion
+    # Retorna una matriz con la probabilidad ponderada para las condiciones
+    # de termino de una oracion
     #########################################################################
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
