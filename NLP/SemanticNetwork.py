@@ -97,6 +97,15 @@ class SemanticNetwork:
     #      luego:   pip install --upgrade google-cloud-language
 
 
+    #########################################################################
+    # train( oracion, verbo )
+    # Este algoritmo se encarga de entrenar para identificar el verbo raiz
+    # usa mas de una matriz para ponderar la prevalencia y postvalencia de
+    # las distintas funciones semanticas que vienen antes del verbo raiz y
+    # despues del verbo raiz, generando una matriz de probabilidades donde
+    # una funcion predice un verbo raiz.
+    # Retorna un arreglo asociativo con el sujeto, nucleo y predicado de la oracion
+    #########################################################################
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         finnish  = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
