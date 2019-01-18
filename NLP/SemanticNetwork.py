@@ -402,7 +402,11 @@ class SemanticNetwork:
         out.put((i, struct))
         #print "(%d) %s " % (i, str(struct))
 
+
     ####################################################################
+    # analize(texto)
+    # Recibe una oracion, analiza su semantica y retorna una lista de posibles
+    # estructuras (sugeto, nucleo y predicado)
 
     def analize(self, text):
         expr = re.compile(r'[^.]+')
@@ -549,6 +553,10 @@ class SemanticNetwork:
         return idx
 
     ####################################################################
+    # getSyntaxStruct(texto, tokens)
+    # Recorre una lista de tokens {palabra,tipo} donde busca y evalua la
+    # identificacion del verbo nucleo y separar el sugeto del predicado.
+    # retorna una lista de estructuras (sujeto, nucleo y predicado)
 
     def getSyntaxStruct(self, text, tokens):
         structs = []
