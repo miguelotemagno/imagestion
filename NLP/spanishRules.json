@@ -151,7 +151,7 @@
             "[a]?si|no|tam(bien|poco)|acaso|talvez|quiza[s]?|ojala"
         ],
 		"advComparative" : [
-			"[ ]"
+			"tan|mas|menos|peor|mejor|que|como"
 		],
 		"advSuperlative" : [
 			"\\w+(isim|errim)[oa][s]?"
@@ -739,6 +739,27 @@
 			"nos"   : "control(emos|aramos|asemos|aremos|abamos|ariamos|amos)",
 			"uds"   : "control(ais|abais|eis|aseis|asteis|ad|arais|ariais|areis)",
 			"ellos" : "control(asen|aban|arian|en|aron|an|aren|aran)"
+		},
+		"contener" : {
+			"inf"   : "contener",
+			"ger"   : "conteniendo",
+			"par"   : "contenido",
+			"ip"    : "cont(eneis|enemos|engo|iene|ienen|ienes)",
+			"ipi"   : "contenia(is|mos|n|s)?",
+			"if"    : "contendr(a|an|as|e|eis|emos)",
+			"ic"    : "contendria(is|mos|n|s)?",
+			"ipps"  : "contuv(e|ieron|imos|iste|isteis|o)",
+			"i"     : "conten(ed|ga|gamos|gan)?",
+			"sp"    : "contenga(is|mos|n|s)?",
+			"spi"   : "contuviera(is|mos|n|s)?",
+			"spi2"  : "contuviese(is|mos|n|s)?",
+			"sf"    : "contuviere(is|mos|n|s)?",
+			"yo"    : "cont(endre|endria|enga|engo|enia|uve|uviera|uviere|uviese)",
+			"tu"    : "contienes|contuvieras|contuvieres|contuvieses|contuviste|conten(dras|drias|gas|ias)?",
+			"el_la" : "cont(endra|endria|enga|enia|iene|uviera|uviere|uviese|uvo)",
+			"nos"   : "cont(endremos|endriamos|enemos|engamos|eniamos|uvieramos|uvieremos|uviesemos|uvimos)",
+			"uds"   : "cont(endreis|endriais|ened|eneis|engais|eniais|uvierais|uviereis|uvieseis|uvisteis)",
+			"ellos" : "cont(endran|endrian|engan|enian|ienen|uvieran|uvieren|uvieron|uviesen)"
 		},
 		"conseguir" : {
 			"inf"   : "conseguir",
@@ -2907,12 +2928,12 @@
 			"spi"   : "resultar(a)",
 			"spi2"  : "resultas(e)",
 			"sf"    : "resultar(e)",
-			"yo"    : "",
-			"tu"    : "",
+			"yo"    : "resulte",
+			"tu"    : "resultes",
 			"el_la" : "resulte|resulto|resulta(ba|ra|re|ria|se)?",
-			"nos"   : "",
-			"uds"   : "",
-			"ellos" : ""
+			"nos"   : "resultemos",
+			"uds"   : "resulten",
+			"ellos" : "resulten"
 		},
 		"reemplazar" : {
 			"inf"   : "reemplazar",

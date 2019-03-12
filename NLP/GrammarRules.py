@@ -244,6 +244,7 @@ class GrammarRules:
 
 	def loadFromWeb(self,source):
 		print "=> loadFromWeb (%s)\n" % (source)
+		print "   sh  %s/%s %s\n" % (self.path, self.fromWeb, source)
 		self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
 	##########################################################################

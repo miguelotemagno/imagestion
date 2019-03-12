@@ -23,7 +23,7 @@ if sys.argv[1] == 'train':
         expr = patterns.search(line)
         if expr:
             (frase, verb) = expr.group(1, 3)
-            print "\n%s => [%s]" % (frase, verb)
+            print "\nRAW: %s => [%s]" % (frase, verb)
             try:
                 tokens = s.rules.getSyntax(frase)
                 syntax = s.rules.normalize(tokens)
@@ -68,6 +68,7 @@ if sys.argv[1] == 'file':
     s.load(dbFile)
 
     s.rules.loadFromFile(file)
+    print s.rules.getSyntax(s.rules.text)
     list = s.analize(s.rules.text)
 
     for y in xrange(0, len(list)-1):
@@ -75,5 +76,9 @@ if sys.argv[1] == 'file':
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
+
+if sys.argv[1] == 'clean':
+    dbFile = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticNet.json'
+    s.save(dbFile)
 
 print 'Done! Time taken: %f sec for %d CPUs' % (time.time() - start_time, multiprocessing.cpu_count())
