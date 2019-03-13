@@ -394,7 +394,7 @@ class GrammarRules:
             type = token[1]
             #print "%d (%s, %s)" % (pos, word, type)
             normType = self.validType(type, nexType)
-            newToken = (word, normType)
+            newToken = (word, normType, self.getIndexFromType(normType, word))
             list.insert(0, newToken)
             nexType = normType
 
@@ -411,3 +411,29 @@ class GrammarRules:
 
     def getCorpus(self, text):
         pass
+
+    ####################################################################
+
+    def getIndexFromType(self, type, word):
+        types = {
+            'DET':  self.isDeterminer,  #(word),
+            'NOUN': self.isNoun,        #(word),
+            'ADJ':  self.isAdjetive,    #(word),
+            'PREP': self.isPreposition, #(word),
+            'VERB': self.getVerbTense,  #(verb, word),
+            'ADV':  self.isAdverb,      #(word),
+            'PRON': self.isPronom,      #(word),
+            'INTJ': self.isInterjection,#(word),
+            'CONJ': self.isConjunction, #(word),
+            'NUM':  self.isNumber,      #(word),
+            'PUNC': self.isPunctuation, #(word),
+            'AUX':  self.isAuxiliar     # (word),
+        }
+
+        if type == 'VERB':
+            verb = self.getVerb(word)
+            return types[type](verb, word) if verb is not None else None
+        else:
+            return types[type](word)
+
+

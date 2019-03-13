@@ -95,6 +95,10 @@
 			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a|san(t|dr)?\\w*|jo[rs]\\w*e",
 			"vargas|welch"
 		],
+        "sustComun" : [
+            "(perr|[pg]at|conej|caball|yegu|aguil|mon|goril|lor|camell|lob|babos|molusc|pescad|simi|poll|gall(in)?)[oa][s]?",
+            "((elefa|rinocero|biso)nt|caracol|pe[cs]|(rat|tibur)on|delfin)e?s?"
+        ],
 		"sustSimple" : [
 			"\\w+[sc]ia[s]?|ca\\wa[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
 			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
@@ -105,7 +109,9 @@
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
 			"\\w+(fuente|aficionado|vision|grafo|copio|[fmtng]ic[oa]s?)"
 		],
-        "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|[^j]or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
+        "sustDespectivo" : [
+            "\\w{2,}(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|[^j]or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"
+        ],
 		"sustDisminutivo" : ["\\w{2,}(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
@@ -251,6 +257,7 @@
 		"sustAbstract" :     "NN",
 		"sustAll" :          "NN",
 		"sustPropio" :       "NNP",
+		"sustComun" :       "NNP",
 		"pronUndefined":     "PR",
 		"pronInterrogatives":"PR",
 		"pronAll":           "PR",

@@ -143,7 +143,7 @@ class SemanticNetwork:
             #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.getIndexFromType(type, word), nextWord, self.getIndexFromType(nextType, nextWord))
+                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
                 y = self.getIndexof(type, self.grammarTypes)
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
@@ -178,8 +178,8 @@ class SemanticNetwork:
             x = self.getIndexof(lastType, self.grammarTypes)
             finnish[y, x] += 1
 
-            idY = self.getIndexFromType(prevType, prevWord)
-            idX = self.getIndexFromType(lastType, lastWord)
+            idY = self.rules.getIndexFromType(prevType, prevWord)
+            idX = self.rules.getIndexFromType(lastType, lastWord)
             key = "%s_%s" % (idY, idX)
             endCondition[key] = endCondition[key] + 1.0 if key in endCondition else 1.0
 
@@ -306,31 +306,6 @@ class SemanticNetwork:
             self.save(self.fileDb)
 
         return finnish
-
-    ####################################################################
-
-    def getIndexFromType(self, type, word):
-        types = {
-            'DET':  self.rules.isDeterminer,  #(word),
-            'NOUN': self.rules.isNoun,        #(word),
-            'ADJ':  self.rules.isAdjetive,    #(word),
-            'PREP': self.rules.isPreposition, #(word),
-            'VERB': self.rules.getVerbTense,  #(verb, word),
-            'ADV':  self.rules.isAdverb,      #(word),
-            'PRON': self.rules.isPronom,      #(word),
-            'INTJ': self.rules.isInterjection,#(word),
-            'CONJ': self.rules.isConjunction, #(word),
-            'NUM':  self.rules.isNumber,      #(word),
-            'PUNC': self.rules.isPunctuation,  #(word),
-            'AUX':  self.rules.isAuxiliar  # (word),
-        }
-
-        if type == 'VERB':
-            verb = self.rules.getVerb(word)
-            return types[type](verb, word) if verb is not None else None
-        else:
-            return types[type](word)
-
 
     ####################################################################
 
@@ -557,7 +532,7 @@ class SemanticNetwork:
     # getSyntaxStruct(texto, tokens)
     # Recorre una lista de tokens {palabra,tipo} donde busca y evalua la
     # identificacion del verbo nucleo y separar el sugeto del predicado.
-    # retorna una lista de estructuras (sujeto, nucleo y predicado)
+    # retorna una lista de estructuras (sujeto, nucleo, predicado y los tokens)
 
     def getSyntaxStruct(self, text, tokens):
         structs = []
@@ -595,7 +570,8 @@ class SemanticNetwork:
                         'text': text,
                         'root': '',
                         'subject': [prevToken],
-                        'predicate': []
+                        'predicate': [],
+                        'tokens': tokens
                     }
                     instances.append(newGraph)
                     idx = len(instances)
@@ -645,8 +621,8 @@ class SemanticNetwork:
                                 # TODO: limitar retorno de None, no es capaz de identificar fin de oracion, tal vez falta de vocabulario para diferenciar NOUNs de otros tipos
                                 prevWord = prevToken[0]
                                 postWord = postToken[0]
-                                idY = self.getIndexFromType(prev, prevWord)
-                                idX = self.getIndexFromType(post, postWord)
+                                idY = self.rules.getIndexFromType(prev, prevWord)
+                                idX = self.rules.getIndexFromType(post, postWord)
                                 key = "%s_%s" % (idY, idX)
                                 isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
 
@@ -663,7 +639,8 @@ class SemanticNetwork:
                                 'text': text,
                                 'root': '',
                                 'subject': [prevToken, token],
-                                'predicate': []
+                                'predicate': [],
+                                'tokens': tokens
                             }
                     pass
                 pass

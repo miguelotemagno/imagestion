@@ -56,7 +56,7 @@ if sys.argv[1] == 'web':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
+                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
 
 # ejemplo: python testSemantic.py file serotoninaTrainTest.txt ''
 if sys.argv[1] == 'file':
@@ -74,7 +74,7 @@ if sys.argv[1] == 'file':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']))
+                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
 
 
 if sys.argv[1] == 'clean':
