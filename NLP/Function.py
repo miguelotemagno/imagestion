@@ -52,6 +52,7 @@ class Function:
             'isIntj': self.isInterjection,
             'isNum':  self.isNumber,
             'isPunc': self.isPunctuation,
+            'isAux':  self.isAuxliliar,
             'setNuc': self.setNucleous
         }
 
@@ -66,7 +67,8 @@ class Function:
             'INTJ': 'isIntj',
             'CONJ': 'isConj',
             'NUM':  'isNum',
-            'PUNC': 'isPunc'
+            'PUNC': 'isPunc',
+            'AUX':  'isAux'
         }
 
         self.parent = parent
@@ -87,6 +89,14 @@ class Function:
     def isVerb(self, args=None):
         try:
             return True if args['type'] == 'VERB' else False
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isAuxliliar(self, args=None):
+        try:
+            return True if args['type'] == 'AUX' else False
         except ValueError:
             return None
 

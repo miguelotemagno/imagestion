@@ -67,7 +67,7 @@ class SemanticNetwork:
     """
     def __init__(self):
         self.rules = GrammarRules()
-        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
         self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
@@ -321,7 +321,8 @@ class SemanticNetwork:
             'INTJ': self.rules.isInterjection,#(word),
             'CONJ': self.rules.isConjunction, #(word),
             'NUM':  self.rules.isNumber,      #(word),
-            'PUNC': self.rules.isPunctuation  #(word),
+            'PUNC': self.rules.isPunctuation,  #(word),
+            'AUX':  self.rules.isAuxiliar  # (word),
         }
 
         if type == 'VERB':

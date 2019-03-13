@@ -40,7 +40,7 @@ from Function import *
 
 
 class Graph:
-    # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+    # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
     def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
         n = len(nodeNames) if len(nodeNames) > 0 else nodes
         self.functions = Function(self)

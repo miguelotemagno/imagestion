@@ -2,6 +2,10 @@
     "verb" : [
         "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
     ],
+	"auxiliar" : [
+        "ser|haber|estar|tener|ir|poder|venir|andar|comenzar|continuar|llevar",
+        "quedar|seguir|venir|terminar|seguir|salir|dejar"
+    ],
     "number" : [
         "\\d+([.]\\d+)?"
     ],
@@ -88,7 +92,7 @@
     "noun" : {
 		"sustPropio" : [
 			"(m[ia]|[rdg]a)\\w+el|(fr|os|[rl][io]|al)\\w+[rgdtszc][oa]|([fh]e)\\w+(an|[ntbd]or|d[oa])",
-			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a",
+			"ana|([mpc]a|a[nl])\\w+[inlrc]a|[ck]a\\w+en|ta\\w+[ir]a|san(t|dr)?\\w*|jo[rs]\\w*e",
 			"vargas|welch"
 		],
 		"sustSimple" : [
@@ -99,16 +103,16 @@
 		],
 		"sustCompuesto" : [
 			"casaquinta|(saca|(radio)?tele|limpia|para)\\w+",
-			"\\w+(fuente|aficionado|vision|grafo|copio)"
+			"\\w+(fuente|aficionado|vision|grafo|copio|[fmtng]ic[oa]s?)"
 		],
         "sustDespectivo" : ["\\w+(ac[h]?|[ai]chuel|a([jt]|ng|sc|str)|e[ce]?zuel|ej|[^j]or(i|ri|r)|ot|uc[h]?|u[jz]|[z]?uel)[oa][s]?"],
-		"sustDisminutivo" : ["\\w+(it|ill)[oa][s]?"],
+		"sustDisminutivo" : ["\\w{2,}(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
-			"paz|guerra|amor|odio|hola|adios",
+			"paz|guerra|amor|odio|hola|adios|mito|base|cosa|objeto|\\w+encia",
 			"\\w+(eza|ismo|[td]ad|anza|[sftln]o[fgrm]ia|miento|aje|tica|rrota)"
 		],
-		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria)[s]?"],
+		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria|conjunto)[s]?"],
         "sustAll" : [
             "\\w+([cs]ion|(uz|asc|astr|ang|[au]j|[at|[z]?uel|uch)[oa]|[^j]or(es)?|tri(z|ces)|ez|ado[s]?)",
             "\\w{3,}([^i]es[a]?|[mt]an[a]?|[iea]n[oa])[s]?"
@@ -282,6 +286,7 @@
 		"prepTemporal" :     "IN",
 		"number" :           "NUM",
 		"punctuation" :      "PUNC",
+        "auxiliar" :         "AUX",
 		
 		"NUM"  : "NUM",
 		"PUNC" : "PUNC",
@@ -312,7 +317,8 @@
 		"VBG"  : "VERB",
 		"VBP"  : "VERB",
 		"VBZ"  : "VERB",
-		"VBF"  : "VERB"
+		"VBF"  : "VERB",
+		"AUX"  : "AUX"
 	},
 
 	"a" : {
@@ -951,6 +957,27 @@
 			"nos"   : "comprend(amos|emos|eremos|eriamos|iamos|ieramos|ieremos|iesemos|imos)",
 			"uds"   : "comprend(ais|ed|eis|ereis|eriais|iais|ierais|iereis|ieseis|isteis)",
 			"ellos" : "comprend(an|en|eran|erian|ian|ieran|ieren|ieron|iesen)"
+		},
+		"comprobar" : {
+			"inf"   : "comprobar",
+			"ger"   : "comprobando",
+			"par"   : "comprobado",
+			"ip"    : "compr(obais|obamos|ueba|ueban|uebas|uebo)",
+			"ipi"   : "comprobaba(is|mos|n|s)?",
+			"if"    : "comprobar(a|an|as|e|eis|emos)",
+			"ic"    : "comprobaria(is|mos|n|s)?",
+			"ipps"  : "comprob(amos|aron|aste|asteis|e|o)",
+			"i"     : "compr(obad|obemos|ueba|uebe|ueben)",
+			"sp"    : "compr(obeis|obemos|uebe|ueben|uebes)",
+			"spi"   : "comprobara(is|mos|n|s)?",
+			"spi2"  : "comprobase(is|mos|n|s)?",
+			"sf"    : "comprobare(is|mos|n|s)?",
+			"yo"    : "compr(obaba|obara|obare|obaria|obase|obe|uebe|uebo)",
+			"tu"    : "compr(obabas|obaras|obares|obarias|obases|obaste|ueba|uebas|uebes)",
+			"el_la" : "compr(obaba|obara|obare|obaria|obase|obo|ueba|uebe)",
+			"nos"   : "comprob(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "comprob(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "compr(obaban|obaran|obaren|obarian|obaron|obasen|ueban|ueben)"
 		},
 		"concernir" : {
 			"inf"   : "concernir",
