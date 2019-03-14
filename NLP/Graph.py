@@ -69,6 +69,42 @@ class Graph:
 
     ####################################################################
 
+    def addNode(self, parent, name='', function='null'):
+        n = len(self.nodeNames)
+        id = name + n
+        self.nodeNames.append(name)
+        self.nodes.append(Node(parent, id, name, function))
+        return id
+
+    ####################################################################
+
+    def search(self, args=None):
+        found = []
+
+        try:
+            if args['id'] is not None:
+                for node in self.nodes:
+                    if node.id == args['id']:
+                        return [node]
+
+            if args['name'] is not None:
+                nodes = self.nodes if len(found) == 0 else found
+                for node in nodes:
+                    if node.name == args['name']:
+                        found.append(node)
+
+            if args['function'] is not None:
+                nodes = self.nodes if len(found) == 0 else found
+                for node in nodes:
+                    if node.functionName == args['function']:
+                        found.append(node)
+        except:
+            return None
+
+        return found
+
+    ####################################################################
+
     def getFunctionName(self, x):
         try:
             idx = self.nodeNames.index(x)

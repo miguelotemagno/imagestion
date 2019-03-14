@@ -71,7 +71,7 @@ class SemanticNetwork:
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
         self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
-                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'undefined']
+                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'sustComun', 'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
@@ -88,6 +88,8 @@ class SemanticNetwork:
         self.factCondition = 0
         self.fileDb = None
         self.busy = None
+
+        self.net = Graph(name='net')
         #self.load('semanticNet.json')
         pass
 
@@ -654,3 +656,51 @@ class SemanticNetwork:
         self.busy -= 1
 
         return structs
+
+    def makeSemanticNetwork(self, tokens):
+        verb = None
+        noun = None
+        thisNoun = None
+        lastNoun = None
+        dictionary = {
+            'ser':        'is',
+            'tener':      'has',
+            'poseer':     'has',
+            'contener':   'has',
+            'pertenecer': 'belong',
+            'hacer':      'does',
+        }
+
+        for token in tokens:
+            (word, tag, type) = token
+
+            if tag == 'VERB':
+                verb = self.rules.getVerb(word)
+            if tag == 'NOUN':
+                noun = word
+
+                if thisNoun is None:
+                    thisNoun = noun
+                else:
+                    lastNoun = thisNoun
+                    thisNoun = noun
+
+            if thisNoun is not None and lastNoun is not None and verb is not None:
+                origin  = self.net.search({'name': lastNoun})
+                destiny = self.net.search({'name': thisNoun})
+
+                try:
+                    func = dictionary['verb']
+                except:
+                    func = 'null'
+
+                if len(origin) == 0:
+                    id = self.net.addNode(self.net, name=lastNoun)
+                    origin = self.net.search({'id': id})
+
+                if len(destiny) == 0:
+                    id = self.net.addNode(self.net, name=thisNoun)
+                    destiny = self.net.search({'id': id})
+
+
+        pass

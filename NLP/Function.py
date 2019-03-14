@@ -53,7 +53,11 @@ class Function:
             'isNum':  self.isNumber,
             'isPunc': self.isPunctuation,
             'isAux':  self.isAuxliliar,
-            'setNuc': self.setNucleous
+            'setNuc': self.setNucleous,
+            'is':     self._is,
+            'has':    self._has,
+            'does':   self._does,
+            'belong': self._belong
         }
 
         self.dictionary = {
@@ -189,3 +193,15 @@ class Function:
 
     def null(self, args=None):
         return None
+
+    def _is(self, args=None):
+        return None
+
+    def _has(self, args=None):
+        return None
+
+    def _does(self, args=None):
+        return None
+
+    def _belong(self, args=None):
+        return  None
