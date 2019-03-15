@@ -90,6 +90,7 @@ class SemanticNetwork:
         self.busy = None
 
         self.net = Graph(name='net')
+        self.actions = np.chararray((1, 1), itemsize=30)
         #self.load('semanticNet.json')
         pass
 
@@ -662,14 +663,14 @@ class SemanticNetwork:
         noun = None
         thisNoun = None
         lastNoun = None
-        dictionary = {
-            'ser':        'is',
-            'tener':      'has',
-            'poseer':     'has',
-            'contener':   'has',
-            'pertenecer': 'belong',
-            'hacer':      'does',
-        }
+        # dictionary = {
+        #     'ser':        'is',
+        #     'tener':      'has',
+        #     'poseer':     'has',
+        #     'contener':   'has',
+        #     'pertenecer': 'belong',
+        #     'hacer':      'does',
+        # }
 
         for token in tokens:
             (word, tag, type) = token
@@ -685,22 +686,27 @@ class SemanticNetwork:
                     lastNoun = thisNoun
                     thisNoun = noun
 
+                node = self.net.search({'name': noun})
+
+                if len(node) == 0:
+                    id = self.net.addNode(self.net, name=noun)
+
             if thisNoun is not None and lastNoun is not None and verb is not None:
                 origin  = self.net.search({'name': lastNoun})
                 destiny = self.net.search({'name': thisNoun})
 
-                try:
-                    func = dictionary['verb']
-                except:
-                    func = 'null'
+                # try:
+                #     func = dictionary['verb']
+                # except:
+                #     func = 'null'
 
-                if len(origin) == 0:
-                    id = self.net.addNode(self.net, name=lastNoun)
-                    origin = self.net.search({'id': id})
+                if len(origin) > 0 and len(destiny) > 0:
+                    o = self.net.getIndexof(origin.name)
+                    d = self.net.getIndexof(destiny.name)
+                    self.net.setConnection(o, d, 1)
+                    self.net.setConnection(o, d, verb, matrix=self.actions)
 
-                if len(destiny) == 0:
-                    id = self.net.addNode(self.net, name=thisNoun)
-                    destiny = self.net.search({'id': id})
-
+                verb = None
+                noun = None
 
         pass

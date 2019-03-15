@@ -33,10 +33,10 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import numpy as np
 import json as js
 from Node import *
 from Function import *
+import numpy as np
 
 
 class Graph:
@@ -69,11 +69,19 @@ class Graph:
 
     ####################################################################
 
-    def addNode(self, parent, name='', function='null'):
+    def addNode(self, parent, name='', function='null', matrix=None):
         n = len(self.nodeNames)
         id = name + n
         self.nodeNames.append(name)
         self.nodes.append(Node(parent, id, name, function))
+
+        # todo demostrar que referencia de matrix se modifica
+        if matrix is not None:
+            n = len(self.nodeNames)
+            arr = np.zeros((n, n), dtype=float)
+            arr[:n, :n] = matrix
+            matrix = np.copy(arr)
+
         return id
 
     ####################################################################
@@ -221,8 +229,11 @@ class Graph:
 
     ####################################################################
 
-    def setConnection(self, y, x, val):
-        self.connects.itemset((y, x), val)
+    def setConnection(self, y, x, val, matrix=None):
+        if matrix is not None:
+            matrix.itemset((y, x), val)
+        else:
+            self.connects.itemset((y, x), val)
 
     ####################################################################
 
