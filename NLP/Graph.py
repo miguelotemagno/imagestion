@@ -224,8 +224,8 @@ class Graph:
 
     ####################################################################
 
-    def getConnection(self, y, x):
-        return self.connects.item((y, x))
+    def getConnection(self, y, x, matrix=None):
+        return self.connects.item((y, x)) if matrix is None else matrix.connects.item((y, x))
 
     ####################################################################
 
@@ -237,13 +237,13 @@ class Graph:
 
     ####################################################################
 
-    def getConnectRow(self, y):
-        return self.connects[y, :]
+    def getConnectRow(self, y, matrix=None):
+        return self.connects[y, :] if matrix is None else matrix.connects[y, :]
 
     ####################################################################
 
-    def getConnectColumn(self, x):
-        return self.connects[:, x]
+    def getConnectColumn(self, x, matrix=None):
+        return self.connects[:, x] if matrix is None else matrix.connects[:, x]
 
     ####################################################################
 
@@ -287,8 +287,8 @@ class Graph:
 
     ####################################################################
 
-    def getConnectionsNode(self, node):
-        col = self.getConnectColumn(node.id)
+    def getConnectionsNode(self, node, matrix=None):
+        col = self.getConnectColumn(node.id, matrix)
         nodes = []
 
         for i in xrange(col):
@@ -299,8 +299,8 @@ class Graph:
 
     ####################################################################
 
-    def getEntriesNode(self, node):
-        row = self.getConnectRow(node.id)
+    def getEntriesNode(self, node, matrix=None):
+        row = self.getConnectRow(node.id, matrix)
         nodes = []
 
         for i in xrange(row):

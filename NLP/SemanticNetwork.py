@@ -689,7 +689,7 @@ class SemanticNetwork:
                 node = self.net.search({'name': noun})
 
                 if len(node) == 0:
-                    id = self.net.addNode(self.net, name=noun)
+                    id = self.net.addNode(self.net, name=noun, matrix=self.net)
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
                 origin  = self.net.search({'name': lastNoun})
