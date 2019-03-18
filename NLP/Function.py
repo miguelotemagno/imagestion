@@ -72,7 +72,9 @@ class Function:
             'CONJ': 'isConj',
             'NUM':  'isNum',
             'PUNC': 'isPunc',
-            'AUX':  'isAux'
+            'AUX':  'isAux',
+            'null': 'null'
+
         }
 
         self.parent = parent

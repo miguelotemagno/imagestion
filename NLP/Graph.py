@@ -71,42 +71,46 @@ class Graph:
 
     def addNode(self, parent, name='', function='null', matrix=None):
         n = len(self.nodeNames)
-        id = name + n
+        id = "%s_%s" % (name, n)
         self.nodeNames.append(name)
-        self.nodes.append(Node(parent, id, name, function))
+        self.nodes.append(Node(parent, name, id, function))
 
-        # todo demostrar que referencia de matrix se modifica
-        if matrix is not None:
-            n = len(self.nodeNames)
-            arr = np.zeros((n, n), dtype=float)
-            arr[:n, :n] = matrix
-            matrix = np.copy(arr)
+        # # todo demostrar que referencia de matrix se modifica
+        # if matrix is not None:
+        #     print "matrix: \n%s\n" % str(matrix)   # /**/
+        #     n = len(self.nodeNames)
+        #     arr = np.copy(matrix)
+        #     (l, m) = arr.shape
+        #     matrix = np.zeros((n, n), dtype=float)
+        #     matrix[:l, :m] = arr
 
         return id
 
     ####################################################################
 
     def search(self, args=None):
+        #print "search: %s\n" % str(args)   #/**/
         found = []
 
         try:
-            if args['id'] is not None:
+            if args is not None and 'id' in args.keys():
                 for node in self.nodes:
-                    if node.id == args['id']:
+                    if node is not None and node.id == args['id']:
                         return [node]
 
-            if args['name'] is not None:
+            if args is not None and 'name' in args.keys():
                 nodes = self.nodes if len(found) == 0 else found
                 for node in nodes:
-                    if node.name == args['name']:
+                    if node is not None and node.name == args['name']:
                         found.append(node)
 
-            if args['function'] is not None:
+            if args is not None and 'function' in args.keys():
                 nodes = self.nodes if len(found) == 0 else found
                 for node in nodes:
-                    if node.functionName == args['function']:
+                    if node is not None and node.functionName == args['function']:
                         found.append(node)
-        except:
+        except ValueError:
+            #print "search error: [%s]\n" % ValueError   # /**/
             return None
 
         return found
@@ -230,6 +234,7 @@ class Graph:
     ####################################################################
 
     def setConnection(self, y, x, val, matrix=None):
+        #print "setConnection(%d, %d)\n" % (y, x)   #/**/
         if matrix is not None:
             matrix.itemset((y, x), val)
         else:

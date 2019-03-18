@@ -75,7 +75,13 @@ if sys.argv[1] == 'file':
         if len(list[y]) > 0:
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+                s.makeSemanticNetwork(item['tokens'])
 
+    net = "redSemantica.json"
+    if sys.argv[4] != '':
+        file = sys.argv[4]
+
+    s.saveSemanticNetwork(net)
 
 if sys.argv[1] == 'clean':
     dbFile = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticNet.json'
