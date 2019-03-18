@@ -58,7 +58,7 @@
             "mi[oa]?[s]?|tu(y[oa][s]?)?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
-            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant)[oa][s]?",
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant|ampli)[oa][s]?",
             "otr[oa][s]?|cualquier[a]?|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
@@ -115,8 +115,8 @@
 		"sustDisminutivo" : ["\\w{2,}(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
-			"paz|guerra|amor|odio|hola|adios|mito|base|cosa|objeto|\\w+encia",
-			"\\w+(eza|ismo|[td]ad|anza|[sftln]o[fgrm]ia|miento|aje|tica|rrota)"
+			"paz|guerra|amor|odio|hola|adios|(mito|base|cosa|objeto)[s]?",
+			"\\w+(eza|ismo|[td][ua]d|anza|[sftln]o[fgrm]ia|miento|aje|[tg]ica|rrota|encia)[s]?"
 		],
 		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria|conjunto)[s]?"],
         "sustAll" : [
@@ -180,9 +180,8 @@
 			"que|quien(es)?|como|cua(n(do)?|nt[oa][s]?|l(es)?)"
 		],
         "pronAll" : [
-            "(aqu)?el((lo|la)[s]?)?|l[aeo][s]?|yo|[tsc]u(y[oa][s]?)?",
             "alg(o|uien|un[oa]?)|si|(es[t]?|vari|much)(e|[oa][s]?)|es([ao][s]?|e)",
-            "con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
+            "[tsc]u(y[oa][s]?)?|con[mst]igo|cardinal(es)?|(mi|otr)[ao][s]?|m[ie]|t[eiu]|os"
         ]
     },
 	"interjection" : {
@@ -3180,6 +3179,90 @@
 			"nos"   : "s(eparabamos|eparamos|epararamos|epararemos|eparariamos|eparasemos|eparemos)",
 			"uds"   : "s(eparabais|eparad|eparais|epararais|eparareis|eparariais|eparaseis|eparasteis|epareis)",
 			"ellos" : "separ(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"sostener" : {
+			"inf"   : "sostener",
+			"ger"   : "sosteniendo",
+			"par"   : "sostenido",
+			"ip"    : "s(osteneis|ostenemos|ostengo|ostiene|ostienen|ostienes)",
+			"ipi"   : "sostenia(is|mos|n|s)?",
+			"if"    : "s(ostendra|ostendran|ostendras|ostendre|ostendreis|ostendremos)",
+			"ic"    : "sostendria(is|mos|n|s)?",
+			"ipps"  : "(sostuve|sostuvieron|sostuvimos|sostuviste|sostuvisteis|sostuvo)",
+			"i"     : "sosten(ed|ga|gamos|gan)?",
+			"sp"    : "sostenga(is|mos|n|s)?",
+			"spi"   : "sostuviera(is|mos|n|s)?",
+			"spi2"  : "sostuviese(is|mos|n|s)?",
+			"sf"    : "sostuviere(is|mos|n|s)?",
+			"yo"    : "sost(endre|endria|enga|engo|enia|uve|uviera|uviere|uviese)",
+			"tu"    : "s(osten|ostendras|ostendrias|ostengas|ostenias|ostienes|ostuvieras|ostuvieres|ostuvieses|ostuviste)",
+			"el_la" : "sost(endra|endria|enga|enia|iene|uviera|uviere|uviese|uvo)",
+			"nos"   : "s(ostendremos|ostendriamos|ostenemos|ostengamos|osteniamos|ostuvieramos|ostuvieremos|ostuviesemos|ostuvimos)",
+			"uds"   : "s(ostendreis|ostendriais|ostened|osteneis|ostengais|osteniais|ostuvierais|ostuviereis|ostuvieseis|ostuvisteis)",
+			"ellos" : "sost(endran|endrian|engan|enian|ienen|uvieran|uvieren|uvieron|uviesen)"
+		},
+		"superar" : {
+			"inf"   : "superar",
+			"ger"   : "superando",
+			"par"   : "superado",
+			"ip"    : "supero|supera(is|mos|n|s)?",
+			"ipi"   : "superaba(is|mos|n|s)?",
+			"if"    : "superare|superareis|superaremos|superara(n|s)?",
+			"ic"    : "superaria(is|mos|n|s)?",
+			"ipps"  : "s(uperamos|uperaron|uperaste|uperasteis|upere|upero)",
+			"i"     : "s(upera|uperad|upere|uperemos|uperen)",
+			"sp"    : "s(upere|upereis|uperemos|uperen|uperes)",
+			"spi"   : "superara(is|mos|n|s)?",
+			"spi2"  : "superase(is|mos|n|s)?",
+			"sf"    : "superare(is|mos|n|s)?",
+			"yo"    : "super(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "s(upera|uperabas|uperaras|uperares|uperarias|uperas|uperases|uperaste|uperes)",
+			"el_la" : "supere|supero|supera(ba|ra|re|ria|se)?",
+			"nos"   : "s(uperabamos|uperamos|uperaramos|uperaremos|uperariamos|uperasemos|uperemos)",
+			"uds"   : "s(uperabais|uperad|uperais|uperarais|uperareis|uperariais|uperaseis|uperasteis|upereis)",
+			"ellos" : "super(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"sujetar" : {
+			"inf"   : "sujetar",
+			"ger"   : "sujetando",
+			"par"   : "sujetado",
+			"ip"    : "sujeto|sujeta(is|mos|n|s)?",
+			"ipi"   : "sujetaba(is|mos|n|s)?",
+			"if"    : "s(ujetara|ujetaran|ujetaras|ujetare|ujetareis|ujetaremos)",
+			"ic"    : "sujetaria(is|mos|n|s)?",
+			"ipps"  : "s(ujetamos|ujetaron|ujetaste|ujetasteis|ujete|ujeto)",
+			"i"     : "sujeta|sujetad|sujete(mos|n)?",
+			"sp"    : "s(ujete|ujeteis|ujetemos|ujeten|ujetes)",
+			"spi"   : "sujetara(is|mos|n|s)?",
+			"spi2"  : "sujetase(is|mos|n|s)?",
+			"sf"    : "sujetare(is|mos|n|s)?",
+			"yo"    : "sujet(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "s(ujeta|ujetabas|ujetaras|ujetares|ujetarias|ujetas|ujetases|ujetaste|ujetes)",
+			"el_la" : "sujete|sujeto|sujeta(ba|ra|re|ria|se)?",
+			"nos"   : "s(ujetabamos|ujetamos|ujetaramos|ujetaremos|ujetariamos|ujetasemos|ujetemos)",
+			"uds"   : "s(ujetabais|ujetad|ujetais|ujetarais|ujetareis|ujetariais|ujetaseis|ujetasteis|ujeteis)",
+			"ellos" : "sujet(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"sorprender" : {
+			"inf"   : "sorprender",
+			"ger"   : "sorprendiendo",
+			"par"   : "sorprendido",
+			"ip"    : "sorprendo|sorprende(is|mos|n|s)?",
+			"ipi"   : "s(orprendia|orprendiais|orprendiamos|orprendian|orprendias)",
+			"if"    : "s(orprendera|orprenderan|orprenderas|orprendere|orprendereis|orprenderemos)",
+			"ic"    : "sorprenderia(is|mos|n|s)?",
+			"ipps"  : "sorprendi(eron|mos|o|ste|steis)?",
+			"i"     : "(sorprenda|sorprendamos|sorprendan|sorprende|sorprended)",
+			"sp"    : "sorprenda(is|mos|n|s)?",
+			"spi"   : "sorprendiera(is|mos|n|s)?",
+			"spi2"  : "sorprendiese(is|mos|n|s)?",
+			"sf"    : "sorprendiere(is|mos|n|s)?",
+			"yo"    : "sorprend(a|ere|eria|i|ia|iera|iere|iese|o)",
+			"tu"    : "s(orprendas|orprende|orprenderas|orprenderias|orprendes|orprendias|orprendieras|orprendieres|orprendieses|orprendiste)",
+			"el_la" : "sorprend(a|e|era|eria|ia|iera|iere|iese|io)",
+			"nos"   : "s(orprendamos|orprendemos|orprenderemos|orprenderiamos|orprendiamos|orprendieramos|orprendieremos|orprendiesemos|orprendimos)",
+			"uds"   : "s(orprendais|orprended|orprendeis|orprendereis|orprenderiais|orprendiais|orprendierais|orprendiereis|orprendieseis|orprendisteis)",
+			"ellos" : "sorprend(an|en|eran|erian|ian|ieran|ieren|ieron|iesen)"
 		}
 	},
 	"t" : {
@@ -3329,6 +3412,50 @@
 			"nos"   : "termin(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "termin(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "termin(aban|an|aran|aren|arian|aron|asen|en)"
+		}
+	},
+	"u" : {
+		"usar" : {
+			"inf"   : "usar",
+			"ger"   : "usando",
+			"par"   : "usado",
+			"ip"    : "uso|usa(is|mos|n|s)?",
+			"ipi"   : "usaba(is|mos|n|s)?",
+			"if"    : "usare|usareis|usaremos|usara(n|s)?",
+			"ic"    : "usaria(is|mos|n|s)?",
+			"ipps"  : "us(amos|aron|aste|asteis|e|o)",
+			"i"     : "usa|usad|use(mos|n)?",
+			"sp"    : "use(is|mos|n|s)?",
+			"spi"   : "usara(is|mos|n|s)?",
+			"spi2"  : "usase(is|mos|n|s)?",
+			"sf"    : "usare(is|mos|n|s)?",
+			"yo"    : "us(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "uses|usa(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "use|uso|usa(ba|ra|re|ria|se)?",
+			"nos"   : "us(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "us(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "us(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"unir" : {
+			"inf"   : "unir",
+			"ger"   : "uniendo",
+			"par"   : "unido",
+			"ip"    : "unimos|unis|uno|une(n|s)?",
+			"ipi"   : "unia(is|mos|n|s)?",
+			"if"    : "unire|unireis|uniremos|unira(n|s)?",
+			"ic"    : "uniria(is|mos|n|s)?",
+			"ipps"  : "uni(eron|mos|o|ste|steis)?",
+			"i"     : "une|unid|una(mos|n)?",
+			"sp"    : "una(is|mos|n|s)?",
+			"spi"   : "uniera(is|mos|n|s)?",
+			"spi2"  : "uniese(is|mos|n|s)?",
+			"sf"    : "uniere(is|mos|n|s)?",
+			"yo"    : "una|uno|uni(a|era|ere|ese|re|ria)?",
+			"tu"    : "un(as|e|es|ias|ieras|ieres|ieses|iras|irias|iste)",
+			"el_la" : "un(a|e|ia|iera|iere|iese|io|ira|iria)",
+			"nos"   : "un(amos|iamos|ieramos|ieremos|iesemos|imos|iremos|iriamos)",
+			"uds"   : "un(ais|iais|id|ierais|iereis|ieseis|ireis|iriais|is|isteis)",
+			"ellos" : "un(an|en|ian|ieran|ieren|ieron|iesen|iran|irian)"
 		}
 	},
 	"v" : {

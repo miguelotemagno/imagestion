@@ -2,6 +2,7 @@ import sys
 import re
 import multiprocessing
 import time
+import numpy as np
 
 from SemanticNetwork import *
 
@@ -51,12 +52,27 @@ if sys.argv[1] == 'web':
     s.load(dbFile)
 
     s.rules.loadFromWeb(url)
-    #print s.rules.getSyntax(s.rules.text)
+    tokens = s.rules.getSyntax(s.rules.text)
+    normalize = s.rules.normalize(tokens)
     list = s.analize(s.rules.text)
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+
+    net = "redSemantica.json"
+    if sys.argv[4] != '':
+        file = sys.argv[4]
+
+    print "NORMALIZE: %s\n" % str(normalize)
+    s.makeSemanticNetwork(normalize)
+    s.saveSemanticNetwork(net)
+
+    print "connects:\n"
+    print s.net.connects
+    print "\nactions:\n"
+    print s.actions
+
 
 # ejemplo: python testSemantic.py file serotoninaTrainTest.txt ''
 if sys.argv[1] == 'file':
@@ -68,20 +84,28 @@ if sys.argv[1] == 'file':
     s.load(dbFile)
 
     s.rules.loadFromFile(file)
-    print s.rules.getSyntax(s.rules.text)
+    tokens = s.rules.getSyntax(s.rules.text)
+    normalize = s.rules.normalize(tokens)
+    print "TOKENS: %s\n" % str(tokens)
+    print "NORMALIZE: %s\n" % str(normalize)
     list = s.analize(s.rules.text)
 
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
-                s.makeSemanticNetwork(item['tokens'])
 
     net = "redSemantica.json"
     if sys.argv[4] != '':
         file = sys.argv[4]
 
+    s.makeSemanticNetwork(normalize)
     s.saveSemanticNetwork(net)
+
+    print "connects:\n"
+    print s.net.connects
+    print "\nactions:\n"
+    print s.actions
 
 if sys.argv[1] == 'clean':
     dbFile = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticNet.json'

@@ -705,14 +705,15 @@ class SemanticNetwork:
                     self.actions = np.chararray((n, n), itemsize=30)
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
-                    print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
+                    #print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
+                print "%s --(%s)--> %s\n" % (lastNoun, verb, thisNoun)
                 origin  = self.net.search({'name': lastNoun})
                 destiny = self.net.search({'name': thisNoun})
 
                 if verb not in self.actionList:
-                    self.actionList.append('verb')
+                    self.actionList.append(verb)
 
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
@@ -742,6 +743,5 @@ class SemanticNetwork:
 
     def saveSemanticNetwork(self, file):
         json = self.getSemanticNetwork()
-        print str(json)   # /**/
         with open(file, "w") as text_file:
             text_file.write(js.dumps(json, sort_keys=True, indent=4, separators=(',', ': ')))
