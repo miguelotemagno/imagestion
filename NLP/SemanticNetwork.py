@@ -32,12 +32,22 @@
 # +-----------------------------------------------------------------------+
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
+import sys
 
 import numpy as np
 import json as js
 from GrammarRules import *
 from Graph import *
+from time import sleep
 import re
+import thread
+
+# http://chriskiehl.com/article/parallelism-in-one-line/
+#from multiprocessing import Pool
+#from multiprocessing.dummy import Pool as ThreadPool
+
+# https://sebastianraschka.com/Articles/2014_multiprocessing.html
+import multiprocessing as mp
 
 class SemanticNetwork:
     """
@@ -57,11 +67,11 @@ class SemanticNetwork:
     """
     def __init__(self):
         self.rules = GrammarRules()
-        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+        self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
         self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
-                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'undefined']
+                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'sustComun', 'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
@@ -77,11 +87,38 @@ class SemanticNetwork:
         self.factNounVrb = 0
         self.factCondition = 0
         self.fileDb = None
-        #self.load('semanticNet.json')
+        self.busy = None
+
+        self.actionList = ['null']
+        self.actionFunc = Function(self)
+        self.actionFunc.names = {
+            'null': self.actionFunc.null
+        }
+        self.actionFunc.dictionary = {
+            'null': 'null'
+        }
+        self.net = Graph(name='net', nodeNames=self.actionList)
+        self.net.functions = self.actionFunc
+        self.actions = np.chararray((1, 1), itemsize=30)
+        self.actions[:] = ''
         pass
 
     ####################################################################
+    # TODO se pretende implementar mismas funcionalidades aplicando librerias NLP de Google
+    # TODO actualizar pip para python a la version 10.0.1 (pip install --upgrade pip)
+    #      luego:   pip install --upgrade google-cloud-language
 
+
+    #########################################################################
+    # train( oracion, verbo )
+    # Este algoritmo se encarga de entrenar para identificar el verbo raiz
+    # usa mas de una matriz para ponderar la prevalencia y postvalencia de
+    # las distintas funciones semanticas que vienen antes del verbo raiz y
+    # despues del verbo raiz, generando una matriz de probabilidades donde
+    # una funcion predice un verbo raiz.
+    # Retorna una matriz con la probabilidad ponderada para las condiciones
+    # de termino de una oracion
+    #########################################################################
     def train(self, text, root):
         connects = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         finnish  = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
@@ -118,7 +155,7 @@ class SemanticNetwork:
             #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                print "m[%s,%s]" % (type, nextType)
+                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
                 y = self.getIndexof(type, self.grammarTypes)
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
@@ -132,19 +169,19 @@ class SemanticNetwork:
                     start[y, x] += 1
 
                 if word == root:
-                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "postVerb[%s,%s] -> %s {%s, %s(%s: %s)}" % (type, nextType, root, nextType, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "[%s,%s][%s,%s,%s,%s] -> %s {%s %s: %s}" % (type, nextType, x, y, z, w, root, tense, verb, self.rules.rules['_comment'][tense])
+                    print "prevVerb[%s,%s] -> %s {%s(%s: %s), %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], type)
                     nucleous[y, x] += 1
                     prevVerb[z, y] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.getIndexof(noun, self.nouns)
-                    print "[%s,%s][%s,%s] -> %s {%s: %s}" % (tense, noun, z, v, root, verb, self.rules.rules['_comment'][tense])
+                    print "noun[%s,%s] -> {%s (%s: %s), %s}" % (tense, noun, root, verb, self.rules.rules['_comment'][tense], pron)
                     nounVerb[z, v] += 1
 
         #print "[%s,%s]" % (prevType,lastType)
@@ -153,8 +190,8 @@ class SemanticNetwork:
             x = self.getIndexof(lastType, self.grammarTypes)
             finnish[y, x] += 1
 
-            idY = self.getIndexFromType(prevType, prevWord)
-            idX = self.getIndexFromType(lastType, lastWord)
+            idY = self.rules.getIndexFromType(prevType, prevWord)
+            idX = self.rules.getIndexFromType(lastType, lastWord)
             key = "%s_%s" % (idY, idX)
             endCondition[key] = endCondition[key] + 1.0 if key in endCondition else 1.0
 
@@ -284,30 +321,6 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def getIndexFromType(self, type, word):
-        types = {
-            'DET':  self.rules.isDeterminer,  #(word),
-            'NOUN': self.rules.isNoun,        #(word),
-            'ADJ':  self.rules.isAdjetive,    #(word),
-            'PREP': self.rules.isPreposition, #(word),
-            'VERB': self.rules.getVerbTense,  #(verb, word),
-            'ADV':  self.rules.isAdverb,      #(word),
-            'PRON': self.rules.isPronom,      #(word),
-            'INTJ': self.rules.isInterjection,#(word),
-            'CONJ': self.rules.isConjunction, #(word),
-            'NUM':  self.rules.isNumber,      #(word),
-            'PUNC': self.rules.isPunctuation  #(word),
-        }
-
-        if type == 'VERB':
-            verb = self.rules.getVerb(word)
-            return types[type](verb, word) if verb is not None else None
-        else:
-            return types[type](word)
-
-
-    ####################################################################
-
     def getJson(self):
         json = {
             'workflow': self.workflow.getJson(),
@@ -371,24 +384,51 @@ class SemanticNetwork:
 
     ####################################################################
 
+    def addProcess(self, i, out, txt):
+        tokens = self.rules.normalize(self.rules.getSyntax(txt))
+        struct = self.getSyntaxStruct(txt, tokens)
+        out.put((i, struct))
+        #print "(%d) %s " % (i, str(struct))
+
+
+    ####################################################################
+    # analize(texto)
+    # Recibe una oracion, analiza su semantica y retorna una lista de posibles
+    # estructuras (sugeto, nucleo y predicado)
+
     def analize(self, text):
-        expr = re.compile(r'(.+[.])')
+        expr = re.compile(r'[^.]+')
         list = expr.findall(text)
-        out = []
+        out = mp.Queue()
+        lsOut = []
+        processes = []
+        self.busy = 0
+        #addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
 
         if len(list) > 0:
             for txt in list:
-                tokens = self.rules.normalize(self.rules.getSyntax(txt+'.'))
-                struct = self.getSyntaxStruct(tokens)
-                #print self.printJson(struct)
-                out.append(struct)
+                #thread.start_new_thread(addSrtuct, (out, self.busy, txt))
+                processes.append(mp.Process(target=self.addProcess, args=(self.busy, out, txt)))
+                print "%d %s " % (self.busy, txt)
+                self.busy += 1
+
+            # Run processes
+            for p in processes:
+                p.start()
+
+            # Exit the completed processes
+            for p in processes:
+                p.join()
+
+            lsOut = [out.get() for p in processes]
+            lsOut.sort()
+            lsOut = [o[1] for o in lsOut]
         else:
             tokens = self.rules.normalize(self.rules.getSyntax(text))
-            struct = self.getSyntaxStruct(tokens)
-            #print self.printJson(struct)
-            out.append(struct)
+            struct = self.getSyntaxStruct(text, tokens)
+            lsOut.append(struct)
 
-        return out
+        return lsOut
 
     ####################################################################
 
@@ -501,8 +541,12 @@ class SemanticNetwork:
         return idx
 
     ####################################################################
+    # getSyntaxStruct(texto, tokens)
+    # Recorre una lista de tokens {palabra,tipo} donde busca y evalua la
+    # identificacion del verbo nucleo y separar el sugeto del predicado.
+    # retorna una lista de estructuras (sujeto, nucleo, predicado y los tokens)
 
-    def getSyntaxStruct(self, tokens):
+    def getSyntaxStruct(self, text, tokens):
         structs = []
         lenght = len(tokens)
         instances = []
@@ -513,6 +557,7 @@ class SemanticNetwork:
         postToken = None
         i = 0
         idx = 0
+        #self.busy += 1
 
         for token in tokens:
             # TODO hacer ciclo que recorra token por token buscando probabilidad de que un flujo de proseso se cumpla
@@ -534,16 +579,18 @@ class SemanticNetwork:
                     newGraph.id = i
                     newGraph.setInit(prev)
                     newGraph.data = {
+                        'text': text,
                         'root': '',
                         'subject': [prevToken],
-                        'predicate': []
+                        'predicate': [],
+                        'tokens': tokens
                     }
                     instances.append(newGraph)
-                    idx = lenght
+                    idx = len(instances)
 
                 for flow in instances:
                     isNext = flow.isNext(prev, post)
-                    isFinnish = flow.isFinnish(prev, post)
+                    isFinnish = flow.isFinnish(prev, post) and flow.data is not None
 
                     if isNext:
                         flow.setNext(post)
@@ -555,44 +602,57 @@ class SemanticNetwork:
 
                         precondition = self.isNucleous(prev, post)
                         postcondition = self.isNucleous(post, beyond)
+                        isNucleous = precondition and postcondition and post == 'VERB' and flow.data is not None
 
-                        if precondition and postcondition:  # isNucleous
+                        if isNucleous:
                             verb = self.rules.getVerb(word)
-                            if verb is not None and flow.data is not None:
-                                tense = self.rules.getVerbTense(verb, word)
-                                pron = self.rules.getVerbPron(verb, word)
-                                preVerb = self.getPreVerb(prev, tense)
-                                postVerb = self.getPostVerb(beyond, tense)
-
-                                # TODO agregar condiciones de noun x verb para identificar el nucleo
-                                if preVerb > 0 and postVerb > 0:
-                                    flow.data['root'] = word
-                            pass
+                            flow.data['root'] = word
+                            # TODO: resolver problemas para identificar nucleo y diferenciar conjuncion de verbo para algunas palabras
+                            # if verb is not None and flow.data is not None:
+                            #     tense = self.rules.getVerbTense(verb, word)
+                            #     pron = self.rules.getVerbPron(verb, word)
+                            #     preVerb = self.getPreVerb(prev, tense)
+                            #     postVerb = self.getPostVerb(beyond, tense)
+                            #
+                            #     # TODO: agregar condiciones de noun x verb para identificar el nucleo
+                            #     if preVerb > 0 and postVerb > 0:
+                            #         flow.data['root'] = word
+                            #         for f in instances:
+                            #             if f.data['root'] is not None:
+                            #                 f.reset()
+                            #                 idx -= 1
+                            # pass
 
                         elif isFinnish:
                             axisX = self.workflow.finnish.sum(axis=1)
                             xMax = axisX.max()
-                            value = flow.isFinnish(prev, post)
-                            prevWord = prevToken[0]
-                            postWord = postToken[0]
-                            idY = self.getIndexFromType(prev, prevWord)
-                            idX = self.getIndexFromType(post, postWord)
-                            key = "%s_%s" % (idY, idX)
-                            isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
+                            value = flow.getFinnishByTags(prev, post)
+                            isValidValue = True #if value is not None and value >= xMax else False
 
-                            if flow.data is not None and flow.data['root'] != '' and value >= xMax and isCondition > 0:
-                                structs.append(flow.data)
-                                for f in instances:
-                                    f.reset()
+                            if isValidValue:
+                                # TODO: limitar retorno de None, no es capaz de identificar fin de oracion, tal vez falta de vocabulario para diferenciar NOUNs de otros tipos
+                                prevWord = prevToken[0]
+                                postWord = postToken[0]
+                                idY = self.rules.getIndexFromType(prev, prevWord)
+                                idX = self.rules.getIndexFromType(post, postWord)
+                                key = "%s_%s" % (idY, idX)
+                                isCondition = self.endCondition[key] if key in self.endCondition.keys() else 0
+
+                                if flow.data['root'] != '' and isCondition > 0:
+                                    structs.append(flow.data)
+                                    for f in instances:
+                                        f.reset()
                     else:
                         flow.reset()
                         if flow.isStart(prev, post):
                             flow.setInit(prev)
                             flow.setNext(post)
                             flow.data = {
+                                'text': text,
                                 'root': '',
                                 'subject': [prevToken, token],
-                                'predicate': []
+                                'predicate': [],
+                                'tokens': tokens
                             }
                     pass
                 pass
@@ -603,4 +663,85 @@ class SemanticNetwork:
             prev = post
             prevToken = token
 
+        self.busy -= 1
+
         return structs
+
+    ####################################################################
+
+    def makeSemanticNetwork(self, tokens):
+        verb = None
+        noun = None
+        thisNoun = None
+        lastNoun = None
+
+        # try:
+        for token in tokens:
+            (word, tag, type) = token
+
+            if tag == 'VERB':
+                verb = self.rules.getVerb(word)
+            if tag == 'NOUN':
+                noun = word
+
+                if thisNoun is None:
+                    thisNoun = noun
+                else:
+                    lastNoun = thisNoun
+                    thisNoun = noun
+
+                node = self.net.search({'name': noun})
+                #print "found: %s\n" % str(node)  # /**/
+
+                if node is not None and len(node) == 0:
+                    id = self.net.addNode(self.net, name=noun, matrix=self.net.connects)
+                    n = len(self.net.nodeNames)
+                    arr1 = np.copy(self.net.connects)
+                    (m, l) = arr1.shape
+                    self.net.connects = np.zeros((n, n), dtype=float)
+                    self.net.connects[:m, :l] = arr1
+                    arr2 = np.copy(self.actions)
+                    #(m, l) = arr2.shape
+                    self.actions = np.chararray((n, n), itemsize=30)
+                    self.actions[:] = ''
+                    self.actions[:m, :l] = arr2
+                    print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
+
+            if thisNoun is not None and lastNoun is not None and verb is not None:
+                origin  = self.net.search({'name': lastNoun})
+                destiny = self.net.search({'name': thisNoun})
+
+                if verb not in self.actionList:
+                    self.actionList.append('verb')
+
+                if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
+                    o = self.net.getIndexof(origin[0].name)
+                    d = self.net.getIndexof(destiny[0].name)
+                    self.net.setConnection(o, d, 1.0, matrix=self.net.connects)
+                    self.net.setConnection(o, d, verb, matrix=self.actions)
+
+                verb = None
+                noun = None
+                thisNoun = None
+                lastNoun = None
+
+        # except ValueError:
+        #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
+        pass
+
+    ####################################################################
+
+    def getSemanticNetwork(self):
+        json = {
+            'net': self.net.getJson(),
+            'actions': self.actions.tolist(),
+        }
+        return json
+
+    ####################################################################
+
+    def saveSemanticNetwork(self, file):
+        json = self.getSemanticNetwork()
+        print str(json)   # /**/
+        with open(file, "w") as text_file:
+            text_file.write(js.dumps(json, sort_keys=True, indent=4, separators=(',', ': ')))

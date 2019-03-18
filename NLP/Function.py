@@ -52,7 +52,12 @@ class Function:
             'isIntj': self.isInterjection,
             'isNum':  self.isNumber,
             'isPunc': self.isPunctuation,
-            'setNuc': self.setNucleous
+            'isAux':  self.isAuxliliar,
+            'setNuc': self.setNucleous,
+            'is':     self._is,
+            'has':    self._has,
+            'does':   self._does,
+            'belong': self._belong
         }
 
         self.dictionary = {
@@ -66,7 +71,10 @@ class Function:
             'INTJ': 'isIntj',
             'CONJ': 'isConj',
             'NUM':  'isNum',
-            'PUNC': 'isPunc'
+            'PUNC': 'isPunc',
+            'AUX':  'isAux',
+            'null': 'null'
+
         }
 
         self.parent = parent
@@ -86,8 +94,15 @@ class Function:
 
     def isVerb(self, args=None):
         try:
-            if args['type'] == 'VERB':
-                return True
+            return True if args['type'] == 'VERB' else False
+        except ValueError:
+            return None
+
+    ####################################################################
+
+    def isAuxliliar(self, args=None):
+        try:
+            return True if args['type'] == 'AUX' else False
         except ValueError:
             return None
 
@@ -95,8 +110,7 @@ class Function:
 
     def isAdverb(self, args=None):
         try:
-            if args['type'] == 'ADV':
-                return True
+            return True if args['type'] == 'ADV' else False
         except ValueError:
             return None
 
@@ -104,8 +118,7 @@ class Function:
 
     def isNoun(self, args=None):
         try:
-            if args['type'] == 'NOUN':
-                return True
+            return True if args['type'] == 'NOUN' else False
         except ValueError:
             return None
 
@@ -113,8 +126,7 @@ class Function:
 
     def isPreposition(self, args=None):
         try:
-            if args['type'] == 'PREP':
-                return True
+            return True if args['type'] == 'PREP' else False
         except ValueError:
             return None
 
@@ -122,8 +134,7 @@ class Function:
 
     def isDeterminant(self, args=None):
         try:
-            if args['type'] == 'DET':
-                return True
+            return True if args['type'] == 'DET' else False
         except ValueError:
             return None
 
@@ -131,8 +142,7 @@ class Function:
 
     def isConjunction(self, args=None):
         try:
-            if args['type'] == 'CONJ':
-                return True
+            return True if args['type'] == 'CONJ' else False
         except ValueError:
             return None
 
@@ -140,8 +150,7 @@ class Function:
 
     def isPronoun(self, args=None):
         try:
-            if args['type'] == 'PRON':
-                return True
+            return True if args['type'] == 'PRON' else False
         except ValueError:
             return None
 
@@ -149,8 +158,7 @@ class Function:
 
     def isAdjetive(self, args=None):
         try:
-            if args['type'] == 'ADJ':
-                return True
+            return True if args['type'] == 'ADJ' else False
         except ValueError:
             return None
 
@@ -158,8 +166,7 @@ class Function:
 
     def isInterjection(self, args=None):
         try:
-            if args['type'] == 'INTJ':
-                return True
+            return True if args['type'] == 'INTJ' else False
         except ValueError:
             return None
 
@@ -167,8 +174,7 @@ class Function:
 
     def isNumber(self, args=None):
         try:
-            if args['type'] == 'NUM':
-                return True
+            return True if args['type'] == 'NUM' else False
         except ValueError:
             return None
 
@@ -176,8 +182,7 @@ class Function:
 
     def isPunctuation(self, args=None):
         try:
-            if args['type'] == 'PUNC':
-                return True
+            return True if args['type'] == 'PUNC' else False
         except ValueError:
             return None
 
@@ -190,3 +195,15 @@ class Function:
 
     def null(self, args=None):
         return None
+
+    def _is(self, args=None):
+        return None
+
+    def _has(self, args=None):
+        return None
+
+    def _does(self, args=None):
+        return None
+
+    def _belong(self, args=None):
+        return  None

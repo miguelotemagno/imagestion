@@ -33,14 +33,14 @@
 # | Author: Miguel Vargas Welch <miguelote@gmail.com>                     |
 # +-----------------------------------------------------------------------+
 
-import numpy as np
 import json as js
 from Node import *
 from Function import *
+import numpy as np
 
 
 class Graph:
-    # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC']
+    # node names example: nodeNames = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
     def __init__(self, name='', nodes=0, id='', nodeNames=[], firstNode=0):
         n = len(nodeNames) if len(nodeNames) > 0 else nodes
         self.functions = Function(self)
@@ -66,6 +66,54 @@ class Graph:
         self.factStart = 0
         self.flow = []
         self.data = None
+
+    ####################################################################
+
+    def addNode(self, parent, name='', function='null', matrix=None):
+        n = len(self.nodeNames)
+        id = "%s_%s" % (name, n)
+        self.nodeNames.append(name)
+        self.nodes.append(Node(parent, name, id, function))
+
+        # # todo demostrar que referencia de matrix se modifica
+        # if matrix is not None:
+        #     print "matrix: \n%s\n" % str(matrix)   # /**/
+        #     n = len(self.nodeNames)
+        #     arr = np.copy(matrix)
+        #     (l, m) = arr.shape
+        #     matrix = np.zeros((n, n), dtype=float)
+        #     matrix[:l, :m] = arr
+
+        return id
+
+    ####################################################################
+
+    def search(self, args=None):
+        #print "search: %s\n" % str(args)   #/**/
+        found = []
+
+        try:
+            if args is not None and 'id' in args.keys():
+                for node in self.nodes:
+                    if node is not None and node.id == args['id']:
+                        return [node]
+
+            if args is not None and 'name' in args.keys():
+                nodes = self.nodes if len(found) == 0 else found
+                for node in nodes:
+                    if node is not None and node.name == args['name']:
+                        found.append(node)
+
+            if args is not None and 'function' in args.keys():
+                nodes = self.nodes if len(found) == 0 else found
+                for node in nodes:
+                    if node is not None and node.functionName == args['function']:
+                        found.append(node)
+        except ValueError:
+            #print "search error: [%s]\n" % ValueError   # /**/
+            return None
+
+        return found
 
     ####################################################################
 
@@ -131,6 +179,17 @@ class Graph:
 
     ####################################################################
 
+    def getFinnishByTags(self, typePrev, typeNext):
+        y = self.getIndexof(typePrev)
+        x = self.getIndexof(typeNext)
+
+        if x is not None and y is not None:
+            return self.finnish[y, x]
+
+        return None
+
+    ####################################################################
+
     def reset(self):
         self.flow = []
         self.data = None
@@ -169,23 +228,27 @@ class Graph:
 
     ####################################################################
 
-    def getConnection(self, y, x):
-        return self.connects.item((y, x))
+    def getConnection(self, y, x, matrix=None):
+        return self.connects.item((y, x)) if matrix is None else matrix.connects.item((y, x))
 
     ####################################################################
 
-    def setConnection(self, y, x, val):
-        self.connects.itemset((y, x), val)
+    def setConnection(self, y, x, val, matrix=None):
+        #print "setConnection(%d, %d)\n" % (y, x)   #/**/
+        if matrix is not None:
+            matrix.itemset((y, x), val)
+        else:
+            self.connects.itemset((y, x), val)
 
     ####################################################################
 
-    def getConnectRow(self, y):
-        return self.connects[y, :]
+    def getConnectRow(self, y, matrix=None):
+        return self.connects[y, :] if matrix is None else matrix.connects[y, :]
 
     ####################################################################
 
-    def getConnectColumn(self, x):
-        return self.connects[:, x]
+    def getConnectColumn(self, x, matrix=None):
+        return self.connects[:, x] if matrix is None else matrix.connects[:, x]
 
     ####################################################################
 
@@ -229,8 +292,8 @@ class Graph:
 
     ####################################################################
 
-    def getConnectionsNode(self, node):
-        col = self.getConnectColumn(node.id)
+    def getConnectionsNode(self, node, matrix=None):
+        col = self.getConnectColumn(node.id, matrix)
         nodes = []
 
         for i in xrange(col):
@@ -241,8 +304,8 @@ class Graph:
 
     ####################################################################
 
-    def getEntriesNode(self, node):
-        row = self.getConnectRow(node.id)
+    def getEntriesNode(self, node, matrix=None):
+        row = self.getConnectRow(node.id, matrix)
         nodes = []
 
         for i in xrange(row):
