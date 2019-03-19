@@ -733,10 +733,33 @@ class SemanticNetwork:
     ####################################################################
 
     def getSemanticNetwork(self):
+        connects = []
+        actions = []
+        (Y, X) = self.net.connects.shape
+
+        for y in range(0, Y):
+            for x in range(0, X):
+                if self.net.connects[y, x] > 0:
+                    connects.append([y, x, 1])
+
+        for y in range(0, Y):
+            for x in range(0, X):
+                if self.actions[y, x] != '':
+                    actions.append([y, x, self.actions[y, x]])
+
+        copy = np.copy(self.net.connects)
+        self.net.connects = np.array(())
+
         json = {
+            'width': X,
+            'height': Y,
             'net': self.net.getJson(),
-            'actions': self.actions.tolist(),
+            'actions': actions,
+            'connects': connects
         }
+
+        self.net.connects = np.copy(copy)
+
         return json
 
     ####################################################################
