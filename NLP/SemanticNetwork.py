@@ -690,7 +690,7 @@ class SemanticNetwork:
                     lastNoun = thisNoun
                     thisNoun = noun
 
-                node = self.net.search({'name': noun})
+                node = self.net.search({'name': noun}) if self.rules.isNoun(noun) is not None else None
                 #print "found: %s\n" % str(node)  # /**/
 
                 if node is not None and len(node) == 0:

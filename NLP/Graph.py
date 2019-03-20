@@ -70,19 +70,13 @@ class Graph:
     ####################################################################
 
     def addNode(self, parent, name='', function='null', matrix=None):
-        n = len(self.nodeNames)
-        id = "%s_%s" % (name, n)
-        self.nodeNames.append(name)
-        self.nodes.append(Node(parent, name, id, function))
+        id = None
 
-        # # todo demostrar que referencia de matrix se modifica
-        # if matrix is not None:
-        #     print "matrix: \n%s\n" % str(matrix)   # /**/
-        #     n = len(self.nodeNames)
-        #     arr = np.copy(matrix)
-        #     (l, m) = arr.shape
-        #     matrix = np.zeros((n, n), dtype=float)
-        #     matrix[:l, :m] = arr
+        if not (name in self.nodeNames):
+            n = len(self.nodeNames)
+            id = "%s_%s" % (name, n)
+            self.nodeNames.append(name)
+            self.nodes.append(Node(parent, name, id, function))
 
         return id
 

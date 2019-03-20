@@ -1,219 +1,39 @@
 {
     "actions": [
         [
-            2,
-            3,
-            "llegar"
-        ],
-        [
-            8,
-            9,
-            "ser"
-        ],
-        [
-            11,
-            12,
-            "ser"
-        ],
-        [
-            14,
-            15,
+            6,
+            7,
             "hacer"
         ],
         [
-            18,
-            19,
-            "instar"
-        ],
-        [
-            21,
-            22,
-            "sostener"
-        ],
-        [
-            24,
-            25,
+            12,
+            13,
             "partir"
         ],
         [
-            30,
-            31,
-            "decir"
-        ],
-        [
-            33,
-            34,
-            "ser"
-        ],
-        [
-            35,
-            36,
-            "emitir"
-        ],
-        [
-            38,
-            39,
-            "conocer"
-        ],
-        [
-            44,
-            45,
-            "ser"
-        ],
-        [
-            53,
-            54,
-            "asegurar"
-        ],
-        [
-            56,
-            57,
-            "nacer"
-        ],
-        [
-            56,
-            78,
+            29,
+            37,
             "sostener"
-        ],
-        [
-            71,
-            72,
-            "tener"
-        ],
-        [
-            79,
-            80,
-            "ser"
-        ],
-        [
-            83,
-            84,
-            "sostener"
-        ],
-        [
-            88,
-            89,
-            "tener"
-        ],
-        [
-            91,
-            92,
-            "nacer"
-        ],
-        [
-            93,
-            94,
-            "arrugar"
         ]
     ],
     "connects": [
         [
-            2,
-            3,
+            6,
+            7,
             1
         ],
         [
-            8,
-            9,
-            1
-        ],
-        [
-            11,
             12,
+            13,
             1
         ],
         [
-            14,
-            15,
-            1
-        ],
-        [
-            18,
-            19,
-            1
-        ],
-        [
-            21,
-            22,
-            1
-        ],
-        [
-            24,
-            25,
-            1
-        ],
-        [
-            30,
-            31,
-            1
-        ],
-        [
-            33,
-            34,
-            1
-        ],
-        [
-            35,
-            36,
-            1
-        ],
-        [
-            38,
-            39,
-            1
-        ],
-        [
-            44,
-            45,
-            1
-        ],
-        [
-            53,
-            54,
-            1
-        ],
-        [
-            56,
-            57,
-            1
-        ],
-        [
-            56,
-            78,
-            1
-        ],
-        [
-            71,
-            72,
-            1
-        ],
-        [
-            79,
-            80,
-            1
-        ],
-        [
-            83,
-            84,
-            1
-        ],
-        [
-            88,
-            89,
-            1
-        ],
-        [
-            91,
-            92,
-            1
-        ],
-        [
-            93,
-            94,
+            29,
+            37,
             1
         ]
     ],
-    "height": 101,
+    "height": 46,
     "net": {
         "functions": [
             [
@@ -238,195 +58,85 @@
             "nodeNames": [
                 "null",
                 "mitad",
-                "siglo",
-                "xx",
                 "llegar",
-                "consenso",
                 "historicidad",
-                "persona",
-                "lao",
-                "tse",
                 "ser",
-                "tao",
-                "ching",
                 "recopilacion",
                 "refranes",
                 "taoistas",
                 "hacer",
-                "manos",
-                "alan",
-                "watts",
                 "instar",
                 "cautela",
-                "punto",
                 "sostener",
                 "vista",
                 "tendencia",
                 "partir",
                 "academica",
                 "escepticismo",
-                "figuras",
                 "espirituales",
-                "historicas",
                 "decir",
-                "anos",
-                "vez",
                 "suficiente",
-                "juicios",
                 "emitir",
-                "tipo",
-                "acerca",
                 "conocer",
                 "existencia",
-                "historica",
                 "autoria",
-                "d",
-                "jing",
                 "objeto",
                 "controversia",
-                "embargo",
-                "convirtio",
-                "heroe",
                 "generaciones",
-                "pueblo",
-                "chino",
                 "tradicion",
                 "asegurar",
                 "ciruelo",
-                "aldea",
                 "nacer",
-                "prefectura",
-                "ku",
-                "k",
-                "xi",
-                "n",
                 "estado",
-                "ch",
                 "distrito",
-                "l",
                 "provincia",
                 "henan",
-                "ultimos",
-                "primaveras",
-                "otonos",
                 "tener",
-                "nombre",
-                "li",
-                "er",
                 "orejas",
                 "versiones",
-                "po",
-                "yang",
                 "proveniente",
-                "familia",
                 "pescadores",
-                "leyendas",
                 "gestacion",
-                "laozi",
-                "requirio",
                 "cantidad",
-                "capitulos",
-                "obra",
-                "king",
-                "fin",
-                "cabello",
                 "rostro",
                 "arrugar",
-                "propias",
                 "anciano",
-                "peculiares",
-                "valieron",
-                "r"
+                "peculiares"
             ],
             "nodes": [
                 0,
                 "mitad_1",
-                "siglo_2",
-                "xx_3",
-                "consenso_5",
-                "historicidad_6",
-                "persona_7",
-                "lao_8",
-                "tse_9",
-                "tao_11",
-                "ching_12",
-                "recopilacion_13",
-                "refranes_14",
-                "taoistas_15",
-                "manos_17",
-                "alan_18",
-                "watts_19",
-                "cautela_21",
-                "punto_22",
-                "vista_24",
-                "tendencia_25",
-                "academica_27",
-                "escepticismo_28",
-                "figuras_29",
-                "espirituales_30",
-                "historicas_31",
-                "anos_33",
-                "vez_34",
-                "suficiente_35",
-                "juicios_36",
-                "tipo_38",
-                "acerca_39",
-                "existencia_41",
-                "historica_42",
-                "autoria_43",
-                "d_44",
-                "jing_45",
-                "objeto_46",
-                "controversia_47",
-                "embargo_48",
-                "convirtio_49",
-                "heroe_50",
-                "generaciones_51",
-                "pueblo_52",
-                "chino_53",
-                "tradicion_54",
-                "ciruelo_56",
-                "aldea_57",
-                "prefectura_59",
-                "ku_60",
-                "k_61",
-                "xi_62",
-                "n_63",
-                "estado_64",
-                "ch_65",
-                "distrito_66",
-                "l_67",
-                "provincia_68",
-                "henan_69",
-                "ultimos_70",
-                "primaveras_71",
-                "otonos_72",
-                "nombre_74",
-                "li_75",
-                "er_76",
-                "orejas_77",
-                "versiones_78",
-                "po_79",
-                "yang_80",
-                "proveniente_81",
-                "familia_82",
-                "pescadores_83",
-                "leyendas_84",
-                "gestacion_85",
-                "laozi_86",
-                "requirio_87",
-                "cantidad_88",
-                "capitulos_89",
-                "obra_90",
-                "king_91",
-                "fin_92",
-                "cabello_93",
-                "rostro_94",
-                "propias_96",
-                "anciano_97",
-                "peculiares_98",
-                "valieron_99",
-                "r_100"
+                "historicidad_3",
+                "recopilacion_5",
+                "refranes_6",
+                "taoistas_7",
+                "cautela_10",
+                "vista_12",
+                "tendencia_13",
+                "academica_15",
+                "escepticismo_16",
+                "espirituales_17",
+                "suficiente_19",
+                "existencia_22",
+                "autoria_23",
+                "objeto_24",
+                "controversia_25",
+                "generaciones_26",
+                "tradicion_27",
+                "ciruelo_29",
+                "estado_31",
+                "distrito_32",
+                "provincia_33",
+                "henan_34",
+                "orejas_36",
+                "versiones_37",
+                "proveniente_38",
+                "pescadores_39",
+                "gestacion_40",
+                "cantidad_41",
+                "rostro_42",
+                "anciano_44",
+                "peculiares_45"
             ],
             "start": [
                 [
@@ -448,435 +158,160 @@
             },
             {
                 "function": "null",
-                "id": "siglo_2",
-                "name": "siglo"
-            },
-            {
-                "function": "null",
-                "id": "xx_3",
-                "name": "xx"
-            },
-            {
-                "function": "null",
-                "id": "consenso_5",
-                "name": "consenso"
-            },
-            {
-                "function": "null",
-                "id": "historicidad_6",
+                "id": "historicidad_3",
                 "name": "historicidad"
             },
             {
                 "function": "null",
-                "id": "persona_7",
-                "name": "persona"
-            },
-            {
-                "function": "null",
-                "id": "lao_8",
-                "name": "lao"
-            },
-            {
-                "function": "null",
-                "id": "tse_9",
-                "name": "tse"
-            },
-            {
-                "function": "null",
-                "id": "tao_11",
-                "name": "tao"
-            },
-            {
-                "function": "null",
-                "id": "ching_12",
-                "name": "ching"
-            },
-            {
-                "function": "null",
-                "id": "recopilacion_13",
+                "id": "recopilacion_5",
                 "name": "recopilacion"
             },
             {
                 "function": "null",
-                "id": "refranes_14",
+                "id": "refranes_6",
                 "name": "refranes"
             },
             {
                 "function": "null",
-                "id": "taoistas_15",
+                "id": "taoistas_7",
                 "name": "taoistas"
             },
             {
                 "function": "null",
-                "id": "manos_17",
-                "name": "manos"
-            },
-            {
-                "function": "null",
-                "id": "alan_18",
-                "name": "alan"
-            },
-            {
-                "function": "null",
-                "id": "watts_19",
-                "name": "watts"
-            },
-            {
-                "function": "null",
-                "id": "cautela_21",
+                "id": "cautela_10",
                 "name": "cautela"
             },
             {
                 "function": "null",
-                "id": "punto_22",
-                "name": "punto"
-            },
-            {
-                "function": "null",
-                "id": "vista_24",
+                "id": "vista_12",
                 "name": "vista"
             },
             {
                 "function": "null",
-                "id": "tendencia_25",
+                "id": "tendencia_13",
                 "name": "tendencia"
             },
             {
                 "function": "null",
-                "id": "academica_27",
+                "id": "academica_15",
                 "name": "academica"
             },
             {
                 "function": "null",
-                "id": "escepticismo_28",
+                "id": "escepticismo_16",
                 "name": "escepticismo"
             },
             {
                 "function": "null",
-                "id": "figuras_29",
-                "name": "figuras"
-            },
-            {
-                "function": "null",
-                "id": "espirituales_30",
+                "id": "espirituales_17",
                 "name": "espirituales"
             },
             {
                 "function": "null",
-                "id": "historicas_31",
-                "name": "historicas"
-            },
-            {
-                "function": "null",
-                "id": "anos_33",
-                "name": "anos"
-            },
-            {
-                "function": "null",
-                "id": "vez_34",
-                "name": "vez"
-            },
-            {
-                "function": "null",
-                "id": "suficiente_35",
+                "id": "suficiente_19",
                 "name": "suficiente"
             },
             {
                 "function": "null",
-                "id": "juicios_36",
-                "name": "juicios"
-            },
-            {
-                "function": "null",
-                "id": "tipo_38",
-                "name": "tipo"
-            },
-            {
-                "function": "null",
-                "id": "acerca_39",
-                "name": "acerca"
-            },
-            {
-                "function": "null",
-                "id": "existencia_41",
+                "id": "existencia_22",
                 "name": "existencia"
             },
             {
                 "function": "null",
-                "id": "historica_42",
-                "name": "historica"
-            },
-            {
-                "function": "null",
-                "id": "autoria_43",
+                "id": "autoria_23",
                 "name": "autoria"
             },
             {
                 "function": "null",
-                "id": "d_44",
-                "name": "d"
-            },
-            {
-                "function": "null",
-                "id": "jing_45",
-                "name": "jing"
-            },
-            {
-                "function": "null",
-                "id": "objeto_46",
+                "id": "objeto_24",
                 "name": "objeto"
             },
             {
                 "function": "null",
-                "id": "controversia_47",
+                "id": "controversia_25",
                 "name": "controversia"
             },
             {
                 "function": "null",
-                "id": "embargo_48",
-                "name": "embargo"
-            },
-            {
-                "function": "null",
-                "id": "convirtio_49",
-                "name": "convirtio"
-            },
-            {
-                "function": "null",
-                "id": "heroe_50",
-                "name": "heroe"
-            },
-            {
-                "function": "null",
-                "id": "generaciones_51",
+                "id": "generaciones_26",
                 "name": "generaciones"
             },
             {
                 "function": "null",
-                "id": "pueblo_52",
-                "name": "pueblo"
-            },
-            {
-                "function": "null",
-                "id": "chino_53",
-                "name": "chino"
-            },
-            {
-                "function": "null",
-                "id": "tradicion_54",
+                "id": "tradicion_27",
                 "name": "tradicion"
             },
             {
                 "function": "null",
-                "id": "ciruelo_56",
+                "id": "ciruelo_29",
                 "name": "ciruelo"
             },
             {
                 "function": "null",
-                "id": "aldea_57",
-                "name": "aldea"
-            },
-            {
-                "function": "null",
-                "id": "prefectura_59",
-                "name": "prefectura"
-            },
-            {
-                "function": "null",
-                "id": "ku_60",
-                "name": "ku"
-            },
-            {
-                "function": "null",
-                "id": "k_61",
-                "name": "k"
-            },
-            {
-                "function": "null",
-                "id": "xi_62",
-                "name": "xi"
-            },
-            {
-                "function": "null",
-                "id": "n_63",
-                "name": "n"
-            },
-            {
-                "function": "null",
-                "id": "estado_64",
+                "id": "estado_31",
                 "name": "estado"
             },
             {
                 "function": "null",
-                "id": "ch_65",
-                "name": "ch"
-            },
-            {
-                "function": "null",
-                "id": "distrito_66",
+                "id": "distrito_32",
                 "name": "distrito"
             },
             {
                 "function": "null",
-                "id": "l_67",
-                "name": "l"
-            },
-            {
-                "function": "null",
-                "id": "provincia_68",
+                "id": "provincia_33",
                 "name": "provincia"
             },
             {
                 "function": "null",
-                "id": "henan_69",
+                "id": "henan_34",
                 "name": "henan"
             },
             {
                 "function": "null",
-                "id": "ultimos_70",
-                "name": "ultimos"
-            },
-            {
-                "function": "null",
-                "id": "primaveras_71",
-                "name": "primaveras"
-            },
-            {
-                "function": "null",
-                "id": "otonos_72",
-                "name": "otonos"
-            },
-            {
-                "function": "null",
-                "id": "nombre_74",
-                "name": "nombre"
-            },
-            {
-                "function": "null",
-                "id": "li_75",
-                "name": "li"
-            },
-            {
-                "function": "null",
-                "id": "er_76",
-                "name": "er"
-            },
-            {
-                "function": "null",
-                "id": "orejas_77",
+                "id": "orejas_36",
                 "name": "orejas"
             },
             {
                 "function": "null",
-                "id": "versiones_78",
+                "id": "versiones_37",
                 "name": "versiones"
             },
             {
                 "function": "null",
-                "id": "po_79",
-                "name": "po"
-            },
-            {
-                "function": "null",
-                "id": "yang_80",
-                "name": "yang"
-            },
-            {
-                "function": "null",
-                "id": "proveniente_81",
+                "id": "proveniente_38",
                 "name": "proveniente"
             },
             {
                 "function": "null",
-                "id": "familia_82",
-                "name": "familia"
-            },
-            {
-                "function": "null",
-                "id": "pescadores_83",
+                "id": "pescadores_39",
                 "name": "pescadores"
             },
             {
                 "function": "null",
-                "id": "leyendas_84",
-                "name": "leyendas"
-            },
-            {
-                "function": "null",
-                "id": "gestacion_85",
+                "id": "gestacion_40",
                 "name": "gestacion"
             },
             {
                 "function": "null",
-                "id": "laozi_86",
-                "name": "laozi"
-            },
-            {
-                "function": "null",
-                "id": "requirio_87",
-                "name": "requirio"
-            },
-            {
-                "function": "null",
-                "id": "cantidad_88",
+                "id": "cantidad_41",
                 "name": "cantidad"
             },
             {
                 "function": "null",
-                "id": "capitulos_89",
-                "name": "capitulos"
-            },
-            {
-                "function": "null",
-                "id": "obra_90",
-                "name": "obra"
-            },
-            {
-                "function": "null",
-                "id": "king_91",
-                "name": "king"
-            },
-            {
-                "function": "null",
-                "id": "fin_92",
-                "name": "fin"
-            },
-            {
-                "function": "null",
-                "id": "cabello_93",
-                "name": "cabello"
-            },
-            {
-                "function": "null",
-                "id": "rostro_94",
+                "id": "rostro_42",
                 "name": "rostro"
             },
             {
                 "function": "null",
-                "id": "propias_96",
-                "name": "propias"
-            },
-            {
-                "function": "null",
-                "id": "anciano_97",
+                "id": "anciano_44",
                 "name": "anciano"
             },
             {
                 "function": "null",
-                "id": "peculiares_98",
+                "id": "peculiares_45",
                 "name": "peculiares"
-            },
-            {
-                "function": "null",
-                "id": "valieron_99",
-                "name": "valieron"
-            },
-            {
-                "function": "null",
-                "id": "r_100",
-                "name": "r"
             }
         ]
     },
-    "width": 101
+    "width": 46
 }
