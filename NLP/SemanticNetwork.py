@@ -682,9 +682,10 @@ class SemanticNetwork:
 
             if tag == 'AUX':
                 aux = self.rules.getVerb(word)
-                aux = '' if self.rules.isAuxiliar(aux) is None else aux + ' '
+                aux = None if self.rules.isAuxiliar(aux) is None else aux
             if tag == 'VERB':
-                verb = aux + self.rules.getVerb(word)
+                verb = self.rules.getVerb(word)
+                verb = "%s %s" % (aux, verb) if aux is not None else verb
             if tag == 'NOUN':
                 noun = word
 
@@ -730,7 +731,7 @@ class SemanticNetwork:
                 noun = None
                 thisNoun = None
                 lastNoun = None
-                aux = ''
+                aux = None
 
         # except ValueError:
         #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
