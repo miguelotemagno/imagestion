@@ -97,7 +97,7 @@ class SemanticNetwork:
         self.actionFunc.dictionary = {
             'null': 'null'
         }
-        self.net = Graph(name='net', nodeNames=self.actionList)
+        self.net = Graph(name='net') #, nodeNames=self.actionList)
         self.net.functions = self.actionFunc
         self.actions = np.chararray((1, 1), itemsize=30)
         self.actions[:] = ''
@@ -670,6 +670,7 @@ class SemanticNetwork:
     ####################################################################
 
     def makeSemanticNetwork(self, tokens):
+        aux = None
         verb = None
         noun = None
         thisNoun = None
@@ -679,22 +680,25 @@ class SemanticNetwork:
         for token in tokens:
             (word, tag, type) = token
 
+            if tag == 'AUX':
+                aux = self.rules.getVerb(word)
+                aux = '' if self.rules.isAuxiliar(aux) is None else aux + ' '
             if tag == 'VERB':
-                verb = self.rules.getVerb(word)
+                verb = aux + self.rules.getVerb(word)
             if tag == 'NOUN':
                 noun = word
 
                 if thisNoun is None:
-                    thisNoun = noun
+                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
                 else:
                     lastNoun = thisNoun
-                    thisNoun = noun
+                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
 
-                node = self.net.search({'name': noun})
+                node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
                 #print "found: %s\n" % str(node)  # /**/
 
                 if node is not None and len(node) == 0:
-                    id = self.net.addNode(self.net, name=noun, matrix=self.net.connects)
+                    id = self.net.addNode(self.net, name=thisNoun, matrix=self.net.connects)
                     n = len(self.net.nodeNames)
                     arr1 = np.copy(self.net.connects)
                     (m, l) = arr1.shape
@@ -705,14 +709,16 @@ class SemanticNetwork:
                     self.actions = np.chararray((n, n), itemsize=30)
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
-                    print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
+                    #print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
+                print "%s --(%s)--> %s\n" % (lastNoun, verb, thisNoun)
                 origin  = self.net.search({'name': lastNoun})
                 destiny = self.net.search({'name': thisNoun})
 
                 if verb not in self.actionList:
-                    self.actionList.append('verb')
+                    self.actionList.append(verb)
+                    self.actionFunc.dictionary[verb] = 'null';
 
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
@@ -724,6 +730,7 @@ class SemanticNetwork:
                 noun = None
                 thisNoun = None
                 lastNoun = None
+                aux = ''
 
         # except ValueError:
         #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
@@ -732,16 +739,38 @@ class SemanticNetwork:
     ####################################################################
 
     def getSemanticNetwork(self):
+        connects = []
+        actions = []
+        (Y, X) = self.net.connects.shape
+
+        for y in range(0, Y):
+            for x in range(0, X):
+                if self.net.connects[y, x] > 0:
+                    connects.append([y, x, 1])
+
+        for y in range(0, Y):
+            for x in range(0, X):
+                if self.actions[y, x] != '':
+                    actions.append([y, x, self.actions[y, x]])
+
+        copy = np.copy(self.net.connects)
+        self.net.connects = np.array(())
+
         json = {
+            'width': X,
+            'height': Y,
             'net': self.net.getJson(),
-            'actions': self.actions.tolist(),
+            'actions': actions,
+            'connects': connects
         }
+
+        self.net.connects = np.copy(copy)
+
         return json
 
     ####################################################################
 
     def saveSemanticNetwork(self, file):
         json = self.getSemanticNetwork()
-        print str(json)   # /**/
         with open(file, "w") as text_file:
             text_file.write(js.dumps(json, sort_keys=True, indent=4, separators=(',', ': ')))
