@@ -1,25 +1,100 @@
 {
     "actions": [
         [
+            0,
+            1,
+            "ser llegar"
+        ],
+        [
+            2,
+            3,
+            "ser"
+        ],
+        [
+            4,
+            5,
+            "tener"
+        ],
+        [
             6,
             7,
-            "hacer"
+            "ser partir"
+        ],
+        [
+            10,
+            11,
+            "poder saber"
         ],
         [
             12,
             13,
-            "partir"
+            "ser conocer"
+        ],
+        [
+            14,
+            15,
+            "ser"
+        ],
+        [
+            16,
+            17,
+            "asegurar"
+        ],
+        [
+            18,
+            19,
+            "nacer"
+        ],
+        [
+            18,
+            24,
+            "sostener"
+        ],
+        [
+            22,
+            23,
+            "tener"
+        ],
+        [
+            25,
+            26,
+            "ser"
+        ],
+        [
+            27,
+            28,
+            "sostener"
         ],
         [
             29,
-            37,
-            "sostener"
+            30,
+            "arrugar"
         ]
     ],
     "connects": [
         [
+            0,
+            1,
+            1
+        ],
+        [
+            2,
+            3,
+            1
+        ],
+        [
+            4,
+            5,
+            1
+        ],
+        [
             6,
             7,
+            1
+        ],
+        [
+            10,
+            11,
             1
         ],
         [
@@ -28,12 +103,47 @@
             1
         ],
         [
+            14,
+            15,
+            1
+        ],
+        [
+            16,
+            17,
+            1
+        ],
+        [
+            18,
+            19,
+            1
+        ],
+        [
+            18,
+            24,
+            1
+        ],
+        [
+            22,
+            23,
+            1
+        ],
+        [
+            25,
+            26,
+            1
+        ],
+        [
+            27,
+            28,
+            1
+        ],
+        [
             29,
-            37,
+            30,
             1
         ]
     ],
-    "height": 46,
+    "height": 32,
     "net": {
         "functions": [
             [
@@ -45,53 +155,36 @@
             "factor": 0,
             "factorFinnish": 0,
             "factorStart": 0,
-            "finnish": [
-                [
-                    0.0
-                ]
-            ],
+            "finnish": [],
             "first": 0,
-            "height": 1,
+            "height": 0,
             "id": "",
             "iterations": 0,
             "name": "net",
             "nodeNames": [
-                "null",
                 "mitad",
-                "llegar",
                 "historicidad",
-                "ser",
                 "recopilacion",
                 "refranes",
                 "taoistas",
-                "hacer",
-                "instar",
                 "cautela",
-                "sostener",
                 "vista",
                 "tendencia",
-                "partir",
                 "academica",
                 "escepticismo",
                 "espirituales",
-                "decir",
                 "suficiente",
-                "emitir",
-                "conocer",
                 "existencia",
                 "autoria",
                 "objeto",
                 "controversia",
                 "generaciones",
                 "tradicion",
-                "asegurar",
                 "ciruelo",
-                "nacer",
                 "estado",
                 "distrito",
                 "provincia",
                 "henan",
-                "tener",
                 "orejas",
                 "versiones",
                 "proveniente",
@@ -99,219 +192,208 @@
                 "gestacion",
                 "cantidad",
                 "rostro",
-                "arrugar",
                 "anciano",
                 "peculiares"
             ],
             "nodes": [
-                0,
-                "mitad_1",
-                "historicidad_3",
-                "recopilacion_5",
-                "refranes_6",
-                "taoistas_7",
-                "cautela_10",
-                "vista_12",
-                "tendencia_13",
-                "academica_15",
-                "escepticismo_16",
-                "espirituales_17",
-                "suficiente_19",
-                "existencia_22",
-                "autoria_23",
-                "objeto_24",
-                "controversia_25",
-                "generaciones_26",
-                "tradicion_27",
-                "ciruelo_29",
-                "estado_31",
-                "distrito_32",
-                "provincia_33",
-                "henan_34",
-                "orejas_36",
-                "versiones_37",
-                "proveniente_38",
-                "pescadores_39",
-                "gestacion_40",
-                "cantidad_41",
-                "rostro_42",
-                "anciano_44",
-                "peculiares_45"
+                "mitad_0",
+                "historicidad_1",
+                "recopilacion_2",
+                "refranes_3",
+                "taoistas_4",
+                "cautela_5",
+                "vista_6",
+                "tendencia_7",
+                "academica_8",
+                "escepticismo_9",
+                "espirituales_10",
+                "suficiente_11",
+                "existencia_12",
+                "autoria_13",
+                "objeto_14",
+                "controversia_15",
+                "generaciones_16",
+                "tradicion_17",
+                "ciruelo_18",
+                "estado_19",
+                "distrito_20",
+                "provincia_21",
+                "henan_22",
+                "orejas_23",
+                "versiones_24",
+                "proveniente_25",
+                "pescadores_26",
+                "gestacion_27",
+                "cantidad_28",
+                "rostro_29",
+                "anciano_30",
+                "peculiares_31"
             ],
-            "start": [
-                [
-                    0.0
-                ]
-            ],
-            "width": 1
+            "start": [],
+            "width": 0
         },
         "nodes": [
             {
                 "function": "null",
-                "id": 0,
-                "name": "null"
-            },
-            {
-                "function": "null",
-                "id": "mitad_1",
+                "id": "mitad_0",
                 "name": "mitad"
             },
             {
                 "function": "null",
-                "id": "historicidad_3",
+                "id": "historicidad_1",
                 "name": "historicidad"
             },
             {
                 "function": "null",
-                "id": "recopilacion_5",
+                "id": "recopilacion_2",
                 "name": "recopilacion"
             },
             {
                 "function": "null",
-                "id": "refranes_6",
+                "id": "refranes_3",
                 "name": "refranes"
             },
             {
                 "function": "null",
-                "id": "taoistas_7",
+                "id": "taoistas_4",
                 "name": "taoistas"
             },
             {
                 "function": "null",
-                "id": "cautela_10",
+                "id": "cautela_5",
                 "name": "cautela"
             },
             {
                 "function": "null",
-                "id": "vista_12",
+                "id": "vista_6",
                 "name": "vista"
             },
             {
                 "function": "null",
-                "id": "tendencia_13",
+                "id": "tendencia_7",
                 "name": "tendencia"
             },
             {
                 "function": "null",
-                "id": "academica_15",
+                "id": "academica_8",
                 "name": "academica"
             },
             {
                 "function": "null",
-                "id": "escepticismo_16",
+                "id": "escepticismo_9",
                 "name": "escepticismo"
             },
             {
                 "function": "null",
-                "id": "espirituales_17",
+                "id": "espirituales_10",
                 "name": "espirituales"
             },
             {
                 "function": "null",
-                "id": "suficiente_19",
+                "id": "suficiente_11",
                 "name": "suficiente"
             },
             {
                 "function": "null",
-                "id": "existencia_22",
+                "id": "existencia_12",
                 "name": "existencia"
             },
             {
                 "function": "null",
-                "id": "autoria_23",
+                "id": "autoria_13",
                 "name": "autoria"
             },
             {
                 "function": "null",
-                "id": "objeto_24",
+                "id": "objeto_14",
                 "name": "objeto"
             },
             {
                 "function": "null",
-                "id": "controversia_25",
+                "id": "controversia_15",
                 "name": "controversia"
             },
             {
                 "function": "null",
-                "id": "generaciones_26",
+                "id": "generaciones_16",
                 "name": "generaciones"
             },
             {
                 "function": "null",
-                "id": "tradicion_27",
+                "id": "tradicion_17",
                 "name": "tradicion"
             },
             {
                 "function": "null",
-                "id": "ciruelo_29",
+                "id": "ciruelo_18",
                 "name": "ciruelo"
             },
             {
                 "function": "null",
-                "id": "estado_31",
+                "id": "estado_19",
                 "name": "estado"
             },
             {
                 "function": "null",
-                "id": "distrito_32",
+                "id": "distrito_20",
                 "name": "distrito"
             },
             {
                 "function": "null",
-                "id": "provincia_33",
+                "id": "provincia_21",
                 "name": "provincia"
             },
             {
                 "function": "null",
-                "id": "henan_34",
+                "id": "henan_22",
                 "name": "henan"
             },
             {
                 "function": "null",
-                "id": "orejas_36",
+                "id": "orejas_23",
                 "name": "orejas"
             },
             {
                 "function": "null",
-                "id": "versiones_37",
+                "id": "versiones_24",
                 "name": "versiones"
             },
             {
                 "function": "null",
-                "id": "proveniente_38",
+                "id": "proveniente_25",
                 "name": "proveniente"
             },
             {
                 "function": "null",
-                "id": "pescadores_39",
+                "id": "pescadores_26",
                 "name": "pescadores"
             },
             {
                 "function": "null",
-                "id": "gestacion_40",
+                "id": "gestacion_27",
                 "name": "gestacion"
             },
             {
                 "function": "null",
-                "id": "cantidad_41",
+                "id": "cantidad_28",
                 "name": "cantidad"
             },
             {
                 "function": "null",
-                "id": "rostro_42",
+                "id": "rostro_29",
                 "name": "rostro"
             },
             {
                 "function": "null",
-                "id": "anciano_44",
+                "id": "anciano_30",
                 "name": "anciano"
             },
             {
                 "function": "null",
-                "id": "peculiares_45",
+                "id": "peculiares_31",
                 "name": "peculiares"
             }
         ]
     },
-    "width": 46
+    "width": 32
 }

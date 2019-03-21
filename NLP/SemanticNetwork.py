@@ -97,7 +97,7 @@ class SemanticNetwork:
         self.actionFunc.dictionary = {
             'null': 'null'
         }
-        self.net = Graph(name='net', nodeNames=self.actionList)
+        self.net = Graph(name='net') #, nodeNames=self.actionList)
         self.net.functions = self.actionFunc
         self.actions = np.chararray((1, 1), itemsize=30)
         self.actions[:] = ''
@@ -670,6 +670,7 @@ class SemanticNetwork:
     ####################################################################
 
     def makeSemanticNetwork(self, tokens):
+        aux = None
         verb = None
         noun = None
         thisNoun = None
@@ -679,22 +680,25 @@ class SemanticNetwork:
         for token in tokens:
             (word, tag, type) = token
 
+            if tag == 'AUX':
+                aux = self.rules.getVerb(word)
+                aux = '' if self.rules.isAuxiliar(aux) is None else aux + ' '
             if tag == 'VERB':
-                verb = self.rules.getVerb(word)
+                verb = aux + self.rules.getVerb(word)
             if tag == 'NOUN':
                 noun = word
 
                 if thisNoun is None:
-                    thisNoun = noun
+                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
                 else:
                     lastNoun = thisNoun
-                    thisNoun = noun
+                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
 
-                node = self.net.search({'name': noun}) if self.rules.isNoun(noun) is not None else None
+                node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
                 #print "found: %s\n" % str(node)  # /**/
 
                 if node is not None and len(node) == 0:
-                    id = self.net.addNode(self.net, name=noun, matrix=self.net.connects)
+                    id = self.net.addNode(self.net, name=thisNoun, matrix=self.net.connects)
                     n = len(self.net.nodeNames)
                     arr1 = np.copy(self.net.connects)
                     (m, l) = arr1.shape
@@ -714,6 +718,7 @@ class SemanticNetwork:
 
                 if verb not in self.actionList:
                     self.actionList.append(verb)
+                    self.actionFunc.dictionary[verb] = 'null';
 
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
@@ -725,6 +730,7 @@ class SemanticNetwork:
                 noun = None
                 thisNoun = None
                 lastNoun = None
+                aux = ''
 
         # except ValueError:
         #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
