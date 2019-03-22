@@ -163,10 +163,24 @@
 
 		if(data.net) {
 			var len = data.net.graph.nodeNames.length;
-			var inc = 360 / (len+1);
+			var radio = 0;
+			var angle = 0;
+			var degree = 60;
+			var a = 0.9;
+			var b = 1.4;
+			var j = 0
 			for(var i=0; i < len; i++) {
-				var y = Math.sin(i*inc * Math.PI / 180) * len * 20;
-				var x = Math.cos(i*inc * Math.PI / 180) * len * 20
+				j++;
+				radio += (Math.pow(b, Math.cos(j)) * 10) / j*20 + 1;
+				angle += (Math.PI*2)/j;
+				var y = Math.sin(angle) * radio*2 ;
+				var x = Math.cos(angle) * radio;
+				/*
+				angle = (j % degree) == 0 ? ((angle + degree) > 360 ? degree : angle + degree) :angle;
+				radio = j + i * (j % degree);
+				var y = Math.sin((Math.PI * angle)/180) * radio;   //Math.sin(angle) * radio;
+				var x = Math.cos((Math.PI * angle)/180) * radio;   //Math.cos(angle) * radio;
+				*/
 				var node = {
 					id: i,
 					text: data.net.graph.nodeNames[i],
