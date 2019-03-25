@@ -680,6 +680,8 @@ class SemanticNetwork:
         for token in tokens:
             (word, tag, type) = token
 
+            if tag == 'PREP':
+                verb = None if self.rules.isPreposition(word) is None else word
             if tag == 'AUX':
                 aux = self.rules.getVerb(word)
                 aux = None if self.rules.isAuxiliar(aux) is None else word

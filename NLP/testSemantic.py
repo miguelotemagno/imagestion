@@ -42,7 +42,7 @@ if sys.argv[1] == 'train':
                 print(ValueError)
                 continue
 
-# ejemplo: python testSemantic.py web https://definicion.de/taoismo ''
+# ejemplo: python testSemantic.py web https://definicion.de/taoismo '' 'taoismo.json'
 if sys.argv[1] == 'web':
     url = 'https://raw.githubusercontent.com/miguelotemagno/imagestion/imagestion_1.0/NLP/grammarTest.txt'
     if sys.argv[2] != '':
@@ -52,21 +52,22 @@ if sys.argv[1] == 'web':
     s.load(dbFile)
 
     s.rules.loadFromWeb(url)
-    tokens = s.rules.getSyntax(s.rules.text)
-    normalize = s.rules.normalize(tokens)
+    #tokens = s.rules.getSyntax(s.rules.text)
+    #normalize = s.rules.normalize(tokens)
+
     list = s.analize(s.rules.text)
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+                s.makeSemanticNetwork(item['tokens'])
 
-    net = "redSemantica.json"
+    file = "redSemantica.json"
     if sys.argv[4] != '':
         file = sys.argv[4]
 
-    print "NORMALIZE: %s\n" % str(normalize)
-    s.makeSemanticNetwork(normalize)
-    s.saveSemanticNetwork(net)
+    #s.makeSemanticNetwork(normalize)
+    s.saveSemanticNetwork(file)
 
     print "connects:\n"
     print s.net.connects
@@ -84,22 +85,25 @@ if sys.argv[1] == 'file':
     s.load(dbFile)
 
     s.rules.loadFromFile(file)
-    tokens = s.rules.getSyntax(s.rules.text)
-    normalize = s.rules.normalize(tokens)
-    print "TOKENS: %s\n" % str(tokens)
-    print "NORMALIZE: %s\n" % str(normalize)
+    #tokens = s.rules.getSyntax(s.rules.text)
+    #normalize = s.rules.normalize(tokens)
+    #print "TOKENS: %s\n" % str(tokens)
+    #print "NORMALIZE: %s\n" % str(normalize)
+    
+    
     list = s.analize(s.rules.text)
 
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
                 print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+                s.makeSemanticNetwork(item['tokens'])
 
     file = "redSemantica.json"
     if sys.argv[4] != '':
         file = sys.argv[4]
 
-    s.makeSemanticNetwork(normalize)
+    #s.makeSemanticNetwork(normalize)
     s.saveSemanticNetwork(file)
 
     print "connects:\n"
