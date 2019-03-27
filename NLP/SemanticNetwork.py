@@ -44,7 +44,7 @@ import thread
 
 # http://chriskiehl.com/article/parallelism-in-one-line/
 #from multiprocessing import Pool
-#from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing.dummy import Pool as ThreadPool
 
 # https://sebastianraschka.com/Articles/2014_multiprocessing.html
 import multiprocessing as mp
@@ -421,6 +421,47 @@ class SemanticNetwork:
                 p.join()
 
             lsOut = [out.get() for p in processes]
+            lsOut.sort()
+            lsOut = [o[1] for o in lsOut]
+        else:
+            tokens = self.rules.normalize(self.rules.getSyntax(text))
+            struct = self.getSyntaxStruct(text, tokens)
+            lsOut.append(struct)
+
+        return lsOut
+
+    ## ## ##
+
+    def analize2(self, text):
+        expr = re.compile(r'[^.]+')
+        list = expr.findall(text)
+        out = mp.Queue()
+        lsOut = []
+        processes = []
+        self.busy = 0
+        pool = ThreadPool(4)
+
+        #addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
+
+        if len(list) > 0:
+            for txt in list:
+                #thread.start_new_thread(addSrtuct, (out, self.busy, txt))
+                #processes.append(mp.Process(target=self.addProcess, args=(self.busy, out, txt)))
+                processes.append((self.busy, out, txt))
+                print "%d %s " % (self.busy, txt)
+                self.busy += 1
+
+            results = pool.map(self.addProcess, processes)
+
+            # Run processes
+            #for p in processes:
+            #    p.start()
+
+            # Exit the completed processes
+            #for p in processes:
+            #    p.join()
+
+            lsOut = [out.get() for p in results]
             lsOut.sort()
             lsOut = [o[1] for o in lsOut]
         else:
