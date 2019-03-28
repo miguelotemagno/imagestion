@@ -75,7 +75,7 @@ if sys.argv[1] == 'web':
     print s.actions
 
 
-# ejemplo: python testSemantic.py file serotoninaTrainTest.txt ''
+# ejemplo: python testSemantic.py file taoismo.txt '' taoismo.json
 if sys.argv[1] == 'file':
     file = "grammarTest.txt"
     if sys.argv[2] != '':
@@ -91,7 +91,7 @@ if sys.argv[1] == 'file':
     #print "NORMALIZE: %s\n" % str(normalize)
     
     
-    list = s.analize2(s.rules.text)
+    list = s.analize(s.rules.text)
 
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
