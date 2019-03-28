@@ -391,6 +391,17 @@ class SemanticNetwork:
         #print "(%d) %s " % (i, str(struct))
 
 
+
+    def addProcess2(self, args={}):
+        i = args['i']
+        out = args['out']
+        txt = args['txt']
+        tokens = self.rules.normalize(self.rules.getSyntax(txt))
+        struct = self.getSyntaxStruct(txt, tokens)
+        out.put((i, struct))
+        #print "(%d) %s " % (i, str(struct))
+
+
     ####################################################################
     # analize(texto)
     # Recibe una oracion, analiza su semantica y retorna una lista de posibles
@@ -447,11 +458,11 @@ class SemanticNetwork:
             for txt in list:
                 #thread.start_new_thread(addSrtuct, (out, self.busy, txt))
                 #processes.append(mp.Process(target=self.addProcess, args=(self.busy, out, txt)))
-                processes.append((self.busy, out, txt))
+                processes.append({'i': self.busy, 'out': out, 'txt': txt})
                 print "%d %s " % (self.busy, txt)
                 self.busy += 1
 
-            results = pool.map(self.addProcess, processes)
+            results = pool.map(self.addProcess2, processes)
 
             # Run processes
             #for p in processes:

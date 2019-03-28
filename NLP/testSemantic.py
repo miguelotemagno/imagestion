@@ -91,7 +91,7 @@ if sys.argv[1] == 'file':
     #print "NORMALIZE: %s\n" % str(normalize)
     
     
-    list = s.analize(s.rules.text)
+    list = s.analize2(s.rules.text)
 
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
