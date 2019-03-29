@@ -400,8 +400,11 @@ class SemanticNetwork:
     # estructuras (sugeto, nucleo y predicado)
 
     def analize(self, text):
+        txt = re.sub(r'\n{2,}', '.\r', text)
+        txt = re.sub(r'\n', ' ', txt)
+        txt = re.sub(r'\r', '\n', txt)
         expr = re.compile(r'[^.]+')
-        list = expr.findall(text)
+        list = expr.findall(txt)
         out = mp.Queue()
         lsOut = []
         processes = []
