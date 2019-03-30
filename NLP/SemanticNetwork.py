@@ -155,7 +155,7 @@ class SemanticNetwork:
             #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
+                print ("m[%s,%s]   \t\t{ %s (%s), %s (%s) }") % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
                 y = self.getIndexof(type, self.grammarTypes)
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
@@ -169,22 +169,22 @@ class SemanticNetwork:
                     start[y, x] += 1
 
                 if word == root:
-                    print "postVerb[%s,%s] -> %s {%s, %s(%s: %s)}" % (type, nextType, root, nextType, tense, verb, self.rules.rules['_comment'][tense])
+                    print ("postVerb[%s,%s] -> %s {%s, %s(%s: %s)}") % (type, nextType, root, nextType, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "prevVerb[%s,%s] -> %s {%s(%s: %s), %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], type)
+                    print ("prevVerb[%s,%s] -> %s {%s(%s: %s), %s}") % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], type)
                     nucleous[y, x] += 1
                     prevVerb[z, y] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.getIndexof(noun, self.nouns)
-                    print "noun[%s,%s] -> {%s (%s: %s), %s}" % (tense, noun, root, verb, self.rules.rules['_comment'][tense], pron)
+                    print ("noun[%s,%s] -> {%s (%s: %s), %s}") % (tense, noun, root, verb, self.rules.rules['_comment'][tense], pron)
                     nounVerb[z, v] += 1
 
-        #print "[%s,%s]" % (prevType,lastType)
+        #print ("[%s,%s]") % (prevType,lastType)
         if prevType is not None and lastType is not None:
             y = self.getIndexof(prevType, self.grammarTypes)
             x = self.getIndexof(lastType, self.grammarTypes)
@@ -391,7 +391,7 @@ class SemanticNetwork:
         tokens = self.rules.normalize(self.rules.getSyntax(txt))
         struct = self.getSyntaxStruct(txt, tokens)
         out.put((i, struct))
-        #print "(%d) %s " % (i, str(struct))
+        #print ("(%d) %s ") % (i, str(struct))
 
 
     ####################################################################
@@ -414,7 +414,7 @@ class SemanticNetwork:
         if len(list) > 0:
             for txt in list:
                 processes.append({'i': self.busy, 'out': out, 'txt': txt})
-                print "%d %s " % (self.busy, txt)
+                print ("%d %s ") % (self.busy, txt)
                 self.busy += 1
 
             results = pool.map(self.addProcess, processes)
@@ -697,7 +697,7 @@ class SemanticNetwork:
                     thisNoun = noun if self.rules.isNoun(noun) is not None else None
 
                 node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
-                #print "found: %s\n" % str(node)  # /**/
+                #print ("found: %s\n") % str(node)  # /**/
 
                 if node is not None and len(node) == 0:
                     id = self.net.addNode(self.net, name=thisNoun, matrix=self.net.connects)
@@ -711,10 +711,10 @@ class SemanticNetwork:
                     self.actions = np.chararray((n, n), itemsize=30)
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
-                    #print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
+                    #print ("new node: %s\n%s\n") % (id, str(self.net.connects))    # /**/
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
-                print "%s --(%s)--> %s\n" % (lastNoun, verb, thisNoun)
+                print ("%s --(%s)--> %s\n") % (lastNoun, verb, thisNoun)
                 origin  = self.net.search({'name': lastNoun})
                 destiny = self.net.search({'name': thisNoun})
 
@@ -735,7 +735,7 @@ class SemanticNetwork:
                 aux = None
 
         # except ValueError:
-        #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
+        #     print ("makeSemanticNetwork error: [%s]\n%s\n") % (ValueError, str(self.getSemanticNetwork()))
         pass
 
     ####################################################################

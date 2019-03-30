@@ -193,10 +193,10 @@ class GrammarRules:
                 for verb, hash in self.rules[char].iteritems():
                     try:
                         expr = '^('+'|'.join(hash.values())+')$'
-                        #print "%s {%s}" % (text, expr)
+                        #print ("%s {%s}") % (text, expr)
                         eval = re.compile(expr)
                     except ValueError:
-                        print "%s {%s} %s" % (text, expr, ValueError)
+                        print ("%s {%s} %s") % (text, expr, ValueError)
 
                     if eval.match(text):
                         return verb
@@ -249,14 +249,14 @@ class GrammarRules:
     ##########################################################################
 
     def loadFromFile(self,source):
-        print "=> loadFromFile (%s)\n" % (source)
+        print ("=> loadFromFile (%s)\n") % (source)
         self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
 
     ##########################################################################
 
     def loadFromWeb(self,source):
-        print "=> loadFromWeb (%s)\n" % (source)
-        print "   sh  %s/%s %s\n" % (self.path, self.fromWeb, source)
+        print ("=> loadFromWeb (%s)\n") % (source)
+        print ("   sh  %s/%s %s\n") % (self.path, self.fromWeb, source)
         self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
     ##########################################################################
@@ -392,7 +392,7 @@ class GrammarRules:
             token = tokens[pos]
             word = token[0]
             type = token[1]
-            #print "%d (%s, %s)" % (pos, word, type)
+            #print ("%d (%s, %s)") % (pos, word, type)
             normType = self.validType(type, nexType)
             newToken = (word, normType, self.getIndexFromType(normType, word))
             list.insert(0, newToken)

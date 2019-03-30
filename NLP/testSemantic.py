@@ -24,18 +24,18 @@ if sys.argv[1] == 'train':
         expr = patterns.search(line)
         if expr:
             (frase, verb) = expr.group(1, 3)
-            print "\nRAW: %s => [%s]" % (frase, verb)
+            print ("\nRAW: %s => [%s]") % (frase, verb)
             try:
                 tokens = s.rules.getSyntax(frase)
                 syntax = s.rules.normalize(tokens)
-                print "1) tokens: %s" % str(tokens)
-                print "2) syntax: %s" % str(syntax)
-                print "3) train:"
+                print ("1) tokens: %s") % str(tokens)
+                print ("2) syntax: %s") % str(syntax)
+                print ("3) train:")
                 s.train(frase, verb)
                 list = s.analize(frase)
-                print "4) test: %s\n" % str(list)
+                print ("4) test: %s\n") % str(list)
                 for item in list[0]:
-                    print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n" % (
+                    print ("%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n") % (
                     0, item['text'], item['root'], str(item['subject']), str(item['predicate']))
 
             except ValueError:
@@ -59,7 +59,7 @@ if sys.argv[1] == 'web':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+                print ("%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n") % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
                 s.makeSemanticNetwork(item['tokens'])
 
     file = "redSemantica.json"
@@ -69,10 +69,10 @@ if sys.argv[1] == 'web':
     #s.makeSemanticNetwork(normalize)
     s.saveSemanticNetwork(file)
 
-    print "connects:\n"
-    print s.net.connects
-    print "\nactions:\n"
-    print s.actions
+    print ("connects:\n")
+    print (s.net.connects)
+    print ("\nactions:\n")
+    print (s.actions)
 
 
 # ejemplo: python testSemantic.py file taoismo.txt '' taoismo.json
@@ -96,7 +96,7 @@ if sys.argv[1] == 'file':
     for y in xrange(0, len(list)-1):
         if len(list[y]) > 0:
             for item in list[y]:
-                print "%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n" % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
+                print ("%03d) texto:%s\n     nucleo:%s\n     sujeto:{%s}\n     predicado:{%s}\n     tokens:{%s}\n") % (y, item['text'], item['root'], str(item['subject']), str(item['predicate']), str(item['tokens']))
                 s.makeSemanticNetwork(item['tokens'])
 
     file = "redSemantica.json"
@@ -106,13 +106,13 @@ if sys.argv[1] == 'file':
     #s.makeSemanticNetwork(normalize)
     s.saveSemanticNetwork(file)
 
-    print "connects:\n"
-    print s.net.connects
-    print "\nactions:\n"
-    print s.actions
+    print ("connects:\n")
+    print (s.net.connects)
+    print ("\nactions:\n")
+    print (s.actions)
 
 if sys.argv[1] == 'clean':
     dbFile = sys.argv[2] if sys.argv[2] is not None and sys.argv[2] != '' else 'semanticNet.json'
     s.save(dbFile)
 
-print 'Done! Time taken: %f sec for %d CPUs' % (time.time() - start_time, multiprocessing.cpu_count())
+print ('Done! Time taken: %f sec for %d CPUs') % (time.time() - start_time, multiprocessing.cpu_count())

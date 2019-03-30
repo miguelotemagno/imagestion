@@ -168,19 +168,22 @@
 			var degree = 60;
 			var a = 0.9;
 			var b = 1.4;
-			var j = 0
+			var j = 0;
+			var r = Math.ceil(Math.sqrt(len))
+			var y = 0;
+			var x = 0;
 			for(var i=0; i < len; i++) {
+				/*
 				j++;
 				radio += (Math.pow(b, Math.cos(j)) * 10) / j*20 + 1;
 				angle += (Math.PI*2)/j;
 				var y = Math.sin(angle) * radio*2 ;
 				var x = Math.cos(angle) * radio;
-				/*
-				angle = (j % degree) == 0 ? ((angle + degree) > 360 ? degree : angle + degree) :angle;
-				radio = j + i * (j % degree);
-				var y = Math.sin((Math.PI * angle)/180) * radio;   //Math.sin(angle) * radio;
-				var x = Math.cos((Math.PI * angle)/180) * radio;   //Math.cos(angle) * radio;
 				*/
+
+                y = 160 * (i % r + 1);
+                x = i % r == 0 ?x + 90 : x;
+
 				var node = {
 					id: i,
 					text: data.net.graph.nodeNames[i],

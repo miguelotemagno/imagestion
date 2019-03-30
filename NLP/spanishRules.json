@@ -101,8 +101,8 @@
         ],
 		"sustSimple" : [
 			"\\w+[sc]ia[s]?|ca\\w+a[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
-			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
-			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?",
+			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?|leche",
+			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?|cola[s]?",
 			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret|expedicion|di)ari)[oa][s]?"
 		],
 		"sustCompuesto" : [
