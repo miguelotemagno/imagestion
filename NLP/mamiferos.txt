@@ -1,0 +1,15 @@
+todo perro es un mamifero
+todo gato es un mamifero
+un mamifero nace placenta
+un mamifero bebe leche
+un mamifero posee pelos
+un mamifero nace mamifero
+un gato tiene cola
+un perro tiene cola
+un pajaro es ave
+
+En la naturaleza encontramos diversas especies, toda especie pertenece a uno de dos grupos, los vertebrados y los invertebrados.
+De estos grupos obtenemos clasificaciones, y de estas clases identificamos diversas familias.
+Cada especie pertenece a una familia, y estas familias se distinguen como mamiferos, reptiles, aves, etc.
+Entre los mamiferos clasificamos las especies, y cada especie tiene sus cualidades y atributos.
+

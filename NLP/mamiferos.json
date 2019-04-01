@@ -1,0 +1,192 @@
+{
+    "actions": [
+        [
+            0,
+            1,
+            "es"
+        ],
+        [
+            1,
+            1,
+            "nace"
+        ],
+        [
+            1,
+            2,
+            "tiene"
+        ],
+        [
+            1,
+            3,
+            "nace"
+        ],
+        [
+            1,
+            4,
+            "bebe"
+        ],
+        [
+            2,
+            1,
+            "es"
+        ],
+        [
+            5,
+            0,
+            "tiene"
+        ],
+        [
+            6,
+            7,
+            "de"
+        ]
+    ],
+    "connects": [
+        [
+            0,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            2,
+            1
+        ],
+        [
+            1,
+            3,
+            1
+        ],
+        [
+            1,
+            4,
+            1
+        ],
+        [
+            2,
+            1,
+            1
+        ],
+        [
+            5,
+            0,
+            1
+        ],
+        [
+            6,
+            7,
+            1
+        ]
+    ],
+    "height": 11,
+    "net": {
+        "functions": [
+            [
+                "null"
+            ]
+        ],
+        "graph": {
+            "connects": [],
+            "factor": 0,
+            "factorFinnish": 0,
+            "factorStart": 0,
+            "finnish": [],
+            "first": 0,
+            "height": 0,
+            "id": "",
+            "iterations": 0,
+            "name": "net",
+            "nodeNames": [
+                "perro",
+                "mamifero",
+                "gato",
+                "placenta",
+                "leche",
+                "cola",
+                "naturaleza",
+                "grupos",
+                "vertebrados",
+                "invertebrados",
+                "cualidades"
+            ],
+            "nodes": [
+                "perro_0",
+                "mamifero_1",
+                "gato_2",
+                "placenta_3",
+                "leche_4",
+                "cola_5",
+                "naturaleza_6",
+                "grupos_7",
+                "vertebrados_8",
+                "invertebrados_9",
+                "cualidades_10"
+            ],
+            "start": [],
+            "width": 0
+        },
+        "nodes": [
+            {
+                "function": "null",
+                "id": "perro_0",
+                "name": "perro"
+            },
+            {
+                "function": "null",
+                "id": "mamifero_1",
+                "name": "mamifero"
+            },
+            {
+                "function": "null",
+                "id": "gato_2",
+                "name": "gato"
+            },
+            {
+                "function": "null",
+                "id": "placenta_3",
+                "name": "placenta"
+            },
+            {
+                "function": "null",
+                "id": "leche_4",
+                "name": "leche"
+            },
+            {
+                "function": "null",
+                "id": "cola_5",
+                "name": "cola"
+            },
+            {
+                "function": "null",
+                "id": "naturaleza_6",
+                "name": "naturaleza"
+            },
+            {
+                "function": "null",
+                "id": "grupos_7",
+                "name": "grupos"
+            },
+            {
+                "function": "null",
+                "id": "vertebrados_8",
+                "name": "vertebrados"
+            },
+            {
+                "function": "null",
+                "id": "invertebrados_9",
+                "name": "invertebrados"
+            },
+            {
+                "function": "null",
+                "id": "cualidades_10",
+                "name": "cualidades"
+            }
+        ]
+    },
+    "width": 11
+}
