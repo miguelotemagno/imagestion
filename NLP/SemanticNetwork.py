@@ -101,6 +101,7 @@ class SemanticNetwork:
         self.net.functions = self.actionFunc
         self.actions = np.chararray((1, 1), itemsize=30)
         self.actions[:] = ''
+        self.text = ['']
         pass
 
     ####################################################################
@@ -674,10 +675,13 @@ class SemanticNetwork:
         noun = None
         thisNoun = None
         lastNoun = None
+        text = []
+        textId = 1.0 * len(self.text)
 
         # try:
         for token in tokens:
             (word, tag, type) = token
+            text.append(word)
 
             if tag == 'PREP':
                 verb = None if self.rules.isPreposition(word) is None else word
@@ -685,7 +689,7 @@ class SemanticNetwork:
                 aux = self.rules.getVerb(word)
                 aux = None if self.rules.isAuxiliar(aux) is None else word
             if tag == 'VERB':
-                verb = self.rules.getVerb(word)
+                #verb = self.rules.getVerb(word)
                 verb = "%s %s" % (aux, word) if aux is not None else word
             if tag == 'NOUN':
                 noun = word
@@ -725,7 +729,7 @@ class SemanticNetwork:
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
                     d = self.net.getIndexof(destiny[0].name)
-                    self.net.setConnection(o, d, 1.0, matrix=self.net.connects)
+                    self.net.setConnection(o, d, textId, matrix=self.net.connects)
                     self.net.setConnection(o, d, verb, matrix=self.actions)
 
                 verb = None
@@ -733,6 +737,10 @@ class SemanticNetwork:
                 thisNoun = None
                 lastNoun = None
                 aux = None
+
+        txt = ' '.join(text)
+        if txt not in self.text:
+            self.text.append(txt)
 
         # except ValueError:
         #     print ("makeSemanticNetwork error: [%s]\n%s\n") % (ValueError, str(self.getSemanticNetwork()))
@@ -748,7 +756,7 @@ class SemanticNetwork:
         for y in range(0, Y):
             for x in range(0, X):
                 if self.net.connects[y, x] > 0:
-                    connects.append([y, x, 1])
+                    connects.append([y, x, self.net.connects[y, x]])
 
         for y in range(0, Y):
             for x in range(0, X):
@@ -763,7 +771,8 @@ class SemanticNetwork:
             'height': Y,
             'net': self.net.getJson(),
             'actions': actions,
-            'connects': connects
+            'connects': connects,
+            'contentList': self.text
         }
 
         self.net.connects = np.copy(copy)
