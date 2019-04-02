@@ -50,8 +50,8 @@ class GrammarRules:
     def __init__(self, db_file=None):
         self.dbFile = "spanishRules.json" if db_file is None else db_file
         self.rules = self.jsonLoad(self.dbFile)
-        self.fromFile = 'loadFromFile2.sh'
-        self.fromWeb = 'loadFromWeb3.sh'
+        self.fromFile = self.rules['readFromFile']     #'loadFromFile2.sh'
+        self.fromWeb  = self.rules['readFromWeb']      #'loadFromWeb3.sh'
         self.path = os.getcwd()
         self.text = ""
 
@@ -368,7 +368,7 @@ class GrammarRules:
             elif 'CONJ' in type and nextType in ['VERB', 'DET', 'ADV', 'PRON']:
                 type = 'CONJ'
             elif 'ADJ' in type and ('ADV' in type or 'NOUN' in type):
-                type = 'ADJ'
+                type = 'NOUN'
             elif 'ADV' in type and ('CONJ' in type or 'NOUN' in type):
                 type = 'ADV'
             elif 'AUX' in type and nextType in ['VERB']:

@@ -3,42 +3,82 @@
         [
             0,
             1,
-            "es"
-        ],
-        [
-            1,
-            1,
-            "nace"
-        ],
-        [
-            1,
-            2,
-            "tiene"
-        ],
-        [
-            1,
-            3,
-            "nace"
-        ],
-        [
-            1,
-            4,
-            "bebe"
-        ],
-        [
-            2,
-            1,
-            "es"
+            "encontramos en"
         ],
         [
             5,
-            0,
-            "tiene"
+            5,
+            "comer"
         ],
         [
             6,
             7,
-            "de"
+            "tiene"
+        ],
+        [
+            6,
+            9,
+            "es"
+        ],
+        [
+            8,
+            7,
+            "tiene"
+        ],
+        [
+            8,
+            9,
+            "es"
+        ],
+        [
+            9,
+            5,
+            "es"
+        ],
+        [
+            9,
+            10,
+            "nace"
+        ],
+        [
+            9,
+            11,
+            "bebe"
+        ],
+        [
+            9,
+            12,
+            "tener"
+        ],
+        [
+            13,
+            14,
+            "es"
+        ],
+        [
+            14,
+            5,
+            "es"
+        ],
+        [
+            14,
+            15,
+            "tiene"
+        ],
+        [
+            16,
+            9,
+            "es"
+        ],
+        [
+            17,
+            16,
+            "es"
+        ],
+        [
+            18,
+            16,
+            "es"
         ]
     ],
     "connects": [
@@ -48,48 +88,104 @@
             1.0
         ],
         [
-            1,
-            1,
-            1.0
-        ],
-        [
-            1,
-            2,
-            1.0
-        ],
-        [
-            1,
-            3,
-            1.0
-        ],
-        [
-            1,
-            4,
-            1.0
-        ],
-        [
-            2,
-            1,
-            1.0
-        ],
-        [
             5,
-            0,
-            1.0
+            5,
+            4.0
         ],
         [
             6,
             7,
-            2.0
+            5.0
+        ],
+        [
+            6,
+            9,
+            8.0
+        ],
+        [
+            8,
+            7,
+            6.0
+        ],
+        [
+            8,
+            9,
+            7.0
+        ],
+        [
+            9,
+            5,
+            19.0
+        ],
+        [
+            9,
+            10,
+            9.0
+        ],
+        [
+            9,
+            11,
+            10.0
+        ],
+        [
+            9,
+            12,
+            11.0
+        ],
+        [
+            13,
+            14,
+            12.0
+        ],
+        [
+            14,
+            5,
+            17.0
+        ],
+        [
+            14,
+            15,
+            13.0
+        ],
+        [
+            16,
+            9,
+            14.0
+        ],
+        [
+            17,
+            16,
+            15.0
+        ],
+        [
+            18,
+            16,
+            16.0
         ]
     ],
     "contentList": [
         "",
-        "todo perro es un mamifero , todo gato es un mamifero , un mamifero nace placenta , un mamifero bebe leche , un mamifero posee pelos , un mamifero nace mamifero , un gato tiene cola , un perro tiene cola , un pajaro es ave",
         "en la naturaleza encontramos diversas especies , toda especie pertenece a uno de dos grupos , los vertebrados y los invertebrados",
-        "entre los mamiferos clasificamos las especies , y cada especie tiene sus cualidades y atributos"
+        "entre los mamiferos clasificamos las especies , y cada especie tiene sus cualidades y atributos",
+        "todo animal nace de otro animal",
+        "todo animal puede comer otro animal",
+        "todo gato tiene cola",
+        "todo perro tiene cola",
+        "todo perro es un mamifero",
+        "todo gato es un mamifero",
+        "todo mamifero nace de una placenta",
+        "todo mamifero bebe leche",
+        "un mamifero puede tener pelos",
+        "el pajaro es una ave",
+        "toda ave tiene plumas",
+        "todo humano es un mamifero",
+        "todo hombre es un humano",
+        "toda mujer es humano",
+        "toda ave es un animal",
+        "toda ave nace de un huevo",
+        "todo mamifero es un animal"
     ],
-    "height": 11,
+    "height": 19,
     "net": {
         "functions": [
             [
@@ -108,30 +204,46 @@
             "iterations": 0,
             "name": "net",
             "nodeNames": [
-                "perro",
-                "mamifero",
-                "gato",
-                "placenta",
-                "leche",
-                "cola",
                 "naturaleza",
                 "grupos",
                 "vertebrados",
                 "invertebrados",
-                "cualidades"
+                "cualidades",
+                "animal",
+                "gato",
+                "cola",
+                "perro",
+                "mamifero",
+                "placenta",
+                "leche",
+                "pelos",
+                "pajaro",
+                "ave",
+                "plumas",
+                "humano",
+                "hombre",
+                "mujer"
             ],
             "nodes": [
-                "perro_0",
-                "mamifero_1",
-                "gato_2",
-                "placenta_3",
-                "leche_4",
-                "cola_5",
-                "naturaleza_6",
-                "grupos_7",
-                "vertebrados_8",
-                "invertebrados_9",
-                "cualidades_10"
+                "naturaleza_0",
+                "grupos_1",
+                "vertebrados_2",
+                "invertebrados_3",
+                "cualidades_4",
+                "animal_5",
+                "gato_6",
+                "cola_7",
+                "perro_8",
+                "mamifero_9",
+                "placenta_10",
+                "leche_11",
+                "pelos_12",
+                "pajaro_13",
+                "ave_14",
+                "plumas_15",
+                "humano_16",
+                "hombre_17",
+                "mujer_18"
             ],
             "start": [],
             "width": 0
@@ -139,60 +251,100 @@
         "nodes": [
             {
                 "function": "null",
-                "id": "perro_0",
-                "name": "perro"
-            },
-            {
-                "function": "null",
-                "id": "mamifero_1",
-                "name": "mamifero"
-            },
-            {
-                "function": "null",
-                "id": "gato_2",
-                "name": "gato"
-            },
-            {
-                "function": "null",
-                "id": "placenta_3",
-                "name": "placenta"
-            },
-            {
-                "function": "null",
-                "id": "leche_4",
-                "name": "leche"
-            },
-            {
-                "function": "null",
-                "id": "cola_5",
-                "name": "cola"
-            },
-            {
-                "function": "null",
-                "id": "naturaleza_6",
+                "id": "naturaleza_0",
                 "name": "naturaleza"
             },
             {
                 "function": "null",
-                "id": "grupos_7",
+                "id": "grupos_1",
                 "name": "grupos"
             },
             {
                 "function": "null",
-                "id": "vertebrados_8",
+                "id": "vertebrados_2",
                 "name": "vertebrados"
             },
             {
                 "function": "null",
-                "id": "invertebrados_9",
+                "id": "invertebrados_3",
                 "name": "invertebrados"
             },
             {
                 "function": "null",
-                "id": "cualidades_10",
+                "id": "cualidades_4",
                 "name": "cualidades"
+            },
+            {
+                "function": "null",
+                "id": "animal_5",
+                "name": "animal"
+            },
+            {
+                "function": "null",
+                "id": "gato_6",
+                "name": "gato"
+            },
+            {
+                "function": "null",
+                "id": "cola_7",
+                "name": "cola"
+            },
+            {
+                "function": "null",
+                "id": "perro_8",
+                "name": "perro"
+            },
+            {
+                "function": "null",
+                "id": "mamifero_9",
+                "name": "mamifero"
+            },
+            {
+                "function": "null",
+                "id": "placenta_10",
+                "name": "placenta"
+            },
+            {
+                "function": "null",
+                "id": "leche_11",
+                "name": "leche"
+            },
+            {
+                "function": "null",
+                "id": "pelos_12",
+                "name": "pelos"
+            },
+            {
+                "function": "null",
+                "id": "pajaro_13",
+                "name": "pajaro"
+            },
+            {
+                "function": "null",
+                "id": "ave_14",
+                "name": "ave"
+            },
+            {
+                "function": "null",
+                "id": "plumas_15",
+                "name": "plumas"
+            },
+            {
+                "function": "null",
+                "id": "humano_16",
+                "name": "humano"
+            },
+            {
+                "function": "null",
+                "id": "hombre_17",
+                "name": "hombre"
+            },
+            {
+                "function": "null",
+                "id": "mujer_18",
+                "name": "mujer"
             }
         ]
     },
-    "width": 11
+    "width": 19
 }

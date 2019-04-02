@@ -70,8 +70,8 @@ class SemanticNetwork:
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
-        self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
-                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'sustComun', 'undefined']
+        self.nouns = ['sustPropio',   'sustSimple',   'sustCompuesto', 'sustDespectivo', 'sustDisminutivo',
+                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll',        'sustComun',        'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
@@ -401,7 +401,8 @@ class SemanticNetwork:
     # estructuras (sugeto, nucleo y predicado)
 
     def analize(self, text):
-        txt = re.sub(r'\n{2,}', '.\r', text)
+        txt = re.sub(r'[.]', ' .', text)
+        txt = re.sub(r'\n{2,}', ' .\r', txt)
         txt = re.sub(r'\n', ' ', txt)
         txt = re.sub(r'\r', '\n', txt)
         expr = re.compile(r'[^.]+')
@@ -672,6 +673,7 @@ class SemanticNetwork:
     def makeSemanticNetwork(self, tokens):
         aux = None
         verb = None
+        prep = None
         noun = None
         thisNoun = None
         lastNoun = None
@@ -684,13 +686,14 @@ class SemanticNetwork:
             text.append(word)
 
             if tag == 'PREP':
-                verb = None if self.rules.isPreposition(word) is None else word
+                prep = None if self.rules.isPreposition(word) is None else word
             if tag == 'AUX':
                 aux = self.rules.getVerb(word)
                 aux = None if self.rules.isAuxiliar(aux) is None else word
             if tag == 'VERB':
                 #verb = self.rules.getVerb(word)
-                verb = "%s %s" % (aux, word) if aux is not None else word
+                verb = "%s %s" % (aux, word)  if aux is not None else word
+                verb = "%s %s" % (word, prep) if prep is not None else word
             if tag == 'NOUN':
                 noun = word
 
@@ -733,9 +736,10 @@ class SemanticNetwork:
                     self.net.setConnection(o, d, verb, matrix=self.actions)
 
                 verb = None
+                prep = None
                 noun = None
-                thisNoun = None
                 lastNoun = None
+                thisNoun = None
                 aux = None
 
         txt = ' '.join(text)

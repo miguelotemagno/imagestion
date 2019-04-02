@@ -1,4 +1,6 @@
 {
+    "readFromFile" : "loadFromFile2.sh",
+    "readFromWeb" : "loadFromWeb3.sh",
     "verb" : [
         "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
     ],
@@ -96,8 +98,10 @@
 			"vargas|welch"
 		],
         "sustComun" : [
-            "(perr|[pg]at|conej|caball|yegu|aguil|mon|goril|lor|camell|lob|babos|molusc|pescad|simi|poll|gall(in)?)[oa][s]?",
-            "((elefa|rinocero|biso)nt|caracol|pe[cs]|(rat|tibur)on|delfin)e?s?"
+            "(pajar|dinosauri|perr|[pg]at|conej|caball|yegu|aguil|mon|goril|lor|camell|lob|babos|molusc|pescad|simi",
+            "cerd|chanch|poll|gall(in)?)[oa][s]?",
+            "((elefa|rinocero|biso)nt|caracol|(rat|tibur)on|delfin)e?s?|(lapi|pe|codorni|lombri|lu)(z|ces)",
+			"(pluma|pelo|ave|vaca|toro|hombre)[s]?|(animal|buey|mujer)(es)?"
         ],
 		"sustSimple" : [
 			"\\w+[sc]ia[s]?|ca\\w+a[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
@@ -115,8 +119,9 @@
 		"sustDisminutivo" : ["\\w{2,}(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
-			"paz|guerra|amor|odio|hola|adios|(mito|base|cosa|objeto)[s]?",
-			"\\w{2,}(eza|ismo|[td][ua]d|anza|[sftln]o[fgrm]ia|miento|aje|[tg]ica|rrota|encia)[s]?"
+			"paz|guerra|amor|odio|hola|adios|(mito|base|cosa|objeto|hora|human[oa])[s]?",
+			"\\w{2,}(eza|ismo|[td][ua]d|anza|[sftln]o[fgrm]ia|miento|aje|[tg]ica|rrota|encia)[s]?",
+            "\\w+rio[s]?"
 		],
 		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria|conjunto)[s]?"],
         "sustAll" : [
@@ -127,14 +132,14 @@
     "preposition" : {
 		"prepPosesion" : ["de[l]?"],
 		"prepProper" : [
-		    "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
+		    "segun|tras|(par|vi)?a|ha(cia|sta)|desde|versus|cabe",
 		    "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
 		],
 		"prepImproper" : [
 		    "debajo de|delante de|a fuerza de|en lugar de"
 		],
 		"prepUbication" : [
-		    "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado|donde"
+		    "en(cima)?|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado|donde"
 		],
 		"prepDisplacement" : [
 		    "desde|ha(cia|sta)|para"
