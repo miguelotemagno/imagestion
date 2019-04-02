@@ -13,7 +13,7 @@ todo perro es un mamifero.
 todo gato es un mamifero.
 todo mamifero nace de una placenta.
 todo mamifero bebe leche.
-un mamifero puede tener pelos.
+un mamifero puede poseer pelos.
 el pajaro es una ave.
 toda ave tiene plumas.
 el ave desciende de dinosaurios.

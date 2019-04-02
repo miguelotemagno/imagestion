@@ -51,24 +51,24 @@
             "bebe"
         ],
         [
-            11,
             14,
-            "tener"
-        ],
-        [
             15,
-            16,
             "es"
         ],
         [
-            16,
+            15,
             7,
             "es"
         ],
         [
+            15,
             16,
-            17,
             "tiene"
+        ],
+        [
+            15,
+            17,
+            "desciende"
         ],
         [
             18,
@@ -138,9 +138,14 @@
             10.0
         ],
         [
-            11,
             14,
+            15,
             11.0
+        ],
+        [
+            15,
+            7,
+            17.0
         ],
         [
             15,
@@ -148,12 +153,7 @@
             12.0
         ],
         [
-            16,
-            7,
-            17.0
-        ],
-        [
-            16,
+            15,
             17,
             13.0
         ],
@@ -185,9 +185,9 @@
         "todo gato es un mamifero",
         "todo mamifero nace de una placenta",
         "todo mamifero bebe leche",
-        "un mamifero puede tener pelos",
         "el pajaro es una ave",
         "toda ave tiene plumas",
+        "el ave desciende de dinosaurios",
         "todo humano es un mamifero",
         "todo hombre es un humano",
         "toda mujer es humano",
@@ -228,10 +228,10 @@
                 "mamifero",
                 "placenta",
                 "leche",
-                "pelos",
                 "pajaro",
                 "ave",
                 "plumas",
+                "dinosaurios",
                 "humano",
                 "hombre",
                 "mujer"
@@ -251,10 +251,10 @@
                 "mamifero_11",
                 "placenta_12",
                 "leche_13",
-                "pelos_14",
-                "pajaro_15",
-                "ave_16",
-                "plumas_17",
+                "pajaro_14",
+                "ave_15",
+                "plumas_16",
+                "dinosaurios_17",
                 "humano_18",
                 "hombre_19",
                 "mujer_20"
@@ -335,23 +335,23 @@
             },
             {
                 "function": "null",
-                "id": "pelos_14",
-                "name": "pelos"
-            },
-            {
-                "function": "null",
-                "id": "pajaro_15",
+                "id": "pajaro_14",
                 "name": "pajaro"
             },
             {
                 "function": "null",
-                "id": "ave_16",
+                "id": "ave_15",
                 "name": "ave"
             },
             {
                 "function": "null",
-                "id": "plumas_17",
+                "id": "plumas_16",
                 "name": "plumas"
+            },
+            {
+                "function": "null",
+                "id": "dinosaurios_17",
+                "name": "dinosaurios"
             },
             {
                 "function": "null",
