@@ -701,7 +701,7 @@ class SemanticNetwork:
                     thisNoun = noun if self.rules.isNoun(noun) is not None else None
                 else:
                     lastNoun = thisNoun
-                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
+                    thisNoun = noun #if self.rules.isNoun(noun) is not None else None
 
                 node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
                 #print ("found: %s\n") % str(node)  # /**/

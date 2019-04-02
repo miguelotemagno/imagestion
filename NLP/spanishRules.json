@@ -60,7 +60,7 @@
             "mi[oa]?[s]?|tu(y[oa][s]?)?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
-            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant|ampli)[oa][s]?",
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant|ampli|divers)[oa][s]?",
             "otr[oa][s]?|cualquier[a]?|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
@@ -76,7 +76,7 @@
 		
 		],
 		"adjDivider" : [
-            "enter[oa]|(dob|trip)le"
+            "enter[oa]|(dob|trip|cuadrup|quintup|sextup|septup|octup)le"
 		],
 		"adjQualifying" : [
             "(buen|mal|baj|alt|medi|magnific|estupend|chic)[oa][s]?|(genial|(mej|pe)or)(es)?",
