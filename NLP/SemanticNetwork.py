@@ -676,7 +676,9 @@ class SemanticNetwork:
         prep = None
         noun = None
         thisNoun = None
+        prevNoun = None
         lastNoun = None
+        lastConj = None
         lastTag = None
         text = []
         textId = 1.0 * len(self.text)
@@ -686,6 +688,8 @@ class SemanticNetwork:
             (word, tag, type) = token
             text.append(word)
 
+            if tag == 'CONJ':
+                lastConj = word if self.rules.isConjunction(word) == 'conjCopulative' else None
             if tag == 'PREP':
                 prep = None if self.rules.isPreposition(word) is None else word
             if tag == 'AUX':
@@ -703,8 +707,12 @@ class SemanticNetwork:
                     verb = None
                     prep = None
                     aux = None
+                elif lastTag == 'CONJ':
+                    if lastConj == 'y':
+                        # TODO
+                        pass
                 else:
-                    lastNoun = thisNoun
+                    prevNoun = thisNoun
                     thisNoun = noun
 
                 node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
@@ -722,9 +730,11 @@ class SemanticNetwork:
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
 
-            if thisNoun is not None and lastNoun is not None and verb is not None:
-                print ("%s --(%s)--> %s\n") % (lastNoun, verb, thisNoun)
-                origin  = self.net.search({'name': lastNoun})
+                lastNoun = noun
+
+            if thisNoun is not None and prevNoun is not None and verb is not None:
+                print ("%s --(%s)--> %s\n") % (prevNoun, verb, thisNoun)
+                origin  = self.net.search({'name': prevNoun})
                 destiny = self.net.search({'name': thisNoun})
 
                 if verb not in self.actionList:
@@ -736,16 +746,17 @@ class SemanticNetwork:
                     d = self.net.getIndexof(destiny[0].name)
                     self.net.setConnection(o, d, textId, matrix=self.net.connects)
                     self.net.setConnection(o, d, verb, matrix=self.actions)
-                    lastNoun = None
+                    prevNoun = None
                     thisNoun = None
                 else:
-                    lastNoun = thisNoun
+                    prevNoun = thisNoun
                     thisNoun = None
 
                 noun = None
                 verb = None
                 prep = None
                 aux = None
+                lastConj = None
 
             lastTag = tag
 

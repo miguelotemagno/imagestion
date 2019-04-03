@@ -2919,6 +2919,27 @@
 			"nos"   : "li(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
 			"uds"   : "li(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
 			"ellos" : "li(aban|an|aran|aren|arian|aron|asen|en)"
+		},
+		"llamar" : {
+			"inf"   : "llamar",
+			"ger"   : "llamando",
+			"par"   : "llamado",
+			"ip"    : "llamo|llama(is|mos|n|s)?",
+			"ipi"   : "llamaba(is|mos|n|s)?",
+			"if"    : "llamar(a|an|as|e|eis|emos)",
+			"ic"    : "llamaria(is|mos|n|s)?",
+			"ipps"  : "llam(amos|aron|aste|asteis|e|o)",
+			"i"     : "llama|llamad|llame(mos|n)?",
+			"sp"    : "llame(is|mos|n|s)?",
+			"spi"   : "llamara(is|mos|n|s)?",
+			"spi2"  : "llamase(is|mos|n|s)?",
+			"sf"    : "llamare(is|mos|n|s)?",
+			"yo"    : "llam(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "llames|llama(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "llame|llamo|llama(ba|ra|re|ria|se)?",
+			"nos"   : "llam(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "llam(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "llam(aban|an|aran|aren|arian|aron|asen|en)"
 		}
 	},
 	"m" : {
@@ -3913,6 +3934,27 @@
 			"nos"   : "produ(ciamos|cimos|ciremos|ciriamos|jeramos|jeremos|jesemos|jimos|zcamos)",
 			"uds"   : "produ(ciais|cid|cireis|ciriais|cis|jerais|jereis|jeseis|jisteis|zcais)",
 			"ellos" : "produ(cen|cian|ciran|cirian|jeran|jeren|jeron|jesen|zcan)"
+		},
+		"prosperar" : {
+			"inf"   : "prosperar",
+			"ger"   : "prosperando",
+			"par"   : "prosperado",
+			"ip"    : "prospero|prospera(is|mos|n|s)?",
+			"ipi"   : "prosperaba(is|mos|n|s)?",
+			"if"    : "prosperare|prosperareis|prosperaremos|prosperara(n|s)?",
+			"ic"    : "prosperaria(is|mos|n|s)?",
+			"ipps"  : "prosper(amos|aron|aste|asteis|e|o)",
+			"i"     : "prospera|prosperad|prospere(mos|n)?",
+			"sp"    : "prospere(is|mos|n|s)?",
+			"spi"   : "prosperara(is|mos|n|s)?",
+			"spi2"  : "prosperase(is|mos|n|s)?",
+			"sf"    : "prosperare(is|mos|n|s)?",
+			"yo"    : "prosper(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "prosperes|prospera(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "prospere|prospero|prospera(ba|ra|re|ria|se)?",
+			"nos"   : "prosper(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "prosper(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "prosper(aban|an|aran|aren|arian|aron|asen|en)"
 		}
 	},
 	"q" : {
