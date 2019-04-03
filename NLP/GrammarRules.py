@@ -50,8 +50,8 @@ class GrammarRules:
     def __init__(self, db_file=None):
         self.dbFile = "spanishRules.json" if db_file is None else db_file
         self.rules = self.jsonLoad(self.dbFile)
-        self.fromFile = 'loadFromFile2.sh'
-        self.fromWeb = 'loadFromWeb3.sh'
+        self.fromFile = self.rules['readFromFile']     #'loadFromFile2.sh'
+        self.fromWeb  = self.rules['readFromWeb']      #'loadFromWeb3.sh'
         self.path = os.getcwd()
         self.text = ""
 
@@ -193,10 +193,10 @@ class GrammarRules:
                 for verb, hash in self.rules[char].iteritems():
                     try:
                         expr = '^('+'|'.join(hash.values())+')$'
-                        #print "%s {%s}" % (text, expr)
+                        #print ("%s {%s}") % (text, expr)
                         eval = re.compile(expr)
                     except ValueError:
-                        print "%s {%s} %s" % (text, expr, ValueError)
+                        print ("%s {%s} %s") % (text, expr, ValueError)
 
                     if eval.match(text):
                         return verb
@@ -249,14 +249,14 @@ class GrammarRules:
     ##########################################################################
 
     def loadFromFile(self,source):
-        print "=> loadFromFile (%s)\n" % (source)
+        print ("=> loadFromFile (%s)\n") % (source)
         self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromFile), source])
 
     ##########################################################################
 
     def loadFromWeb(self,source):
-        print "=> loadFromWeb (%s)\n" % (source)
-        print "   sh  %s/%s %s\n" % (self.path, self.fromWeb, source)
+        print ("=> loadFromWeb (%s)\n") % (source)
+        print ("   sh  %s/%s %s\n") % (self.path, self.fromWeb, source)
         self.text = sp.check_output(['sh', "%s/%s" % (self.path,self.fromWeb), source])
 
     ##########################################################################
@@ -368,7 +368,7 @@ class GrammarRules:
             elif 'CONJ' in type and nextType in ['VERB', 'DET', 'ADV', 'PRON']:
                 type = 'CONJ'
             elif 'ADJ' in type and ('ADV' in type or 'NOUN' in type):
-                type = 'ADJ'
+                type = 'NOUN'
             elif 'ADV' in type and ('CONJ' in type or 'NOUN' in type):
                 type = 'ADV'
             elif 'AUX' in type and nextType in ['VERB']:
@@ -392,7 +392,7 @@ class GrammarRules:
             token = tokens[pos]
             word = token[0]
             type = token[1]
-            #print "%d (%s, %s)" % (pos, word, type)
+            #print ("%d (%s, %s)") % (pos, word, type)
             normType = self.validType(type, nexType)
             newToken = (word, normType, self.getIndexFromType(normType, word))
             list.insert(0, newToken)

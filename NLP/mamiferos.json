@@ -1,0 +1,374 @@
+{
+    "actions": [
+        [
+            0,
+            1,
+            "encontramos en"
+        ],
+        [
+            5,
+            6,
+            "tiene entre"
+        ],
+        [
+            7,
+            7,
+            "comer"
+        ],
+        [
+            8,
+            9,
+            "tiene"
+        ],
+        [
+            8,
+            11,
+            "es"
+        ],
+        [
+            10,
+            9,
+            "tiene"
+        ],
+        [
+            10,
+            11,
+            "es"
+        ],
+        [
+            11,
+            7,
+            "es"
+        ],
+        [
+            11,
+            12,
+            "nace"
+        ],
+        [
+            11,
+            13,
+            "bebe"
+        ],
+        [
+            14,
+            15,
+            "es"
+        ],
+        [
+            15,
+            7,
+            "es"
+        ],
+        [
+            15,
+            16,
+            "tiene"
+        ],
+        [
+            15,
+            17,
+            "desciende"
+        ],
+        [
+            18,
+            11,
+            "es"
+        ],
+        [
+            19,
+            18,
+            "es"
+        ],
+        [
+            20,
+            18,
+            "es"
+        ]
+    ],
+    "connects": [
+        [
+            0,
+            1,
+            1.0
+        ],
+        [
+            5,
+            6,
+            2.0
+        ],
+        [
+            7,
+            7,
+            4.0
+        ],
+        [
+            8,
+            9,
+            5.0
+        ],
+        [
+            8,
+            11,
+            8.0
+        ],
+        [
+            10,
+            9,
+            6.0
+        ],
+        [
+            10,
+            11,
+            7.0
+        ],
+        [
+            11,
+            7,
+            19.0
+        ],
+        [
+            11,
+            12,
+            9.0
+        ],
+        [
+            11,
+            13,
+            10.0
+        ],
+        [
+            14,
+            15,
+            11.0
+        ],
+        [
+            15,
+            7,
+            17.0
+        ],
+        [
+            15,
+            16,
+            12.0
+        ],
+        [
+            15,
+            17,
+            13.0
+        ],
+        [
+            18,
+            11,
+            14.0
+        ],
+        [
+            19,
+            18,
+            15.0
+        ],
+        [
+            20,
+            18,
+            16.0
+        ]
+    ],
+    "contentList": [
+        "",
+        "en la naturaleza encontramos diversas especies , toda especie pertenece a uno de dos grupos , los vertebrados y los invertebrados",
+        "entre los mamiferos clasificamos las especies , y cada especie tiene sus cualidades y atributos",
+        "todo animal nace de otro animal",
+        "todo animal puede comer otro animal",
+        "todo gato tiene cola",
+        "todo perro tiene cola",
+        "todo perro es un mamifero",
+        "todo gato es un mamifero",
+        "todo mamifero nace de una placenta",
+        "todo mamifero bebe leche",
+        "el pajaro es una ave",
+        "toda ave tiene plumas",
+        "el ave desciende de dinosaurios",
+        "todo humano es un mamifero",
+        "todo hombre es un humano",
+        "toda mujer es humano",
+        "toda ave es un animal",
+        "toda ave nace de un huevo",
+        "todo mamifero es un animal"
+    ],
+    "height": 21,
+    "net": {
+        "functions": [
+            [
+                "null"
+            ]
+        ],
+        "graph": {
+            "connects": [],
+            "factor": 0,
+            "factorFinnish": 0,
+            "factorStart": 0,
+            "finnish": [],
+            "first": 0,
+            "height": 0,
+            "id": "",
+            "iterations": 0,
+            "name": "net",
+            "nodeNames": [
+                "naturaleza",
+                "especies",
+                "grupos",
+                "vertebrados",
+                "invertebrados",
+                "cualidades",
+                "atributos",
+                "animal",
+                "gato",
+                "cola",
+                "perro",
+                "mamifero",
+                "placenta",
+                "leche",
+                "pajaro",
+                "ave",
+                "plumas",
+                "dinosaurios",
+                "humano",
+                "hombre",
+                "mujer"
+            ],
+            "nodes": [
+                "naturaleza_0",
+                "especies_1",
+                "grupos_2",
+                "vertebrados_3",
+                "invertebrados_4",
+                "cualidades_5",
+                "atributos_6",
+                "animal_7",
+                "gato_8",
+                "cola_9",
+                "perro_10",
+                "mamifero_11",
+                "placenta_12",
+                "leche_13",
+                "pajaro_14",
+                "ave_15",
+                "plumas_16",
+                "dinosaurios_17",
+                "humano_18",
+                "hombre_19",
+                "mujer_20"
+            ],
+            "start": [],
+            "width": 0
+        },
+        "nodes": [
+            {
+                "function": "null",
+                "id": "naturaleza_0",
+                "name": "naturaleza"
+            },
+            {
+                "function": "null",
+                "id": "especies_1",
+                "name": "especies"
+            },
+            {
+                "function": "null",
+                "id": "grupos_2",
+                "name": "grupos"
+            },
+            {
+                "function": "null",
+                "id": "vertebrados_3",
+                "name": "vertebrados"
+            },
+            {
+                "function": "null",
+                "id": "invertebrados_4",
+                "name": "invertebrados"
+            },
+            {
+                "function": "null",
+                "id": "cualidades_5",
+                "name": "cualidades"
+            },
+            {
+                "function": "null",
+                "id": "atributos_6",
+                "name": "atributos"
+            },
+            {
+                "function": "null",
+                "id": "animal_7",
+                "name": "animal"
+            },
+            {
+                "function": "null",
+                "id": "gato_8",
+                "name": "gato"
+            },
+            {
+                "function": "null",
+                "id": "cola_9",
+                "name": "cola"
+            },
+            {
+                "function": "null",
+                "id": "perro_10",
+                "name": "perro"
+            },
+            {
+                "function": "null",
+                "id": "mamifero_11",
+                "name": "mamifero"
+            },
+            {
+                "function": "null",
+                "id": "placenta_12",
+                "name": "placenta"
+            },
+            {
+                "function": "null",
+                "id": "leche_13",
+                "name": "leche"
+            },
+            {
+                "function": "null",
+                "id": "pajaro_14",
+                "name": "pajaro"
+            },
+            {
+                "function": "null",
+                "id": "ave_15",
+                "name": "ave"
+            },
+            {
+                "function": "null",
+                "id": "plumas_16",
+                "name": "plumas"
+            },
+            {
+                "function": "null",
+                "id": "dinosaurios_17",
+                "name": "dinosaurios"
+            },
+            {
+                "function": "null",
+                "id": "humano_18",
+                "name": "humano"
+            },
+            {
+                "function": "null",
+                "id": "hombre_19",
+                "name": "hombre"
+            },
+            {
+                "function": "null",
+                "id": "mujer_20",
+                "name": "mujer"
+            }
+        ]
+    },
+    "width": 21
+}

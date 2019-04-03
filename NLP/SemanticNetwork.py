@@ -44,7 +44,7 @@ import thread
 
 # http://chriskiehl.com/article/parallelism-in-one-line/
 #from multiprocessing import Pool
-#from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing.dummy import Pool as ThreadPool
 
 # https://sebastianraschka.com/Articles/2014_multiprocessing.html
 import multiprocessing as mp
@@ -70,8 +70,8 @@ class SemanticNetwork:
         self.grammarTypes = ['DET', 'NOUN', 'ADJ', 'PREP', 'VERB', 'ADV', 'PRON', 'INTJ', 'CONJ', 'NUM', 'PUNC', 'AUX']
         self.verbTenses = ['inf', 'ger', 'par', 'ip', 'ipi', 'if', 'ic', 'ipps', 'i', 'sp', 'spi', 'spi2', 'sf']
         self.pronouns = ['yo', 'tu', 'el_la', 'nos', 'uds', 'ellos']
-        self.nouns = ['sustPropio', 'sustSimple', 'sustCompuesto', 'sustDespectivo', 'sustDisminutivo', 
-                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll', 'sustComun', 'undefined']
+        self.nouns = ['sustPropio',   'sustSimple',   'sustCompuesto', 'sustDespectivo', 'sustDisminutivo',
+                      'sustDerivado', 'sustAbstract', 'sustColectivo', 'sustAll',        'sustComun',        'undefined']
         self.workflow = Graph(name='workflow', nodeNames=self.grammarTypes)
         self.nucleous = np.zeros((len(self.grammarTypes), len(self.grammarTypes)), dtype=float)
         self.prevVerb = np.zeros((len(self.grammarTypes), len(self.verbTenses)),   dtype=float)
@@ -101,6 +101,7 @@ class SemanticNetwork:
         self.net.functions = self.actionFunc
         self.actions = np.chararray((1, 1), itemsize=30)
         self.actions[:] = ''
+        self.text = ['']
         pass
 
     ####################################################################
@@ -155,7 +156,7 @@ class SemanticNetwork:
             #type = self.rules.validType(type, nextType)
 
             if nextType is not None and type is not None:
-                print "m[%s,%s]   \t\t{ %s (%s), %s (%s) }" % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
+                print ("m[%s,%s]   \t\t{ %s (%s), %s (%s) }") % (type, nextType, word, self.rules.getIndexFromType(type, word), nextWord, self.rules.getIndexFromType(nextType, nextWord))
                 y = self.getIndexof(type, self.grammarTypes)
                 x = self.getIndexof(nextType, self.grammarTypes)
                 prevType = type
@@ -169,22 +170,22 @@ class SemanticNetwork:
                     start[y, x] += 1
 
                 if word == root:
-                    print "postVerb[%s,%s] -> %s {%s, %s(%s: %s)}" % (type, nextType, root, nextType, tense, verb, self.rules.rules['_comment'][tense])
+                    print ("postVerb[%s,%s] -> %s {%s, %s(%s: %s)}") % (type, nextType, root, nextType, tense, verb, self.rules.rules['_comment'][tense])
                     nucleous[y, x] += 1
                     postVerb[x, z] += 1
                     pronVerb[z, w] += 1
                 elif nextWord == root:
-                    print "prevVerb[%s,%s] -> %s {%s(%s: %s), %s}" % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], type)
+                    print ("prevVerb[%s,%s] -> %s {%s(%s: %s), %s}") % (type, nextType, root, tense, verb, self.rules.rules['_comment'][tense], type)
                     nucleous[y, x] += 1
                     prevVerb[z, y] += 1
                 elif type == 'NOUN':
                     noun = self.rules.isNoun(word)
                     noun = 'undefined' if noun is None else noun
                     v = self.getIndexof(noun, self.nouns)
-                    print "noun[%s,%s] -> {%s (%s: %s), %s}" % (tense, noun, root, verb, self.rules.rules['_comment'][tense], pron)
+                    print ("noun[%s,%s] -> {%s (%s: %s), %s}") % (tense, noun, root, verb, self.rules.rules['_comment'][tense], pron)
                     nounVerb[z, v] += 1
 
-        #print "[%s,%s]" % (prevType,lastType)
+        #print ("[%s,%s]") % (prevType,lastType)
         if prevType is not None and lastType is not None:
             y = self.getIndexof(prevType, self.grammarTypes)
             x = self.getIndexof(lastType, self.grammarTypes)
@@ -384,11 +385,14 @@ class SemanticNetwork:
 
     ####################################################################
 
-    def addProcess(self, i, out, txt):
+    def addProcess(self, args={}):
+        i = args['i']
+        out = args['out']
+        txt = args['txt']
         tokens = self.rules.normalize(self.rules.getSyntax(txt))
         struct = self.getSyntaxStruct(txt, tokens)
         out.put((i, struct))
-        #print "(%d) %s " % (i, str(struct))
+        #print ("(%d) %s ") % (i, str(struct))
 
 
     ####################################################################
@@ -397,30 +401,27 @@ class SemanticNetwork:
     # estructuras (sugeto, nucleo y predicado)
 
     def analize(self, text):
+        txt = re.sub(r'[.]', ' .', text)
+        txt = re.sub(r'\n{2,}', ' .\r', txt)
+        txt = re.sub(r'\n', ' ', txt)
+        txt = re.sub(r'\r', '\n', txt)
         expr = re.compile(r'[^.]+')
-        list = expr.findall(text)
+        list = expr.findall(txt)
         out = mp.Queue()
         lsOut = []
         processes = []
         self.busy = 0
-        #addSrtuct = lambda out, i, txt : out.insert(i, self.getSyntaxStruct(txt, self.rules.normalize(self.rules.getSyntax(txt))))
+        pool = ThreadPool(4)
 
         if len(list) > 0:
             for txt in list:
-                #thread.start_new_thread(addSrtuct, (out, self.busy, txt))
-                processes.append(mp.Process(target=self.addProcess, args=(self.busy, out, txt)))
-                print "%d %s " % (self.busy, txt)
+                processes.append({'i': self.busy, 'out': out, 'txt': txt})
+                print ("%d %s ") % (self.busy, txt)
                 self.busy += 1
 
-            # Run processes
-            for p in processes:
-                p.start()
+            results = pool.map(self.addProcess, processes)
 
-            # Exit the completed processes
-            for p in processes:
-                p.join()
-
-            lsOut = [out.get() for p in processes]
+            lsOut = [out.get() for p in results]
             lsOut.sort()
             lsOut = [o[1] for o in lsOut]
         else:
@@ -672,19 +673,27 @@ class SemanticNetwork:
     def makeSemanticNetwork(self, tokens):
         aux = None
         verb = None
+        prep = None
         noun = None
         thisNoun = None
         lastNoun = None
+        text = []
+        textId = 1.0 * len(self.text)
 
         # try:
         for token in tokens:
             (word, tag, type) = token
+            text.append(word)
 
+            if tag == 'PREP':
+                prep = None if self.rules.isPreposition(word) is None else word
             if tag == 'AUX':
                 aux = self.rules.getVerb(word)
-                aux = '' if self.rules.isAuxiliar(aux) is None else aux + ' '
+                aux = None if self.rules.isAuxiliar(aux) is None else word
             if tag == 'VERB':
-                verb = aux + self.rules.getVerb(word)
+                #verb = self.rules.getVerb(word)
+                verb = "%s %s" % (aux, word)  if aux is not None else word
+                verb = "%s %s" % (word, prep) if prep is not None else word
             if tag == 'NOUN':
                 noun = word
 
@@ -692,10 +701,10 @@ class SemanticNetwork:
                     thisNoun = noun if self.rules.isNoun(noun) is not None else None
                 else:
                     lastNoun = thisNoun
-                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
+                    thisNoun = noun #if self.rules.isNoun(noun) is not None else None
 
                 node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
-                #print "found: %s\n" % str(node)  # /**/
+                #print ("found: %s\n") % str(node)  # /**/
 
                 if node is not None and len(node) == 0:
                     id = self.net.addNode(self.net, name=thisNoun, matrix=self.net.connects)
@@ -709,10 +718,10 @@ class SemanticNetwork:
                     self.actions = np.chararray((n, n), itemsize=30)
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
-                    #print "new node: %s\n%s\n" % (id, str(self.net.connects))    # /**/
+                    #print ("new node: %s\n%s\n") % (id, str(self.net.connects))    # /**/
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
-                print "%s --(%s)--> %s\n" % (lastNoun, verb, thisNoun)
+                print ("%s --(%s)--> %s\n") % (lastNoun, verb, thisNoun)
                 origin  = self.net.search({'name': lastNoun})
                 destiny = self.net.search({'name': thisNoun})
 
@@ -723,17 +732,22 @@ class SemanticNetwork:
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
                     d = self.net.getIndexof(destiny[0].name)
-                    self.net.setConnection(o, d, 1.0, matrix=self.net.connects)
+                    self.net.setConnection(o, d, textId, matrix=self.net.connects)
                     self.net.setConnection(o, d, verb, matrix=self.actions)
 
                 verb = None
+                prep = None
                 noun = None
-                thisNoun = None
                 lastNoun = None
-                aux = ''
+                thisNoun = None
+                aux = None
+
+        txt = ' '.join(text)
+        if txt not in self.text:
+            self.text.append(txt)
 
         # except ValueError:
-        #     print "makeSemanticNetwork error: [%s]\n%s\n" % (ValueError, str(self.getSemanticNetwork()))
+        #     print ("makeSemanticNetwork error: [%s]\n%s\n") % (ValueError, str(self.getSemanticNetwork()))
         pass
 
     ####################################################################
@@ -746,7 +760,7 @@ class SemanticNetwork:
         for y in range(0, Y):
             for x in range(0, X):
                 if self.net.connects[y, x] > 0:
-                    connects.append([y, x, 1])
+                    connects.append([y, x, self.net.connects[y, x]])
 
         for y in range(0, Y):
             for x in range(0, X):
@@ -761,7 +775,8 @@ class SemanticNetwork:
             'height': Y,
             'net': self.net.getJson(),
             'actions': actions,
-            'connects': connects
+            'connects': connects,
+            'contentList': self.text
         }
 
         self.net.connects = np.copy(copy)

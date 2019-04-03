@@ -1,4 +1,6 @@
 {
+    "readFromFile" : "loadFromFile2.sh",
+    "readFromWeb" : "loadFromWeb3.sh",
     "verb" : [
         "\\w+[ae]r|\\w*ir|\\w+(mos|is|[snaeioy]|id|ron|[nai]do)"
     ],
@@ -58,7 +60,7 @@
             "mi[oa]?[s]?|tu(y[oa][s]?)?|[nv]uestr[oa][s]?|su(y[oa][s]?)?"
         ],
         "adjUndefined" : [
-            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant|ampli)[oa][s]?",
+            "(al|nin)gun([oa][s]?)?|casi|(demasiad|much|poc|ciert|tant|ampli|divers)[oa][s]?",
             "otr[oa][s]?|cualquier[a]?|mas|meno(re)?s|tod[oa][s]?|mayor(es)?|amb[oa]s|muy"
         ],
 		"adjOrdinal" : [
@@ -74,7 +76,7 @@
 		
 		],
 		"adjDivider" : [
-            "enter[oa]|(dob|trip)le"
+            "enter[oa]|(dob|trip|cuadrup|quintup|sextup|septup|octup)le"
 		],
 		"adjQualifying" : [
             "(buen|mal|baj|alt|medi|magnific|estupend|chic)[oa][s]?|(genial|(mej|pe)or)(es)?",
@@ -96,13 +98,15 @@
 			"vargas|welch"
 		],
         "sustComun" : [
-            "(perr|[pg]at|conej|caball|yegu|aguil|mon|goril|lor|camell|lob|babos|molusc|pescad|simi|poll|gall(in)?)[oa][s]?",
-            "((elefa|rinocero|biso)nt|caracol|pe[cs]|(rat|tibur)on|delfin)e?s?"
+            "(pajar|dinosauri|perr|[pg]at|conej|caball|yegu|aguil|mon|goril|lor|camell|lob|babos|molusc|pescad|simi",
+            "cerd|chanch|poll|gall(in)?)[oa][s]?",
+            "((elefa|rinocero|biso)nt|caracol|(rat|tibur)on|delfin)e?s?|(lapi|pe|codorni|lombri|lu)(z|ces)",
+			"(pluma|pelo|ave|vaca|toro|hombre)[s]?|(animal|buey|mujer)(es)?"
         ],
 		"sustSimple" : [
 			"\\w+[sc]ia[s]?|ca\\w+a[s]?|(almendra\\w*|sol)(es)?|nube|\\w*ent[ae][s]?|\\w+(zon|iz(es)?|mbra|ista[s]?)|pie[ls]?",
-			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?",
-			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?",
+			"((\\w+grama|computa|acciona|suma|resta|agrupa|calcula|conta)dor|\\w+[st]or|dios|tutor)(a|[ae]s)?|leche",
+			"(pupil|pe(at)?|alumn|amig|europe|a\\w+merican|hij|maestr|critic|colon[i]?|tut|[fbgpm]ot)[oa][s]?|cola[s]?",
 			"(([aeiou][trmgnfspvdbyxj])ic|(agor|tesor|compan)er|(funcion|parlament|secret|expedicion|di)ari)[oa][s]?"
 		],
 		"sustCompuesto" : [
@@ -115,8 +119,9 @@
 		"sustDisminutivo" : ["\\w{2,}(it|ill)[oa][s]?"],
 		"sustDerivado" :  ["floresta|\\w+ero|ojera|quesillo|\\w+eria"],
 		"sustAbstract" : [
-			"paz|guerra|amor|odio|hola|adios|(mito|base|cosa|objeto)[s]?",
-			"\\w{2,}(eza|ismo|[td][ua]d|anza|[sftln]o[fgrm]ia|miento|aje|[tg]ica|rrota|encia)[s]?"
+			"paz|guerra|amor|odio|hola|adios|(mito|base|cosa|objeto|hora|human[oa])[s]?",
+			"\\w{2,}(eza|ismo|[td][ua]d|anza|[sftln]o[fgrm]ia|miento|aje|[tg]ica|rrota|encia)[s]?",
+            "\\w+rio[s]?"
 		],
 		"sustColectivo" : ["cardumen(es)?|(piara|banda(da)?|ejercito|tropa|grupo|biblioteca|jauria|conjunto)[s]?"],
         "sustAll" : [
@@ -127,14 +132,14 @@
     "preposition" : {
 		"prepPosesion" : ["de[l]?"],
 		"prepProper" : [
-		    "segun|tras|(par|vi)?a|ha(cia|sta)|de(sde)?|versus|cabe",
+		    "segun|tras|(par|vi)?a|ha(cia|sta)|desde|versus|cabe",
 		    "(dur|medi)?ante|en(tre)?|so(bre)?|con(tra)?|por|sin"
 		],
 		"prepImproper" : [
 		    "debajo de|delante de|a fuerza de|en lugar de"
 		],
 		"prepUbication" : [
-		    "en(cima)|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado|donde"
+		    "en(cima)?|sobre|bajo|traves|(a|de)(bajo|lante|tras)|entre|por|medio|al|lado|donde"
 		],
 		"prepDisplacement" : [
 		    "desde|ha(cia|sta)|para"
@@ -794,6 +799,27 @@
 			"uds"   : "com(ereis|eriais|isteis|ierais|eis|iereis|iais|ais|ed|ieseis)",
 			"ellos" : "com(ian|an|ieren|ieran|iesen|eran|erian|en|ieron)"
 		},
+		"captar" : {
+			"inf"   : "captar",
+			"ger"   : "captando",
+			"par"   : "captado",
+			"ip"    : "capto|capta(is|mos|n|s)?",
+			"ipi"   : "captaba(is|mos|n|s)?",
+			"if"    : "captare|captareis|captaremos|captara(n|s)?",
+			"ic"    : "captaria(is|mos|n|s)?",
+			"ipps"  : "capt(amos|aron|aste|asteis|e|o)",
+			"i"     : "capta|captad|capte(mos|n)?",
+			"sp"    : "capte(is|mos|n|s)?",
+			"spi"   : "captara(is|mos|n|s)?",
+			"spi2"  : "captase(is|mos|n|s)?",
+			"sf"    : "captare(is|mos|n|s)?",
+			"yo"    : "capt(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "captes|capta(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "capte|capto|capta(ba|ra|re|ria|se)?",
+			"nos"   : "capt(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "capt(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "capt(aban|an|aran|aren|arian|aron|asen|en)"
+		},
 		"controlar" : {
 			"inf"   : "controlar",
 			"ger"   : "controlando",
@@ -1301,6 +1327,27 @@
 			"nos"   : "d(abamos|amos|aremos|ariamos|emos|ieramos|ieremos|iesemos|imos)",
 			"uds"   : "d(abais|ad|ais|areis|ariais|eis|ierais|iereis|ieseis|isteis)",
 			"ellos" : "d(aban|an|aran|arian|en|ieran|ieren|ieron|iesen)"
+		},
+		"descender" : {
+			"inf"   : "descender",
+			"ger"   : "descendiendo",
+			"par"   : "descendido",
+			"ip"    : "desc(endeis|endemos|iende|ienden|iendes|iendo)",
+			"ipi"   : "descendia(is|mos|n|s)?",
+			"if"    : "descendere|descendereis|descenderemos|descendera(n|s)?",
+			"ic"    : "descenderia(is|mos|n|s)?",
+			"ipps"  : "descendi(eron|mos|o|ste|steis)?",
+			"i"     : "(descendamos|descended|descienda|desciendan|desciende)",
+			"sp"    : "desc(endais|endamos|ienda|iendan|iendas)",
+			"spi"   : "descendiera(is|mos|n|s)?",
+			"spi2"  : "descendiese(is|mos|n|s)?",
+			"sf"    : "descendiere(is|mos|n|s)?",
+			"yo"    : "desc(endere|enderia|endi|endia|endiera|endiere|endiese|ienda|iendo)",
+			"tu"    : "desc(enderas|enderias|endias|endieras|endieres|endieses|endiste|iendas|iende|iendes)",
+			"el_la" : "desc(endera|enderia|endia|endiera|endiere|endiese|endio|ienda|iende)",
+			"nos"   : "descend(amos|emos|eremos|eriamos|iamos|ieramos|ieremos|iesemos|imos)",
+			"uds"   : "descend(ais|ed|eis|ereis|eriais|iais|ierais|iereis|ieseis|isteis)",
+			"ellos" : "desc(enderan|enderian|endian|endieran|endieren|endieron|endiesen|iendan|ienden)"
 		},
 		"decir" : {
 			"inf"  : "decir",
@@ -2340,6 +2387,27 @@
 			"nos"   : "instig(abamos|amos|aramos|aremos|ariamos|asemos|uemos)",
 			"uds"   : "instig(abais|ad|ais|arais|areis|ariais|aseis|asteis|ueis)",
 			"ellos" : "instig(aban|an|aran|aren|arian|aron|asen|uen)"
+		},
+		"interconectar"  : {
+			"inf"   : "interconectar",                                                                                                                                    
+			"ger"   : "interconectando",
+			"par"   : "interconectado",
+			"ip"    : "interconecto|interconecta(is|mos|n|s)?",
+			"ipi"   : "interconectaba(is|mos|n|s)?",
+			"if"    : "interconectare|interconectareis|interconectaremos|interconectara(n|s)?",
+			"ic"    : "interconectaria(is|mos|n|s)?",
+			"ipps"  : "interconect(amos|aron|aste|asteis|e|o)",
+			"i"     : "interconecta|interconectad|interconecte(mos|n)?",
+			"sp"    : "interconecte(is|mos|n|s)?",
+			"spi"   : "interconectara(is|mos|n|s)?",
+			"spi2"  : "interconectase(is|mos|n|s)?",
+			"sf"    : "interconectare(is|mos|n|s)?",
+			"yo"    : "interconect(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "interconectes|interconecta(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "interconecte|interconecto|interconecta(ba|ra|re|ria|se)?",
+			"nos"   : "interconect(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "interconect(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "interconect(aban|an|aran|aren|arian|aron|asen|en)"
 		}
 	},
 	"j" : {
@@ -2389,6 +2457,27 @@
 			"nos"   : "le(iamos|emos|yesemos|eriamos|amos|yeremos|yeramos|eremos|imos)",
 			"uds"   : "le(ais|yeseis|ereis|ed|eriais|yereis|isteis|eis|iais|yerais)",
 			"ellos" : "le(an|yeran|yesen|ian|yeren|erian|eran|yeron|en)"
+		},
+		"liberar" : {
+			"inf"   : "liberar",
+			"ger"   : "liberando",
+			"par"   : "liberado",
+			"ip"    : "libero|libera(is|mos|n|s)?",
+			"ipi"   : "liberaba(is|mos|n|s)?",
+			"if"    : "liberar(a|an|as|e|eis|emos)",
+			"ic"    : "liberaria(is|mos|n|s)?",
+			"ipps"  : "liber(amos|aron|aste|asteis|e|o)",
+			"i"     : "libera|liberad|libere(mos|n)?",
+			"sp"    : "libere(is|mos|n|s)?",
+			"spi"   : "liberara(is|mos|n|s)?",
+			"spi2"  : "liberase(is|mos|n|s)?",
+			"sf"    : "liberare(is|mos|n|s)?",
+			"yo"    : "liber(aba|ara|are|aria|ase|e|o)",
+			"tu"    : "liberes|libera(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "libere|libero|libera(ba|ra|re|ria|se)?",
+			"nos"   : "liber(abamos|amos|aramos|aremos|ariamos|asemos|emos)",
+			"uds"   : "liber(abais|ad|ais|arais|areis|ariais|aseis|asteis|eis)",
+			"ellos" : "liber(aban|an|aran|aren|arian|aron|asen|en)"
 		},
 		"lucir" : {
 			"inf"  : "lucir",
@@ -2963,6 +3052,48 @@
 			"nos"   : "part(amos|iamos|ieramos|ieremos|iesemos|imos|iremos|iriamos)",
 			"uds"   : "part(ais|iais|id|ierais|iereis|ieseis|ireis|iriais|is|isteis)",
 			"ellos" : "part(an|en|ian|ieran|ieren|ieron|iesen|iran|irian)"
+		},
+		"poseer" : {
+			"inf"   : "poseer",
+			"ger"   : "poseyendo",
+			"par"   : "poseido",
+			"ip"    : "poseo|posee(is|mos|n|s)?",
+			"ipi"   : "poseia(is|mos|n|s)?",
+			"if"    : "poseer(a|an|as|e|eis|emos)",
+			"ic"    : "poseeria(is|mos|n|s)?",
+			"ipps"  : "poseyeron|poseyo|posei(mos|ste|steis)?",
+			"i"     : "posee|poseed|posea(mos|n)?",
+			"sp"    : "posea(is|mos|n|s)?",
+			"spi"   : "poseyera(is|mos|n|s)?",
+			"spi2"  : "poseyese(is|mos|n|s)?",
+			"sf"    : "poseyere(is|mos|n|s)?",
+			"yo"    : "pose(a|ere|eria|i|ia|o|yera|yere|yese)",
+			"tu"    : "pose(as|e|eras|erias|es|ias|iste|yeras|yeres|yeses)",
+			"el_la" : "pose(a|e|era|eria|ia|yera|yere|yese|yo)",
+			"nos"   : "pose(amos|emos|eremos|eriamos|iamos|imos|yeramos|yeremos|yesemos)",
+			"uds"   : "pose(ais|ed|eis|ereis|eriais|iais|isteis|yerais|yereis|yeseis)",
+			"ellos" : "pose(an|en|eran|erian|ian|yeran|yeren|yeron|yesen)"
+		},
+		"presentar" : {
+			"inf"   : "presentar",                                                                                                                                        
+			"ger"   : "presentando",                                                                                                                                      
+			"par"   : "presentado",                                                                                                                                       
+			"ip"    : "presento|presenta(is|mos|n|s)?",                                                                                                                   
+			"ipi"   : "presentaba(is|mos|n|s)?",                                                                                                                          
+			"if"    : "presentar(a|an|as|e|eis|emos)",
+			"ic"    : "presentaria(is|mos|n|s)?",
+			"ipps"  : "present(amos|ara|aron|aste|asteis|o)",
+			"i"     : "",
+			"sp"    : "present(a)",
+			"spi"   : "presentara(is|mos|n|s)?",
+			"spi2"  : "presentase(is|mos|n|s)?",
+			"sf"    : "presentare(is|mos|n|s)?",
+			"yo"    : "present(aba|ara|are|aria|ase|o)",
+			"tu"    : "presenta(bas|ras|res|rias|s|ses|ste)?",
+			"el_la" : "presento|presenta(ba|ra|re|ria|se)?",
+			"nos"   : "presenta(bamos|mos|ramos|remos|riamos|semos)",
+			"uds"   : "presenta(bais|is|rais|reis|riais|seis|steis)",
+			"ellos" : "presenta(ban|n|ran|ren|rian|ron|sen)"
 		},
 		"parir" : {
 			"inf"   : "parir",
