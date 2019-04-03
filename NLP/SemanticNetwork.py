@@ -677,6 +677,7 @@ class SemanticNetwork:
         noun = None
         thisNoun = None
         lastNoun = None
+        lastTag = None
         text = []
         textId = 1.0 * len(self.text)
 
@@ -694,17 +695,19 @@ class SemanticNetwork:
                 #verb = self.rules.getVerb(word)
                 verb = "%s %s" % (aux, word)  if aux is not None else word
                 verb = "%s %s" % (word, prep) if prep is not None else word
-            if tag == 'NOUN':
-                noun = word
+            if tag == 'NOUN' and not self.rules.isVerb().match(word):
+                noun = "%s %s" % (noun, word) if lastTag == 'NOUN' else word
 
                 if thisNoun is None:
-                    thisNoun = noun if self.rules.isNoun(noun) is not None else None
+                    thisNoun = noun
+                    verb = None
+                    prep = None
+                    aux = None
                 else:
                     lastNoun = thisNoun
-                    thisNoun = noun #if self.rules.isNoun(noun) is not None else None
+                    thisNoun = noun
 
                 node = self.net.search({'name': thisNoun}) if thisNoun is not None and tag == 'NOUN' else None
-                #print ("found: %s\n") % str(node)  # /**/
 
                 if node is not None and len(node) == 0:
                     id = self.net.addNode(self.net, name=thisNoun, matrix=self.net.connects)
@@ -718,7 +721,6 @@ class SemanticNetwork:
                     self.actions = np.chararray((n, n), itemsize=30)
                     self.actions[:] = ''
                     self.actions[:m, :l] = arr2
-                    #print ("new node: %s\n%s\n") % (id, str(self.net.connects))    # /**/
 
             if thisNoun is not None and lastNoun is not None and verb is not None:
                 print ("%s --(%s)--> %s\n") % (lastNoun, verb, thisNoun)
@@ -727,20 +729,25 @@ class SemanticNetwork:
 
                 if verb not in self.actionList:
                     self.actionList.append(verb)
-                    self.actionFunc.dictionary[verb] = 'null';
+                    self.actionFunc.dictionary[verb] = 'null'
 
                 if origin is not None and destiny is not None and len(origin) > 0 and len(destiny) > 0:
                     o = self.net.getIndexof(origin[0].name)
                     d = self.net.getIndexof(destiny[0].name)
                     self.net.setConnection(o, d, textId, matrix=self.net.connects)
                     self.net.setConnection(o, d, verb, matrix=self.actions)
+                    lastNoun = None
+                    thisNoun = None
+                else:
+                    lastNoun = thisNoun
+                    thisNoun = None
 
+                noun = None
                 verb = None
                 prep = None
-                noun = None
-                lastNoun = None
-                thisNoun = None
                 aux = None
+
+            lastTag = tag
 
         txt = ' '.join(text)
         if txt not in self.text:
