@@ -367,8 +367,8 @@ class GrammarRules:
                 type = 'ADJ'
             elif 'CONJ' in type and nextType in ['VERB', 'DET', 'ADV', 'PRON']:
                 type = 'CONJ'
-            elif 'ADJ' in type and ('ADV' in type or 'NOUN' in type):
-                type = 'NOUN'
+            #elif 'ADJ' in type and ('ADV' in type or 'NOUN' in type):
+            #    type = 'NOUN'
             elif 'ADV' in type and ('CONJ' in type or 'NOUN' in type):
                 type = 'ADV'
             elif 'AUX' in type and nextType in ['VERB']:
